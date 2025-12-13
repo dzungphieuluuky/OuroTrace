@@ -7,7 +7,7 @@ print("⬇️ Downloading model to local folder 'ouro_model'...")
 local_model_path = snapshot_download(
     repo_id="ByteDance/Ouro-1.4B",
     local_dir="ouro_model",
-    local_dir_use_symlinks=False  # Ensures actual files are downloaded
+    local_dir_use_symlinks=False,  # Ensures actual files are downloaded
 )
 print(f"✅ Downloaded to: {local_model_path}")
 
@@ -20,7 +20,7 @@ print("⏳ Loading Model...")
 model = AutoModelForCausalLM.from_pretrained(
     local_model_path,
     device_map="auto",
-    torch_dtype="auto"  # Auto-selects optimal dtype (e.g., float16 on GPU)
+    torch_dtype="auto",  # Auto-selects optimal dtype (e.g., float16 on GPU)
 )
 print("✅ Model loaded successfully!")
 
@@ -32,7 +32,7 @@ outputs = model.generate(
     do_sample=True,  # Slight variation; set False for deterministic
     temperature=0.7,
     pad_token_id=tokenizer.eos_token_id,
-    use_cache=False  # Disables KV caching to prevent property setter issue; loops still run
+    use_cache=False,  # Disables KV caching to prevent property setter issue; loops still run
 )
 print("\nGenerated Output:")
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))

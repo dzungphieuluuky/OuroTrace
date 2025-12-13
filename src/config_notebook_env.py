@@ -1,9 +1,8 @@
+from datetime import datetime
 import os
-import glob
-import zipfile
-import hashlib
-import sys
 from IPython import get_ipython
+import glob
+
 
 def configure_environment_paths():
     """Detect environment and configure paths"""
@@ -35,12 +34,10 @@ def configure_environment_paths():
 
     return base_data_path, base_output_path, environment_name
 
+
 def auto_unzip_colab_content(target_dir="/content/", zip_extension="*.zip"):
     """Auto-extract zip files in Colab environment"""
-    try:
-        if "google.colab" not in str(get_ipython()):
-            return
-    except NameError:
+    if "google.colab" not in str(get_ipython()):
         return
 
     print(f"🔎 Scanning for {zip_extension} files...")
@@ -62,7 +59,22 @@ def auto_unzip_colab_content(target_dir="/content/", zip_extension="*.zip"):
         except Exception as e:
             print(f"❌ Error: {e}")
 
-def generate_test_id(task_type: str, difficulty: str, prompt: str) -> str:
-    """Generate unique test ID"""
-    unique_str = f"{task_type}_{difficulty}_{prompt}"
-    return hashlib.md5(unique_str.encode()).hexdigest()[:8]
+
+if __name__ == "__main__":
+    import os
+    import glob
+    import zipfile
+    import wandb
+
+    DATA_PATH, OUTPUT_PATH, ENV = configure_environment_paths()
+    auto_unzip_colab_content(DATA_PATH)
+
+    # Optional: WandB login
+    try:
+        from google.colab import userdata
+
+        wandb_key = userdata.get("WANDB_API_KEY")
+        if wandb_key:
+            wandb.login(key=wandb_key)
+    except:
+        pass
