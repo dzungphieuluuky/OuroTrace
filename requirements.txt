@@ -1,0 +1,18 @@
+# deep learning libraries
+torch==2.6.0
+transformers==4.56.0
+accelerate
+protobuf>=5.29.4
+datasets
+bitsandbytes
+
+# data processing and visual
+pandas
+matplotlib
+seaborn
+numpy
+
+# utilities and experiment tracking
+tqdm
+pyyaml
+wandb

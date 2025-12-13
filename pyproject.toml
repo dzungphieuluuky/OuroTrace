@@ -1,0 +1,32 @@
+[project]
+name = "ourotrace"
+version = "0.1.0"
+description = "Experiment and Inference Optimization with ByteDance's Ouro Looped Transformer model"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "accelerate>=1.12.0",
+    "bitsandbytes>=0.49.0",
+    "datasets>=4.4.1",
+    "matplotlib>=3.10.8",
+    "numpy>=2.3.5",
+    "pandas>=2.3.3",
+    "protobuf>=5.29.4",
+    "pyyaml>=6.0.3",
+    "seaborn>=0.13.2",
+    "torch==2.6.0",
+    "tqdm>=4.67.1",
+    "transformers==4.56.0",
+    "wandb>=0.23.1",
+]
+
+# Reference links
+[project.urls]
+"GitHub Repo" = "https://github.com/dzungphieuluuky/OuroTrace.git"
+"Project Reference Paper" = "https://arxiv.org/abs/2502.17416"
+"ByteDance Ouro Model Paper" = "https://arxiv.org/abs/2510.25741"
+"HuggingFace Model Hub" = "https://huggingface.co/collections/ByteDance/ouro"
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
