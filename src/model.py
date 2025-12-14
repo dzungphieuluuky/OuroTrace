@@ -100,16 +100,11 @@ class OuroThinkingExperiment:
                         "content": "100 + 200 + 300 =",
                         "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600"
                     },
-                    {
-                        "role": "user",
-                        "content": "050 + 025 + 100 =",
-                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175"
-                    },
-                    {
-                        "role": "user",
-                        "content": "001 + 002 + 003 + 004 =",
-                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 001: 0 + 1 = 1.\n[STEP 3] Current: 1.\n[STEP 4] Add 002: 1 + 2 = 3.\n[STEP 5] Current: 3.\n[STEP 6] Add 003: 3 + 3 = 6.\n[STEP 7] Current: 6.\n[STEP 8] Add 004: 6 + 4 = 10.\n[FINAL] 10"
-                    }
+                    # {
+                    #     "role": "user",
+                    #     "content": "050 + 025 + 100 =",
+                    #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175"
+                    # },
                 ],
                 "force_start": "[STEP 1] Current: 0.\n",
                 "input_prefix": ""
@@ -119,11 +114,6 @@ class OuroThinkingExperiment:
             "p_hop": {
                 "system": "You are an induction head mechanism. Trace EXACTLY the requested number of hops. Find each token's position in the sequence. Stop after the required hops. DO NOT output anything after the final answer.",
                 "few_shots": [
-                    {
-                        "role": "user",
-                        "content": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                        "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is B.\n[FINAL] B."
-                    },
                     {
                         "role": "user",
                         "content": "Sequence: D C B A D C. Start: D. Hop 2 times.",
@@ -143,11 +133,6 @@ class OuroThinkingExperiment:
             "igsm": {
                 "system": "You are a symbolic math solver. Solve equations modulo 7 (results 0-6). For each equation, show the substitution and modulo 7 calculation. STOP after solving for the target variable.",
                 "few_shots": [
-                    {
-                        "role": "user",
-                        "content": "Question. A#A := 4. A#B := A#A + 2. A#B?",
-                        "role_response": "[EQ 1] A#A = 4.\n[EQ 2] A#B = A#A + 2 = 4 + 2 = 6.\n[FINAL] 6."
-                    },
                     {
                         "role": "user",
                         "content": "Question. X#Y := 3. Z#Z := X#Y * 2. Z#Z?",
