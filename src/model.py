@@ -321,51 +321,42 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         self.max_batch_size = max_batch_size
         self.max_new_tokens = max_new_tokens
 
-    def prepare_batch_inputs(
-        self, prompts: List[str], task_type: str
-    ) -> List[List[int]]:
+    def prepare_batch_inputs(self, prompts: List[str], task_type: str) -> List[List[int]]:
         """Prepare inputs for batch generation"""
         if task_type not in self.task_templates:
             raise ValueError("Templates not built. Call _build_task_templates first.")
-
+        
         template = self.task_templates[task_type]
-
+        
         batch_texts = [template["input_prefix"] + p for p in prompts]
         user_encodings = self.tokenizer(batch_texts, add_special_tokens=False)
-
+        
         static_ids = template["static_input_ids"].squeeze(0).tolist()
         force_ids = template["force_start_ids"].squeeze(0).tolist()
-
+        
         input_id_lists = []
-        for user_ids in user_encodings["input_ids"]:
+        for user_ids in user_encodings['input_ids']:
             full_seq = static_ids + user_ids + force_ids
             input_id_lists.append(full_seq)
-
+        
         return input_id_lists
 
     @torch.no_grad()
-    def batch_predict_with_metrics(
-        self,
-        prompts: List[str],
-        task_type: str,
-        model,
-        tokenizer,
-        ut_steps: int,
-        generation_config: Optional[GenerationConfig] = None,
-    ):
+    def batch_predict_with_metrics(self, prompts: List[str], task_type: str,
+                                   model, tokenizer, ut_steps: int,
+                                   generation_config: Optional[GenerationConfig] = None):
         """Batch prediction with metrics"""
         if not prompts:
             return []
-
+        
         simple_batch_inputs = self.prepare_batch_inputs(prompts, task_type)
         input_lengths = [len(ids) for ids in simple_batch_inputs]
-
-        if not hasattr(model, "generate_batch"):
+        
+        if not hasattr(model, 'generate_batch'):
             print("⚠️ Model doesn't support generate_batch(). Using sequential.")
-            return self._sequential_fallback(
-                prompts, task_type, model, tokenizer, ut_steps, generation_config
-            )
-
+            return self._sequential_fallback(prompts, task_type, model, 
+                                            tokenizer, ut_steps, generation_config)
+        
         if generation_config is None:
             generation_config = GenerationConfig(
                 max_new_tokens=self.max_new_tokens,
@@ -374,11 +365,10 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                 pad_token_id=tokenizer.pad_token_id,
                 do_sample=False,
                 max_batch_tokens=self.max_batch_size * self.max_new_tokens,
-                repetition_penalty=1.2
             )
-
+        
         start_time = time.perf_counter()
-
+        
         try:
             batch_outputs = model.generate_batch(
                 inputs=simple_batch_inputs,
@@ -386,68 +376,57 @@ class OuroBatchExperiment(OuroThinkingExperiment):
             )
         except Exception as e:
             print(f"⚠️ generate_batch failed: {e}. Falling back.")
-            return self._sequential_fallback(
-                prompts, task_type, model, tokenizer, ut_steps, generation_config
-            )
-
+            return self._sequential_fallback(prompts, task_type, model, 
+                                            tokenizer, ut_steps, generation_config)
+        
         batch_time = time.perf_counter() - start_time
-
+        
         template = self.task_templates[task_type]
         results = [None] * len(prompts)
         request_ids = list(batch_outputs.keys())
-
+        
         # Map outputs to prompts
         if all(isinstance(rid, int) for rid in request_ids):
             for request_id in request_ids:
                 if 0 <= request_id < len(prompts):
                     output = batch_outputs[request_id]
                     results[request_id] = self._process_single_output(
-                        output,
-                        request_id,
-                        input_lengths[request_id],
-                        template,
-                        tokenizer,
-                        task_type,
-                        ut_steps,
-                        batch_time / len(prompts),
+                        output, request_id, input_lengths[request_id],
+                        template, tokenizer, task_type, ut_steps,
+                        batch_time / len(prompts)
                     )
         else:
             # String/UUID request IDs
             input_to_index = {
-                " ".join(map(str, inp)): idx
+                " ".join(map(str, inp)): idx 
                 for idx, inp in enumerate(simple_batch_inputs)
             }
-
+            
             for request_id in request_ids:
                 output = batch_outputs[request_id]
-
-                if hasattr(output, "prompt_ids"):
+                
+                if hasattr(output, 'prompt_ids'):
                     input_key = " ".join(map(str, output.prompt_ids))
                     if input_key in input_to_index:
                         idx = input_to_index[input_key]
                         results[idx] = self._process_single_output(
-                            output,
-                            idx,
-                            len(output.prompt_ids),
-                            template,
-                            tokenizer,
-                            task_type,
-                            ut_steps,
-                            batch_time / len(prompts),
+                            output, idx, len(output.prompt_ids),
+                            template, tokenizer, task_type, ut_steps,
+                            batch_time / len(prompts)
                         )
-
+        
         # Fill missing results
         for i in range(len(prompts)):
             if results[i] is None:
                 results[i] = {
-                    "full_response": "ERROR: No output",
-                    "prediction": "ERROR",
-                    "generation_time": batch_time / len(prompts),
-                    "generated_tokens": 0,
-                    "input_tokens": input_lengths[i],
-                    "ut_steps": ut_steps,
+                    'full_response': 'ERROR: No output',
+                    'prediction': 'ERROR',
+                    'generation_time': batch_time / len(prompts),
+                    'generated_tokens': 0,
+                    'input_tokens': input_lengths[i],
+                    'ut_steps': ut_steps
                 }
-
+        
         return results
 
     def _process_single_output(
