@@ -5,9 +5,7 @@
         "use_4bit_quant": false,
         "use_torch_compile": true
     },
-    "INFERENCE_STEPS": [
-        1
-    ],
+    "INFERENCE_STEPS": [1],
     "EVAL_SETTINGS": {
         "calculate_perplexity": true,
         "early_exit_threshold": -1.0,
@@ -16,8 +14,8 @@
         "ppl_stride": 512
     },
     "WANDB": {
-        "enabled": false,
-        "project": "ouro-trace",
+        "enabled": true,
+        "project": "ouro-1.4b-thinking",
         "run_name": "auto_timestamp",
         "entity": null,
         "mode": "offline"
@@ -26,17 +24,11 @@
         "load_existing": false,
         "data_file_path": "",
         "n_ary": {
-            "ops_levels": [
-                4,
-                8
-            ],
+            "ops_levels": [4, 8],
             "num_samples_per_level": 10
         },
         "p_hop": {
-            "hop_levels": [
-                2,
-                4
-            ],
+            "hop_levels": [2, 4],
             "num_samples_per_level": 10
         },
         "igsm": {
@@ -48,10 +40,11 @@
         "max_batch_size": 8,
         "max_new_token": 1024
     },
-
+    
     "reasoning_primitives": {
         "num_samples": 50
     },
 
     "ENABLE_HEAVY_BENCHMARKS": false
+
 }
