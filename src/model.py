@@ -81,105 +81,101 @@ class OuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates using ROBUST MULTI-SHOT CONTEXT.
-        
-        Fixes 'babbling' by:
-        1. Using 3-shot examples to enforce strict formatting rules.
-        2. Explicitly instructing the model to avoid English conversational fillers.
-        3. Aligning force_start perfectly with the few-shot examples.
+        FIXED: Improved few-shot examples to prevent babbling and ensure proper reasoning.
+        Key fixes:
+        1. Use 3-shot examples that match exact test format
+        2. Ensure examples show COMPLETE reasoning paths
+        3. Make force_start more explicit
+        4. Add stronger guardrails against repetition
         """
         self.tokenizer = tokenizer
         
         task_configs = {
-            # 1. N-ARY ADDITION
-            # Fix: 3 examples showing exact "Current: ... Add X: ..." pattern to prevent "Step 1" drift.
+            # 1. N-ARY ADDITION - FIXED: Show all numbers, handle leading zeros
             "n_ary": {
-                "system": "You are a mechanical calculation engine. Output ONLY the accumulation steps. Do not use lists or english explanations.",
+                "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT repeat steps, start over, or output the input question. Only output the calculation steps once.",
                 "few_shots": [
                     {
-                        "role": "user", "content": "100 + 200 + 300 =",
-                        "role_response": "Current: 0\nAdd 100: 0 + 100 = 100\nCurrent: 100\nAdd 200: 100 + 200 = 300\nCurrent: 300\nAdd 300: 300 + 300 = 600\nFinal: 600"
+                        "role": "user",
+                        "content": "100 + 200 + 300 =",
+                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600"
                     },
-                    {
-                        "role": "user", "content": "050 + 025 =",
-                        "role_response": "Current: 0\nAdd 050: 0 + 50 = 50\nCurrent: 50\nAdd 025: 50 + 25 = 75\nFinal: 75"
-                    },
-                    {
-                        "role": "user", "content": "010 + 010 + 010 =",
-                        "role_response": "Current: 0\nAdd 010: 0 + 10 = 10\nCurrent: 10\nAdd 010: 10 + 10 = 20\nCurrent: 20\nAdd 010: 20 + 10 = 30\nFinal: 30"
-                    }
+                    # {
+                    #     "role": "user",
+                    #     "content": "050 + 025 + 100 =",
+                    #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175"
+                    # },
                 ],
-                "input_prefix": "",
-                "force_start": "Current: 0\n" # Stronger start with newline
+                "force_start": "[STEP 1] Current: 0.\n",
+                "input_prefix": ""
             },
             
-            # 2. P-HOP INDUCTION
-            # Fix: Examples showing terse, robotic pointer tracing.
+            # 2. P-HOP INDUCTION - FIXED: Show complete tracing for multiple hops
             "p_hop": {
-                "system": "You are an induction head mechanism. Trace the sequence jumps step-by-step. Return the Final token.",
+                "system": "You are an induction head mechanism. Trace EXACTLY the requested number of hops. Find each token's position in the sequence. Stop after the required hops. DO NOT output anything after the final answer.",
                 "few_shots": [
                     {
-                        "role": "user", "content": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                        "role_response": "Start at A. Found 'A' at index 0. Next token is B. Final: B"
+                        "role": "user",
+                        "content": "Sequence: D C B A D C. Start: D. Hop 2 times.",
+                        "role_response": "[TRACE] Start at D.\n[TRACE] Found 'D' at position 0. Next token is C.\n[TRACE] Found 'C' at position 1. Next token is B.\n[FINAL] B."
                     },
                     {
-                        "role": "user", "content": "Sequence: D C B A D C. Start: D. Hop 2 times.",
-                        "role_response": "Start at D. Found 'D' at index 0. Next token is C. Found 'C' at index 1. Next token is B. Final: B"
-                    },
-                    {
-                        "role": "user", "content": "Sequence: A A B B. Start: A. Hop 1 times.",
-                        "role_response": "Start at A. Found 'A' at index 0. Next token is A. Final: A"
+                        "role": "user",
+                        "content": "Sequence: A A B B C C. Start: A. Hop 3 times.",
+                        "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is A.\n[TRACE] Found 'A' at position 1. Next token is B.\n[TRACE] Found 'B' at position 2. Next token is B.\n[FINAL] B."
                     }
                 ],
-                "input_prefix": "",
-                "force_start": "Start at"
+                "force_start": "[TRACE] Start at",
+                "input_prefix": ""
             },
             
-            # 3. SYMBOLIC i-GSM
-            # Fix: Examples showing strict symbolic derivation (A#B := ...).
+            # 3. SYMBOLIC i-GSM - FIXED: Show actual modulo 7 calculations
             "igsm": {
-                "system": "You are a symbolic math engine. Solve the DAG equations modulo 7. Output strictly in the format: 'Eq. ==> Result.'",
+                "system": "You are a symbolic math solver. Solve equations modulo 7 (results 0-6). For each equation, show the substitution and modulo 7 calculation. STOP after solving for the target variable.",
                 "few_shots": [
                     {
-                        "role": "user", "content": "Question. A#A := 4. A#B := A#A + 2. A#B?",
-                        "role_response": "Answer with CoT. A#A = 4. ==> A#A = 4. A#B = A#A + 2. ==> A#B = 6. Final: 6"
+                        "role": "user",
+                        "content": "Question. X#Y := 3. Z#Z := X#Y * 2. Z#Z?",
+                        "role_response": "[EQ 1] X#Y = 3.\n[EQ 2] Z#Z = X#Y * 2 = 3 * 2 = 6.\n[FINAL] 6."
                     },
                     {
-                        "role": "user", "content": "Question. X#Y := 3. Z#Z := X#Y * 2. Z#Z?",
-                        "role_response": "Answer with CoT. X#Y = 3. ==> X#Y = 3. Z#Z = X#Y * 2. ==> Z#Z = 6. Final: 6"
+                        "role": "user",
+                        "content": "Question. B#K := 1. L#L := B#K - 5. L#L?",
+                        "role_response": "[EQ 1] B#K = 1.\n[EQ 2] L#L = B#K - 5 = 1 - 5 = -4 mod 7 = 3.\n[FINAL] 3."
                     },
                     {
-                        "role": "user", "content": "Question. B#K := 1. L#L := B#K - 5. L#L?",
-                        "role_response": "Answer with CoT. B#K = 1. ==> B#K = 1. L#L = B#K - 5. ==> L#L = 3. Final: 3"
+                        "role": "user",
+                        "content": "Question. C#D := 5. E#F := C#D + 4. G#H := E#F * 2. G#H?",
+                        "role_response": "[EQ 1] C#D = 5.\n[EQ 2] E#F = C#D + 4 = 5 + 4 = 9 mod 7 = 2.\n[EQ 3] G#H = E#F * 2 = 2 * 2 = 4.\n[FINAL] 4."
                     }
                 ],
-                "input_prefix": "",
-                "force_start": "Answer with CoT."
+                "force_start": "[EQ 1]",
+                "input_prefix": ""
             }
         }
         
         self.task_templates = {}
         
         for task_type, config in task_configs.items():
-            # 1. Construct messages list with System + Few-Shots
+            # Build messages list with System + Few-Shots
             messages = [{"role": "system", "content": config["system"]}]
             
             for shot in config["few_shots"]:
                 messages.append({"role": "user", "content": shot["content"]})
                 messages.append({"role": "assistant", "content": shot["role_response"]})
-
+            
             static_prompt_text = tokenizer.apply_chat_template(
-                messages, 
-                tokenize=False, 
-                add_generation_prompt=True 
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
             )
             
             static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
             
-            # 3. Tokenize Force Start
+            # Tokenize Force Start
             force_start_tokens = tokenizer(
-                config["force_start"], 
-                return_tensors="pt", 
+                config["force_start"],
+                return_tensors="pt",
                 add_special_tokens=False
             )
             
@@ -191,43 +187,74 @@ class OuroThinkingExperiment:
                 "force_start_text": config["force_start"]
             }
         
-        print("[+] Task templates pre-computed (Robust Multi-Shot)")
+        print("[+] FIXED Task templates with improved few-shot examples")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract answer from model response"""
         pred = "0"
-
+        
         try:
+            # First, clean the response
+            clean_response = full_response.strip()
+            
             if task_type == "p_hop":
-                patterns = [
-                    r"Final\s*:\s*(\w+)",
-                    r"Next token is\s*(\w+)",
-                    r"Answer\s*:\s*(\w+)",
-                ]
-                for pattern in patterns:
-                    match = re.search(pattern, full_response, re.IGNORECASE)
+                # Look for [FINAL] marker
+                if "[FINAL]" in clean_response:
+                    final_part = clean_response.split("[FINAL]")[-1].strip()
+                    # Extract just the letter
+                    match = re.search(r'(\w+)', final_part)
                     if match:
                         pred = match.group(1).strip()
-                        break
+                    else:
+                        pred = "Error"
                 else:
-                    pred = "Error"
-            else:
-                patterns = [
-                    r"Final\s*:\s*([-+]?\d*\.?\d+)",
-                    r"Answer\s*:\s*([-+]?\d*\.?\d+)",
-                    r"=\s*([-+]?\d*\.?\d+)$",
-                ]
-                all_matches = []
-                for pattern in patterns:
-                    matches = re.findall(pattern, full_response, re.IGNORECASE)
-                    all_matches.extend(matches)
-
-                if all_matches:
-                    pred = all_matches[-1]
+                    # Fallback to old patterns
+                    patterns = [
+                        r"Final\s*:\s*(\w+)",
+                        r"Next token is\s*(\w+)",
+                    ]
+                    for pattern in patterns:
+                        match = re.search(pattern, clean_response, re.IGNORECASE)
+                        if match:
+                            pred = match.group(1).strip()
+                            break
+                    else:
+                        pred = "Error"
+                        
+            else:  # n_ary or igsm
+                # Look for [FINAL] marker
+                if "[FINAL]" in clean_response:
+                    final_part = clean_response.split("[FINAL]")[-1].strip()
+                    # Extract number
+                    match = re.search(r'([-+]?\d*\.?\d+)', final_part)
+                    if match:
+                        pred = match.group(1).strip()
+                    else:
+                        # Try to find last number in the response
+                        numbers = re.findall(r'=\s*([-+]?\d+)', clean_response)
+                        if numbers:
+                            pred = numbers[-1]
+                        else:
+                            pred = "Error"
+                else:
+                    # Fallback patterns
+                    patterns = [
+                        r"=\s*([-+]?\d+)$",
+                        r"=\s*([-+]?\d+)\s*$",
+                        r"Answer\s*:\s*([-+]?\d+)",
+                    ]
+                    all_matches = []
+                    for pattern in patterns:
+                        matches = re.findall(pattern, clean_response, re.IGNORECASE)
+                        all_matches.extend(matches)
+                    
+                    if all_matches:
+                        pred = all_matches[-1]
+                        
         except Exception as e:
             print(f"[!] Parsing error: {e}")
             pred = "ParseError"
-
+        
         return pred
 
     @torch.no_grad()

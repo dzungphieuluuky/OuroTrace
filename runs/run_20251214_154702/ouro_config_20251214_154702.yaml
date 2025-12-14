@@ -1,0 +1,41 @@
+DATA:
+  data_file_path: ''
+  igsm:
+    num_samples_total: 20
+  load_existing: false
+  n_ary:
+    num_samples_per_level: 10
+    ops_levels:
+    - 4
+    - 8
+  p_hop:
+    hop_levels:
+    - 2
+    - 4
+    num_samples_per_level: 10
+ENABLE_HEAVY_BENCHMARKS: false
+EVAL_SETTINGS:
+  calculate_perplexity: true
+  early_exit_threshold: -1.0
+  ppl_max_length: 2048
+  ppl_num_samples: 50
+  ppl_stride: 512
+INFERENCE_STEPS:
+- 1
+MODEL:
+  dtype: torch.bfloat16
+  path: ByteDance/Ouro-1.4B-Thinking
+  use_4bit_quant: false
+  use_torch_compile: true
+OPTIMIZATION:
+  enable_batch: true
+  max_batch_size: 8
+  max_new_token: 1024
+WANDB:
+  enabled: true
+  entity: null
+  mode: offline
+  project: ouro-1.4b-thinking
+  run_name: run_20251214_1547
+reasoning_primitives:
+  num_samples: 50
