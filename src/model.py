@@ -452,6 +452,13 @@ class OuroBatchExperiment(OuroThinkingExperiment):
             )
         except Exception as e:
             print(f"⚠️ generate_batch failed: {e}. Falling back.")
+
+            import gc
+            if 'batch_outputs' in locals(): del batch_outputs
+            gc.collect()
+            torch.cuda.empty_cache()
+            print("🧹 GPU Cache cleared. Attempting sequential fallback...")
+
             return self._sequential_fallback(prompts, task_type, model, 
                                             tokenizer, ut_steps, generation_config)
         

@@ -37,7 +37,7 @@
     },
     "OPTIMIZATION": {
         "enable_batch": true,
-        "max_batch_size": 8,
+        "max_batch_size": 4,
         "max_new_token": 1024
     },
     
