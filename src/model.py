@@ -81,60 +81,117 @@ class OuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates for faster inference.
-        UPDATED: Added spaces/newlines to force_start to prevent token gluing/contamination.
+        Pre-compute prompt templates using ROBUST MULTI-SHOT CONTEXT.
+        
+        Fixes 'babbling' by:
+        1. Using 3-shot examples to enforce strict formatting rules.
+        2. Explicitly instructing the model to avoid English conversational fillers.
+        3. Aligning force_start perfectly with the few-shot examples.
         """
         self.tokenizer = tokenizer
-
+        
         task_configs = {
+            # 1. N-ARY ADDITION
+            # Fix: 3 examples showing exact "Current: ... Add X: ..." pattern to prevent "Step 1" drift.
             "n_ary": {
-                "system": "You are a mechanical calculation engine. Output the accumulation steps strictly.",
-                "example_user": "10 + 20 + 30 =",
-                "example_asst": "Current: 0\nAdd 10: 0 + 10 = 10\nCurrent: 10\nAdd 20: 10 + 20 = 30\nCurrent: 30\nAdd 30: 30 + 30 = 60\nFinal: 60",
-                "force_start": " Current: 0",
+                "system": "You are a mechanical calculation engine. Output ONLY the accumulation steps. Do not use lists or english explanations.",
+                "few_shots": [
+                    {
+                        "role": "user", "content": "100 + 200 + 300 =",
+                        "role_response": "Current: 0\nAdd 100: 0 + 100 = 100\nCurrent: 100\nAdd 200: 100 + 200 = 300\nCurrent: 300\nAdd 300: 300 + 300 = 600\nFinal: 600"
+                    },
+                    {
+                        "role": "user", "content": "050 + 025 =",
+                        "role_response": "Current: 0\nAdd 050: 0 + 50 = 50\nCurrent: 50\nAdd 025: 50 + 25 = 75\nFinal: 75"
+                    },
+                    {
+                        "role": "user", "content": "010 + 010 + 010 =",
+                        "role_response": "Current: 0\nAdd 010: 0 + 10 = 10\nCurrent: 10\nAdd 010: 10 + 10 = 20\nCurrent: 20\nAdd 010: 20 + 10 = 30\nFinal: 30"
+                    }
+                ],
                 "input_prefix": "",
+                "force_start": "Current: 0\n" # Stronger start with newline
             },
+            
+            # 2. P-HOP INDUCTION
+            # Fix: Examples showing terse, robotic pointer tracing.
             "p_hop": {
-                "system": "You are an induction head mechanism. Trace the sequence occurrences step-by-step.",
-                "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                "example_asst": "\nStart at A. Found 'A' in sequence. Next token is B. Final: B",
-                "force_start": "\nStart at",
+                "system": "You are an induction head mechanism. Trace the sequence jumps step-by-step. Return the Final token.",
+                "few_shots": [
+                    {
+                        "role": "user", "content": "Sequence: A B C D A B. Start: A. Hop 1 times.",
+                        "role_response": "Start at A. Found 'A' at index 0. Next token is B. Final: B"
+                    },
+                    {
+                        "role": "user", "content": "Sequence: D C B A D C. Start: D. Hop 2 times.",
+                        "role_response": "Start at D. Found 'D' at index 0. Next token is C. Found 'C' at index 1. Next token is B. Final: B"
+                    },
+                    {
+                        "role": "user", "content": "Sequence: A A B B. Start: A. Hop 1 times.",
+                        "role_response": "Start at A. Found 'A' at index 0. Next token is A. Final: A"
+                    }
+                ],
                 "input_prefix": "",
+                "force_start": "Start at"
             },
+            
+            # 3. SYMBOLIC i-GSM
+            # Fix: Examples showing strict symbolic derivation (A#B := ...).
             "igsm": {
-                "system": "You are a symbolic math solver. Solve the DAG modulo 7.",
-                "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
-                "example_asst": "\nAnswer with CoT. E#I = 4. ==> E#I = 4. E#J = E#I. ==> E#J = 4. F#K = E#J. ==> F#K = 4. H#J = E#J + F#K. ==> H#J = 1. Final: 1",
-                "force_start": "\nAnswer with CoT.",
+                "system": "You are a symbolic math engine. Solve the DAG equations modulo 7. Output strictly in the format: 'Eq. ==> Result.'",
+                "few_shots": [
+                    {
+                        "role": "user", "content": "Question. A#A := 4. A#B := A#A + 2. A#B?",
+                        "role_response": "Answer with CoT. A#A = 4. ==> A#A = 4. A#B = A#A + 2. ==> A#B = 6. Final: 6"
+                    },
+                    {
+                        "role": "user", "content": "Question. X#Y := 3. Z#Z := X#Y * 2. Z#Z?",
+                        "role_response": "Answer with CoT. X#Y = 3. ==> X#Y = 3. Z#Z = X#Y * 2. ==> Z#Z = 6. Final: 6"
+                    },
+                    {
+                        "role": "user", "content": "Question. B#K := 1. L#L := B#K - 5. L#L?",
+                        "role_response": "Answer with CoT. B#K = 1. ==> B#K = 1. L#L = B#K - 5. ==> L#L = 3. Final: 3"
+                    }
+                ],
                 "input_prefix": "",
-            },
+                "force_start": "Answer with CoT."
+            }
         }
-
+        
+        self.task_templates = {}
+        
         for task_type, config in task_configs.items():
-            static_messages = [
-                {"role": "system", "content": config["system"]},
-                {"role": "user", "content": config["example_user"]},
-                {"role": "assistant", "content": config["example_asst"]},
-            ]
+            # 1. Construct messages list with System + Few-Shots
+            messages = [{"role": "system", "content": config["system"]}]
+            
+            for shot in config["few_shots"]:
+                messages.append({"role": "user", "content": shot["content"]})
+                messages.append({"role": "assistant", "content": shot["role_response"]})
 
             static_prompt_text = tokenizer.apply_chat_template(
-                static_messages, tokenize=False, add_generation_prompt=True
+                messages, 
+                tokenize=False, 
+                add_generation_prompt=True 
             )
+            
             static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
-
+            
+            # 3. Tokenize Force Start
             force_start_tokens = tokenizer(
-                config["force_start"], return_tensors="pt", add_special_tokens=False
+                config["force_start"], 
+                return_tensors="pt", 
+                add_special_tokens=False
             )
-
+            
             self.task_templates[task_type] = {
                 "static_input_ids": static_inputs.input_ids,
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
                 "input_prefix": config["input_prefix"],
-                "force_start_text": config["force_start"],
+                "force_start_text": config["force_start"]
             }
-
-        print("[+] Task templates pre-computed")
+        
+        print("[+] Task templates pre-computed (Robust Multi-Shot)")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract answer from model response"""
