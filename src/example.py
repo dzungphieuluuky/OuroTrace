@@ -3,6 +3,8 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers.generation import GenerationConfig
 
+SAMPLE_SIZE = 20
+
 model = AutoModelForCausalLM.from_pretrained(
     "Qwen/Qwen3-4B-Instruct-2507",
     attn_implementation="sdpa_paged",
@@ -12,7 +14,7 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-4B-Instruct-2507", padding_side="left")
 
 dataset = datasets.load_dataset("openai/gsm8k", "socratic", split="test")
-dataset = dataset.select(range(args.samples))
+dataset = dataset.select(range(SAMPLE_SIZE))
 tokenized_datasets = dataset.map(lambda x: tokenizer(x["question"]), batched=True)
 simple_batch_inputs = [item["input_ids"] for item in tokenized_datasets]
 

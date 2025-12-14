@@ -134,7 +134,7 @@ class OuroThinkingExperiment:
                 "force_start_text": config["force_start"],
             }
 
-        print("[+] Task templates pre-computed (Corrected with spacers)")
+        print("[+] Task templates pre-computed")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract answer from model response"""
