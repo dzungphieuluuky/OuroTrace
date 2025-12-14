@@ -10,7 +10,6 @@ from datasets import load_dataset
 from transformers import TrainingArguments, Trainer
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-
 def tokenize_function(examples):
     return tokenizer(examples["text"], padding="max_length", truncation=True)
 

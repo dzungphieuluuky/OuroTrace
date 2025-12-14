@@ -5,7 +5,7 @@ import torch
 import random
 from tqdm.auto import tqdm
 from .utils import generate_test_id
-from .data import create_test_datasets, create_perplexity_data, load_and_preprocess_data
+from .data_generator import create_test_datasets, create_perplexity_data, load_and_preprocess_data
 from .model import OuroBatchExperiment
 from .evaluation import run_holistic_evaluation
 

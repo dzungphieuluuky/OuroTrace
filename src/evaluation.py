@@ -3,7 +3,7 @@ import re
 import torch
 import random
 from tqdm.auto import tqdm
-from .data import create_reasoning_primitives_data, format_5_shot_prompt
+from .data_generator import create_reasoning_primitives_data, format_5_shot_prompt
 
 def analyze_experiment_results(accuracy_results: list, perplexity_results: list = None):
     """Generate summary statistics dataframe"""
