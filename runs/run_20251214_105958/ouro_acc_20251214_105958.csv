@@ -1,0 +1,1759 @@
+task_type,difficulty,test_input,expected_answer,is_correct,test_id,ut_steps,full_response,prediction,generation_time,generated_tokens,input_tokens,prompt_idx
+n_ary,4_ops,670 + 693 + 431 + 646 =,2440,True,c047e0a7,1,"Current: 0
+Add 670: 0 + 670 = 670
+Current: 670
+Add 693: 670 + 693 = 1363
+Current: 1363
+Add 431: 1363 + 431 = 1794
+Current: 1794
+Add 646: 1794 + 646 = 2440
+Final: 2440",2440,2.377109826124979,119,336,0
+n_ary,4_ops,558 + 435 + 797 + 179 =,1969,True,c6bdf48e,1,"Current: 0
+Add 558: 0 + 558 = 558
+Current: 558
+Add 435: 558 + 435 = 993
+Current: 993
+Add 797: 993 + 797 = 1790
+Current: 1790
+Add 179: 1790 + 179 = 1969
+Final: 1969",1969,2.377109826124979,115,336,1
+n_ary,4_ops,049 + 729 + 144 + 268 =,1190,True,39b14ebe,1,"Current: 0
+Add 049: 0 + 49 = 49
+Current: 49
+Add 729: 49 + 729 = 778
+Current: 778
+Add 144: 778 + 144 = 922
+Current: 922
+Add 268: 922 + 268 = 1190
+Final: 1190",1190,2.377109826124979,108,336,2
+n_ary,4_ops,802 + 410 + 006 + 882 =,2100,True,60df60f5,1,"Current: 0
+Add 802: 0 + 802 = 802
+Current: 802
+Add 410: 802 + 410 = 1212
+Current: 1212
+Add 006: 1212 + 6 = 1218
+Current: 1218
+Add 882: 1218 + 882 = 2100
+Final: 2100",2100,2.377109826124979,116,336,3
+n_ary,4_ops,047 + 890 + 680 + 724 =,2341,True,bceda43e,1,"Current: 0
+Add 047: 0 + 47 = 47
+Current: 47
+Add 890: 47 + 890 = 937
+Current: 937
+Add 680: 937 + 680 = 1617
+Current: 1617
+Add 724: 1617 + 724 = 2341
+Final: 2341",2341,2.377109826124979,111,336,4
+n_ary,4_ops,333 + 612 + 936 + 886 =,2767,True,61e5d6be,1,"Current: 0
+Add 333: 0 + 333 = 333
+Current: 333
+Add 612: 333 + 612 = 945
+Current: 945
+Add 936: 945 + 936 = 1881
+Current: 1881
+Add 886: 1881 + 886 = 2767
+Final: 2767",2767,2.377109826124979,115,336,5
+n_ary,4_ops,376 + 253 + 353 + 764 =,1746,True,d220822c,1,"Current: 0
+Add 376: 0 + 376 = 376
+Current: 376
+Add 253: 376 + 253 = 629
+Current: 629
+Add 353: 629 + 353 = 982
+Current: 982
+Add 764: 982 + 764 = 1746
+Final: 1746",1746,2.377109826124979,112,336,6
+n_ary,4_ops,904 + 579 + 393 + 204 =,2080,False,7768c6fa,1,"Current: 0
+Add 904: 0 + 904 = 904
+Current: 904
+Add 579: 904 + 579 = 1583
+Current: 1583
+Add 393: 1583 + 393 = 1976
+Current: 1976
+Add 204: 1976 + 204 = 2180
+Final: 2180",2180,2.377109826124979,119,336,7
+n_ary,4_ops,250 + 891 + 912 + 809 =,2862,True,ac4bc5b6,1,"Current: 0
+Add 250: 0 + 250 = 250
+Current: 250
+Add 891: 250 + 891 = 1141
+Current: 1141
+Add 912: 1141 + 912 = 2053
+Current: 2053
+Add 809: 2053 + 809 = 2862
+Final: 2862",2862,15.502512224874977,118,336,0
+n_ary,4_ops,527 + 968 + 049 + 985 =,2529,True,b0a96a3d,1,"Current: 0
+Add 527: 0 + 527 = 527
+Current: 527
+Add 968: 527 + 968 = 1495
+Current: 1495
+Add 049: 1495 + 49 = 1544
+Current: 1544
+Add 985: 1544 + 985 = 2529
+Final: 2529",2529,15.502512224874977,117,336,1
+n_ary,8_ops,707 + 424 + 148 + 404 + 389 + 656 + 988 + 164 =,3880,False,78746631,1,"Current: 0
+Add 707: 0 + 707 = 707
+Current: 707
+Add 424: 707 + 424 = 1131
+Current: 1131
+Add 148: 1131 + 148 = 1279
+Current: 1279
+Add 404: 1279 + 404 = 1683
+Current: 1683
+Add 656: 1683 + 656 = 2339
+Current: 2339
+Add 988: 2339 + 988 = 3327
+Current: 3327
+Add 164: 3327 + 164 = 3491
+Final: 3491",3491,15.502512224874977,211,356,2
+n_ary,8_ops,500 + 806 + 967 + 822 + 373 + 956 + 742 + 861 =,6027,True,e4c29231,1,"Current: 0
+Add 500: 0 + 500 = 500
+Current: 500
+Add 806: 500 + 806 = 1306
+Current: 1306
+Add 967: 1306 + 967 = 2273
+Current: 2273
+Add 822: 2273 + 822 = 3095
+Current: 3095
+Add 373: 3095 + 373 = 3468
+Current: 3468
+Add 956: 3468 + 956 = 4424
+Current: 4424
+Add 742: 4424 + 742 = 5166
+Current: 5166
+Add 861: 5166 + 861 = 6027
+Final: 6027",6027,15.502512224874977,242,356,3
+n_ary,8_ops,732 + 215 + 834 + 272 + 038 + 253 + 579 + 813 =,3736,False,65f3782a,1,"Current: 0
+Add 732: 0 + 732 = 732
+Current: 732
+Add 215: 732 + 215 = 947
+Current: 947
+Add 834: 947 + 834 = 1781
+Current: 1781
+Add 272: 1781 + 272 = 2053
+Current: 2053
+Add 038: 2053 + 38 = 2091
+Current: 2091
+Add 253: 2091 + 253 = 2344
+Current: 2344
+Add 813: 2344 + 813 = 3157
+Final: 3157",3157,15.502512224874977,207,356,4
+n_ary,8_ops,341 + 895 + 180 + 246 + 162 + 622 + 172 + 543 =,3161,True,9f9a5367,1,"Current: 0
+Add 341: 0 + 341 = 341
+Current: 341
+Add 895: 341 + 895 = 1236
+Current: 1236
+Add 180: 1236 + 180 = 1416
+Current: 1416
+Add 246: 1416 + 246 = 1662
+Current: 1662
+Add 162: 1662 + 162 = 1824
+Current: 1824
+Add 622: 1824 + 622 = 2446
+Current: 2446
+Add 172: 2446 + 172 = 2618
+Current: 2618
+Add 543: 2618 + 543 = 3161
+Final: 3161",3161,15.502512224874977,242,356,5
+n_ary,8_ops,142 + 332 + 959 + 304 + 788 + 096 + 577 + 929 =,4127,False,9af178da,1,"Current: 0
+
+a) 010 + 010 + 010 = 010 + 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = 010 + 010 = ",0,15.502512224874977,1024,356,6
+n_ary,8_ops,853 + 712 + 880 + 536 + 986 + 524 + 361 + 037 =,4889,False,1ed50a5b,1,"Current: 0
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it.
+
+- 037 is not a valid number, so we can ignore it",0,15.502512224874977,1024,356,7
+n_ary,8_ops,749 + 933 + 054 + 414 + 750 + 686 + 127 + 344 =,4057,True,1acbb7cd,1,"Current: 0
+Add 749: 0 + 749 = 749
+Current: 749
+Add 933: 749 + 933 = 1682
+Current: 1682
+Add 054: 1682 + 54 = 1736
+Current: 1736
+Add 414: 1736 + 414 = 2150
+Current: 2150
+Add 750: 2150 + 750 = 2900
+Current: 2900
+Add 686: 2900 + 686 = 3586
+Current: 3586
+Add 127: 3586 + 127 = 3713
+Current: 3713
+Add 344: 3713 + 344 = 4057
+Final: 4057",4057,15.491884821249982,241,356,0
+n_ary,8_ops,878 + 677 + 409 + 194 + 732 + 003 + 511 + 187 =,3591,False,30caaada,1,"Current: 0
+
+- 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",0,15.491884821249982,1024,356,1
+n_ary,8_ops,152 + 472 + 103 + 121 + 503 + 693 + 689 + 665 =,3398,True,bba4fcb5,1,"Current: 0
+Add 152: 0 + 152 = 152
+Current: 152
+Add 472: 152 + 472 = 624
+Current: 624
+Add 103: 624 + 103 = 727
+Current: 727
+Add 121: 727 + 121 = 848
+Current: 848
+Add 503: 848 + 503 = 1351
+Current: 1351
+Add 693: 1351 + 693 = 2044
+Current: 2044
+Add 689: 2044 + 689 = 2733
+Current: 2733
+Add 665: 2733 + 665 = 3398
+Final: 3398",3398,15.491884821249982,233,356,2
+n_ary,8_ops,719 + 797 + 005 + 354 + 683 + 685 + 497 + 242 =,3982,True,c4bd425b,1,"Current: 0
+Add 719: 0 + 719 = 719
+Current: 719
+Add 797: 719 + 797 = 1516
+Current: 1516
+Add 005: 1516 + 5 = 1521
+Current: 1521
+Add 354: 1521 + 354 = 1875
+Current: 1875
+Add 683: 1875 + 683 = 2558
+Current: 2558
+Add 685: 2558 + 685 = 3243
+Current: 3243
+Add 497: 3243 + 497 = 3740
+Current: 3740
+Add 242: 3740 + 242 = 3982
+Final: 3982",3982,15.491884821249982,240,356,3
+p_hop,2_hops,Sequence: DBBACCCADCBBDCDCBAAAADADBAACADDBBBCCCDDDBCDACDABADCAAABCDBDCDDBADCBDCDBAACBCBACABCDAADBACCDBBDACADCADCBBDDADBBACDCDBDCDCDAAAADCCCACCDCADBBAAABAABBDCCCCBDDADABDCDBACACBACDCCCACACBADCCDCCBADADBBBCBCAABABCBCBDCCDABBCADADDACCCBCBABCCDBBAAABABDCDCDCBACDADDBBBBD. Start: B. Hop 2 times.,D,False,33428e7a,1,Start at B. Found 'B' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Final: B,B,11.610590894750032,34,342,0
+p_hop,2_hops,Sequence: DADDCCADACBABCBCBBCCDDBBACADCCCAADBACCBCBAABDBCBDDABDABBBCBCDBBADCCDBCCBDCDAAACDBDCDCBCCDCDBADBCBDDAABCDABDCBBCBADBACACDDAABBBBADBDABDCACDDCCDABDCABCDBADADBBCADCBCBACDDBCBBCBAABBADDBDBAAADCADADDBDABABDDCACDBCCBCBCADCDCCDAACAABBCBBADCBACDCDABDCDCBBBAACCBCBA. Start: B. Hop 2 times.,A,False,7c115679,1,Start at B. Found 'B' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Final: B,B,11.610590894750032,34,345,1
+p_hop,2_hops,Sequence: ADCDDADADAACAABABCDCABBBCDDCBCCBABBBABCCBABACADABACAACBBABCADCABACDCCADBAAABCACADBCDDDDCAADBCDBCDCDDDCBDDABAABDDDBCCBBCDADCBDBBDBDBADCCBCCADCACAACDCABDDCDAABDACBCBBABCCDACAAACAADDBCDBDAADBBBBBBCCDCCDCBBBDDDCAACDACADBCDDACBCCDAACCABCADDBBDACDACCAAADABDDDBDB. Start: B. Hop 2 times.,B,False,e6ed28a4,1,Start at B. Found 'B' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Found 'B' at index 2. Next token is A. Found 'A' at index 3. Next token is B. Found 'B' at index 4. Next token is A. Found 'A' at index 5. Next token is B. Found 'B' at index 6. Next token is A. Found 'A' at index 7. Next token is B. Found 'B' at index 8. Next token is A. Found 'A' at index 9. Next token is B. Found 'B' at index 10. Next token is A. Found 'A' at index 11. Next token is B. Found 'B' at index 12. Next token is A. Found 'A' at index 13. Next token is B. Found 'B' at index 14. Next token is A. Found 'A' at index 15. Next token is B. Found 'B' at index 16. Next token is A. Found 'A' at index 17. Next token is B. Found 'B' at index 18. Next token is A. Found 'A' at index 19. Next token is B. Found 'B' at index 20. Next token is A. Found 'A' at index 21. Next token is B. Found 'B' at index 22. Next token is A. Found 'A' at index 23. Next token is B. Found 'B' at index 24. Next token is A. Found 'A' at index 25. Next token is B. Found 'B' at index 26. Next token is A. Found 'A' at index 27. Next token is B. Found 'B' at index 28. Next token is A. Found 'A' at index 29. Next token is B. Found 'B' at index 30. Next token is A. Found 'A' at index 31. Next token is B. Found 'B' at index 32. Next token is A. Found 'A' at index 33. Next token is B. Found 'B' at index 34. Next token is A. Found 'A' at index 35. Next token is B. Found 'B' at index 36. Next token is A. Found 'A' at index 37. Next token is B. Found 'B' at index 38. Next token is A. Found 'A' at index 39. Next token is B. Found 'B' at index 40. Next token is A. Found 'A' at index 41. Next token is B. Found 'B' at index 42. Next token is A. Found 'A' at index 43. Next token is B. Found 'B' at index 44. Next token is A. Found 'A' at index 45. Next token is B. Found 'B' at index 46. Next token is A. Found 'A' at index 47. Next token is B. Found 'B' at index 48. Next token is A. Found 'A' at index 49. Next token is B. Found 'B' at index 50. Next token is A. Found 'A' at index 51. Next token is B. Found 'B' at index 52. Next token is A. Found 'A' at index 53. Next token is B. Found 'B' at index 54. Next token is A. Found 'A' at index 55. Next token is B. Found 'B' at index 56. Next token is A. Found 'A' at index 57. Next token is B. Found 'B' at index 58. Next token is A. Found 'A' at index 59. Next token is B. Found 'B' at index 60. Next token is A. Found 'A' at index 61. Next token is B. Found 'B' at index 62. Next token is A. Found 'A' at index 63. Next token is B. Found 'B' at index 64. Next token is A. Found 'A' at index 65. Next token is B. Found 'B' at index 66. Next token is A. Found 'A' at index 67. Next token is B. Found 'B' at index 68. Next token,A,11.610590894750032,1024,342,2
+p_hop,2_hops,Sequence: DADADBACACCADCCABDDCCDDCDBBBBBACBBCDDCBABDDABDCDBABBBBCDADAABDBDACABABCACADABAABDBAABABAADCABDBABCDDBBBBCACBACCDCCADBDADCADCDDDDBDBAABACBDAAAADCABCCBDBBDBCCBBCDDBBCDBACBAACDDDDBBCCDDADBBBDCACBCBADABCACBBBCABCBCABDACADBDDBDACABBBABBACBCDCBDCDCABABABCDABDDBD. Start: C. Hop 2 times.,D,False,a4816475,1,Start at C. Found 'C' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Final: B.,B,11.610590894750032,35,344,3
+p_hop,2_hops,Sequence: BACAABDACBBCDCDBACACABABBACAADDDCBCBBBDDDBADAAADADDCDBBCACBCCCDBBBDCADDCDADDCDABAADDBBCCBBBCDADCBDABCABDCACCCBDDAACCCDDBBDCDBDDADDDDAADBBCDBADCCABCCBDCBACADAACDDDACCADABAADDCAAACAABCCCCAAABAABDDCCBCDBDBCBDCADBBCAACDCAABBBCBABADADBAAAADDDBBABCCAACAADBADBCAD. Start: C. Hop 2 times.,A,False,0d80204d,1,Start at C. Found 'C' at index 0. Next token is A. Next token is B. Next token is B. Final: B.,B,28.88191365725004,31,342,0
+p_hop,2_hops,Sequence: ABDABCDCCCABCBCCDCADDBBCCBABACDADCCDCBBACDCCCAACDADCDDACDDCBAACCBCBDDADDDAAACDDADDDDCCDDDACDBACCBABCABCCADDBBBCCABBBDBDBDBDDCDBBBADBADDABBCBCBBDADBCDCBDBCDABBBBDAACDBBAABCABACCBCBDCAACADBDBBCBCDCCAACBBBDCAADADCBBBCCACBBCBCDADBDDDCCBAABDDACCDBDCDCDDBDDCCDBA. Start: B. Hop 2 times.,A,False,e1379861,1,Start at B. Found 'B' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Final: B,B,28.88191365725004,34,346,1
+p_hop,2_hops,Sequence: AAAADDAADADBDADAABABBDADBBBBCCCABABDDAACDAACDBAABDCDDCBBBCDABCCDDCBDBDDCCDBCBAAACCDADBDABBCDABACCCBBBBAABDBABCDCBCDCBBAAACDBBABBDCDDCBAADDDCDCCDBDABCCADCBCADCBBAABBDABDCACBDABBCBDBBACCCABCDBACCCBBDBABADABADBBBADCDADDAADDBDDDDDADDDBBBBACABDABDCADDAAAACBCDAB. Start: C. Hop 2 times.,B,False,fabb059e,1,Start at C. Found 'C' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Found 'B' at index 2. Next token is B. Found 'B' at index 3. Next token is A. Found 'A' at index 4. Next token is B. Found 'B' at index 5. Next token is A. Found 'A' at index 6. Next token is B. Found 'B' at index 7. Next token is B. Found 'B' at index 8. Next token is A. Found 'A' at index 9. Next token is B. Found 'B' at index 10. Next token is A. Found 'A' at index 11. Next token is B. Found 'B' at index 12. Next token is A. Found 'A' at index 13. Next token is B. Found 'B' at index 14. Next token is A. Found 'A' at index 15. Next token is B. Found 'B' at index 16. Next token is A. Found 'A' at index 17. Next token is B. Found 'B' at index 18. Next token is A. Found 'A' at index 19. Next token is B. Found 'B' at index 20. Next token is A. Found 'A' at index 21. Next token is B. Found 'B' at index 22. Next token is A. Found 'A' at index 23. Next token is B. Found 'B' at index 24. Next token is A. Found 'A' at index 25. Next token is B. Found 'B' at index 26. Next token is A. Found 'A' at index 27. Next token is B. Found 'B' at index 28. Next token is A. Found 'A' at index 29. Next token is B. Found 'B' at index 30. Next token is A. Found 'A' at index 31. Next token is B. Found 'B' at index 32. Next token is A. Found 'A' at index 33. Next token is B. Found 'B' at index 34. Next token is A. Found 'A' at index 35. Next token is B. Found 'B' at index 36. Next token is A. Found 'A' at index 37. Next token is B. Found 'B' at index 38. Next token is A. Found 'A' at index 39. Next token is B. Found 'B' at index 40. Next token is A. Found 'A' at index 41. Next token is B. Found 'B' at index 42. Next token is A. Found 'A' at index 43. Next token is B. Found 'B' at index 44. Next token is A. Found 'A' at index 45. Next token is B. Found 'B' at index 46. Next token is A. Found 'A' at index 47. Next token is B. Found 'B' at index 48. Next token is A. Found 'A' at index 49. Next token is B. Found 'B' at index 50. Next token is A. Found 'A' at index 51. Next token is B. Found 'B' at index 52. Next token is A. Found 'A' at index 53. Next token is B. Found 'B' at index 54. Next token is A. Found 'A' at index 55. Next token is B. Found 'B' at index 56. Next token is A. Found 'A' at index 57. Next token is B. Found 'B' at index 58. Next token is A. Found 'A' at index 59. Next token is B. Found 'B' at index 60. Next token is A. Found 'A' at index 61. Next token is B. Found 'B' at index 62. Next token is A. Found 'A' at index 63. Next token is B. Found 'B' at index 64. Next token is A. Found 'A' at index 65. Next token is B. Found 'B' at index 66. Next token is A. Found 'A' at index 67. Next token is B. Found 'B' at index 68. Next token,A,28.88191365725004,1024,344,2
+p_hop,2_hops,Sequence: BDBCDBAADACCADACADDBCBCCADCCDCDACAABBADAACBCDCBBDADDBCDADAAACBCBDBBABCCBBDDADBCCABBADABABBCCAACBADBBABCCACCDBABDCCDDCBADBBDCBACCDBBAADBAABAADDBCAACBACADCDACABCCBABBABABBCDBDAACCCBACCAAACDCAABDAABACACAACADBCBCADBDAACABCCDDCCDACDDDBDCADBDACBDADBBBCCCCCDDACCB. Start: C. Hop 2 times.,D,False,2f948491,1,Start at C. Found 'C' at index 0. Next token is B. Found 'B' at index 1. Next token is B. Found 'B' at index 2. Next token is A. Found 'A' at index 3. Next token is B. Found 'B' at index 4. Next token is A. Found 'A' at index 5. Next token is B. Found 'B' at index 6. Next token is A. Found 'A' at index 7. Next token is B. Found 'B' at index 8. Next token is A. Found 'A' at index 9. Next token is B. Found 'B' at index 10. Next token is A. Found 'A' at index 11. Next token is B. Found 'B' at index 12. Next token is A. Found 'A' at index 13. Next token is B. Found 'B' at index 14. Next token is A. Found 'A' at index 15. Next token is B. Found 'B' at index 16. Next token is A. Found 'A' at index 17. Next token is B. Found 'B' at index 18. Next token is A. Found 'A' at index 19. Next token is B. Found 'B' at index 20. Next token is A. Found 'A' at index 21. Next token is B. Found 'B' at index 22. Next token is A. Found 'A' at index 23. Next token is B. Found 'B' at index 24. Next token is A. Found 'A' at index 25. Next token is B. Found 'B' at index 26. Next token is A. Found 'A' at index 27. Next token is B. Found 'B' at index 28. Next token is A. Found 'A' at index 29. Next token is B. Found 'B' at index 30. Next token is A. Found 'A' at index 31. Next token is B. Found 'B' at index 32. Next token is A. Found 'A' at index 33. Next token is B. Found 'B' at index 34. Next token is A. Found 'A' at index 35. Next token is B. Found 'B' at index 36. Next token is A. Found 'A' at index 37. Next token is B. Found 'B' at index 38. Next token is A. Found 'A' at index 39. Next token is B. Found 'B' at index 40. Next token is A. Found 'A' at index 41. Next token is B. Found 'B' at index 42. Next token is A. Found 'A' at index 43. Next token is B. Found 'B' at index 44. Next token is A. Found 'A' at index 45. Next token is B. Found 'B' at index 46. Next token is A. Found 'A' at index 47. Next token is B. Found 'B' at index 48. Next token is A. Found 'A' at index 49. Next token is B. Found 'B' at index 50. Next token is A. Found 'A' at index 51. Next token is B. Found 'B' at index 52. Next token is A. Found 'A' at index 53. Next token is B. Found 'B' at index 54. Next token is A. Found 'A' at index 55. Next token is B. Found 'B' at index 56. Next token is A. Found 'A' at index 57. Next token is B. Found 'B' at index 58. Next token is A. Found 'A' at index 59. Next token is B. Found 'B' at index 60. Next token is A. Found 'A' at index 61. Next token is B. Found 'B' at index 62. Next token is A. Found 'A' at index 63. Next token is B. Found 'B' at index 64. Next token is A. Found 'A' at index 65. Next token is B. Found 'B' at index 66. Next token is A. Found 'A' at index 67. Next token is B. Found 'B' at index 68. Next token,B,28.88191365725004,1024,345,3
+p_hop,2_hops,Sequence: DCCACABDCBDCDBBADCACDDCBDCDDCDCDACADCAABAACBCBABDBDDCDCCDBDDCABDAABCCDBDDBADCBCDCBDBBBDBCCDCCCCAACAAABABDBBADACABCBAABCCBCBBCCBAACABCCBDDACADCCDBBDBDCDDABCCACADCABBCABDCBCACBCACADCDADBADCCBACACDCBACCDADBDBBDCDBDBCBDBBADDABACCDAADCADADCABBAABCCBDBDAACCCACCD. Start: A. Hop 2 times.,D,False,e4da5364,1,Start at A. Found 'A' at index 0. Next token is A. Next token is B. Final: B.,B,11.57683513850003,26,345,0
+p_hop,2_hops,Sequence: ACDDDCACCDBBAADBADABCABABCDBABDDAACCCDDCBDDADDABBADDCBADADCCCABCADCBABDCDCBDCDACDDAAABACBCCBDCDDBBCCAAAABCACCDDADACACDCDBBABDABDCCCACCACCDAAAACBBBDBDBCACBDCBAACCAAABDAAAACDABCCCADAADCCDADCACDCDCCDDBDDCDCAABACBADCDBCABCBDBCCCCACDDDCBBDAABACACBABDAAAAADDCCBC. Start: B. Hop 2 times.,C,False,b2567fd3,1,Start at B. Found 'B' at index 0. Next token is A. Found 'A' at index 1. Next token is B. Final: B,B,11.57683513850003,34,343,1
+p_hop,4_hops,Sequence: ADBCAAACBDCDBAABBCBCCDCADDACAADCBBBDBBCBDBBDBDCADBABDACDADABDBCCCDDAACDBCDBAAACBADDCDBAAAADADCAAACACCBDBCDAACADBBCCBDBDACCADBDADBCACDDDDCCDDCDDCAAABDCCBBBCBBBDDABAADCDBBBACBABADDCCBDDACACAABABDDCBDACCBCDCBABCADBADABBCCBDCCABBCABCDACDACCBAACBACCDCDCBCBACDDC. Start: C. Hop 4 times.,B,True,55340658,1,Start at C. Found 'C' at index 0. Next token is A. Next token is B. Next token is B. Final: B.,B,11.57683513850003,31,341,2
+p_hop,4_hops,Sequence: DBACCDCCDCBBADCCBDBDDDAAABBBDADBACCDADCBDACACBBDCBCCCDDDDBACABCDCADABBCDCCABDDABBDDCCBBAADADBABDBBCBBDCABCADBABCCABBDDDDCCBCBBBADBCCABCABDABDCACBCABDCCBDDDBAADDCCCAACBCCACDCBBCCDADDDACCCAACACDDDBABCDDCACBDDCAABCCBDCCBBCACAABBDCBCADCCACDAACABADCDDADBDBACAAB. Start: B. Hop 4 times.,C,False,4384b044,1,Start at B. Found 'B' at index 0. Next token is A. Next token is B. Next token is B. Next token is B. Next token is D. Next token is C. Next token is C. Next token is D. Next token is C. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is B. Next token is,A,11.57683513850003,1024,345,3
+p_hop,4_hops,Sequence: ADCACABCDACACACBDBBCCDADBDACCDDADCAABBCBADBBCCDACADACAAACAAADBCBBCAADBCABDBCADCBAABBCCCDABADBDBDBBBCBCDBBDCCCCDDDBBBBADBACCDCACDACDBDDACBBCABACBAABBAAACDCACADCAADACDCBCBDBDACBBADBABDBABDABCDBADDABCADABDAACCBDCBACCCCCBDCBADAABCCBADDBDCDBACDADBCBBDACDCCCCCDB. Start: B. Hop 4 times.,D,False,f661cbe0,1,Start at B. Found 'B' at index 0. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is C. Next token is B. Next token is A. Next token is,A,34.15227249075002,1024,344,0
+p_hop,4_hops,Sequence: DCBBABCAACCDDDBACCADAACAAADCACABABBADDAADDDCBAABBBCAAAADBABBADBABBBADDDBBDCCDAABDAACCBDDCCBACAADDCCBCCDDCBBBBBBDCDCBCBCCADDCBCBABBDDADDBDABCDAADBAAABABCABDDDBDBCAADAABBDDABCABCDACBCAAAACADDDDDBBBCBADDCBACBCADDBCACDCCABCBDDDCADDBBDDBCBCBABCCBADDACDBBCBCCABA. Start: C. Hop 4 times.,A,False,fe9a4edf,1,Start at C. Found 'C' at index 0. Next token is B. Found 'B' at index 1. Next token is A. Found 'A' at index 2. Next token is B. Found 'B' at index 3. Next token is A. Found 'A' at index 4. Next token is B. Found 'B' at index 5. Next token is A. Found 'A' at index 6. Next token is B. Found 'B' at index 7. Next token is A. Found 'A' at index 8. Next token is B. Found 'B' at index 9. Next token is A. Found 'A' at index 10. Next token is B. Found 'B' at index 11. Next token is A. Found 'A' at index 12. Next token is B. Found 'B' at index 13. Next token is A. Found 'A' at index 14. Next token is B. Found 'B' at index 15. Next token is A. Found 'A' at index 16. Next token is B. Found 'B' at index 17. Next token is A. Found 'A' at index 18. Next token is B. Found 'B' at index 19. Next token is A. Found 'A' at index 20. Next token is B. Found 'B' at index 21. Next token is A. Found 'A' at index 22. Next token is B. Found 'B' at index 23. Next token is A. Found 'A' at index 24. Next token is B. Found 'B' at index 25. Next token is A. Found 'A' at index 26. Next token is B. Found 'B' at index 27. Next token is A. Found 'A' at index 28. Next token is B. Found 'B' at index 29. Next token is A. Found 'A' at index 30. Next token is B. Found 'B' at index 31. Next token is A. Found 'A' at index 32. Next token is B. Found 'B' at index 33. Next token is A. Found 'A' at index 34. Next token is B. Found 'B' at index 35. Next token is A. Found 'A' at index 36. Next token is B. Found 'B' at index 37. Next token is A. Found 'A' at index 38. Next token is B. Found 'B' at index 39. Next token is A. Found 'A' at index 40. Next token is B. Found 'B' at index 41. Next token is A. Found 'A' at index 42. Next token is B. Found 'B' at index 43. Next token is A. Found 'A' at index 44. Next token is B. Found 'B' at index 45. Next token is A. Found 'A' at index 46. Next token is B. Found 'B' at index 47. Next token is A. Found 'A' at index 48. Next token is B. Found 'B' at index 49. Next token is A. Found 'A' at index 50. Next token is B. Found 'B' at index 51. Next token is A. Found 'A' at index 52. Next token is B. Found 'B' at index 53. Next token is A. Found 'A' at index 54. Next token is B. Found 'B' at index 55. Next token is A. Found 'A' at index 56. Next token is B. Found 'B' at index 57. Next token is A. Found 'A' at index 58. Next token is B. Found 'B' at index 59. Next token is A. Found 'A' at index 60. Next token is B. Found 'B' at index 61. Next token is A. Found 'A' at index 62. Next token is B. Found 'B' at index 63. Next token is A. Found 'A' at index 64. Next token is B. Found 'B' at index 65. Next token is A. Found 'A' at index 66. Next token is B. Found 'B' at index 67. Next token is A. Found 'A' at index 68. Next token,B,34.15227249075002,1024,344,1
+p_hop,4_hops,Sequence: AAADCBBCCCDCBABDABDAAADDBCADCABADCBCBCCCBCBDDCBCBDAADDCABADDBDBCACDDCABCBBDDCADDCDDCDBADADCADDDBDDADCCCBCBDDBDACABDBABDCDBBAABBDABACDACBDCBCDBADBACCCDCCBCCACCDDDDCCDBAABDBCADCDACDAADDCAADBDADCBDCBACBBDCDDBDACADACCBAAACBBCACBCADCACABDACBADCACDDBBAACACCBDBDD. Start: B. Hop 4 times.,B,False,b81b3d5c,1,Start at B. Found 'B' at index 0. Next token is A. Next token is A. Next token is B. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is C. Next token is B. Next token is A. Next token is D. Next token is C. Next token is,A,34.15227249075002,1024,347,2
+p_hop,4_hops,Sequence: CBBAAACAAAACADDCCBAAACBABCCADBABCCDACBCCADCABCCBBADBDBDDCBDABDCCBCCCCABABDADCADABBADAAACCDCBDCDBBADDBAACDCDABADBDBDDADACCACDDADCABBDDDCCBDDDCCAAADCDBDBACCABDBAABDBDCCBDCADDACADBCBCDCDCDAADDBBBBDCDBAABADACCCDCBBADBCBCAAACDDDDBABBDDADDBCCCBBBBBBADCADBDDDCABA. Start: B. Hop 4 times.,B,False,1284ba0a,1,Start at B. Found 'B' at index 0. Next token is A. Next token is B. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is B. Next token is A. Next token is,A,34.15227249075002,1024,341,3
+p_hop,4_hops,Sequence: CCABDBBBBDBCCBDCDBAABDDBCBBACDABACACBBBCBBBDCCDCBBCACDABAADDBACAABCCACDDAABBDDBBCBDCDDBDCADBABDCBDDCBAAADCBDBABDACCADADAAAAADDCCAACABBDDDDDDCBACBDBCCCCACABBDDBBCACDADBCDDBADDBBAAADABBBAAAABBDCBADDDDDABDACDDAABDABABDBDACCDADBABCDDDCCBDACDBDBDDABDACDABABBABD. Start: D. Hop 4 times.,A,False,23992140,1,Start at D. Found 'D' at index 0. Next token is C. Found 'C' at index 1. Next token is B. Found 'B' at index 2. Next token is A. Found 'A' at index 3. Next token is B. Found 'B' at index 4. Next token is D. Found 'D' at index 5. Next token is B. Found 'B' at index 6. Next token is B. Found 'B' at index 7. Next token is B. Found 'B' at index 8. Next token is B. Found 'B' at index 9. Next token is D. Found 'D' at index 10. Next token is C. Found 'C' at index 11. Next token is B. Found 'B' at index 12. Next token is B. Found 'B' at index 13. Next token is B. Found 'B' at index 14. Next token is B. Found 'B' at index 15. Next token is B. Found 'B' at index 16. Next token is B. Found 'B' at index 17. Next token is B. Found 'B' at index 18. Next token is B. Found 'B' at index 19. Next token is B. Found 'B' at index 20. Next token is B. Found 'B' at index 21. Next token is B. Found 'B' at index 22. Next token is B. Found 'B' at index 23. Next token is B. Found 'B' at index 24. Next token is B. Found 'B' at index 25. Next token is B. Found 'B' at index 26. Next token is B. Found 'B' at index 27. Next token is B. Found 'B' at index 28. Next token is B. Found 'B' at index 29. Next token is B. Found 'B' at index 30. Next token is B. Found 'B' at index 31. Next token is B. Found 'B' at index 32. Next token is B. Found 'B' at index 33. Next token is B. Found 'B' at index 34. Next token is B. Found 'B' at index 35. Next token is B. Found 'B' at index 36. Next token is B. Found 'B' at index 37. Next token is B. Found 'B' at index 38. Next token is B. Found 'B' at index 39. Next token is B. Found 'B' at index 40. Next token is B. Found 'B' at index 41. Next token is B. Found 'B' at index 42. Next token is B. Found 'B' at index 43. Next token is B. Found 'B' at index 44. Next token is B. Found 'B' at index 45. Next token is B. Found 'B' at index 46. Next token is B. Found 'B' at index 47. Next token is B. Found 'B' at index 48. Next token is B. Found 'B' at index 49. Next token is B. Found 'B' at index 50. Next token is B. Found 'B' at index 51. Next token is B. Found 'B' at index 52. Next token is B. Found 'B' at index 53. Next token is B. Found 'B' at index 54. Next token is B. Found 'B' at index 55. Next token is B. Found 'B' at index 56. Next token is B. Found 'B' at index 57. Next token is B. Found 'B' at index 58. Next token is B. Found 'B' at index 59. Next token is B. Found 'B' at index 60. Next token is B. Found 'B' at index 61. Next token is B. Found 'B' at index 62. Next token is B. Found 'B' at index 63. Next token is B. Found 'B' at index 64. Next token is B. Found 'B' at index 65. Next token is B. Found 'B' at index 66. Next token is B. Found 'B' at index 67. Next token is B. Found 'B' at index 68. Next token,C,34.20876684174999,1024,344,0
+p_hop,4_hops,Sequence: CACCABCBDADBDAADDACBACAADCBACDDDBBDCABDACBBACCADACBDDBBADDCAADCDCDACCBBCCBBDADABAACDDDABDCCACCCCDBDCCCAABCCCBDADBBACCDDDBDBADBBAADDAACACCAABAACADDDCAADDAAACBCDADABDDAACBCCDCBBABDCDCDAACADCBCCCDAADADBCDCBBDDBABDDAABCACCCCCDADCAAABBBAACBDABDCCAADDCDCABDBCCDC. Start: D. Hop 4 times.,C,True,051eee37,1,Start at D. Found 'D' at index 0. Next token is C. Found 'C' at index 1. Next token is B. Found 'B' at index 2. Next token is A. Found 'A' at index 3. Next token is C. Found 'C' at index 4. Next token is A. Found 'A' at index 5. Next token is B. Found 'B' at index 6. Next token is D. Found 'D' at index 7. Next token is C. Found 'C' at index 8. Next token is A. Found 'A' at index 9. Next token is C. Found 'C' at index 10. Next token is B. Found 'B' at index 11. Next token is D. Found 'D' at index 12. Next token is A. Found 'A' at index 13. Next token is C. Found 'C' at index 14. Next token is A. Found 'A' at index 15. Next token is B. Found 'B' at index 16. Next token is D. Found 'D' at index 17. Next token is C. Found 'C' at index 18. Next token is A. Found 'A' at index 19. Next token is C. Found 'C' at index 20. Next token is B. Found 'B' at index 21. Next token is D. Found 'D' at index 22. Next token is A. Found 'A' at index 23. Next token is C. Found 'C' at index 24. Next token is A. Found 'A' at index 25. Next token is B. Found 'B' at index 26. Next token is D. Found 'D' at index 27. Next token is C. Found 'C' at index 28. Next token is A. Found 'A' at index 29. Next token is C. Found 'C' at index 30. Next token is A. Found 'A' at index 31. Next token is B. Found 'B' at index 32. Next token is D. Found 'D' at index 33. Next token is C. Found 'C' at index 34. Next token is A. Found 'A' at index 35. Next token is B. Found 'B' at index 36. Next token is D. Found 'D' at index 37. Next token is C. Found 'C' at index 38. Next token is A. Found 'A' at index 39. Next token is C. Found 'C' at index 40. Next token is A. Found 'A' at index 41. Next token is B. Found 'B' at index 42. Next token is D. Found 'D' at index 43. Next token is C. Found 'C' at index 44. Next token is A. Found 'A' at index 45. Next token is B. Found 'B' at index 46. Next token is D. Found 'D' at index 47. Next token is C. Found 'C' at index 48. Next token is A. Found 'A' at index 49. Next token is B. Found 'B' at index 50. Next token is D. Found 'D' at index 51. Next token is C. Found 'C' at index 52. Next token is A. Found 'A' at index 53. Next token is B. Found 'B' at index 54. Next token is D. Found 'D' at index 55. Next token is C. Found 'C' at index 56. Next token is A. Found 'A' at index 57. Next token is B. Found 'B' at index 58. Next token is D. Found 'D' at index 59. Next token is C. Found 'C' at index 60. Next token is A. Found 'A' at index 61. Next token is B. Found 'B' at index 62. Next token is D. Found 'D' at index 63. Next token is C. Found 'C' at index 64. Next token is A. Found 'A' at index 65. Next token is B. Found 'B' at index 66. Next token is D. Found 'D' at index 67. Next token is C. Found 'C' at index 68. Next token,C,34.20876684174999,1024,338,1
+p_hop,4_hops,Sequence: CDBDDCCCCADDBABBBCCBBCDBABCBDCBBCBADBADAACBABCBCDBADBDBAADBABDADDBCCCCABADCDAABBAACCDACCBBCAABBDDBBCCCBDBADCBAABCAABAACDBDBCCDDCCBBCDDAADDACBCDCBBDDCDBACCABABDDCADBDCDDBBCCCDADAAADDBDDCAAABADDBDCCBDACDCCCCDAAADAADDDABDADCBBBBBDCABDADDDAAABCACDDDAAACDADCBDB. Start: B. Hop 4 times.,A,True,b95aa33f,1,Start at B. Found 'B' at index 0. Next token is A. Next token is B. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is C. Next token is B. Next token is D. Next token is,A,34.20876684174999,1024,343,2
+p_hop,4_hops,Sequence: DCDCCCDDBBBADDABCABDAABBCAADDCADDCBABABBABCCDBADCDADCBCACACDBAACAAACCABDBCAADBABBDCACADCBCDCBCBBDDCBACCDCBAABCCBBBAABBDCDADADCDBCDBCAABCBBCDACCBADCCDBADACDACAACCDAADCDADABDDAADBCDBACAACCDBDCCDACBAABADCDCAAADDDDDCDABDCABDABBBCDDACCDAAADBBCDDADCADCBADDCBDBDC. Start: C. Hop 4 times.,C,False,a9b639db,1,Start at C. Found 'C' at index 0. Next token is D. Found 'D' at index 1. Next token is B. Found 'B' at index 2. Next token is A. Found 'A' at index 3. Next token is D. Found 'D' at index 4. Next token is C. Found 'C' at index 5. Next token is B. Found 'B' at index 6. Next token is A. Found 'A' at index 7. Next token is D. Found 'D' at index 8. Next token is C. Found 'C' at index 9. Next token is B. Found 'B' at index 10. Next token is A. Found 'A' at index 11. Next token is D. Found 'D' at index 12. Next token is C. Found 'C' at index 13. Next token is B. Found 'B' at index 14. Next token is A. Found 'A' at index 15. Next token is D. Found 'D' at index 16. Next token is C. Found 'C' at index 17. Next token is B. Found 'B' at index 18. Next token is A. Found 'A' at index 19. Next token is D. Found 'D' at index 20. Next token is C. Found 'C' at index 21. Next token is B. Found 'B' at index 22. Next token is A. Found 'A' at index 23. Next token is D. Found 'D' at index 24. Next token is C. Found 'C' at index 25. Next token is B. Found 'B' at index 26. Next token is A. Found 'A' at index 27. Next token is D. Found 'D' at index 28. Next token is C. Found 'C' at index 29. Next token is B. Found 'B' at index 30. Next token is A. Found 'A' at index 31. Next token is D. Found 'D' at index 32. Next token is C. Found 'C' at index 33. Next token is B. Found 'B' at index 34. Next token is A. Found 'A' at index 35. Next token is D. Found 'D' at index 36. Next token is C. Found 'C' at index 37. Next token is B. Found 'B' at index 38. Next token is A. Found 'A' at index 39. Next token is D. Found 'D' at index 40. Next token is C. Found 'C' at index 41. Next token is B. Found 'B' at index 42. Next token is A. Found 'A' at index 43. Next token is D. Found 'D' at index 44. Next token is C. Found 'C' at index 45. Next token is B. Found 'B' at index 46. Next token is A. Found 'A' at index 47. Next token is D. Found 'D' at index 48. Next token is C. Found 'C' at index 49. Next token is B. Found 'B' at index 50. Next token is A. Found 'A' at index 51. Next token is D. Found 'D' at index 52. Next token is C. Found 'C' at index 53. Next token is B. Found 'B' at index 54. Next token is A. Found 'A' at index 55. Next token is D. Found 'D' at index 56. Next token is C. Found 'C' at index 57. Next token is B. Found 'B' at index 58. Next token is A. Found 'A' at index 59. Next token is D. Found 'D' at index 60. Next token is C. Found 'C' at index 61. Next token is B. Found 'B' at index 62. Next token is A. Found 'A' at index 63. Next token is D. Found 'D' at index 64. Next token is C. Found 'C' at index 65. Next token is B. Found 'B' at index 66. Next token is A. Found 'A' at index 67. Next token is D. Found 'D' at index 68. Next token,D,34.20876684174999,1024,343,3
+igsm,depth_4_hierarchical_mod_7,Question. N#G := P#K * P#K. F#N := 1. A#P := M#D. E#K := E#J. P#K := K#C + D#C. I#M := O#E. M#D := E#J. N#N := O#E. D#C := N#N * E#J. O#E := 1. P#F := A#P. N#F := 6. A#J := P#K - P#K. K#D := 4. K#C := N#N. E#J := K#D. A#J?,0,True,f0b8f159,1,"Answer with CoT.
+
+- The first step is to substitute the given values for the variables.
+- The second step is to substitute the values for the variables.
+- The third step is to substitute the values for the variables.
+- The fourth step is to substitute the values for the variables.
+- The fifth step is to substitute the values for the variables.
+- The sixth step is to substitute the values for the variables.
+- The seventh step is to substitute the values for the variables.
+- The eighth step is to substitute the values for the variables.
+- The ninth step is to substitute the values for the variables.
+- The tenth step is to substitute the values for the variables.
+- The eleventh step is to substitute the values for the variables.
+- The twelfth step is to substitute the values for the variables.
+- The thirteenth step is to substitute the values for the variables.
+- The fourteenth step is to substitute the values for the variables.
+- The fifteenth step is to substitute the values for the variables.
+- The sixteenth step is to substitute the values for the variables.
+- The seventeenth step is to substitute the values for the variables.
+- The eighteenth step is to substitute the values for the variables.
+- The nineteenth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.
+- The twentieth step is to substitute the values for the variables.",0,58.13142553699993,1024,431,0
+igsm,depth_4_hierarchical_mod_7,Question. L#F := J#I. E#C := F#D. D#A := 5. F#D := J#O. E#E := F#D. M#M := K#B + O#C. O#C := L#F. M#G := J#O + J#O. D#F := 3. D#O := E#E - E#C. K#B := L#F. J#O := D#F. N#A := 3. J#I := N#A. B#N := 3. D#O?,0,True,30fe8b47,1,"Answer with CoT.
+
+- 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. ",0,58.13142553699993,1024,419,1
+igsm,depth_4_hierarchical_mod_7,Question. B#E := A#J. M#N := B#E. K#H := 3. B#F := C#G. J#G := G#K - A#J. K#M := G#K - A#J. O#F := 4. D#H := C#G. I#M := G#K + A#J. A#J := K#H. B#G := 1. C#H := K#M. M#J := P#L + C#G. P#L := J#G. G#K := P#B. C#G := I#M - J#G. P#B := 2. B#F?,6,False,6d29c53b,1,"Answer with CoT.
+
+- 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. ",0,58.2594958064999,1024,443,0
+igsm,depth_4_hierarchical_mod_7,Question. P#B := 0. E#N := K#E. P#E := B#D. H#E := O#H * L#L. F#F := L#K + L#K. J#O := L#L + P#B. H#A := L#K - J#O. B#D := O#P + P#B. G#B := O#I. O#H := 3. K#E := F#F. O#I := H#A. H#L := J#O. L#K := P#B. L#L := 1. O#P := 1. G#B?,6,False,325ab2f7,1,"Answer with CoT.
+
+- 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. ",0,58.2594958064999,1024,435,1
+igsm,depth_4_hierarchical_mod_7,Question. E#K := 4. P#I := J#I * G#D. A#M := E#K + M#M. P#A := P#O. G#D := P#A. M#M := 3. O#E := H#L * H#L. G#J := 5. J#I := P#A * A#M. H#L := J#I. P#F := P#I. P#O := 1. O#D := G#D. C#J := P#I. C#J?,0,True,b88966bb,1,"Answer with CoT.
+
+- 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. ",0,23.888295556999992,1024,415,0
+igsm,depth_4_hierarchical_mod_7,Question. H#D := P#O. N#I := A#M. I#J := G#E + D#L. P#O := 0. M#F := N#B. I#D := N#I. G#E := N#I. D#F := 3. E#B := D#F * A#M. D#L := H#J. A#M := 0. H#J := D#F * A#M. N#B := D#L. D#K := 0. L#L := N#B. C#C := N#I. L#L?,0,True,fb5ad91c,1,"Answer with CoT.
+
+- The first step is to substitute the given values for the variables.
+- The second step is to substitute the values for the variables in the given equations.
+- The third step is to simplify the equations.
+- The fourth step is to solve the equations.
+- The fifth step is to output the result.",0,23.888295556999992,68,427,1
+igsm,depth_4_hierarchical_mod_7,Question. F#G := A#D. N#P := F#G + F#G. C#D := F#G. A#I := 1. L#H := D#D. J#G := 4. A#D := A#I. C#F := A#I. B#K := 6. I#N := N#P. D#N := N#P. D#D := 6. L#M := F#G. K#K := A#D. D#N?,2,False,78244049,1,"Answer with CoT.
+
+I#N = 6. ==> I#N = 6.
+
+N#N = 6. ==> N#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = 6.
+
+D#N = 6. ==> D#N = 6.
+
+L#M = 6. ==> L#M = 6.
+
+K#K = 6. ==> K#K = 6.
+
+S#N = 6. ==> S#N = ",0,57.995385365000175,1024,403,0
+igsm,depth_4_hierarchical_mod_7,Question. C#O := 5. B#P := P#B. K#B := B#P * B#P. O#P := A#D + I#H. A#B := P#B. A#D := 1. H#E := A#D. B#H := O#P. N#M := 3. N#L := O#P + O#P. M#K := A#B + B#P. P#B := H#E. L#O := I#H. I#H := 1. N#G := B#P - B#P. N#G?,0,True,feee5682,1,"Answer with CoT.
+
+C#O = 5.
+
+B#P = 1.
+
+B#P = 1.
+
+L#L = B#P - 5.
+
+L#L = 3.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#P - B#P.
+
+N#G = 0.
+
+M#K = A#B + B#P.
+
+P#B = H#E.
+
+L#O = I#H.
+
+I#H = 1.
+
+N#G = B#",0,57.995385365000175,1024,427,1
+igsm,depth_4_hierarchical_mod_7,Question. K#D := M#P + M#P. G#O := 6. I#E := L#P. N#F := I#E. C#L := 5. O#P := K#D. M#P := M#C. F#B := L#P. P#J := K#A - K#A. E#F := O#P. G#C := K#D * B#A. M#C := 1. C#F := M#P. B#A := I#E. L#P := 1. K#A := K#D. P#J?,0,True,80e49fd1,1,"Answer with CoT.
+
+- 1. 1 = 1.
+- 2. 1 = 1.
+- 3. 1 = 1.
+- 4. 1 = 1.
+- 5. 1 = 1.
+- 6. 1 = 1.
+- 7. 1 = 1.
+- 8. 1 = 1.
+- 9. 1 = 1.
+- 10. 1 = 1.
+- 11. 1 = 1.
+- 12. 1 = 1.
+- 13. 1 = 1.
+- 14. 1 = 1.
+- 15. 1 = 1.
+- 16. 1 = 1.
+- 17. 1 = 1.
+- 18. 1 = 1.
+- 19. 1 = 1.
+- 20. 1 = 1.
+- 21. 1 = 1.
+- 22. 1 = 1.
+- 23. 1 = 1.
+- 24. 1 = 1.
+- 25. 1 = 1.
+- 26. 1 = 1.
+- 27. 1 = 1.
+- 28. 1 = 1.
+- 29. 1 = 1.
+- 30. 1 = 1.
+- 31. 1 = 1.
+- 32. 1 = 1.
+- 33. 1 = 1.
+- 34. 1 = 1.
+- 35. 1 = 1.
+- 36. 1 = 1.
+- 37. 1 = 1.
+- 38. 1 = 1.
+- 39. 1 = 1.
+- 40. 1 = 1.
+- 41. 1 = 1.
+- 42. 1 = 1.
+- 43. 1 = 1.
+- 44. 1 = 1.
+- 45. 1 = 1.
+- 46. 1 = 1.
+- 47. 1 = 1.
+- 48. 1 = 1.
+- 49. 1 = 1.
+- 50. 1 = 1.
+- 51. 1 = 1.
+- 52. 1 = 1.
+- 53. 1 = 1.
+- 54. 1 = 1.
+- 55. 1 = 1.
+- 56. 1 = 1.
+- 57. 1 = 1.
+- 58. 1 = 1.
+- 59. 1 = 1.
+- 60. 1 = 1.
+- 61. 1 = 1.
+- 62. 1 = 1.
+- 63. 1 = 1.
+- 64. 1 = 1.
+- 65. 1 = 1.
+- 66. 1 = 1.
+- 67. 1 = 1.
+- 68. 1 = 1.
+- 69. 1 = 1.
+- 70. 1 = 1.
+- 71. 1 = 1.
+- 72. 1 = 1.
+- 73. 1 = 1.
+- 74. 1 = 1.
+- 75. 1 = 1.
+- 76. 1 = 1.
+- 77. 1 = 1.
+- 78. 1 = 1.
+- 79. 1 = 1.
+- 80. 1 = 1.
+- 81. 1 = 1.
+- 82. 1 = 1.
+- 83. 1 = 1.
+- 84. 1 = 1.
+- 85. 1 = 1.
+- 86. 1 = 1.",0,58.302933054500045,1024,427,0
+igsm,depth_4_hierarchical_mod_7,Question. K#O := P#D. P#O := H#O. E#B := H#K + P#H. E#D := A#I. H#F := C#A. B#N := F#F * F#F. F#F := P#D. H#O := 3. D#O := H#F. P#M := D#G - K#O. H#K := 0. A#I := H#F + H#F. C#A := 5. P#H := 6. P#D := I#O. D#G := A#I * D#P. I#O := P#H. D#P := E#B + P#O. P#M?,0,True,7f0c2e39,1,"Answer with CoT.
+
+The first step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The second step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The third step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The fourth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The fifth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The sixth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The seventh step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The eighth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The ninth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The tenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The eleventh step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twelfth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The thirteenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The fourteenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The fifteenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The sixteenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The seventeenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The eighteenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The nineteenth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<x, 0>` is the result of the expression `x#0.`
+
+The twentieth step is to find the value of the expression `<x, 0>` where `<",0,58.302933054500045,1024,455,1
+igsm,depth_4_hierarchical_mod_7,Question. M#M := 3. M#C := 3. M#H := G#O. J#O := I#I. H#A := D#I - I#I. D#O := P#P. F#F := A#B. A#B := 1. I#I := M#H * M#H. D#I := M#H * M#H. G#O := M#M. I#C := M#H. A#C := D#O. J#C := B#K - M#M. B#K := 0. P#P := G#O. H#A?,0,True,12e50bd2,1,"Answer with CoT.
+
+- 1. 1 = 1.
+- 2. 1 = 1.
+- 3. 1 = 1.
+- 4. 1 = 1.
+- 5. 1 = 1.
+- 6. 1 = 1.
+- 7. 1 = 1.
+- 8. 1 = 1.
+- 9. 1 = 1.
+- 10. 1 = 1.
+- 11. 1 = 1.
+- 12. 1 = 1.
+- 13. 1 = 1.
+- 14. 1 = 1.
+- 15. 1 = 1.
+- 16. 1 = 1.
+- 17. 1 = 1.
+- 18. 1 = 1.
+- 19. 1 = 1.
+- 20. 1 = 1.
+- 21. 1 = 1.
+- 22. 1 = 1.
+- 23. 1 = 1.
+- 24. 1 = 1.
+- 25. 1 = 1.
+- 26. 1 = 1.
+- 27. 1 = 1.
+- 28. 1 = 1.
+- 29. 1 = 1.
+- 30. 1 = 1.
+- 31. 1 = 1.
+- 32. 1 = 1.
+- 33. 1 = 1.
+- 34. 1 = 1.
+- 35. 1 = 1.
+- 36. 1 = 1.
+- 37. 1 = 1.
+- 38. 1 = 1.
+- 39. 1 = 1.
+- 40. 1 = 1.
+- 41. 1 = 1.
+- 42. 1 = 1.
+- 43. 1 = 1.
+- 44. 1 = 1.
+- 45. 1 = 1.
+- 46. 1 = 1.
+- 47. 1 = 1.
+- 48. 1 = 1.
+- 49. 1 = 1.
+- 50. 1 = 1.
+- 51. 1 = 1.
+- 52. 1 = 1.
+- 53. 1 = 1.
+- 54. 1 = 1.
+- 55. 1 = 1.
+- 56. 1 = 1.
+- 57. 1 = 1.
+- 58. 1 = 1.
+- 59. 1 = 1.
+- 60. 1 = 1.
+- 61. 1 = 1.
+- 62. 1 = 1.
+- 63. 1 = 1.
+- 64. 1 = 1.
+- 65. 1 = 1.
+- 66. 1 = 1.
+- 67. 1 = 1.
+- 68. 1 = 1.
+- 69. 1 = 1.
+- 70. 1 = 1.
+- 71. 1 = 1.
+- 72. 1 = 1.
+- 73. 1 = 1.
+- 74. 1 = 1.
+- 75. 1 = 1.
+- 76. 1 = 1.
+- 77. 1 = 1.
+- 78. 1 = 1.
+- 79. 1 = 1.
+- 80. 1 = 1.
+- 81. 1 = 1.
+- 82. 1 = 1.
+- 83. 1 = 1.
+- 84. 1 = 1.
+- 85. 1 = 1.
+- 86. 1 = 1.",0,58.21949345849998,1024,431,0
+igsm,depth_4_hierarchical_mod_7,Question. M#E := 3. L#G := P#I + I#H. I#H := B#O. B#O := G#O - A#K. C#I := D#D. G#O := H#O - H#J. E#B := P#I + P#I. C#M := C#I. G#B := D#D. H#J := 1. P#I := G#B. N#M := H#J. D#D := H#J. A#K := B#L. H#O := 4. B#L := 5. E#B?,2,False,cc114284,1,"Answer with CoT.
+
+- 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. 22. 23. 24. 25. 26. 27. 28. 29. 30. 31. 32. 33. 34. 35. 36. 37. 38. 39. 40. 41. 42. 43. 44. 45. 46. 47. 48. 49. 50. 51. 52. 53. 54. 55. 56. 57. 58. 59. 60. 61. 62. 63. 64. 65. 66. 67. 68. 69. 70. 71. 72. 73. 74. 75. 76. 77. 78. 79. 80. 81. 82. 83. 84. 85. 86. 87. 88. 89. 90. 91. 92. 93. 94. 95. 96. 97. 98. 99. 100. 101. 102. 103. 104. 105. 106. 107. 108. 109. 110. 111. 112. 113. 114. 115. 116. 117. 118. 119. 120. 121. 122. 123. 124. 125. 126. 127. 128. 129. 130. 131. 132. 133. 134. 135. 136. 137. 138. 139. 140. 141. 142. 143. 144. 145. 146. 147. 148. 149. 150. 151. 152. 153. 154. 155. 156. 157. 158. 159. 160. 161. 162. 163. 164. 165. 166. 167. 168. 169. 170. 171. 172. 173. 174. 175. 176. 177. 178. 179. 180. 181. 182. 183. 184. 185. 186. 187. 188. 189. 190. 191. 192. 193. 194. 195. 196. 197. 198. 199. 200. 201. 202. 203. 204. 205. 206. 207. 208. 209. 210. 211. 212. 213. 214. 215. 216. 217. 218. 219. 220. 221. 222. 223. 224. 225. 226",0,58.21949345849998,1024,431,1
+igsm,depth_4_hierarchical_mod_7,Question. H#P := 3. G#L := B#E. L#H := B#K - B#K. F#J := B#K - L#D. B#K := J#N. M#A := B#K. I#F := J#H. H#H := B#K. L#D := I#F. B#E := 0. D#I := G#L. N#F := 5. L#N := 3. J#H := L#N + B#E. J#N := D#F + G#L. D#F := L#N - B#E. H#H?,3,False,a71c6352,1,"Answer with CoT.
+
+- 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. ",0,58.158503287500025,1024,435,0
+igsm,depth_4_hierarchical_mod_7,Question. M#O := B#C. B#C := 6. F#O := A#O. M#A := C#A * C#A. B#J := M#A - M#A. C#A := 3. P#K := A#O * A#O. G#M := 6. J#H := K#H. B#E := 4. A#O := F#C. H#G := I#L. F#C := M#A. I#L := K#H. K#H := M#O. H#G?,6,False,be9ba803,1,"Answer with CoT.
+
+- 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. 22. 23. 24. 25. 26. 27. 28. 29. 30. 31. 32. 33. 34. 35. 36. 37. 38. 39. 40. 41. 42. 43. 44. 45. 46. 47. 48. 49. 50. 51. 52. 53. 54. 55. 56. 57. 58. 59. 60. 61. 62. 63. 64. 65. 66. 67. 68. 69. 70. 71. 72. 73. 74. 75. 76. 77. 78. 79. 80. 81. 82. 83. 84. 85. 86. 87. 88. 89. 90. 91. 92. 93. 94. 95. 96. 97. 98. 99. 100. 101. 102. 103. 104. 105. 106. 107. 108. 109. 110. 111. 112. 113. 114. 115. 116. 117. 118. 119. 120. 121. 122. 123. 124. 125. 126. 127. 128. 129. 130. 131. 132. 133. 134. 135. 136. 137. 138. 139. 140. 141. 142. 143. 144. 145. 146. 147. 148. 149. 150. 151. 152. 153. 154. 155. 156. 157. 158. 159. 160. 161. 162. 163. 164. 165. 166. 167. 168. 169. 170. 171. 172. 173. 174. 175. 176. 177. 178. 179. 180. 181. 182. 183. 184. 185. 186. 187. 188. 189. 190. 191. 192. 193. 194. 195. 196. 197. 198. 199. 200. 201. 202. 203. 204. 205. 206. 207. 208. 209. 210. 211. 212. 213. 214. 215. 216. 217. 218. 219. 220. 221. 222. 223. 224. 225. 226",0,58.158503287500025,1024,419,1
+igsm,depth_4_hierarchical_mod_7,Question. K#E := I#J. C#P := G#E. O#J := J#L * J#L. J#L := C#P + L#O. O#D := G#G * G#G. J#F := C#J. N#O := L#O. C#J := 3. C#K := O#D. G#I := L#O * L#O. H#C := 5. L#H := J#L * O#D. G#E := E#C. E#C := 6. L#O := K#E - J#F. I#J := 1. G#G := G#E - G#E. C#K?,0,True,1da0662a,1,"Answer with CoT.
+
+I#J = 1.
+
+L#L = B#K - 5.
+
+L#L = 3.
+
+L#L = 3.
+
+C#P = G#E.
+
+C#P = 6.
+
+C#K = O#D.
+
+C#K = 5.
+
+L#O = 5.
+
+L#O = 5.
+
+C#J = 3.
+
+C#J = 3.
+
+C#K = 5.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+
+C#K = 5.
+
+C#J = 3.
+",0,58.57534808849982,1024,451,0
+igsm,depth_4_hierarchical_mod_7,Question. G#N := P#L. P#A := P#J * E#M. B#N := P#A + M#C. E#H := P#F - P#L. N#J := 0. C#M := K#F. K#F := I#G * N#J. F#F := B#N + B#N. C#C := P#J. P#J := F#P. E#M := P#H. I#G := 3. M#C := E#M - E#M. P#H := 6. F#P := 1. P#L := P#A. K#M := P#L. P#F := C#C. G#N?,6,False,7460e395,1,"Answer with CoT.
+
+I#G = 3.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E#M = 6.
+
+C#C = 1.
+
+N#J = 0.
+
+F#F = 3.
+
+B#N = 1.
+
+B#N = 1.
+
+S#F = 1.
+
+P#L = P#A.
+
+P#J = 1.
+
+E",0,58.57534808849982,1024,455,1
+igsm,depth_4_hierarchical_mod_7,Question. P#G := 4. N#M := N#H. B#J := I#J - D#G. P#O := 4. P#K := C#D. C#F := N#H. J#B := G#E. C#D := 5. G#E := P#K. D#G := P#G. O#N := I#J. A#L := F#I. O#L := 4. F#I := I#J. I#J := O#L. E#E := O#N - G#E. N#H := O#N * B#J. B#O := J#B - N#H. C#F?,0,True,1f6cf2a3,1,"Answer with CoT.
+
+To solve the given equations, we need to find the values of the variables.
+
+First, we can start by finding the value of B#K.
+
+- We know that B#K = 1.
+
+- We also know that P#G = 4.
+
+- From the equation P#G = 4, we can substitute the value of P#G into the equation for B#K.
+
+- Therefore, B#K = 1.
+
+Next, we can find the value of L#L.
+
+- We know that L#L = B#K - 5.
+
+- We know that B#K = 1.
+
+- Therefore, L#L = 1 - 5 = -4.
+
+- We can substitute the value of L#L into the equation for L#L.
+
+- Therefore, L#L = -4.
+
+Finally, we can find the value of C#F.
+
+- We know that C#F = N#H.
+
+- We know that N#H = 5.
+
+- Therefore, C#F = 5.
+
+- We can substitute the value of C#F into the equation for C#F.
+
+- Therefore, C#F = 5.
+
+- We can substitute the value of C#F into the equation for P#G.
+
+- Therefore, P#G = 4.
+
+- We can substitute the value of P#G into the equation for B#K.
+
+- Therefore, B#K = 1.
+
+- We can substitute the value of B#K into the equation for L#L.
+
+- Therefore, L#L = -4.
+
+- We can substitute the value of L#L into the equation for C#F.
+
+- Therefore, C#F = 5.
+
+- We can substitute the value of C#F into the equation for N#H.
+
+- Therefore, N#H = 5.
+
+- We can substitute the value of N#H into the equation for O#N.
+
+- Therefore, O#N = 4.
+
+- We can substitute the value of O#N into the equation for I#J.
+
+- Therefore, I#J = 4.
+
+- We can substitute the value of I#J into the equation for A#L.
+
+- Therefore, A#L = 4.
+
+- We can substitute the value of A#L into the equation for F#I.
+
+- Therefore, F#I = 4.
+
+- We can substitute the value of F#I into the equation for I#J.
+
+- Therefore, I#J = 4.
+
+- We can substitute the value of I#J into the equation for C#F.
+
+- Therefore, C#F = 5.
+
+- We can substitute the value of C#F into the equation for N#H.
+
+- Therefore, N#H = 5.
+
+- We can substitute the value of N#H into the equation for O#N.
+
+- Therefore, O#N = 4.
+
+- We can substitute the value of O#N into the equation for I#J.
+
+- Therefore, I#J = 4.
+
+- We can substitute the value of I#J into the equation for A#L.
+
+- Therefore, A#L = 4.
+
+- We can substitute the value of A#L into the equation for F#I.
+
+- Therefore, F#I = 4.
+
+- We can substitute the value of F#I into the equation for I#J.
+
+- Therefore, I#J = 4.
+
+- We can substitute the value of I#J into the equation for C#F.
+
+- Therefore, C#F = 5.
+
+- We can substitute the value of C#F into the equation for N#H.
+
+- Therefore, N#H = 5.
+
+- We can substitute the value of N#H into the equation for O#N.
+
+- Therefore, O#N = 4.
+
+- We can substitute the value of O#N into the equation for I#J.
+
+- Therefore, I#J = 4.
+
+- We can substitute the value of I#J into the equation for A#L.
+
+- Therefore, A#L = 4.
+
+- We can substitute the value of A#L into the equation for F#I.
+
+- Therefore, F#I = 4.
+
+- We can substitute",0,58.08200194599999,1024,447,0
+igsm,depth_4_hierarchical_mod_7,Question. D#G := J#P. L#H := L#F. A#J := 3. D#K := 6. L#F := D#G - D#G. P#M := M#C * M#C. G#D := L#H. M#C := D#G. B#N := 3. O#I := L#H. P#I := B#N. J#P := 6. G#D?,0,True,7cdd441b,1,"Answer with CoT.
+
+- 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. 22. 23. 24. 25. 26. 27. 28. 29. 30. 31. 32. 33. 34. 35. 36. 37. 38. 39. 40. 41. 42. 43. 44. 45. 46. 47. 48. 49. 50. 51. 52. 53. 54. 55. 56. 57. 58. 59. 60. 61. 62. 63. 64. 65. 66. 67. 68. 69. 70. 71. 72. 73. 74. 75. 76. 77. 78. 79. 80. 81. 82. 83. 84. 85. 86. 87. 88. 89. 90. 91. 92. 93. 94. 95. 96. 97. 98. 99. 100. 101. 102. 103. 104. 105. 106. 107. 108. 109. 110. 111. 112. 113. 114. 115. 116. 117. 118. 119. 120. 121. 122. 123. 124. 125. 126. 127. 128. 129. 130. 131. 132. 133. 134. 135. 136. 137. 138. 139. 140. 141. 142. 143. 144. 145. 146. 147. 148. 149. 150. 151. 152. 153. 154. 155. 156. 157. 158. 159. 160. 161. 162. 163. 164. 165. 166. 167. 168. 169. 170. 171. 172. 173. 174. 175. 176. 177. 178. 179. 180. 181. 182. 183. 184. 185. 186. 187. 188. 189. 190. 191. 192. 193. 194. 195. 196. 197. 198. 199. 200. 201. 202. 203. 204. 205. 206. 207. 208. 209. 210. 211. 212. 213. 214. 215. 216. 217. 218. 219. 220. 221. 222. 223. 224. 225. 226",0,58.08200194599999,1024,391,1
+igsm,depth_4_hierarchical_mod_7,Question. J#B := 0. N#H := E#E. N#K := H#C. J#C := L#F. O#E := L#F. E#E := H#C. A#G := I#M. P#E := N#K * C#E. H#C := A#G. L#D := 3. I#M := 3. C#E := O#E - O#E. L#F := J#B * H#L. O#G := O#E. H#L := 1. P#E?,0,True,bcbf46f1,1,"Answer with CoT.
+
+- 1. 0 = 0.
+- 2. 0 = 0.
+- 3. 0 = 0.
+- 4. 0 = 0.
+- 5. 0 = 0.
+- 6. 0 = 0.
+- 7. 0 = 0.
+- 8. 0 = 0.
+- 9. 0 = 0.
+- 10. 0 = 0.
+- 11. 0 = 0.
+- 12. 0 = 0.
+- 13. 0 = 0.
+- 14. 0 = 0.
+- 15. 0 = 0.
+- 16. 0 = 0.
+- 17. 0 = 0.
+- 18. 0 = 0.
+- 19. 0 = 0.
+- 20. 0 = 0.
+- 21. 0 = 0.
+- 22. 0 = 0.
+- 23. 0 = 0.
+- 24. 0 = 0.
+- 25. 0 = 0.
+- 26. 0 = 0.
+- 27. 0 = 0.
+- 28. 0 = 0.
+- 29. 0 = 0.
+- 30. 0 = 0.
+- 31. 0 = 0.
+- 32. 0 = 0.
+- 33. 0 = 0.
+- 34. 0 = 0.
+- 35. 0 = 0.
+- 36. 0 = 0.
+- 37. 0 = 0.
+- 38. 0 = 0.
+- 39. 0 = 0.
+- 40. 0 = 0.
+- 41. 0 = 0.
+- 42. 0 = 0.
+- 43. 0 = 0.
+- 44. 0 = 0.
+- 45. 0 = 0.
+- 46. 0 = 0.
+- 47. 0 = 0.
+- 48. 0 = 0.
+- 49. 0 = 0.
+- 50. 0 = 0.
+- 51. 0 = 0.
+- 52. 0 = 0.
+- 53. 0 = 0.
+- 54. 0 = 0.
+- 55. 0 = 0.
+- 56. 0 = 0.
+- 57. 0 = 0.
+- 58. 0 = 0.
+- 59. 0 = 0.
+- 60. 0 = 0.
+- 61. 0 = 0.
+- 62. 0 = 0.
+- 63. 0 = 0.
+- 64. 0 = 0.
+- 65. 0 = 0.
+- 66. 0 = 0.
+- 67. 0 = 0.
+- 68. 0 = 0.
+- 69. 0 = 0.
+- 70. 0 = 0.
+- 71. 0 = 0.
+- 72. 0 = 0.
+- 73. 0 = 0.
+- 74. 0 = 0.
+- 75. 0 = 0.
+- 76. 0 = 0.
+- 77. 0 = 0.
+- 78. 0 = 0.
+- 79. 0 = 0.
+- 80. 0 = 0.
+- 81. 0 = 0.
+- 82. 0 = 0.
+- 83. 0 = 0.
+- 84. 0 = 0.
+- 85. 0 = 0.
+- 86. 0 = 0.",0,58.096413428999995,1024,419,0
+igsm,depth_4_hierarchical_mod_7,Question. G#M := C#O. F#E := M#G. N#D := D#P. J#N := A#I. A#N := 2. M#G := 2. C#O := 0. D#I := P#E. K#P := F#E - G#M. D#P := M#J * I#K. M#J := N#F - J#N. P#E := M#J. I#K := F#E. I#O := G#M. N#F := A#I. A#I := 1. D#I?,0,True,d5432c71,1,"Answer with CoT.
+
+The first step is to find the reachability reachable from the start node.
+
+The second step is to reach the terminal state.
+
+The third step is to find the shortest path from the start node to the terminal state.
+
+The fourth step is to find the shortest path from the start node to the terminal state.
+
+The fifth step is to find the shortest path from the start node to the terminal state.
+
+The sixth step is to find the shortest path from the start node to the terminal state.
+
+The seventh step is to find the shortest path from the start node to the terminal state.
+
+The eighth step is to find the shortest path from the start node to the terminal state.
+
+The ninth step is to find the shortest path from the start node to the terminal state.
+
+The tenth step is to find the shortest path from the start node to the terminal state.
+
+The eleventh step is to find the shortest path from the start node to the terminal state.
+
+The twelfth step is to find the shortest path from the start node to the terminal state.
+
+The thirteenth step is to find the shortest path from the start node to the terminal state.
+
+The fourteenth step is to find the shortest path from the start node to the terminal state.
+
+The fifteenth step is to find the shortest path from the start node to the terminal state.
+
+The sixteenth step is to find the shortest path from the start node to the terminal state.
+
+The seventeenth step is to find the shortest path from the start node to the terminal state.
+
+The eighteenth step is to find the shortest path from the start node to the terminal state.
+
+The nineteenth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start node to the terminal state.
+
+The twentieth step is to find the shortest path from the start",0,58.096413428999995,1024,427,1
