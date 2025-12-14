@@ -4,7 +4,14 @@ from datetime import datetime
 from typing import Dict, Any
 
 def load_config_from_json(filepath: str) -> Dict[str, Any]:
-    """Tải cấu hình từ file JSON vào Python dictionary."""
+    """Load configuration from a JSON file.
+
+    Args:
+        filepath (str): Path to the JSON configuration file.
+
+    Returns:
+        Dict[str, Any]: Configuration dictionary (values are strings, not objects).
+    """
     try:
         with open(filepath, 'r') as f:
             config = json.load(f)
@@ -17,8 +24,13 @@ def load_config_from_json(filepath: str) -> Dict[str, Any]:
         return {}
 
 def post_process_config(config: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Xử lý các chuỗi placeholder thành các đối tượng Python thực tế.
+    """Post process for configs file because they can't store torch.float16 or torch.bloat16 as an object.
+
+    Args:
+        config (Dict[str, Any]): dictionary loaded from JSON config file.
+
+    Returns:
+        Dict[str, Any]: processed config dictionary.
     """
     # Xử lý kiểu dữ liệu Torch
     if config.get('MODEL', {}).get('dtype') == "torch.float16":

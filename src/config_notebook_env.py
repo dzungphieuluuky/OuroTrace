@@ -58,23 +58,3 @@ def auto_unzip_colab_content(target_dir="/content/", zip_extension="*.zip"):
                 zip_ref.extractall(target_dir)
         except Exception as e:
             print(f"❌ Error: {e}")
-
-
-if __name__ == "__main__":
-    import os
-    import glob
-    import zipfile
-    import wandb
-
-    DATA_PATH, OUTPUT_PATH, ENV = configure_environment_paths()
-    auto_unzip_colab_content(DATA_PATH)
-
-    # Optional: WandB login
-    try:
-        from google.colab import userdata
-
-        wandb_key = userdata.get("WANDB_API_KEY")
-        if wandb_key:
-            wandb.login(key=wandb_key)
-    except:
-        pass
