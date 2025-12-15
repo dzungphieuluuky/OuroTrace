@@ -151,7 +151,6 @@ def run_batch_experiment(config: dict):
         # C. Holistic Evaluation
         if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
             holistic_results = run_holistic_evaluation(model, tokenizer, config)
-            # You can process holistic_results further or save them separately if needed
 
         # Cleanup
         del model, tokenizer
@@ -162,7 +161,7 @@ def run_batch_experiment(config: dict):
     if use_wandb and run:
         wandb.finish()
 
-    return all_results, perplexity_results
+    return all_results, perplexity_results, holistic_results if 'holistic_results' in locals() else []
 
 def _create_result_entry(result, item, task_type, ut_steps):
     """Helper to format result dictionary"""

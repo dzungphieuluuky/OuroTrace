@@ -49,21 +49,25 @@ if __name__ == "__main__":
     print("\n" + "=" * 50 + "\n🚀 STARTING EXPERIMENT\n" + "=" * 50)
 
     # 4. Run
-    results_acc, results_ppl = run_batch_experiment(HolisticExperimentConfig)
+    acc_results, ppl_results, holistic_results = run_batch_experiment(HolisticExperimentConfig)
 
     # 5. Save Results
-    df_acc = pd.DataFrame(results_acc)
-    df_ppl = pd.DataFrame(results_ppl)
+    df_acc = pd.DataFrame(acc_results)
+    df_ppl = pd.DataFrame(ppl_results)
+    df_hollistic = pd.DataFrame(holistic_results)
 
     RUN_RESULTS_NAME = f"run_{timestamp}"
     os.makedirs(os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME), exist_ok=True)
     acc_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_acc_{timestamp}.csv")
     ppl_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_ppl_{timestamp}.csv")
+    hol_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_holistic_{timestamp}.csv")
     cfg_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_config_{timestamp}.yaml")
 
     df_acc.to_csv(acc_path, index=False)
     if not df_ppl.empty:
         df_ppl.to_csv(ppl_path, index=False)
+    if not df_hollistic.empty:
+        df_hollistic.to_csv(hol_path, index=False)
 
     # Helper to sanitize config for YAML
     def sanitize_config_yaml(cfg):
@@ -87,7 +91,7 @@ if __name__ == "__main__":
         print("\n" + "=" * 50 + "\n📊 VISUALIZATION\n" + "=" * 50)
 
         # Summary Tables
-        summary = analyze_experiment_results(results_acc)
+        summary = analyze_experiment_results(acc_results)
         print("\n--- Summary Statistics ---")
         print(summary)
 
