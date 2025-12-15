@@ -104,13 +104,13 @@ class OuroThinkingExperiment:
                     {
                         "role": "user",
                         "content": "100 + 200 + 300 =",
-                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600"
+                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600.\n"
                     },
-                    # {
-                    #     "role": "user",
-                    #     "content": "050 + 025 + 100 =",
-                    #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175"
-                    # },
+                    {
+                        "role": "user",
+                        "content": "050 + 025 + 100 =",
+                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175.\n"
+                    },
                 ],
                 "force_start": "[STEP 1] Current: 0.\n",
                 "input_prefix": ""
@@ -123,12 +123,12 @@ class OuroThinkingExperiment:
                     {
                         "role": "user",
                         "content": "Sequence: DCBADC. Start: D. Hop 2 times.",
-                        "role_response": "[TRACE] Start at D.\n[TRACE] Found 'D' at position 0. Next token is C.\n[TRACE] Found 'C' at position 1. Next token is B.\n[FINAL] B."
+                        "role_response": "[TRACE] Start at D.\n[TRACE] Found 'D' at position 0. Next token is C.\n[TRACE] Found 'C' at position 1. Next token is B.\n[FINAL] B.\n"
                     },
                     {
                         "role": "user",
                         "content": "Sequence: AABBCC. Start: A. Hop 3 times.",
-                        "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is A.\n[TRACE] Found 'A' at position 1. Next token is B.\n[TRACE] Found 'B' at position 2. Next token is B.\n[FINAL] B."
+                        "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is A.\n[TRACE] Found 'A' at position 1. Next token is B.\n[TRACE] Found 'B' at position 2. Next token is B.\n[FINAL] B.\n"
                     }
                 ],
                 "force_start": "[TRACE] Start at",
@@ -142,17 +142,17 @@ class OuroThinkingExperiment:
                     {
                         "role": "user",
                         "content": "Question. X#Y := 3. Z#Z := X#Y * 2. Z#Z?",
-                        "role_response": "[EQ 1] X#Y = 3.\n[EQ 2] Z#Z = X#Y * 2 = 3 * 2 = 6.\n[FINAL] 6."
+                        "role_response": "[EQ 1] X#Y = 3.\n[EQ 2] Z#Z = X#Y * 2 = 3 * 2 = 6.\n[FINAL] 6.\n"
                     },
                     {
                         "role": "user",
                         "content": "Question. B#K := 1. L#L := B#K - 5. L#L?",
-                        "role_response": "[EQ 1] B#K = 1.\n[EQ 2] L#L = B#K - 5 = 1 - 5 = -4 mod 7 = 3.\n[FINAL] 3."
+                        "role_response": "[EQ 1] B#K = 1.\n[EQ 2] L#L = B#K - 5 = 1 - 5 = -4 mod 7 = 3.\n[FINAL] 3.\n"
                     },
                     {
                         "role": "user",
                         "content": "Question. C#D := 5. E#F := C#D + 4. G#H := E#F * 2. G#H?",
-                        "role_response": "[EQ 1] C#D = 5.\n[EQ 2] E#F = C#D + 4 = 5 + 4 = 9 mod 7 = 2.\n[EQ 3] G#H = E#F * 2 = 2 * 2 = 4.\n[FINAL] 4."
+                        "role_response": "[EQ 1] C#D = 5.\n[EQ 2] E#F = C#D + 4 = 5 + 4 = 9 mod 7 = 2.\n[EQ 3] G#H = E#F * 2 = 2 * 2 = 4.\n[FINAL] 4.\n"
                     }
                 ],
                 "force_start": "[EQ 1]",
@@ -481,16 +481,16 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         request_ids = list(batch_outputs.keys())
         
         # Map outputs to prompts
-        if all(isinstance(rid, int) for rid in request_ids):
-            for request_id in request_ids:
-                if 0 <= request_id < len(prompts):
-                    output = batch_outputs[request_id]
-                    results[request_id] = self._process_single_output(
-                        output, request_id, input_lengths[request_id],
-                        template, tokenizer, task_type, ut_steps,
-                        batch_time / len(prompts)
-                    )
-        else:
+        # if all(isinstance(rid, int) for rid in request_ids):
+        #     for request_id in request_ids:
+        #         if 0 <= request_id < len(prompts):
+        #             output = batch_outputs[request_id]
+        #             results[request_id] = self._process_single_output(
+        #                 output, request_id, input_lengths[request_id],
+        #                 template, tokenizer, task_type, ut_steps,
+        #                 batch_time / len(prompts)
+        #             )
+        if all(isinstance(rid, str) for rid in request_ids):
             # String/UUID request IDs
             input_to_index = {
                 " ".join(map(str, inp)): idx 
