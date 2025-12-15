@@ -104,7 +104,7 @@ class OuroThinkingExperiment:
                     {
                         "role": "user",
                         "content": "100 + 200 + 300 =",
-                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600.\n"
+                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600."
                     },
                     # {
                     #     "role": "user",
@@ -112,7 +112,7 @@ class OuroThinkingExperiment:
                     #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175.\n"
                     # },
                 ],
-                "force_start": "[STEP 1] Current: 0.\n",
+                "force_start": "\n[STEP 1]",
                 "input_prefix": ""
             },
             
@@ -131,7 +131,7 @@ class OuroThinkingExperiment:
                         "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is A.\n[TRACE] Found 'A' at position 1. Next token is B.\n[TRACE] Found 'B' at position 2. Next token is B.\n[FINAL] B.\n"
                     }
                 ],
-                "force_start": "[TRACE] Start at",
+                "force_start": "\n[TRACE] Start at",
                 "input_prefix": ""
             },
             
@@ -155,7 +155,7 @@ class OuroThinkingExperiment:
                         "role_response": "[EQ 1] C#D = 5.\n[EQ 2] E#F = C#D + 4 = 5 + 4 = 9 mod 7 = 2.\n[EQ 3] G#H = E#F * 2 = 2 * 2 = 4.\n[FINAL] 4.\n"
                     }
                 ],
-                "force_start": "[EQ 1]",
+                "force_start": "\n[EQ 1]",
                 "input_prefix": ""
             }
         }
