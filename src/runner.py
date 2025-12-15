@@ -195,11 +195,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 # BATCHED PROCESSING
                 print(f"   🔄 Running batched inference...")
                 
-                for batch_idx in tqdm(
-                    range(0, len(items), batch_size),
-                    desc=f"   {task_type}",
-                    leave=False
-                ):
+                for batch_idx in range(0, len(items), batch_size):
                     batch_items = items[batch_idx : batch_idx + batch_size]
                     prompts = [item["prompt"] for item in batch_items]
 
