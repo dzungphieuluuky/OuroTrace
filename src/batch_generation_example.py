@@ -1,6 +1,6 @@
-    """
-    This is example file for batch generation taken from https://huggingface.co/docs/transformers/main/en/continuous_batching
-    """
+"""
+This is example file for batch generation taken from https://huggingface.co/docs/transformers/main/en/continuous_batching
+"""
 import datasets
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer

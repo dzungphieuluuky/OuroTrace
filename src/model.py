@@ -65,7 +65,7 @@ class OuroThinkingExperiment:
             config=base_config,  # Use the fully configured base_config
             device_map="cuda",
             attn_implementation="sdpa_paged",
-            torch_dtype=self.dtype,
+            torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
             quantization_config=quantization_config,
         )
@@ -122,12 +122,12 @@ class OuroThinkingExperiment:
                 "few_shots": [
                     {
                         "role": "user",
-                        "content": "Sequence: D C B A D C. Start: D. Hop 2 times.",
+                        "content": "Sequence: DCBADC. Start: D. Hop 2 times.",
                         "role_response": "[TRACE] Start at D.\n[TRACE] Found 'D' at position 0. Next token is C.\n[TRACE] Found 'C' at position 1. Next token is B.\n[FINAL] B."
                     },
                     {
                         "role": "user",
-                        "content": "Sequence: A A B B C C. Start: A. Hop 3 times.",
+                        "content": "Sequence: AABBCC. Start: A. Hop 3 times.",
                         "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is A.\n[TRACE] Found 'A' at position 1. Next token is B.\n[TRACE] Found 'B' at position 2. Next token is B.\n[FINAL] B."
                     }
                 ],

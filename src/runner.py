@@ -53,7 +53,7 @@ def run_batch_experiment(config: dict):
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
         use_torch_compile=config["MODEL"].get("use_torch_compile", True),
         max_batch_size=config.get("OPTIMIZATION", {}).get("max_batch_size", 4),
-        max_new_tokens=config.get("OPTIMIZATION", {}).get("max_new_token", 1024),
+        max_new_tokens=config.get("OPTIMIZATION", {}).get("max_new_tokens", 1024),
     )
 
     torch.manual_seed(42)
