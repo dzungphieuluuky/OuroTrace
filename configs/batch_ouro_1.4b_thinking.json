@@ -24,15 +24,15 @@
         "load_existing": false,
         "data_file_path": "",
         "n_ary": {
-            "ops_levels": [4, 8],
-            "num_samples_per_level": 10
+            "ops_levels": [4, 8, 16],
+            "num_samples_per_level": 50
         },
         "p_hop": {
-            "hop_levels": [2, 4],
-            "num_samples_per_level": 10
+            "hop_levels": [2, 4, 8],
+            "num_samples_per_level": 50
         },
         "igsm": {
-            "num_samples_total": 20
+            "num_samples_total": 50
         }
     },
     "OPTIMIZATION": {
