@@ -38,7 +38,7 @@
     "OPTIMIZATION": {
         "enable_batch": true,
         "max_batch_size": 8,
-        "max_new_token": 1024
+        "max_new_tokens": 512
     },
     
     "reasoning_primitives": {
