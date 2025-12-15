@@ -5,7 +5,7 @@
         "use_4bit_quant": false,
         "use_torch_compile": true
     },
-    "INFERENCE_STEPS": [1],
+    "INFERENCE_STEPS": [1, 2, 4, 8],
     "EVAL_SETTINGS": {
         "calculate_perplexity": true,
         "early_exit_threshold": -1.0,
