@@ -25,14 +25,14 @@
         "data_file_path": "",
         "n_ary": {
             "ops_levels": [4, 8, 16],
-            "num_samples_per_level": 10
+            "num_samples_per_level": 8
         },
         "p_hop": {
             "hop_levels": [2, 4, 8],
-            "num_samples_per_level": 10
+            "num_samples_per_level": 8
         },
         "igsm": {
-            "num_samples_total": 10
+            "num_samples_total": 8
         }
     },
     "OPTIMIZATION": {
