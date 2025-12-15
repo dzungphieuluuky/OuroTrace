@@ -1,6 +1,7 @@
 import torch
 import time
 import re
+import gc
 from typing import List, Optional
 from transformers import (
     AutoConfig,
@@ -10,6 +11,16 @@ from transformers import (
     GenerationConfig,
 )
 from tqdm.auto import tqdm
+from contextlib import contextmanager  # FIX: Added import
+
+@contextmanager
+def timed_operation(name: str):
+    """Context manager for timing operations"""
+    start = time.time()
+    yield
+    elapsed = time.time() - start
+    if elapsed > 0.1:  # Only log if it takes significant time
+        print(f"⏱️  {name}: {elapsed:.2f}s")
 
 class OuroThinkingExperiment:
     """Core experiment class for Ouro model testing"""
@@ -28,6 +39,9 @@ class OuroThinkingExperiment:
         self.use_torch_compile = use_torch_compile
         self.tokenizer = None
         self.task_templates = {}
+        self._template_cache = {}  # NEW: Cache for templates
+        self._model_cache = {}  # NEW: Cache for optimized models
+        self._templates_precomputed = False  # FIX: Added flag
 
     def load_model_with_ut_steps(
         self, total_ut_steps: int, early_exit_threshold: float
@@ -79,6 +93,213 @@ class OuroThinkingExperiment:
             },
         )
 
+    def _optimize_model_for_ut_steps(self, model, ut_steps: int):
+        """NEW: Apply specific optimizations based on UT step count"""
+        cache_key = f"ut_{ut_steps}"
+        
+        if cache_key in self._model_cache:
+            return self._model_cache[cache_key]
+        
+        # Disable gradients completely
+        for param in model.parameters():
+            param.requires_grad = False
+        
+        # Set model to eval mode
+        model.eval()
+        
+        # Apply torch.compile for UT steps > 1
+        if ut_steps > 1 and self.use_torch_compile:
+            if not hasattr(model, '_compiled'):
+                print(f"→ Applying torch.compile() for UT steps {ut_steps}")
+                try:
+                    model = torch.compile(model, mode="reduce-overhead")
+                    model._compiled = True
+                except Exception as e:
+                    print(f"⚠️ torch.compile failed: {e}")
+        
+        # Optimize attention implementation if available
+        if hasattr(model.config, '_attn_implementation'):
+            try:
+                # Try to use flash attention if available
+                import flash_attn
+                model.config._attn_implementation = "flash_attention_2"
+                print("→ Using flash attention 2")
+            except ImportError:
+                pass
+        
+        # Cache the optimized model
+        self._model_cache[cache_key] = model
+        return model
+    
+    def _get_cached_template(self, task_type: str, tokenizer):
+        """NEW: Cache templates to avoid recomputation"""
+        cache_key = f"{task_type}_{id(tokenizer)}"
+        
+        if cache_key not in self._template_cache:
+            if not hasattr(self, "task_templates") or task_type not in self.task_templates:
+                self._build_task_templates(tokenizer)
+            self._template_cache[cache_key] = self.task_templates[task_type]
+        
+        return self._template_cache[cache_key]
+    
+    def _cleanup_between_batches(self):
+        """NEW: Aggressive memory cleanup"""
+        torch.cuda.empty_cache()
+        gc.collect()
+        
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+            torch.cuda.ipc_collect()
+    
+    @torch.no_grad()
+    def predict_with_metrics_optimized(
+        self,
+        user_input: str,
+        task_type: str,
+        model,
+        tokenizer,
+        ut_steps: int,
+        generation_config: dict = None,
+    ):
+        """OPTIMIZED: Prediction with UT-step aware optimizations"""
+        # Use cached template
+        template = self._get_cached_template(task_type, tokenizer)
+        device = model.device
+
+        # Prepare input ONCE
+        input_ids = template["static_input_ids"].to(device)
+        user_query = template["input_prefix"] + user_input
+        user_tokens = tokenizer(
+            user_query, return_tensors="pt", add_special_tokens=False
+        ).input_ids.to(device)
+        force_start_ids = template["force_start_ids"].to(device)
+
+        input_ids = torch.cat([input_ids, user_tokens, force_start_ids], dim=1)
+        attention_mask = torch.ones_like(input_ids, device=device)
+        
+        prompt_length = input_ids.shape[1]
+        
+        # Apply model optimizations
+        model = self._optimize_model_for_ut_steps(model, ut_steps)
+
+        start_time = time.perf_counter()
+
+        # OPTIMIZED generation config based on UT steps
+        if generation_config is None:
+            if ut_steps > 1:
+                # Optimized config for multi-step generation
+                generation_config = {
+                    "max_new_tokens": min(1024, 256 * ut_steps),  # Scale with steps
+                    "do_sample": False,
+                    "num_beams": 1,
+                    "temperature": 1.0,
+                    "top_p": 1.0,
+                    "repetition_penalty": 1.1,  # Lower penalty for multi-step
+                    "no_repeat_ngram_size": 3,
+                    "length_penalty": 1.0,
+                }
+            else:
+                # Original config for single step
+                generation_config = {
+                    "max_new_tokens": 1024,
+                    "do_sample": False,
+                    "num_beams": 1,
+                    "min_length": 5,
+                    "repetition_penalty": 1.2
+                }
+
+        # OPTIMIZED: Different generation strategy for multi-UT steps
+        if ut_steps > 1:
+            # Step-wise generation with cache reuse
+            all_generated_ids = torch.empty((0,), dtype=torch.long, device=device)
+            past_key_values = None
+            max_total_tokens = generation_config["max_new_tokens"]
+            
+            with timed_operation(f"UT{ut_steps}_generation"):
+                for step in range(ut_steps):
+                    # Calculate tokens for this step
+                    remaining_tokens = max_total_tokens - len(all_generated_ids)
+                    if remaining_tokens <= 0:
+                        break
+                    
+                    # Distribute tokens across steps
+                    step_tokens = min(256, remaining_tokens // (ut_steps - step))
+                    
+                    if step == 0:
+                        # First step: use full input
+                        step_input_ids = input_ids
+                        step_attention_mask = attention_mask
+                    else:
+                        # Subsequent steps: only need attention mask continuation
+                        step_input_ids = None
+                        # FIX: Correct attention mask construction
+                        step_attention_mask = torch.cat([
+                            attention_mask,
+                            torch.ones((1, len(all_generated_ids)), device=device, dtype=attention_mask.dtype)
+                        ], dim=1)
+                    
+                    # Generate for this UT step
+                    outputs = model.generate(
+                        input_ids=step_input_ids,
+                        attention_mask=step_attention_mask,
+                        past_key_values=past_key_values,
+                        max_new_tokens=step_tokens,
+                        pad_token_id=tokenizer.eos_token_id,
+                        eos_token_id=tokenizer.eos_token_id,
+                        use_cache=True,
+                        return_dict_in_generate=True,
+                        **{k:v for k,v in generation_config.items() 
+                           if k not in ['max_new_tokens']}
+                    )
+                    
+                    # Update cache for next step
+                    if hasattr(outputs, 'past_key_values') and outputs.past_key_values:
+                        past_key_values = outputs.past_key_values
+                    
+                    # Extract new tokens
+                    if step == 0:
+                        new_ids = outputs.sequences[0, prompt_length:]
+                    else:
+                        new_ids = outputs.sequences[0, -step_tokens:]
+                    
+                    all_generated_ids = torch.cat([all_generated_ids, new_ids])
+                    
+                    # Early exit if EOS generated
+                    if tokenizer.eos_token_id in new_ids:
+                        break
+            
+            generated_ids = all_generated_ids
+        else:
+            # Single UT step - original logic but optimized
+            with timed_operation("UT1_generation"):
+                outputs = model.generate(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    pad_token_id=tokenizer.eos_token_id,
+                    use_cache=True,
+                    return_dict_in_generate=True,
+                    output_scores=False,
+                    **generation_config,
+                )
+                generated_ids = outputs.sequences[0, prompt_length:]
+
+        generation_time = time.perf_counter() - start_time
+        generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
+        full_response = template["force_start_text"] + generated_text
+        pred = self._extract_final_answer(full_response, task_type)
+
+        # Cleanup
+        self._cleanup_between_batches()
+
+        return {
+            "full_response": full_response,
+            "prediction": pred,
+            "generation_time": generation_time,
+            "generated_tokens": generated_ids.shape[0],
+            "input_tokens": input_ids.shape[1],
+            "ut_steps": ut_steps,
+        }
+
     def _build_task_templates(self, tokenizer):
         """
         FIXED: Improved few-shot examples to prevent babbling and ensure proper reasoning.
@@ -100,11 +321,6 @@ class OuroThinkingExperiment:
                         "content": "100 + 200 + 300 =",
                         "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600"
                     },
-                    # {
-                    #     "role": "user",
-                    #     "content": "050 + 025 + 100 =",
-                    #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175"
-                    # },
                 ],
                 "force_start": "[STEP 1] Current: 0.\n",
                 "input_prefix": ""
@@ -188,6 +404,7 @@ class OuroThinkingExperiment:
             }
         
         print("[+] FIXED Task templates with improved few-shot examples")
+        self._templates_precomputed = True  # FIX: Set flag
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract answer from model response"""
@@ -256,71 +473,6 @@ class OuroThinkingExperiment:
             pred = "ParseError"
         
         return pred
-
-    @torch.no_grad()
-    def predict_with_metrics_optimized(
-        self,
-        user_input: str,
-        task_type: str,
-        model,
-        tokenizer,
-        ut_steps: int,
-        generation_config: dict = None,
-    ):
-        """Optimized prediction with repetition penalty to prevent loops"""
-        if not hasattr(self, "task_templates") or task_type not in self.task_templates:
-            self._build_task_templates(tokenizer)
-
-        template = self.task_templates[task_type]
-        device = model.device
-
-        input_ids = template["static_input_ids"].to(device)
-        user_query = template["input_prefix"] + user_input
-        user_tokens = tokenizer(
-            user_query, return_tensors="pt", add_special_tokens=False
-        ).input_ids.to(device)
-        force_start_ids = template["force_start_ids"].to(device)
-
-        input_ids = torch.cat([input_ids, user_tokens, force_start_ids], dim=1)
-        attention_mask = torch.ones_like(input_ids, device=device)
-
-        start_time = time.perf_counter()
-
-        gen_config = generation_config or {
-            "max_new_tokens": 1024,
-            "do_sample": False,
-            "num_beams": 1,
-            "min_length": 5,
-            "repetition_penalty": 1.2
-        }
-
-        outputs = model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            pad_token_id=tokenizer.eos_token_id,
-            use_cache=True,
-            return_dict_in_generate=True,
-            output_scores=False,
-            **gen_config,
-        )
-
-        generation_time = time.perf_counter() - start_time
-
-        prompt_length = input_ids.shape[1]
-        generated_ids = outputs.sequences[0, prompt_length:]
-        generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
-
-        full_response = template["force_start_text"] + generated_text
-        pred = self._extract_final_answer(full_response, task_type)
-
-        return {
-            "full_response": full_response,
-            "prediction": pred,
-            "generation_time": generation_time,
-            "generated_tokens": generated_ids.shape[0],
-            "input_tokens": input_ids.shape[1],
-            "ut_steps": ut_steps,
-        }
 
     @torch.no_grad()
     def calculate_perplexity(
