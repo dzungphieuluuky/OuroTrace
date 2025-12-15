@@ -64,6 +64,7 @@ class OuroThinkingExperiment:
             self.model_path,
             config=base_config,  # Use the fully configured base_config
             device_map="cuda",
+            attn_implementation="sdpa_paged",
             torch_dtype=self.dtype,
             trust_remote_code=True,
             quantization_config=quantization_config,
