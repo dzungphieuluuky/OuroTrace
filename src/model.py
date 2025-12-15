@@ -106,11 +106,11 @@ class OuroThinkingExperiment:
                         "content": "100 + 200 + 300 =",
                         "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600.\n"
                     },
-                    {
-                        "role": "user",
-                        "content": "050 + 025 + 100 =",
-                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175.\n"
-                    },
+                    # {
+                    #     "role": "user",
+                    #     "content": "050 + 025 + 100 =",
+                    #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175.\n"
+                    # },
                 ],
                 "force_start": "[STEP 1] Current: 0.\n",
                 "input_prefix": ""
