@@ -86,114 +86,77 @@ class OuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-        """
-        FIXED: Improved few-shot examples to prevent babbling and ensure proper reasoning.
-        Key fixes:
-        1. Use 3-shot examples that match exact test format
-        2. Ensure examples show COMPLETE reasoning paths
-        3. Make force_start more explicit
-        4. Add stronger guardrails against repetition
-        """
-        self.tokenizer = tokenizer
-        
-        task_configs = {
-            # 1. N-ARY ADDITION - FIXED: Show all numbers, handle leading zeros
-            "n_ary": {
-                "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT repeat steps, start over, or output the input question. Only output the calculation steps once.",
-                "few_shots": [
-                    {
-                        "role": "user",
-                        "content": "100 + 200 + 300 =",
-                        "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 100: 0 + 100 = 100.\n[STEP 3] Current: 100.\n[STEP 4] Add 200: 100 + 200 = 300.\n[STEP 5] Current: 300.\n[STEP 6] Add 300: 300 + 300 = 600.\n[FINAL] 600."
-                    },
-                    # {
-                    #     "role": "user",
-                    #     "content": "050 + 025 + 100 =",
-                    #     "role_response": "[STEP 1] Current: 0.\n[STEP 2] Add 050: 0 + 50 = 50.\n[STEP 3] Current: 50.\n[STEP 4] Add 025: 50 + 25 = 75.\n[STEP 5] Current: 75.\n[STEP 6] Add 100: 75 + 100 = 175.\n[FINAL] 175.\n"
-                    # },
-                ],
-                "force_start": "\n[STEP 1]",
-                "input_prefix": ""
-            },
+            """
+            Pre-compute prompt templates for faster inference.
+            UPDATED: Refined Few-Shot examples to prevent babbling (added Step Prefixes and Guardrails).
+            """
+            self.tokenizer = tokenizer
             
-            # 2. P-HOP INDUCTION - FIXED: Show complete tracing for multiple hops
-            "p_hop": {
-                "system": "You are an induction head mechanism. Trace EXACTLY the requested number of hops. Find each token's position in the sequence. Stop after the required hops. DO NOT output anything after the final answer.",
-                "few_shots": [
-                    {
-                        "role": "user",
-                        "content": "Sequence: DCBADC. Start: D. Hop 2 times.",
-                        "role_response": "[TRACE] Start at D.\n[TRACE] Found 'D' at position 0. Next token is C.\n[TRACE] Found 'C' at position 1. Next token is B.\n[FINAL] B.\n"
-                    },
-                    {
-                        "role": "user",
-                        "content": "Sequence: AABBCC. Start: A. Hop 3 times.",
-                        "role_response": "[TRACE] Start at A.\n[TRACE] Found 'A' at position 0. Next token is A.\n[TRACE] Found 'A' at position 1. Next token is B.\n[TRACE] Found 'B' at position 2. Next token is B.\n[FINAL] B.\n"
-                    }
-                ],
-                "force_start": "\n[TRACE] Start at",
-                "input_prefix": ""
-            },
-            
-            # 3. SYMBOLIC i-GSM - FIXED: Show actual modulo 7 calculations
-            "igsm": {
-                "system": "You are a symbolic math solver. Solve equations modulo 7 (results 0-6). For each equation, show the substitution and modulo 7 calculation. STOP after solving for the target variable.",
-                "few_shots": [
-                    {
-                        "role": "user",
-                        "content": "Question. X#Y := 3. Z#Z := X#Y * 2. Z#Z?",
-                        "role_response": "[EQ 1] X#Y = 3.\n[EQ 2] Z#Z = X#Y * 2 = 3 * 2 = 6.\n[FINAL] 6.\n"
-                    },
-                    {
-                        "role": "user",
-                        "content": "Question. B#K := 1. L#L := B#K - 5. L#L?",
-                        "role_response": "[EQ 1] B#K = 1.\n[EQ 2] L#L = B#K - 5 = 1 - 5 = -4 mod 7 = 3.\n[FINAL] 3.\n"
-                    },
-                    {
-                        "role": "user",
-                        "content": "Question. C#D := 5. E#F := C#D + 4. G#H := E#F * 2. G#H?",
-                        "role_response": "[EQ 1] C#D = 5.\n[EQ 2] E#F = C#D + 4 = 5 + 4 = 9 mod 7 = 2.\n[EQ 3] G#H = E#F * 2 = 2 * 2 = 4.\n[FINAL] 4.\n"
-                    }
-                ],
-                "force_start": "\n[EQ 1]",
-                "input_prefix": ""
+            task_configs = {
+                # 1. N-ARY ADDITION (TÍCH HỢP STEP PREFIX VÀ GUARDRAILS)
+                "n_ary": {
+                    # Thêm từ khóa kiểm soát: MUST, DO NOT
+                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
+                    "example_user": "10 + 20 + 30 =",
+                    # Thêm [STEP X] và [FINAL]
+                    "example_asst": "[STEP 1] Current: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Current: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Current: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
+                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
+                    "force_start": "\n[STEP 1] Current: 0", 
+                    "input_prefix": "" 
+                },
+                
+                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
+                "p_hop": {
+                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
+                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
+                    "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
+                    # Rút gọn ví dụ: dùng [TRACE]
+                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
+                    "force_start": "\n[TRACE] Start at", 
+                    "input_prefix": "" 
+                },
+                
+                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
+                "igsm": {
+                    # Tăng cường Guardrail
+                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
+                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
+                    # Thêm [EQ X] cho từng bước và [FINAL]
+                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
+                    "force_start": "\n[EQ 1]", 
+                    "input_prefix": "" 
+                }
             }
-        }
-        
-        self.task_templates = {}
-        
-        for task_type, config in task_configs.items():
-            # Build messages list with System + Few-Shots
-            messages = [{"role": "system", "content": config["system"]}]
             
-            for shot in config["few_shots"]:
-                messages.append({"role": "user", "content": shot["content"]})
-                messages.append({"role": "assistant", "content": shot["role_response"]})
+            for task_type, config in task_configs.items():
+                # 1. Build static context (Unchanged logic)
+                static_messages = [
+                    {"role": "system", "content": config["system"]},
+                    {"role": "user", "content": config["example_user"]},
+                    {"role": "assistant", "content": config["example_asst"]}
+                ]
+                
+                static_prompt_text = tokenizer.apply_chat_template(
+                    static_messages, tokenize=False, add_generation_prompt=True
+                )
+                static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+                
+                # 2. Tokenize Force Start (Unchanged logic)
+                force_start_tokens = tokenizer(
+                    config["force_start"], 
+                    return_tensors="pt", 
+                    add_special_tokens=False
+                )
+                
+                self.task_templates[task_type] = {
+                    "static_input_ids": static_inputs.input_ids,
+                    "static_attention_mask": static_inputs.attention_mask,
+                    "force_start_ids": force_start_tokens.input_ids,
+                    "input_prefix": config["input_prefix"],
+                    "force_start_text": config["force_start"]
+                }
             
-            static_prompt_text = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True
-            )
-            
-            static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
-            
-            # Tokenize Force Start
-            force_start_tokens = tokenizer(
-                config["force_start"],
-                return_tensors="pt",
-                add_special_tokens=False
-            )
-            
-            self.task_templates[task_type] = {
-                "static_input_ids": static_inputs.input_ids,
-                "static_attention_mask": static_inputs.attention_mask,
-                "force_start_ids": force_start_tokens.input_ids,
-                "input_prefix": config["input_prefix"],
-                "force_start_text": config["force_start"]
-            }
-        
-        print("[+] FIXED Task templates with improved few-shot examples")
+            print("[+] Task templates pre-computed (Corrected with Step Prefixes and Guardrails)")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract answer from model response"""
