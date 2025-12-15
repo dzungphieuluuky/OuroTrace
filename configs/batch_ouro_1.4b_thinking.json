@@ -42,7 +42,7 @@
     },
     
     "reasoning_primitives": {
-        "num_samples": 50
+        "num_samples": 8
     },
 
     "ENABLE_HEAVY_BENCHMARKS": false
