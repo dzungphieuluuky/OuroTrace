@@ -49,12 +49,7 @@ class OuroThinkingExperiment:
         # Apply the UT step configuration BEFORE loading the model
         base_config.total_ut_steps = total_ut_steps
         base_config.early_exit_threshold = early_exit_threshold
-        
-        # IMPORTANT: For Ouro models, also set these critical parameters
-        if hasattr(base_config, 'num_key_value_heads'):
-            # Ensure KV heads are properly configured for UT steps
-            base_config.num_key_value_heads = base_config.num_attention_heads
-        
+                
         tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, 
             trust_remote_code=True, 
@@ -69,7 +64,7 @@ class OuroThinkingExperiment:
             self.model_path,
             config=base_config,  # Use the fully configured base_config
             device_map="cuda",
-            torch_dtype=self.dtype if not self.use_4bit_quant else None,
+            torch_dtype=self.dtype,
             trust_remote_code=True,
             quantization_config=quantization_config,
         )
