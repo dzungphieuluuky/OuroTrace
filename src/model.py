@@ -62,7 +62,7 @@ class OuroThinkingExperiment:
         # Load model with the COMPLETE modified config
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
-            config=base_config,  # Use the fully configured base_config
+            config=base_config,
             device_map="cuda",
             attn_implementation="sdpa_paged",
             torch_dtype=self.dtype if not self.use_4bit_quant else None,
@@ -78,7 +78,7 @@ class OuroThinkingExperiment:
         print(f"✅ Model loaded on {model.device}")
         
         # VERIFICATION: Check the config was applied
-        print(f"✅ VERIFIED: Model configured with total_ut_steps={model.config.total_ut_steps}")
+        print(f"✅ VERIFIED: Model configured with total_ut_steps = {model.config.total_ut_steps}")
         
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
