@@ -6,21 +6,23 @@ from collections import defaultdict
 
 def create_test_datasets(config: dict) -> Dict[str, List[Dict]]:
     """
-    Generate algorithmic test datasets strictly matching ICLR 2025 specs.
-    Ensures prompts match the exact format expected by model templates.
+    Generate algorithmic test datasets strictly matching ICLR 2025 specs:
+    1. N-ary Addition: Input-Output pairs, 3-digit operands, sum.
+    2. P-hop Induction: Sequence length 256, Alphabet 4, Chain embedded at random sorted indices.
+    3. Symbolic i-GSM: Hierarchy depth 4, strict Level i -> Level i+1 dependency, Modulo 7.
     """
     test_data = {}
 
-    if "n_ary" in config:
+    # 1. N-ARY ADDITION (Unchanged, matches paper description)
+    if 'n_ary' in config:
         n_ary_data = []
-        ops_levels = config["n_ary"].get("ops_levels", [8, 16, 24, 32])
-        num_samples = config["n_ary"].get("num_samples_per_level", 30)
+        ops_levels = config['n_ary'].get('ops_levels', [8, 16, 24, 32])
+        num_samples = config['n_ary'].get('num_samples_per_level', 30)
 
         for n in ops_levels:
             for _ in range(num_samples):
                 nums_int = [random.randint(0, 999) for _ in range(n)]
                 nums_str = [str(x).zfill(3) for x in nums_int]
-                # Format matching the few-shot examples: "100 + 200 + 300 ="
                 prompt_str = " + ".join(nums_str) + " ="
                 target_str = str(sum(nums_int))
 
@@ -28,256 +30,151 @@ def create_test_datasets(config: dict) -> Dict[str, List[Dict]]:
                     "prompt": prompt_str,
                     "expected_answer": target_str,
                     "difficulty": f"{n}_ops",
-                    "task_type": "n_ary",
-                    "numbers": nums_int,  # Keep for verification
-                    "sum": sum(nums_int),
+                    "task_type": "n_ary"
                 })
-        test_data["n_ary"] = n_ary_data
+        test_data['n_ary'] = n_ary_data
 
-    if "p_hop" in config:
+    # 2. P-HOP INDUCTION
+    if 'p_hop' in config:
         p_hop_data = []
-        alphabet = ["A", "B", "C", "D"]
-        seq_len = config["p_hop"].get("sequence_length", 256)
-        hop_levels = config["p_hop"].get("hop_levels", [16, 24, 32])
-        num_samples = config["p_hop"].get("num_samples_per_level", 30)
+        alphabet = ['A', 'B', 'C', 'D']
+        seq_len = 256
+        hop_levels = config['p_hop'].get('hop_levels', [16, 24, 32])
+        num_samples = config['p_hop'].get('num_samples_per_level', 30)
 
         for p in hop_levels:
             for _ in range(num_samples):
-                # Ensure indices fit within sequence
-                if p + 1 >= seq_len:
-                    # Adjust sequence length for large hops
-                    seq_len_adjusted = max(seq_len, (p + 1) * 2)
-                    indices = random.sample(range(seq_len_adjusted), p + 1)
-                else:
-                    indices = random.sample(range(seq_len), p + 1)
-                
+                chain = [random.choice(alphabet) for _ in range(p + 1)]
+                indices = random.sample(range(seq_len), p + 1)
                 indices.sort()
-                
-                # Generate chain that ensures each hop is possible
-                chain = []
-                # First element can be any letter
-                chain.append(random.choice(alphabet))
-                
-                # Ensure each subsequent element follows the sequence pattern
-                for i in range(1, p + 1):
-                    # Make sure the next token exists in the alphabet
-                    possible_next = [c for c in alphabet if c != chain[-1]] or alphabet
-                    chain.append(random.choice(possible_next))
-                
-                # Create sequence with embedded chain
                 seq = [random.choice(alphabet) for _ in range(seq_len)]
                 for k, idx in enumerate(indices):
-                    if idx < len(seq):
-                        seq[idx] = chain[k]
-                    else:
-                        # Extend sequence if needed
-                        seq.extend([random.choice(alphabet)] * (idx - len(seq) + 1))
-                        seq[idx] = chain[k]
-
-                seq_str = "".join(seq[:seq_len])  # Trim to exact length
+                    seq[idx] = chain[k]
+                seq_str = "".join(seq)
                 start_node = chain[0]
                 expected = chain[-1]
-                
-                # Format matching few-shot: "Sequence: ABC... Start: A. Hop X times."
                 full_prompt = f"Sequence: {seq_str}. Start: {start_node}. Hop {p} times."
-
                 p_hop_data.append({
                     "prompt": full_prompt,
                     "expected_answer": expected,
                     "difficulty": f"{p}_hops",
-                    "task_type": "p_hop",
-                    "sequence": seq_str,
-                    "chain": chain,
-                    "indices": indices[:seq_len],
+                    "task_type": "p_hop"
                 })
-        test_data["p_hop"] = p_hop_data
+        test_data['p_hop'] = p_hop_data
 
-    if "igsm" in config:
+    # 3. SYMBOLIC i-GSM
+    if 'igsm' in config:
         igsm_data = []
-        num_total = config["igsm"].get("num_samples_total", 50)
-        chars = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-        
-        def get_var_name(existing: set = None) -> str:
-            """Get unique variable name"""
-            while True:
-                var = f"{random.choice(chars)}#{random.choice(chars)}"
-                if existing is None or var not in existing:
-                    return var
-        
-        def create_hierarchical_equations() -> Tuple[List[str], Dict[str, int], str, int]:
-            """Create properly hierarchical equations with depth constraint"""
-            all_vars = set()
-            levels = defaultdict(list)
-            var_values = {}
-            equations = []
-            
-            # Level 0: Base assignments (values 0-6)
-            num_base = random.randint(3, 5)
-            for _ in range(num_base):
-                var = get_var_name(all_vars)
-                all_vars.add(var)
-                val = random.randint(0, 6)
-                var_values[var] = val
-                levels[0].append(var)
-                equations.append(f"{var} := {val}")
-            
-            # Levels 1-3: Dependencies on previous level only
-            for level in range(1, 4):
-                num_vars = random.randint(2, 4)
-                for _ in range(num_vars):
-                    var = get_var_name(all_vars)
-                    all_vars.add(var)
-                    
-                    # Only reference variables from previous level
-                    available_refs = levels[level - 1]
-                    if not available_refs:
-                        available_refs = levels[0]  # Fallback
-                    
-                    # Use 1 or 2 operands from previous level
-                    num_operands = random.randint(1, 2)
-                    operands = random.sample(available_refs, min(num_operands, len(available_refs)))
-                    op_vals = [var_values[op] for op in operands]
-                    
-                    # Choose operation
-                    if len(operands) == 1:
-                        # Assignment from previous level
-                        res = op_vals[0]
-                        stmt = f"{var} := {operands[0]}"
-                    else:
-                        # Binary operation
-                        op_type = random.choice(["+", "-", "*"])
-                        if op_type == "+":
-                            res = (op_vals[0] + op_vals[1]) % 7
-                            stmt = f"{var} := {operands[0]} + {operands[1]}"
-                        elif op_type == "-":
-                            res = (op_vals[0] - op_vals[1]) % 7
-                            stmt = f"{var} := {operands[0]} - {operands[1]}"
-                        else:  # "*"
-                            res = (op_vals[0] * op_vals[1]) % 7
-                            stmt = f"{var} := {operands[0]} * {operands[1]}"
-                    
-                    var_values[var] = res
-                    levels[level].append(var)
-                    equations.append(stmt)
-            
-            # Target variable from deepest level
-            target_level = 3 if levels[3] else (2 if levels[2] else 1)
-            target_var = random.choice(levels[target_level])
-            target_val = var_values[target_var]
-            
-            return equations, var_values, target_var, target_val
-        
+        num_total = config['igsm'].get('num_samples_total', 50)
+        chars = "ABCDEFGHIJKLMNOP"
+        def get_var_name():
+            return f"{random.choice(chars)}#{random.choice(chars)}"
         for _ in range(num_total):
-            equations, var_values, target_var, target_val = create_hierarchical_equations()
-            
-            # Shuffle equations but maintain solvability (base definitions first in practice)
+            levels = {0: [], 1: [], 2: [], 3: [], 4: []}
+            all_vars_data = {}
+            equations = []
+            for _ in range(4):
+                name = get_var_name()
+                val = random.randint(0, 6)
+                levels[0].append(name)
+                all_vars_data[name] = val
+                equations.append(f"{name} := {val}")
+            for i in range(1, 5):
+                num_vars_in_level = random.randint(2, 4)
+                for _ in range(num_vars_in_level):
+                    target_var = get_var_name()
+                    while target_var in all_vars_data:
+                        target_var = get_var_name()
+                    operands = random.choices(levels[i-1], k=random.randint(1, 2))
+                    op_vals = [all_vars_data[op] for op in operands]
+                    op_type = random.choice(['add', 'sub', 'mult', 'assign'])
+                    stmt = ""
+                    res = 0
+                    if op_type == 'assign' or len(operands) < 2:
+                        stmt = f"{target_var} := {operands[0]}"
+                        res = op_vals[0]
+                    elif op_type == 'add':
+                        stmt = f"{target_var} := {operands[0]} + {operands[1]}"
+                        res = (op_vals[0] + op_vals[1]) % 7
+                    elif op_type == 'sub':
+                        stmt = f"{target_var} := {operands[0]} - {operands[1]}"
+                        res = (op_vals[0] - op_vals[1]) % 7
+                    elif op_type == 'mult':
+                        stmt = f"{target_var} := {operands[0]} * {operands[1]}"
+                        res = (op_vals[0] * op_vals[1]) % 7
+                    equations.append(stmt)
+                    all_vars_data[target_var] = res
+                    levels[i].append(target_var)
+            target_var = random.choice(levels[4])
+            target_val = all_vars_data[target_var]
             random.shuffle(equations)
-            
-            # Format matching few-shot: "Question. A#A := 4. A#B := A#A + 2. A#B?"
             full_prompt = "Question. " + ". ".join(equations) + f". {target_var}?"
-
             igsm_data.append({
                 "prompt": full_prompt,
                 "expected_answer": str(target_val),
                 "difficulty": "depth_4_hierarchical_mod_7",
-                "task_type": "igsm",
-                "equations": equations,
-                "target_var": target_var,
-                "all_values": var_values,
+                "task_type": "igsm"
             })
-    
-    test_data["igsm"] = igsm_data
+        test_data['igsm'] = igsm_data
+
     return test_data
 
 def create_perplexity_data(num_samples: int = 30) -> List[str]:
     """Generate reasoning traces for perplexity calculation"""
     perplexity_texts = []
-    
-    # Format to match model's expected templates
+
     # N-ARY traces
     for _ in range(num_samples // 2):
         n = random.choice([4, 6, 8])
-        nums = [str(random.randint(10, 999)).zfill(3) for _ in range(n)]
-        # Match the exact format from n_ary template
-        prompt = " + ".join(nums) + " ="
-        trace = f"Current: 0\n"
+        nums = [random.randint(10, 99) for _ in range(n)]
+        trace = f"System: You are a calculation engine.\nUser: Sum: {nums}\nAssistant: Current Sum: 0\n"
         current_sum = 0
         for num in nums:
-            num_int = int(num)
-            current_sum += num_int
-            trace += f"Add {num}: {current_sum - num_int} + {num_int} = {current_sum}\n"
-            trace += f"Current: {current_sum}\n"
+            prev_sum = current_sum
+            current_sum += num
+            trace += f"Add {num}: {prev_sum} + {num} = {current_sum}\nCurrent Sum: {current_sum}\n"
         trace += f"Final: {current_sum}"
         perplexity_texts.append(trace)
-    
+
     # P-HOP traces
-    alphabet = ["A", "B", "C", "D"]
+    all_letters = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     for _ in range(num_samples // 2):
         hops = random.choice([3, 4, 5])
-        seq_len = 256
-        indices = sorted(random.sample(range(seq_len), hops + 1))
-        chain = [random.choice(alphabet) for _ in range(hops + 1)]
-        
-        # Create trace in model's expected format
-        trace = f"Start at {chain[0]}.\n"
-        current_idx = indices[0]
+        nodes = random.sample(all_letters, hops + 1)
+        facts = [f"{nodes[i]}->{nodes[i+1]}" for i in range(len(nodes) - 1)]
+        facts_str = ", ".join(facts)
+        trace = f"System: Logic engine.\nUser: Facts: {facts_str}. Start: {nodes[0]}. Find: {nodes[-1]}.\n"
+        trace += f"Assistant: Current Node: {nodes[0]}\n"
         for i in range(hops):
-            # Find next occurrence after current position
-            next_idx = indices[i + 1]
-            trace += f"Found '{chain[i]}' at index {next_idx}.\n"
-            if i < hops:
-                trace += f"Next token is {chain[i + 1]}.\n"
-        
-        trace += f"Final: {chain[-1]}"
+            trace += f"Rule Matches: {nodes[i]} -> {nodes[i+1]}\nNext Node: {nodes[i+1]}\n"
+        trace += f"Final: {nodes[-1]}"
         perplexity_texts.append(trace)
-    
+
     return perplexity_texts
 
 def load_and_preprocess_data(file_path: str) -> Dict[str, List[Dict]]:
     """Load existing test data from JSON or CSV"""
     print(f"Loading data from: {file_path}")
     
-    if file_path.endswith(".json"):
-        with open(file_path, "r", encoding="utf-8") as f:
+    if file_path.endswith('.json'):
+        with open(file_path, 'r', encoding='utf-8') as f:
             raw_data = json.load(f)
-    elif file_path.endswith(".csv"):
+    elif file_path.endswith('.csv'):
         df = pd.read_csv(file_path)
-        raw_data = df.to_dict("records")
+        raw_data = df.to_dict('records')
     else:
         raise ValueError("Unsupported format. Use .json or .csv")
-
-    processed_data = {"n_ary": [], "p_hop": [], "igsm": []}
-    stats = {"n_ary": 0, "p_hop": 0, "igsm": 0, "unknown": 0}
+    
+    processed_data = {'n_ary': [], 'p_hop': [], 'igsm': []}
     
     for record in raw_data:
-        task = record.get("task_type", "").lower()
-        
-        # Normalize task type names
-        if "n_ary" in task or "addition" in task:
-            task_key = "n_ary"
-        elif "p_hop" in task or "induction" in task:
-            task_key = "p_hop"
-        elif "igsm" in task or "gsm" in task or "symbolic" in task:
-            task_key = "igsm"
-        else:
-            stats["unknown"] += 1
-            continue
-        
-        # Validate required fields
-        required = ["prompt", "expected_answer"]
-        if all(k in record for k in required):
-            processed_data[task_key].append({
-                "prompt": str(record["prompt"]),
-                "expected_answer": str(record["expected_answer"]),
-                "difficulty": record.get("difficulty", "unknown"),
-                "task_type": task_key,
-                "original_data": record  # Keep original for debugging
-            })
-            stats[task_key] += 1
+        task = record.get('task_type')
+        if task in processed_data:
+            if all(k in record for k in ['prompt', 'expected_answer', 'difficulty']):
+                processed_data[task].append(record)
     
-    print(f"✅ Loaded - N-ary: {stats['n_ary']}, "
-          f"P-Hop: {stats['p_hop']}, iGSM: {stats['igsm']}, "
-          f"Skipped: {stats['unknown']}")
+    print(f"✅ Loaded - N-ary: {len(processed_data['n_ary'])}, "
+          f"P-Hop: {len(processed_data['p_hop'])}, iGSM: {len(processed_data['igsm'])}")
     
     return processed_data
 
