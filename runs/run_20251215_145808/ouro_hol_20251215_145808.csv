@@ -1,0 +1,2002 @@
+task_category,task_name,prompt,prediction,target,is_correct
+Reasoning Primitive,var_assign_depth_0_code,"d = 58
+q = 98
+f = 62
+o = 69
+n = 9
+print(q)
+Answer:...","9
+
+#
+
+**",98,False
+Reasoning Primitive,var_assign_depth_0_code,"w = 54
+g = 4
+i = 81
+a = 86
+m = 43
+print(g)
+Answer:...","43
+
+#
+
+#",4,False
+Reasoning Primitive,var_assign_depth_0_code," = 64
+t = 31
+g = 16
+r = 40
+j = 14
+print(t)
+Answer:...","14
+
+#
+
+#",31,False
+Reasoning Primitive,var_assign_depth_0_code," = 18
+x = 24
+f = 15
+v = 68
+u = 16
+print(c)
+Answer:...","16
+
+# 17",18,False
+Reasoning Primitive,var_assign_depth_0_code," = 81
+c = 40
+m = 74
+n = 65
+a = 49
+print(x)
+Answer:...","49
+
+#
+
+**",66,False
+Reasoning Primitive,var_assign_depth_0_code," = 17
+i = 30
+u = 27
+c = 55
+d = 95
+print(x)
+Answer:...","95
+
+#
+
+#",10,False
+Reasoning Primitive,var_assign_depth_0_code," = 75
+d = 56
+g = 75
+y = 71
+l = 21
+print(h)
+Answer:...","21
+
+#
+
+#",70,False
+Reasoning Primitive,var_assign_depth_0_code,"l = 0
+c = 68
+d = 29
+a = 37
+m = 94
+print(l)
+Answer:...","94
+
+#
+
+**",0,False
+Reasoning Primitive,var_assign_depth_0_code," = 71
+i = 29
+b = 79
+w = 65
+z = 99
+print(m)
+Answer:...","99
+
+#
+
+#",44,False
+Reasoning Primitive,var_assign_depth_0_code,"
+k = 41
+f = 63
+w = 95
+y = 9
+x = 1
+print(w)
+Answer:...","1
+
+# 1000",95,False
+Reasoning Primitive,var_assign_depth_0_code,"
+u = 51
+n = 4
+t = 44
+a = 41
+s = 0
+print(u)
+Answer:...","41
+
+#
+
+#",51,False
+Reasoning Primitive,var_assign_depth_0_code," = 34
+j = 66
+f = 65
+t = 87
+o = 27
+print(f)
+Answer:...","27
+
+#
+
+#",65,False
+Reasoning Primitive,var_assign_depth_0_code,"b = 5
+u = 19
+t = 42
+n = 62
+k = 97
+print(u)
+Answer:...","97
+
+#
+
+#",19,False
+Reasoning Primitive,var_assign_depth_0_code," = 72
+v = 52
+r = 77
+d = 82
+o = 82
+print(r)
+Answer:...","82
+
+#
+
+#",77,False
+Reasoning Primitive,var_assign_depth_0_code,"v = 85
+y = 46
+u = 0
+p = 60
+b = 31
+print(y)
+Answer:...","31
+
+#
+
+**",46,False
+Reasoning Primitive,var_assign_depth_0_code,"w = 47
+f = 0
+q = 52
+p = 26
+m = 80
+print(m)
+Answer:...","80
+
+#
+
+**",80,False
+Reasoning Primitive,var_assign_depth_0_code," = 56
+k = 45
+q = 41
+o = 27
+x = 94
+print(l)
+Answer:...","94
+
+# 100",10,False
+Reasoning Primitive,var_assign_depth_0_code,"z = 38
+b = 58
+s = 8
+r = 78
+o = 17
+print(z)
+Answer:...","17
+
+#
+
+#",38,False
+Reasoning Primitive,var_assign_depth_0_code," = 26
+d = 48
+e = 50
+s = 78
+q = 83
+print(u)
+Answer:...","83
+
+#
+
+#",26,False
+Reasoning Primitive,var_assign_depth_0_code," = 43
+h = 66
+x = 80
+b = 76
+c = 16
+print(c)
+Answer:...","16
+
+#
+
+**",16,False
+Reasoning Primitive,var_assign_depth_0_code,"n = 71
+q = 15
+a = 35
+o = 6
+x = 49
+print(k)
+Answer:...","49
+
+#
+
+**",39,False
+Reasoning Primitive,var_assign_depth_0_code," = 31
+w = 35
+e = 68
+l = 31
+u = 23
+print(a)
+Answer:...","23
+
+#
+
+**",31,False
+Reasoning Primitive,var_assign_depth_0_code,"p = 68
+m = 62
+l = 34
+k = 60
+n = 5
+print(m)
+Answer:...","5
+
+#
+
+#",62,False
+Reasoning Primitive,var_assign_depth_0_code," = 69
+a = 27
+m = 80
+l = 99
+u = 33
+print(p)
+Answer:...","33
+
+#
+
+#",33,False
+Reasoning Primitive,var_assign_depth_0_code," = 24
+o = 29
+d = 53
+v = 91
+u = 79
+print(o)
+Answer:...","79
+
+# 100",29,False
+Reasoning Primitive,var_assign_depth_0_code," = 64
+p = 55
+c = 68
+r = 91
+u = 59
+print(u)
+Answer:...","59
+
+x = 10",59,False
+Reasoning Primitive,var_assign_depth_0_code," = 45
+w = 68
+t = 80
+y = 21
+b = 14
+print(b)
+Answer:...","14
+
+#
+
+#",14,False
+Reasoning Primitive,var_assign_depth_0_code,"a = 36
+e = 56
+d = 19
+q = 61
+y = 6
+print(a)
+Answer:...","6
+
+#
+
+#",36,False
+Reasoning Primitive,var_assign_depth_0_code," = 53
+q = 70
+v = 56
+u = 45
+d = 31
+print(p)
+Answer:...","31
+
+#
+
+#",53,False
+Reasoning Primitive,var_assign_depth_0_code," = 24
+c = 85
+f = 54
+v = 18
+z = 59
+print(z)
+Answer:...","59
+
+#
+
+#",59,False
+Reasoning Primitive,var_assign_depth_0_code,"o = 14
+j = 2
+q = 89
+f = 48
+a = 11
+print(a)
+Answer:...","11
+
+#
+
+**",11,False
+Reasoning Primitive,var_assign_depth_0_code,"s = 21
+u = 33
+h = 76
+x = 6
+c = 12
+print(h)
+Answer:...","12
+
+#
+
+**",76,False
+Reasoning Primitive,var_assign_depth_0_code," = 38
+g = 44
+c = 38
+f = 69
+y = 71
+print(x)
+Answer:...","71
+
+#
+
+**",38,False
+Reasoning Primitive,var_assign_depth_0_code," = 93
+v = 79
+u = 77
+p = 42
+l = 69
+print(q)
+Answer:...","69
+
+#
+
+#",93,False
+Reasoning Primitive,var_assign_depth_0_code," = 66
+v = 46
+c = 51
+o = 51
+p = 69
+print(p)
+Answer:...","69
+
+#
+
+#",69,False
+Reasoning Primitive,var_assign_depth_0_code," = 87
+z = 64
+s = 82
+f = 15
+b = 44
+print(f)
+Answer:...","44
+
+#
+
+#",15,False
+Reasoning Primitive,var_assign_depth_0_code," = 24
+d = 10
+q = 47
+f = 58
+e = 97
+print(q)
+Answer:...","97
+
+#
+
+#",47,False
+Reasoning Primitive,var_assign_depth_0_code,"r = 7
+e = 36
+v = 10
+b = 38
+q = 23
+print(q)
+Answer:...","23
+
+#
+
+#",23,False
+Reasoning Primitive,var_assign_depth_0_code," = 55
+m = 38
+h = 36
+l = 87
+y = 30
+print(m)
+Answer:...","30
+
+#
+
+#",38,False
+Reasoning Primitive,var_assign_depth_0_code,"r = 29
+w = 39
+h = 33
+c = 40
+l = 1
+print(l)
+Answer:...","1
+
+i = 1",1,False
+Reasoning Primitive,var_assign_depth_0_code," = 64
+r = 89
+x = 57
+t = 69
+j = 77
+print(j)
+Answer:...","77
+
+#
+
+**",77,False
+Reasoning Primitive,var_assign_depth_0_code," = 59
+z = 48
+j = 21
+v = 94
+o = 59
+print(j)
+Answer:...","59
+
+#
+
+#",21,False
+Reasoning Primitive,var_assign_depth_0_code," = 73
+r = 44
+g = 58
+w = 78
+c = 61
+print(q)
+Answer:...","61
+
+#
+
+#",73,False
+Reasoning Primitive,var_assign_depth_0_code," = 94
+y = 96
+l = 57
+h = 80
+f = 25
+print(f)
+Answer:...","25
+
+#
+
+#",25,False
+Reasoning Primitive,var_assign_depth_0_code,"z = 7
+y = 29
+d = 82
+c = 65
+n = 36
+print(d)
+Answer:...","36
+
+#
+
+#",82,False
+Reasoning Primitive,var_assign_depth_0_code," = 14
+l = 72
+m = 84
+x = 24
+v = 44
+print(x)
+Answer:...","44
+
+#
+
+#",24,False
+Reasoning Primitive,var_assign_depth_0_code," = 12
+h = 11
+r = 64
+o = 76
+j = 17
+print(h)
+Answer:...","17
+
+#
+
+**",11,False
+Reasoning Primitive,var_assign_depth_0_code," = 62
+o = 51
+s = 59
+z = 99
+n = 65
+print(s)
+Answer:...","65
+
+#
+
+=",59,False
+Reasoning Primitive,var_assign_depth_0_code," = 14
+e = 58
+l = 52
+t = 15
+w = 37
+print(p)
+Answer:...","37
+
+#
+
+#",14,False
+Reasoning Primitive,var_assign_depth_0_code," = 62
+k = 50
+x = 66
+t = 47
+s = 12
+print(x)
+Answer:...","12
+
+#
+
+**",66,False
+Reasoning Primitive,var_assign_depth_0_math,"d = 39. Let y = 92. Let b = 56. What is y?
+Answer:...","56
+
+The problem is:",92,False
+Reasoning Primitive,var_assign_depth_0_math,"z = 69. Let m = 26. Let c = 69. What is i?
+Answer:...","26
+
+The problem is:",2,False
+Reasoning Primitive,var_assign_depth_0_math,"s = 39. Let v = 16. Let u = 81. What is h?
+Answer:...","81
+
+Which is the",45,False
+Reasoning Primitive,var_assign_depth_0_math," m = 54. Let e = 8. Let r = 43. What is e?
+Answer:...","43
+
+The problem is to find",8,False
+Reasoning Primitive,var_assign_depth_0_math,"d = 53. Let x = 53. Let f = 86. What is g?
+Answer:...","86
+
+Which of the",7,False
+Reasoning Primitive,var_assign_depth_0_math," h = 4. Let u = 96. Let s = 75. What is r?
+Answer:...","75
+
+Which is the",5,False
+Reasoning Primitive,var_assign_depth_0_math,"m = 88. Let b = 68. Let a = 53. What is y?
+Answer:...","53
+
+Which is the",88,False
+Reasoning Primitive,var_assign_depth_0_math,"y = 14. Let u = 45. Let z = 99. What is y?
+Answer:...","99
+
+Which is the",14,False
+Reasoning Primitive,var_assign_depth_0_math," u = 9. Let j = 65. Let c = 83. What is u?
+Answer:...","83
+
+If 100",9,False
+Reasoning Primitive,var_assign_depth_0_math," m = 27. Let y = 85. Let s = 5. What is y?
+Answer:...","5
+
+The problem is to find the",85,False
+Reasoning Primitive,var_assign_depth_0_math,"t = 49. Let a = 70. Let s = 10. What is s?
+Answer:...","10
+
+Which is the",10,False
+Reasoning Primitive,var_assign_depth_0_math,"v = 14. Let o = 92. Let q = 60. What is q?
+Answer:...","60
+
+Which is the",60,False
+Reasoning Primitive,var_assign_depth_0_math," x = 4. Let z = 78. Let b = 39. What is p?
+Answer:...","39
+
+Which is the",10,False
+Reasoning Primitive,var_assign_depth_0_math,"k = 74. Let h = 27. Let r = 92. What is k?
+Answer:...","92
+
+Which of the",74,False
+Reasoning Primitive,var_assign_depth_0_math," z = 18. Let i = 35. Let m = 2. What is o?
+Answer:...","2
+
+Which of the
+
+A",18,False
+Reasoning Primitive,var_assign_depth_0_math," g = 47. Let e = 83. Let o = 7. What is v?
+Answer:...","7
+
+The problem is to find the",60,False
+Reasoning Primitive,var_assign_depth_0_math,"p = 18. Let z = 33. Let y = 20. What is e?
+Answer:...","20
+
+Which is the",17,False
+Reasoning Primitive,var_assign_depth_0_math,"p = 78. Let a = 52. Let t = 23. What is z?
+Answer:...","23
+
+Which is the",16,False
+Reasoning Primitive,var_assign_depth_0_math,"d = 26. Let g = 63. Let a = 43. What is a?
+Answer:...","43
+
+The problem is:",43,False
+Reasoning Primitive,var_assign_depth_0_math,"q = 11. Let n = 39. Let d = 51. What is f?
+Answer:...","51
+
+The problem is to find",74,False
+Reasoning Primitive,var_assign_depth_0_math,"n = 50. Let o = 46. Let b = 91. What is z?
+Answer:...","91
+
+Which is the",67,False
+Reasoning Primitive,var_assign_depth_0_math,"q = 20. Let s = 91. Let b = 89. What is s?
+Answer:...","9
+
+Which is the
+
+A",91,False
+Reasoning Primitive,var_assign_depth_0_math,"c = 38. Let q = 48. Let i = 66. What is l?
+Answer:...","66
+
+The problem is to find",17,False
+Reasoning Primitive,var_assign_depth_0_math," v = 90. Let h = 74. Let u = 0. What is u?
+Answer:...","74
+
+The problem is:",0,False
+Reasoning Primitive,var_assign_depth_0_math,"q = 38. Let u = 37. Let p = 94. What is o?
+Answer:...","94
+
+The problem is:",24,False
+Reasoning Primitive,var_assign_depth_0_math,"s = 39. Let w = 78. Let o = 31. What is o?
+Answer:...","31
+
+Which is the",31,False
+Reasoning Primitive,var_assign_depth_0_math,"e = 83. Let r = 67. Let j = 22. What is h?
+Answer:...","22
+
+Which is the",3,False
+Reasoning Primitive,var_assign_depth_0_math,"r = 96. Let j = 95. Let t = 80. What is t?
+Answer:...","80
+
+Which is the",80,False
+Reasoning Primitive,var_assign_depth_0_math,"v = 29. Let e = 64. Let w = 24. What is d?
+Answer:...","24
+
+Which of the",36,False
+Reasoning Primitive,var_assign_depth_0_math,"e = 22. Let s = 22. Let n = 25. What is c?
+Answer:...","25
+
+Which is the",7,False
+Reasoning Primitive,var_assign_depth_0_math,"y = 62. Let f = 56. Let m = 35. What is f?
+Answer:...","56
+
+The problem is:",56,False
+Reasoning Primitive,var_assign_depth_0_math,"a = 18. Let v = 97. Let k = 22. What is x?
+Answer:...","22
+
+Which is the",19,False
+Reasoning Primitive,var_assign_depth_0_math,"v = 36. Let y = 83. Let x = 26. What is x?
+Answer:...","26
+
+The problem is:",26,False
+Reasoning Primitive,var_assign_depth_0_math,"k = 38. Let s = 32. Let j = 46. What is t?
+Answer:...","46
+
+Which is the",49,False
+Reasoning Primitive,var_assign_depth_0_math,"b = 46. Let q = 52. Let r = 75. What is p?
+Answer:...","75
+
+The problem is to find",5,False
+Reasoning Primitive,var_assign_depth_0_math,"a = 27. Let o = 24. Let e = 90. What is o?
+Answer:...","90
+
+Which is the",24,False
+Reasoning Primitive,var_assign_depth_0_math," p = 44. Let x = 74. Let f = 3. What is l?
+Answer:...","3
+
+Which is the
+
+A",61,False
+Reasoning Primitive,var_assign_depth_0_math,"n = 41. Let d = 66. Let h = 88. What is h?
+Answer:...","88
+
+The problem is:",88,False
+Reasoning Primitive,var_assign_depth_0_math," x = 3. Let h = 67. Let s = 16. What is h?
+Answer:...","16
+
+The problem is:",67,False
+Reasoning Primitive,var_assign_depth_0_math," d = 56. Let c = 84. Let q = 7. What is q?
+Answer:...","7
+
+Which of the
+
+A",7,False
+Reasoning Primitive,var_assign_depth_0_math,"v = 78. Let q = 97. Let o = 81. What is q?
+Answer:...","81
+
+If 81 is",97,False
+Reasoning Primitive,var_assign_depth_0_math," g = 6. Let o = 66. Let x = 88. What is r?
+Answer:...","6
+
+If 1000",49,False
+Reasoning Primitive,var_assign_depth_0_math,"d = 99. Let o = 87. Let h = 86. What is o?
+Answer:...","86
+
+The problem is:",87,False
+Reasoning Primitive,var_assign_depth_0_math,"w = 25. Let t = 98. Let q = 94. What is w?
+Answer:...","94
+
+Which of the
+A",25,False
+Reasoning Primitive,var_assign_depth_0_math,"f = 57. Let c = 76. Let m = 55. What is u?
+Answer:...","55
+
+The problem is:",75,False
+Reasoning Primitive,var_assign_depth_0_math,"v = 45. Let j = 54. Let c = 96. What is v?
+Answer:...","96
+
+Which is the",45,False
+Reasoning Primitive,var_assign_depth_0_math,"t = 22. Let j = 37. Let b = 40. What is t?
+Answer:...","40
+
+Which is the",22,False
+Reasoning Primitive,var_assign_depth_0_math," d = 98. Let u = 46. Let t = 2. What is u?
+Answer:...","46
+
+Which is the",46,False
+Reasoning Primitive,var_assign_depth_0_math,"d = 87. Let n = 75. Let y = 55. What is x?
+Answer:...","55
+
+The problem is:",11,False
+Reasoning Primitive,var_assign_depth_0_math,"j = 82. Let d = 88. Let b = 89. What is b?
+Answer:...","89
+
+The problem is:",89,False
+Reasoning Primitive,var_assign_depth_0_equation,"18. o := 41. h := 50. e := 80. v := 42. o?
+Answer:...","5
+
+.
+
+The 1",41,False
+Reasoning Primitive,var_assign_depth_0_equation," 7. m := 75. k := 79. z := 98. r := 55. o?
+Answer:...","64.
+
+But 10",41,False
+Reasoning Primitive,var_assign_depth_0_equation," 53. q := 14. t := 94. r := 5. i := 50. q?
+Answer:...","50.
+
+The 10",14,False
+Reasoning Primitive,var_assign_depth_0_equation," 91. u := 28. l := 81. t := 37. z := 1. r?
+Answer:...","1.
+
+So, the",91,False
+Reasoning Primitive,var_assign_depth_0_equation," 26. t := 61. r := 96. n := 76. i := 6. s?
+Answer:...","76.
+
+But the",35,False
+Reasoning Primitive,var_assign_depth_0_equation,"27. g := 76. c := 98. t := 48. x := 54. c?
+Answer:...","54.
+
+So, the",98,False
+Reasoning Primitive,var_assign_depth_0_equation,"33. t := 11. b := 85. p := 64. j := 67. b?
+Answer:...","33.
+
+So, the",85,False
+Reasoning Primitive,var_assign_depth_0_equation," 50. n := 42. j := 4. o := 91. i := 18. t?
+Answer:...","18.
+
+So, the",30,False
+Reasoning Primitive,var_assign_depth_0_equation," 27. o := 45. s := 7. i := 40. n := 85. o?
+Answer:...","45.
+
+But the",45,False
+Reasoning Primitive,var_assign_depth_0_equation," 52. q := 85. e := 6. a := 12. y := 36. e?
+Answer:...","64.
+
+But the",6,False
+Reasoning Primitive,var_assign_depth_0_equation,"64. j := 36. r := 16. h := 17. k := 97. m?
+Answer:...","16.
+
+So, the",6,False
+Reasoning Primitive,var_assign_depth_0_equation,"17. b := 77. e := 20. w := 19. m := 80. t?
+Answer:...","10.
+
+But 10",17,False
+Reasoning Primitive,var_assign_depth_0_equation,"31. m := 32. t := 51. j := 85. h := 75. j?
+Answer:...","10.
+
+But the",85,False
+Reasoning Primitive,var_assign_depth_0_equation,"65. u := 10. e := 44. z := 92. a := 40. z?
+Answer:...","40.
+
+So, the",92,False
+Reasoning Primitive,var_assign_depth_0_equation,"91. q := 29. x := 83. k := 89. y := 67. y?
+Answer:...","67.
+
+So, the",67,False
+Reasoning Primitive,var_assign_depth_0_equation,"87. h := 82. t := 89. v := 71. r := 36. r?
+Answer:...","89.
+
+But 10",36,False
+Reasoning Primitive,var_assign_depth_0_equation," 73. i := 76. h := 43. x := 61. q := 2. i?
+Answer:...","96.
+
+But the",76,False
+Reasoning Primitive,var_assign_depth_0_equation," 83. b := 27. i := 77. m := 43. w := 6. i?
+Answer:...","77.
+
+So, the",77,False
+Reasoning Primitive,var_assign_depth_0_equation,"29. r := 37. v := 36. k := 25. l := 25. r?
+Answer:...","42.
+
+But 10",37,False
+Reasoning Primitive,var_assign_depth_0_equation," 65. o := 17. e := 36. m := 77. i := 5. e?
+Answer:...","67.
+
+So, the",36,False
+Reasoning Primitive,var_assign_depth_0_equation,":= 0. z := 9. s := 55. v := 75. u := 5. m?
+Answer:...","5.
+
+But the
+
+```",10,False
+Reasoning Primitive,var_assign_depth_0_equation,"71. j := 39. g := 16. l := 77. t := 88. g?
+Answer:...","98.
+
+So, the",16,False
+Reasoning Primitive,var_assign_depth_0_equation,"51. v := 66. a := 45. c := 99. n := 67. c?
+Answer:...","6
+
+.
+
+.",99,False
+Reasoning Primitive,var_assign_depth_0_equation,"= 65. u := 68. p := 58. n := 4. y := 2. q?
+Answer:...","64.
+
+But 10",44,False
+Reasoning Primitive,var_assign_depth_0_equation,"93. q := 67. h := 58. u := 78. z := 68. g?
+Answer:...","6
+
+.
+
+.",93,False
+Reasoning Primitive,var_assign_depth_0_equation," 51. l := 11. s := 28. f := 7. o := 58. l?
+Answer:...","44.
+
+So, the",11,False
+Reasoning Primitive,var_assign_depth_0_equation," 65. v := 95. s := 5. i := 64. e := 13. i?
+Answer:...","13.
+
+So, the",64,False
+Reasoning Primitive,var_assign_depth_0_equation,"74. q := 28. e := 92. u := 43. b := 66. k?
+Answer:...","66.
+
+But the",74,False
+Reasoning Primitive,var_assign_depth_0_equation,"23. v := 61. a := 95. z := 11. n := 82. z?
+Answer:...","42.
+
+But the",11,False
+Reasoning Primitive,var_assign_depth_0_equation,"13. y := 54. i := 59. v := 89. w := 90. w?
+Answer:...","90.
+
+So, the",90,False
+Reasoning Primitive,var_assign_depth_0_equation,"55. x := 60. p := 52. f := 58. a := 53. p?
+Answer:...","53.
+
+So, the",52,False
+Reasoning Primitive,var_assign_depth_0_equation,"78. u := 89. v := 78. r := 68. n := 98. u?
+Answer:...","88.
+
+But 10",89,False
+Reasoning Primitive,var_assign_depth_0_equation,"21. u := 26. w := 53. d := 59. e := 54. a?
+Answer:...","54.
+
+But the",21,False
+Reasoning Primitive,var_assign_depth_0_equation," 89. d := 14. m := 98. c := 5. b := 33. b?
+Answer:...","99.
+
+So, the",33,False
+Reasoning Primitive,var_assign_depth_0_equation,"79. b := 97. e := 64. r := 82. w := 79. e?
+Answer:...","98.
+
+So, the",64,False
+Reasoning Primitive,var_assign_depth_0_equation,"84. z := 67. p := 53. f := 14. l := 73. p?
+Answer:...","41.
+
+So, the",53,False
+Reasoning Primitive,var_assign_depth_0_equation,"77. a := 51. m := 36. e := 65. x := 99. x?
+Answer:...","64.
+
+But 10",99,False
+Reasoning Primitive,var_assign_depth_0_equation,"63. b := 83. w := 73. e := 85. j := 73. x?
+Answer:...","42.
+
+But 10",48,False
+Reasoning Primitive,var_assign_depth_0_equation,"92. l := 42. x := 68. c := 80. t := 28. l?
+Answer:...","45.
+
+So, the",42,False
+Reasoning Primitive,var_assign_depth_0_equation," 33. i := 24. b := 64. u := 21. z := 3. z?
+Answer:...","36.
+
+But the",3,False
+Reasoning Primitive,var_assign_depth_0_equation," 9. a := 43. z := 30. u := 99. m := 61. m?
+Answer:...","64.
+
+So, the",61,False
+Reasoning Primitive,var_assign_depth_0_equation,"17. c := 47. j := 55. u := 71. v := 73. s?
+Answer:...","73.
+
+So, the",92,False
+Reasoning Primitive,var_assign_depth_0_equation," 54. x := 91. l := 46. f := 67. w := 0. l?
+Answer:...","14.
+
+So, the",46,False
+Reasoning Primitive,var_assign_depth_0_equation,"88. a := 88. m := 61. h := 91. y := 76. y?
+Answer:...","6.
+
+The 100",76,False
+Reasoning Primitive,var_assign_depth_0_equation,"60. d := 50. e := 96. i := 66. u := 24. e?
+Answer:...","45.
+
+But 10",96,False
+Reasoning Primitive,var_assign_depth_0_equation," 5. w := 60. f := 38. q := 68. u := 48. a?
+Answer:...","48.
+
+But 10",5,False
+Reasoning Primitive,var_assign_depth_0_equation,"12. x := 37. d := 23. e := 30. v := 12. e?
+Answer:...","30.
+
+So, the",30,False
+Reasoning Primitive,var_assign_depth_0_equation,"51. k := 95. r := 54. h := 47. d := 52. o?
+Answer:...","52.
+
+So, the",6,False
+Reasoning Primitive,var_assign_depth_0_equation," 22. f := 43. p := 14. x := 86. v := 0. d?
+Answer:...","6
+
+.
+
+The 1",22,False
+Reasoning Primitive,var_assign_depth_0_equation,"93. i := 27. n := 38. j := 64. e := 53. e?
+Answer:...","53.
+
+So, the",53,False
+Reasoning Primitive,var_assign_depth_1_code,"r
+r = 9
+z = a
+u = a
+p = 14
+k = 63
+print(h)
+Answer:...","63
+
+#
+
+#",9,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+q = 11
+p = t
+t = 94
+r = q
+i = q
+print(p)
+Answer:...","94
+
+#
+
+#",94,False
+Reasoning Primitive,var_assign_depth_1_code,"
+s = 52
+w = 25
+y = w
+i = 75
+c = s
+print(c)
+Answer:...","75
+
+#
+
+#",52,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+b = s
+n = x
+s = 66
+e = x
+x = 54
+print(b)
+Answer:...","63
+
+#
+
+#",66,False
+Reasoning Primitive,var_assign_depth_1_code,"l
+f = e
+l = 5
+u = e
+e = 58
+z = 84
+print(q)
+Answer:...","84
+
+#
+
+#",58,False
+Reasoning Primitive,var_assign_depth_1_code,"
+e = 67
+p = c
+q = 65
+c = 78
+d = e
+print(p)
+Answer:...","78
+
+#
+
+#",78,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+d = 99
+s = c
+b = d
+w = c
+c = 82
+print(s)
+Answer:...","82
+
+#
+
+#",82,False
+Reasoning Primitive,var_assign_depth_1_code,"y
+l = v
+p = s
+y = 53
+x = s
+s = 68
+print(l)
+Answer:...","68
+
+#
+
+#",56,False
+Reasoning Primitive,var_assign_depth_1_code,"
+m = 92
+o = e
+e = 82
+p = 60
+d = e
+print(o)
+Answer:...","82
+
+The answer is:",82,False
+Reasoning Primitive,var_assign_depth_1_code,"7
+p = a
+u = 98
+x = u
+g = u
+t = 22
+print(p)
+Answer:...","22
+
+#
+
+#",17,False
+Reasoning Primitive,var_assign_depth_1_code,"4
+n = 10
+i = d
+b = o
+o = 2
+h = 49
+print(a)
+Answer:...","49
+
+The problem is:",10,False
+Reasoning Primitive,var_assign_depth_1_code,"
+m = r
+q = 14
+v = 27
+r = 91
+f = v
+print(m)
+Answer:...","91
+
+c = 10",91,False
+Reasoning Primitive,var_assign_depth_1_code,"6
+
+v = s
+o = i
+s = 6
+p = s
+i = 63
+print(o)
+Answer:...","63
+
+The problem is:",63,False
+Reasoning Primitive,var_assign_depth_1_code,"
+i = 63
+x = 48
+s = i
+g = y
+y = 40
+print(s)
+Answer:...","40
+
+#
+
+#",63,False
+Reasoning Primitive,var_assign_depth_1_code,"4
+p = g
+f = 71
+g = 76
+v = g
+x = q
+print(v)
+Answer:...","76
+
+#
+
+#",76,False
+Reasoning Primitive,var_assign_depth_1_code,"5
+u = e
+j = g
+s = 59
+e = 27
+t = e
+print(j)
+Answer:...","27
+
+#
+
+#",15,False
+Reasoning Primitive,var_assign_depth_1_code,"70
+f = d
+p = u
+d = 3
+m = 75
+q = m
+print(q)
+Answer:...","75
+
+#
+
+#",75,False
+Reasoning Primitive,var_assign_depth_1_code,"
+a = 74
+f = a
+s = 38
+l = 87
+w = a
+print(f)
+Answer:...","77
+
+#
+
+#",74,False
+Reasoning Primitive,var_assign_depth_1_code,"49
+z = y
+e = 59
+a = e
+n = l
+k = e
+print(n)
+Answer:...","59
+
+#
+
+#",80,False
+Reasoning Primitive,var_assign_depth_1_code,"
+l = 45
+s = 73
+c = p
+j = 46
+v = j
+print(n)
+Answer:...","46
+
+#
+
+#",46,False
+Reasoning Primitive,var_assign_depth_1_code,"
+q = f
+f = 70
+c = 98
+s = 21
+t = s
+print(q)
+Answer:...","65
+
+#
+
+#",70,False
+Reasoning Primitive,var_assign_depth_1_code," 0
+e = j
+b = a
+i = a
+a = 45
+t = a
+print(t)
+Answer:...","45
+
+#
+
+#",45,False
+Reasoning Primitive,var_assign_depth_1_code,"
+b = 90
+o = a
+h = 43
+a = 31
+l = a
+print(o)
+Answer:...","31
+
+#
+
+#",31,False
+Reasoning Primitive,var_assign_depth_1_code,"5
+
+u = f
+a = v
+z = v
+f = 56
+v = 3
+print(z)
+Answer:...","56
+
+#
+
+#",3,False
+Reasoning Primitive,var_assign_depth_1_code,"2
+f = w
+w = 66
+n = 93
+a = w
+x = w
+print(f)
+Answer:...","93
+
+#
+
+#",66,False
+Reasoning Primitive,var_assign_depth_1_code,"
+m = u
+r = 19
+z = r
+t = 89
+u = 51
+print(m)
+Answer:...","51
+
+#
+
+#",51,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+z = s
+b = s
+c = 66
+s = 98
+e = s
+print(z)
+Answer:...","98
+
+The problem is:",98,False
+Reasoning Primitive,var_assign_depth_1_code," m
+m = 2
+i = 41
+w = 4
+t = w
+k = w
+print(j)
+Answer:...","41
+
+#
+
+#",2,False
+Reasoning Primitive,var_assign_depth_1_code,"s
+s = 11
+y = r
+h = b
+b = 93
+d = s
+print(y)
+Answer:...","66
+
+#
+
+#",44,False
+Reasoning Primitive,var_assign_depth_1_code,"9
+z = n
+k = n
+d = n
+v = 95
+o = 27
+print(d)
+Answer:...","27
+
+#
+
+#",99,False
+Reasoning Primitive,var_assign_depth_1_code,"z
+b = 27
+h = z
+a = 51
+r = b
+x = z
+print(x)
+Answer:...","51
+
+#
+
+#",50,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+o = 26
+u = 38
+q = u
+a = u
+m = u
+print(q)
+Answer:...","26
+
+#
+
+#",38,False
+Reasoning Primitive,var_assign_depth_1_code,"2
+
+c = 17
+j = 9
+q = j
+v = j
+x = j
+print(q)
+Answer:...","2
+
+#
+
+#",9,False
+Reasoning Primitive,var_assign_depth_1_code,"5
+i = c
+x = g
+v = c
+u = 26
+w = 71
+print(v)
+Answer:...","63
+
+#
+
+#",65,False
+Reasoning Primitive,var_assign_depth_1_code,"5
+
+l = r
+o = 3
+m = o
+r = 75
+b = o
+print(l)
+Answer:...","65
+
+#
+
+#",75,False
+Reasoning Primitive,var_assign_depth_1_code,"9
+
+l = 2
+h = 16
+e = l
+t = l
+a = l
+print(t)
+Answer:...","16
+
+#
+
+#",2,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+c = 34
+m = c
+t = b
+s = b
+b = 49
+print(s)
+Answer:...","49
+
+c = 49",49,False
+Reasoning Primitive,var_assign_depth_1_code,"30
+l = k
+z = 42
+a = 8
+q = k
+w = k
+print(q)
+Answer:...","8
+
+The number of the",32,False
+Reasoning Primitive,var_assign_depth_1_code,"j
+f = a
+j = 39
+x = j
+a = 26
+k = g
+print(x)
+Answer:...","26
+
+#
+
+#",39,False
+Reasoning Primitive,var_assign_depth_1_code,"63
+l = 92
+t = v
+f = v
+u = v
+z = 9
+print(t)
+Answer:...","9
+
+#
+
+#",63,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+r = m
+m = 81
+x = m
+h = 56
+e = h
+print(x)
+Answer:...","66
+
+#
+
+#",81,False
+Reasoning Primitive,var_assign_depth_1_code,"
+s = 63
+b = 28
+y = 92
+e = s
+n = s
+print(n)
+Answer:...","68
+
+#
+
+#",63,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+f = w
+w = 91
+d = 28
+n = d
+l = d
+print(n)
+Answer:...","75
+
+#
+
+#",28,False
+Reasoning Primitive,var_assign_depth_1_code,"
+x = c
+f = 45
+c = 25
+s = 71
+u = s
+print(t)
+Answer:...","71
+
+#
+
+#",45,False
+Reasoning Primitive,var_assign_depth_1_code,"
+y = t
+t = 18
+v = 77
+s = 77
+b = v
+print(g)
+Answer:...","77
+
+#
+
+#",77,False
+Reasoning Primitive,var_assign_depth_1_code,"
+x = 14
+w = d
+s = 60
+d = 68
+a = x
+print(j)
+Answer:...","68
+
+#
+
+#",68,False
+Reasoning Primitive,var_assign_depth_1_code,"n
+n = 27
+k = 85
+j = n
+p = s
+v = s
+print(j)
+Answer:...","1
+
+The problem is:",27,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+v = 83
+n = v
+j = y
+l = v
+y = 98
+print(l)
+Answer:...","98
+
+#
+
+#",83,False
+Reasoning Primitive,var_assign_depth_1_code,"
+k = 15
+y = k
+c = 79
+r = l
+l = 41
+print(y)
+Answer:...","41
+
+c = 41",15,False
+Reasoning Primitive,var_assign_depth_1_code," 18
+r = 3
+l = o
+f = a
+n = o
+z = o
+print(f)
+Answer:...","74
+
+#
+
+#",74,False
+Reasoning Primitive,var_assign_depth_1_math," h = 11. Let v = 32. Let c = v. What is q?
+Answer:...","32
+
+The problem is to find",32,False
+Reasoning Primitive,var_assign_depth_1_math,"et p = t. Let x = t. Let o = j. What is p?
+Answer:...","33
+
+The problem is:",30,False
+Reasoning Primitive,var_assign_depth_1_math,"t f = z. Let z = 3. Let i = 38. What is w?
+Answer:...","38
+
+The problem is to find",98,False
+Reasoning Primitive,var_assign_depth_1_math," m = 95. Let s = l. Let l = 70. What is a?
+Answer:...","70
+
+The problem is:",54,False
+Reasoning Primitive,var_assign_depth_1_math,"t y = s. Let l = q. Let q = 12. What is f?
+Answer:...","12
+
+In the
+
+-",7,False
+Reasoning Primitive,var_assign_depth_1_math,"et e = d. Let a = d. Let w = i. What is e?
+Answer:...","86
+
+The problem is to find",37,False
+Reasoning Primitive,var_assign_depth_1_math,"t i = 45. Let r = b. Let z = v. What is z?
+Answer:...","5
+
+The problem is to find the",5,False
+Reasoning Primitive,var_assign_depth_1_math,"et i = b. Let o = f. Let u = n. What is o?
+Answer:...","66
+
+The problem is to find",71,False
+Reasoning Primitive,var_assign_depth_1_math,"t d = t. Let u = 38. Let r = v. What is i?
+Answer:...","38
+
+The problem is to find",38,False
+Reasoning Primitive,var_assign_depth_1_math," u = d. Let x = 57. Let d = 35. What is g?
+Answer:...","35
+
+The problem is to find",35,False
+Reasoning Primitive,var_assign_depth_1_math,"t v = t. Let t = 67. Let f = c. What is f?
+Answer:...","67
+
+The problem is to find",23,False
+Reasoning Primitive,var_assign_depth_1_math,"t t = h. Let h = 3. Let f = 68. What is k?
+Answer:...","68
+
+The problem is to find",28,False
+Reasoning Primitive,var_assign_depth_1_math," w = 59. Let e = w. Let b = 68. What is e?
+Answer:...","68
+
+The problem is to find",59,False
+Reasoning Primitive,var_assign_depth_1_math," x = 38. Let r = 45. Let e = s. What is e?
+Answer:...","38
+
+In the
+
+A",37,False
+Reasoning Primitive,var_assign_depth_1_math,"t n = h. Let m = h. Let f = 10. What is n?
+Answer:...","10
+
+In the
+
+A",90,False
+Reasoning Primitive,var_assign_depth_1_math," z = t. Let t = 52. Let u = 34. What is s?
+Answer:...","34
+
+In the
+
+A",52,False
+Reasoning Primitive,var_assign_depth_1_math,"t v = r. Let b = 43. Let f = b. What is f?
+Answer:...","43
+
+The problem is to find",43,False
+Reasoning Primitive,var_assign_depth_1_math,"t n = 63. Let h = v. Let s = n. What is q?
+Answer:...","63
+
+The problem is:",53,False
+Reasoning Primitive,var_assign_depth_1_math,"t o = 63. Let n = o. Let p = q. What is p?
+Answer:...","63
+
+The problem is to find",69,False
+Reasoning Primitive,var_assign_depth_1_math," g = i. Let i = 33. Let j = 13. What is s?
+Answer:...","33
+
+The problem is to find",13,False
+Reasoning Primitive,var_assign_depth_1_math,"t s = k. Let u = 63. Let c = k. What is c?
+Answer:...","63
+
+In the
+
+A",84,False
+Reasoning Primitive,var_assign_depth_1_math,"t v = 53. Let b = e. Let z = e. What is h?
+Answer:...","98
+
+The problem is to find",53,False
+Reasoning Primitive,var_assign_depth_1_math,"t j = v. Let z = 60. Let l = g. What is b?
+Answer:...","60
+
+In the
+
+A",19,False
+Reasoning Primitive,var_assign_depth_1_math,"t x = 33. Let o = x. Let z = u. What is o?
+Answer:...","33
+
+The problem is to find",33,False
+Reasoning Primitive,var_assign_depth_1_math,"t g = p. Let c = 77. Let b = c. What is z?
+Answer:...","77
+
+The problem is to find",77,False
+Reasoning Primitive,var_assign_depth_1_math," u = 44. Let y = 21. Let e = y. What is a?
+Answer:...","21
+
+In a 10",44,False
+Reasoning Primitive,var_assign_depth_1_math,"t w = 76. Let y = c. Let k = w. What is y?
+Answer:...","76
+
+The problem is:",53,False
+Reasoning Primitive,var_assign_depth_1_math,"t k = 8. Let u = 80. Let r = l. What is r?
+Answer:...","80
+
+Which of the",69,False
+Reasoning Primitive,var_assign_depth_1_math,"t n = b. Let u = 38. Let q = b. What is q?
+Answer:...","38
+
+The problem is to find",21,False
+Reasoning Primitive,var_assign_depth_1_math,"t i = 1. Let d = k. Let k = 84. What is c?
+Answer:...","84
+
+The problem is to find",84,False
+Reasoning Primitive,var_assign_depth_1_math,"et s = x. Let t = x. Let z = 6. What is r?
+Answer:...","6
+
+The problem is to find the",6,False
+Reasoning Primitive,var_assign_depth_1_math,"et l = e. Let y = s. Let g = 9. What is o?
+Answer:...","9
+
+The problem is to find the",94,False
+Reasoning Primitive,var_assign_depth_1_math,"et b = d. Let z = d. Let y = d. What is b?
+Answer:...","10
+
+In the
+
+A",10,False
+Reasoning Primitive,var_assign_depth_1_math,"t u = h. Let a = p. Let l = 62. What is a?
+Answer:...","62
+
+Which is the",6,False
+Reasoning Primitive,var_assign_depth_1_math,"t t = x. Let d = 16. Let v = x. What is r?
+Answer:...","16
+
+Which of the",29,False
+Reasoning Primitive,var_assign_depth_1_math," w = 87. Let p = 58. Let b = p. What is b?
+Answer:...","58
+
+The problem is to find",58,False
+Reasoning Primitive,var_assign_depth_1_math,"t j = 3. Let r = 97. Let x = k. What is w?
+Answer:...","97
+
+The problem is to find",3,False
+Reasoning Primitive,var_assign_depth_1_math,"t n = 75. Let k = x. Let l = x. What is s?
+Answer:...","75
+
+The problem is:",66,False
+Reasoning Primitive,var_assign_depth_1_math," m = 95. Let g = i. Let i = 67. What is h?
+Answer:...","67
+
+The problem is to find",67,False
+Reasoning Primitive,var_assign_depth_1_math," o = 82. Let t = 34. Let a = o. What is b?
+Answer:...","34
+
+The problem is:",34,False
+Reasoning Primitive,var_assign_depth_1_math,"t e = k. Let f = k. Let a = 14. What is f?
+Answer:...","14
+
+In the
+
+A",23,False
+Reasoning Primitive,var_assign_depth_1_math,"t r = w. Let q = 37. Let x = q. What is e?
+Answer:...","37
+
+In the
+
+-",37,False
+Reasoning Primitive,var_assign_depth_1_math,"t c = 63. Let l = o. Let q = o. What is l?
+Answer:...","63
+
+The problem is to find",65,False
+Reasoning Primitive,var_assign_depth_1_math," e = m. Let q = 78. Let m = 70. What is i?
+Answer:...","70
+
+The problem is to find",78,False
+Reasoning Primitive,var_assign_depth_1_math,"t h = y. Let k = b. Let y = 86. What is h?
+Answer:...","86
+
+The problem is to find",86,False
+Reasoning Primitive,var_assign_depth_1_math,"t p = q. Let u = d. Let d = 98. What is u?
+Answer:...","98
+
+The problem is to find",98,False
+Reasoning Primitive,var_assign_depth_1_math,"t o = v. Let n = g. Let w = 67. What is c?
+Answer:...","67
+
+The problem is to find",93,False
+Reasoning Primitive,var_assign_depth_1_math,"et d = 8. Let v = c. Let y = d. What is v?
+Answer:...","8
+
+In the
+
+-",83,False
+Reasoning Primitive,var_assign_depth_1_math,"t f = e. Let t = e. Let e = 64. What is f?
+Answer:...","64
+
+The problem is to find",64,False
+Reasoning Primitive,var_assign_depth_1_math," z = 49. Let p = 14. Let j = a. What is m?
+Answer:...","14
+
+In the
+
+A",49,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 68. u := x. h := k. k := 41. p := 81. u?
+Answer:...","41.
+
+So, the",68,False
+Reasoning Primitive,var_assign_depth_1_equation," := g. m := 27. f := m. x := p. a := m. f?
+Answer:...","33.
+
+But the",27,False
+Reasoning Primitive,var_assign_depth_1_equation," := 75. u := g. p := i. m := g. g := 8. u?
+Answer:...","8.
+
+But the
+
+```",8,False
+Reasoning Primitive,var_assign_depth_1_equation,":= y. t := b. s := y. y := 28. b := 72. t?
+Answer:...","54.
+
+So, the",72,False
+Reasoning Primitive,var_assign_depth_1_equation," := k. m := y. y := 1. v := k. q := 51. v?
+Answer:...","51.
+
+So, the",52,False
+Reasoning Primitive,var_assign_depth_1_equation,":= s. r := v. q := f. s := 52. v := 46. g?
+Answer:...","57.
+
+So, the",52,False
+Reasoning Primitive,var_assign_depth_1_equation,":= q. q := 85. e := q. b := 12. t := b. x?
+Answer:...","12.
+
+But the",85,False
+Reasoning Primitive,var_assign_depth_1_equation,":= b. l := m. m := 26. f := 77. w := m. p?
+Answer:...","4
+
+.
+
+.",14,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 93. w := i. i := 28. g := o. h := i. g?
+Answer:...","8
+
+.
+
+.",57,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 72. f := x. g := e. a := 17. s := a. s?
+Answer:...","17.
+
+But the",17,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 4. k := 42. x := 29. b := q. c := x. n?
+Answer:...","57.
+
+So, the",42,False
+Reasoning Primitive,var_assign_depth_1_equation,":= s. l := r. s := 29. g := s. p := 13. x?
+Answer:...","13.
+
+The average of the",29,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 27. m := s. z := 93. x := s. s := 56. x?
+Answer:...","66.
+
+But the",56,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 30. o := r. r := 3. p := 54. l := w. o?
+Answer:...","54.
+
+But the",3,False
+Reasoning Primitive,var_assign_depth_1_equation," := 8. u := c. y := v. g := v. c := 37. y?
+Answer:...","55.
+
+So, the",8,False
+Reasoning Primitive,var_assign_depth_1_equation,":= k. b := k. k := 48. x := k. o := 11. b?
+Answer:...","11.
+
+But the",48,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 83. n := 71. v := 29. p := q. y := n. y?
+Answer:...","44.
+
+.
+
+.",71,False
+Reasoning Primitive,var_assign_depth_1_equation,":= q. w := 82. o := w. e := q. t := 50. l?
+Answer:...","50.
+
+So, the",3,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 39. v := w. y := 81. b := 31. l := y. c?
+Answer:...","19.
+
+But the",53,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 74. s := x. f := 21. q := v. j := x. a?
+Answer:...","1
+
+.
+
+.",55,False
+Reasoning Primitive,var_assign_depth_1_equation," := 14. p := k. t := k. o := k. q := 6. p?
+Answer:...","6.
+
+But the
+
+```",67,False
+Reasoning Primitive,var_assign_depth_1_equation," := a. a := 95. h := a. z := p. f := d. z?
+Answer:...","19.
+
+But the",19,False
+Reasoning Primitive,var_assign_depth_1_equation,":= j. k := 34. p := j. j := 10. o := k. o?
+Answer:...","10.
+
+But the",34,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 99. m := 36. x := 85. i := m. s := b. r?
+Answer:...","34
+
+.
+
+So,",99,False
+Reasoning Primitive,var_assign_depth_1_equation,":= v. y := 56. o := y. r := v. v := 39. r?
+Answer:...","48.
+
+The average of the",39,False
+Reasoning Primitive,var_assign_depth_1_equation,":= l. z := 38. a := b. l := 46. u := y. u?
+Answer:...","56.
+
+So, the",54,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 64. n := o. e := m. m := 86. s := o. n?
+Answer:...","64.
+
+But the",64,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 22. o := 26. m := n. n := 12. t := n. t?
+Answer:...","44.
+
+But the",12,False
+Reasoning Primitive,var_assign_depth_1_equation,":= v. d := 53. l := v. v := 33. g := v. l?
+Answer:...","42.
+
+But the",33,False
+Reasoning Primitive,var_assign_depth_1_equation,"c := h. h := 4. y := i. p := i. i := 9. y?
+Answer:...","55.
+
+The average of the",9,False
+Reasoning Primitive,var_assign_depth_1_equation,":= u. u := 99. f := q. r := 7. l := 15. d?
+Answer:...","15.
+
+But the",7,False
+Reasoning Primitive,var_assign_depth_1_equation," := k. o := 69. w := y. z := o. x := r. w?
+Answer:...","69.
+
+But the",78,False
+Reasoning Primitive,var_assign_depth_1_equation," := 75. u := d. o := 8. e := x. r := x. u?
+Answer:...","8.
+
+.
+
+.",75,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 60. h := n. n := 66. g := 59. l := g. h?
+Answer:...","64.
+
+But the",66,False
+Reasoning Primitive,var_assign_depth_1_equation,":= b. b := 81. s := 45. x := s. g := b. z?
+Answer:...","45.
+
+But the",81,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 15. g := w. w := 12. a := 81. i := w. r?
+Answer:...","81.
+
+So, the",12,False
+Reasoning Primitive,var_assign_depth_1_equation,":= f. y := 53. f := 85. r := f. k := f. r?
+Answer:...","64.
+
+.
+
+.",85,False
+Reasoning Primitive,var_assign_depth_1_equation,":= p. z := p. f := 95. u := f. p := 33. z?
+Answer:...","44.
+
+But the",33,False
+Reasoning Primitive,var_assign_depth_1_equation,":= 64. m := b. t := y. s := b. b := 18. t?
+Answer:...","18.
+
+But the",75,False
+Reasoning Primitive,var_assign_depth_1_equation,":= m. m := 63. a := q. q := 36. w := q. i?
+Answer:...","34.
+
+But the",63,False
+Reasoning Primitive,var_assign_depth_1_equation,":= b. s := b. t := f. z := 60. f := 81. t?
+Answer:...","12.
+
+But the",81,False
+Reasoning Primitive,var_assign_depth_1_equation,"= d. s := e. d := 93. w := 44. e := 60. s?
+Answer:...","44.
+
+But the",60,False
+Reasoning Primitive,var_assign_depth_1_equation," := r. r := 47. m := b. b := 1. o := b. o?
+Answer:...","47.
+
+So, the",1,False
+Reasoning Primitive,var_assign_depth_1_equation," := e. k := 31. c := n. e := 0. a := k. g?
+Answer:...","75.
+
+But the",0,False
+Reasoning Primitive,var_assign_depth_1_equation,":= v. w := 8. v := 69. i := w. r := 41. m?
+Answer:...","4
+
+.
+
+The above code",69,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 50. m := 72. s := 76. b := s. n := m. n?
+Answer:...","7
+
+.
+
+.",72,False
+Reasoning Primitive,var_assign_depth_1_equation,":= y. y := 44. q := b. z := y. b := 12. z?
+Answer:...","12.
+
+The 12",44,False
+Reasoning Primitive,var_assign_depth_1_equation," := l. w := 1. l := 44. e := 0. z := w. p?
+Answer:...","44.
+
+So, the",44,False
+Reasoning Primitive,var_assign_depth_1_equation," := i. s := b. q := i. i := 66. b := 8. q?
+Answer:...","9
+
+.
+
+So, the",66,False
+Reasoning Primitive,var_assign_depth_1_equation," := 3. s := 19. l := s. q := s. h := i. h?
+Answer:...","19.
+
+So, the",4,False

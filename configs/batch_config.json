@@ -8,7 +8,7 @@
     "INFERENCE_STEPS": [1],
     "EVAL_SETTINGS": {
         "calculate_perplexity": true,
-        "early_exit_threshold": -1.0,
+        "early_exit_threshold": 1.0,
         "ppl_num_samples": 50,
         "ppl_max_length": 2048,
         "ppl_stride": 512
@@ -38,6 +38,6 @@
     "OPTIMIZATION": {
         "enable_batch": true,
         "max_batch_size": 8,
-        "max_new_token": 1024
+        "max_new_tokens": 512
     }
 }
