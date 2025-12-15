@@ -30,34 +30,46 @@ class OuroThinkingExperiment:
         self.task_templates = {}
 
     def load_model_with_ut_steps(
-        self, total_ut_steps: int, early_exit_threshold: float
+        self, total_ut_steps: int, early_exit_threshold: float = 1.0
     ):
-        """Load model with specific UT steps configuration"""
+        """Load model with specific UT steps configuration - COMPLETE FIX"""
         quantization_config = None
         if self.use_4bit_quant:
             print("→ Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
-        print(
-            f"Loading model: UT steps={total_ut_steps}, Early exit={early_exit_threshold}"
+        print(f"Loading model: UT steps={total_ut_steps}, Early exit={early_exit_threshold}")
+
+        # CRITICAL: Load the base config first
+        base_config = AutoConfig.from_pretrained(
+            self.model_path, 
+            trust_remote_code=True
         )
-
-        config = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
-        config.total_ut_steps = total_ut_steps
-        config.early_exit_threshold = early_exit_threshold
-
+        
+        # Apply the UT step configuration BEFORE loading the model
+        base_config.total_ut_steps = total_ut_steps
+        base_config.early_exit_threshold = early_exit_threshold
+        
+        # IMPORTANT: For Ouro models, also set these critical parameters
+        if hasattr(base_config, 'num_key_value_heads'):
+            # Ensure KV heads are properly configured for UT steps
+            base_config.num_key_value_heads = base_config.num_attention_heads
+        
         tokenizer = AutoTokenizer.from_pretrained(
-            self.model_path, trust_remote_code=True, padding_side="left"
+            self.model_path, 
+            trust_remote_code=True, 
+            padding_side="left"
         )
+        
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
 
+        # Load model with the COMPLETE modified config
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
-            config=config,
+            config=base_config,  # Use the fully configured base_config
             device_map="cuda",
-            attn_implementation="sdpa_paged",
-            dtype=self.dtype if not self.use_4bit_quant else None,
+            torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
             quantization_config=quantization_config,
         )
@@ -68,16 +80,14 @@ class OuroThinkingExperiment:
 
         model.eval()
         print(f"✅ Model loaded on {model.device}")
-
-        return (
-            model,
-            tokenizer,
-            None,
-            {
-                "total_ut_steps": total_ut_steps,
-                "early_exit_threshold": early_exit_threshold,
-            },
-        )
+        
+        # VERIFICATION: Check the config was applied
+        print(f"✅ VERIFIED: Model configured with total_ut_steps={model.config.total_ut_steps}")
+        
+        return model, tokenizer, base_config, {
+            "total_ut_steps": total_ut_steps,
+            "early_exit_threshold": early_exit_threshold,
+        }
 
     def _build_task_templates(self, tokenizer):
         """
@@ -267,6 +277,11 @@ class OuroThinkingExperiment:
         ut_steps: int,
         generation_config: dict = None,
     ):
+            # VERIFY model has the right config
+        if not hasattr(model.config, 'total_ut_steps'):
+            print("❌ ERROR: Model missing total_ut_steps config!")
+            return {"error": "Bad model config", "prediction": "0"}
+
         """Optimized prediction with repetition penalty to prevent loops"""
         if not hasattr(self, "task_templates") or task_type not in self.task_templates:
             self._build_task_templates(tokenizer)

@@ -3,6 +3,7 @@ import wandb
 import gc
 import torch
 import random
+import pandas as pd
 from tqdm.auto import tqdm
 from .utils import generate_test_id
 from .data_generator import create_test_datasets, create_perplexity_data, load_and_preprocess_data
@@ -80,6 +81,9 @@ def run_batch_experiment(config: dict):
         model, tokenizer, _, _ = experiment.load_model_with_ut_steps(
             ut_steps, eval_settings["early_exit_threshold"]
         )
+        print(f"🔄 Loaded model UT steps: {model.config.total_ut_steps} (Requested: {ut_steps})")
+        if model.config.total_ut_steps != ut_steps:
+            print(f"❌ CONFIG MISMATCH! Model still has {model.config.total_ut_steps} steps")
 
         if not hasattr(experiment, "_templates_precomputed"):
             experiment._build_task_templates(tokenizer)
@@ -147,6 +151,8 @@ def run_batch_experiment(config: dict):
 
             # Logging
             _log_task_summary(task_results, task_type, ut_steps, start_time, use_wandb)
+            print(f"Task Results Preview for {task_type}:\n")
+            print(f"{pd.DataFrame(task_results).head(20)}")
 
         # C. Holistic Evaluation
         if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
@@ -156,6 +162,7 @@ def run_batch_experiment(config: dict):
         del model, tokenizer
         torch.cuda.empty_cache()
         gc.collect()
+        print("🧹 Cleaned up GPU memory.")
 
     # Final W&B Close
     if use_wandb and run:
