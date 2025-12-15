@@ -1,9 +1,9 @@
 {
     "MODEL": {
         "path": "ByteDance/Ouro-1.4B-Thinking",
-        "dtype": "torch.bfloat16",
+        "dtype": "torch.float16",
         "use_4bit_quant": false,
-        "use_torch_compile": true
+        "use_torch_compile": false
     },
     "INFERENCE_STEPS": [1],
     "EVAL_SETTINGS": {
