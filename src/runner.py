@@ -295,7 +295,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             # Print sample results
             if task_results:
                 print(f"\n   📊 Sample results from {task_type}:")
-                df_sample = pd.DataFrame(task_results).head(10)
+                df_sample = pd.DataFrame(task_results).head(20)
                 display_cols = ['test_input', 'expected_answer', 'prediction', 'is_correct']
                 display_cols = [c for c in display_cols if c in df_sample.columns]
                 print(df_sample[display_cols].to_string(index=False))
