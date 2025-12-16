@@ -45,7 +45,7 @@ class OuroThinkingExperiment:
             self.model_path, 
             trust_remote_code=True
         )
-        
+        print(f"→ Base model config loaded. Current UT steps: {base_config.total_ut_steps}")
         # Apply the UT step configuration BEFORE loading the model
         base_config.total_ut_steps = total_ut_steps
         base_config.early_exit_threshold = early_exit_threshold
@@ -422,6 +422,8 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                 eos_token_id=tokenizer.eos_token_id,
                 pad_token_id=tokenizer.pad_token_id,
                 do_sample=False,
+                use_cache=False,
+                disable_compile=False,
                 max_batch_tokens=self.max_batch_size * self.max_new_tokens,
             )
         
