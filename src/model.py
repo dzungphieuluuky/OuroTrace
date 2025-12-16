@@ -102,7 +102,6 @@ class OuroThinkingExperiment:
         print(f"✅ MODEL LOADED SUCCESSFULLY")
         print(f"{'='*60}")
         print(f"Device: {model.device}")
-        print(f"Attention implementation: {model.config.attn_implementation}")
         print(f"Model dtype: {model.dtype}")
         print(f"VERIFIED UT steps: {model.config.total_ut_steps}")
         print(f"VERIFIED early exit: {model.config.early_exit_threshold}")
