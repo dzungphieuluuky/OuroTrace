@@ -19,7 +19,11 @@ from .evaluation import run_holistic_evaluation
 
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
     """
-    Run experiment with batching support and W&B logging.
+    Run experiment with automatic batch/compile optimization based on UT steps.
+    
+    AUTO-OPTIMIZATION RULES:
+    - UT Steps = 1: Enable batching + torch.compile (fast path)
+    - UT Steps > 1: Disable batching + torch.compile (stability)
     
     Args:
         config: Configuration dictionary with MODEL, DATA, EVAL_SETTINGS, etc.
@@ -67,12 +71,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"UT Steps to Test: {ut_steps_list}")
     print(f"Data Type: {config['MODEL'].get('dtype', torch.float16)}")
     print(f"4-bit Quantization: {config['MODEL'].get('use_4bit_quant', True)}")
-    print(f"Torch Compile: {config['MODEL'].get('use_torch_compile', False)}")
+    print(f"Torch Compile: {config['MODEL'].get('use_torch_compile', False)} (auto-controlled)")
     print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
-    print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 512)}")
-    print(f"Enable Batching: {optimization_config.get('enable_batch', True)}")
+    print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
+    print(f"Batching: Auto (enabled only for UT=1)")
     print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', False)}")
-    print(f"Early Exit Threshold: {eval_settings.get('early_exit_threshold', 1.0)}")
+    print(f"Early Exit: Auto (from model config)")
     print(f"{'='*70}\n")
 
     # 3. Setup Experiment Handler
@@ -82,7 +86,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
         use_torch_compile=config["MODEL"].get("use_torch_compile", False),
         max_batch_size=optimization_config.get("max_batch_size", 4),
-        max_new_tokens=optimization_config.get("max_new_tokens", 512),
+        max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
 
     torch.manual_seed(42)
@@ -127,11 +131,18 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"🧪 EXPERIMENT {ut_step_idx + 1}/{len(ut_steps_list)}: UT Steps = {ut_steps}")
         print(f"{'='*70}\n")
 
+        # AUTO-OPTIMIZATION: Determine if batching should be enabled
+        enable_batch = (ut_steps == 1)
+        
+        print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
+        print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
+        print(f"   Torch Compile: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
+        print(f"   Reason: {'Fast path (UT=1)' if enable_batch else 'Stability (UT>1)'}")
+        print()
+
         # Load model with specific UT steps configuration
         try:
-            model, tokenizer, model_config, config_dict = experiment.load_model_with_ut_steps(
-                ut_steps, eval_settings.get("early_exit_threshold", 1.0)
-            )
+            model, tokenizer, model_config, config_dict = experiment.load_model_with_ut_steps(ut_steps)
         except Exception as e:
             print(f"❌ Failed to load model with UT steps={ut_steps}: {e}")
             continue
@@ -184,8 +195,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"🎯 ACCURACY EVALUATION")
         print(f"{'='*70}\n")
         
-        enable_batch = optimization_config.get("enable_batch", True)
-        
         for task_type, items in test_datasets.items():
             if not items:
                 print(f"⚠️ Skipping {task_type} - no test items\n")
@@ -199,7 +208,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             task_results = []
             task_start_time = time.time()
 
-            # Determine optimal batch size for this task
+            # Determine optimal batch size for this task (only if batch enabled)
             batch_size = 1
             if enable_batch and hasattr(model, 'generate_batch'):
                 task_batch_limits = {
@@ -216,6 +225,8 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             else:
                 print(f"Batch Size: 1 (Sequential)")
                 print(f"Strategy: Sequential Processing")
+                if not enable_batch and ut_steps > 1:
+                    print(f"Note: Batching disabled for UT={ut_steps} (stability)")
             
             print()
 
@@ -243,16 +254,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             ut_steps=ut_steps
                         )
 
-                        # Process each output in the batch
                         for output, item in zip(batch_outputs, batch_items):
                             result_entry = _create_result_entry(
                                 output, item, task_type, ut_steps
                             )
                             task_results.append(result_entry)
                             all_results.append(result_entry)
-
-                            # Logging full response for debugging
-                            print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']].to_string(index=False, max_colwidth=50))
                     
                     except Exception as e:
                         print(f"\n⚠️ Batch {batch_idx//batch_size + 1} failed: {e}")
@@ -271,8 +278,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 )
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
-                                # Logging full response for debugging
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']].to_string(index=False, max_colwidth=50))
 
                             except Exception as e2:
                                 print(f"⚠️ Item failed: {e2}")
@@ -289,10 +294,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 )
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
-                                # Logging full response for debugging
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']].to_string(index=False, max_colwidth=50))
-
-
             
             else:
                 # SEQUENTIAL PROCESSING
@@ -312,8 +313,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         )
                         task_results.append(result_entry)
                         all_results.append(result_entry)
-                        # Logging full response for debugging
-                        print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']].to_string(index=False, max_colwidth=50))
 
                     except Exception as e:
                         print(f"⚠️ Item failed: {e}")
@@ -330,16 +329,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         )
                         task_results.append(result_entry)
                         all_results.append(result_entry)
-                        # Logging full response for debugging
-                        print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']].to_string(index=False, max_colwidth=50))
 
             # Log and display task summary
             _log_task_summary(
                 task_results, task_type, ut_steps, task_start_time, use_wandb
             )
 
-            # Display detailed results for this task
-            _display_task_results(task_results, task_type)
+            # Display sample results (first 5)
+            _display_sample_results(task_results, task_type)
 
         # C. HOLISTIC EVALUATION (if enabled)
         if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
@@ -528,23 +525,30 @@ def _log_task_summary(
             print(f"   ⚠️ Failed to log to W&B: {e}")
 
 
-def _display_task_results(results: List[Dict[str, Any]], task_type: str) -> None:
-    """Display detailed results table for a task."""
+def _display_sample_results(results: List[Dict[str, Any]], task_type: str, num_samples: int = 5) -> None:
+    """Display sample results for inspection."""
     if not results:
         return
     
-    print(f"📋 Detailed Results for {task_type.upper()}:")
+    print(f"📋 Sample Results for {task_type.upper()} (first {num_samples}):")
     print(f"{'─'*70}")
     
-    df_sample = pd.DataFrame(results).head(20)
-    display_cols = ['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']
+    df_sample = pd.DataFrame(results).head(num_samples)
+    display_cols = ['test_input', 'expected_answer', 'prediction', 'is_correct']
     
     # Add degenerate flag if present
     if 'is_degenerate' in df_sample.columns:
         display_cols.append('is_degenerate')
     
-    print(df_sample[display_cols])
+    # Truncate long text for display
+    for col in ['test_input', 'expected_answer', 'prediction']:
+        if col in df_sample.columns:
+            df_sample[col] = df_sample[col].astype(str).str[:60]
     
+    print(df_sample[display_cols].to_string(index=False))
+    print()
+
+
 # Optional: Save results function
 def save_results(
     all_results: List[Dict],
