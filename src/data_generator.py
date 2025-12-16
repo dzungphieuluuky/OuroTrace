@@ -16,7 +16,7 @@ def create_test_datasets(config: dict) -> Dict[str, List[Dict]]:
     # 1. N-ARY ADDITION (Unchanged, matches paper description)
     if 'n_ary' in config:
         n_ary_data = []
-        ops_levels = config['n_ary'].get('ops_levels', [8, 16, 24, 32])
+        ops_levels = config['n_ary'].get('ops_levels', [2, 4, 8, 16, 32])
         num_samples = config['n_ary'].get('num_samples_per_level', 30)
 
         for n in ops_levels:
@@ -50,7 +50,7 @@ def create_test_datasets(config: dict) -> Dict[str, List[Dict]]:
                 seq = [random.choice(alphabet) for _ in range(seq_len)]
                 for k, idx in enumerate(indices):
                     seq[idx] = chain[k]
-                seq_str = "".join(seq)
+                seq_str = " ".join(seq)
                 start_node = chain[0]
                 expected = chain[-1]
                 full_prompt = f"Sequence: {seq_str}. Start: {start_node}. Hop {p} times."
