@@ -84,7 +84,7 @@ class OuroThinkingExperiment:
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
             config=base_config,
-            device_map="cuda",
+            device_map="auto",
             attn_implementation="sdpa_paged",
             torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
@@ -342,7 +342,7 @@ class OuroThinkingExperiment:
                 attention_mask=attention_mask,
                 pad_token_id=tokenizer.eos_token_id,
                 eos_token_id=tokenizer.eos_token_id,
-                use_cache=False,
+                use_cache=True,
                 return_dict_in_generate=True,
                 output_scores=False,
                 **default_config,
