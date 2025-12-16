@@ -241,8 +241,10 @@ class OuroThinkingExperiment:
         return pred
 
     def _detect_degenerate_output(self, text: str) -> bool:
-        """Detect if output is degenerate/chaotic/garbage
-           Super important because this model is highly unstable and has just released on 2025 October"""
+        """Detect if output is degenerate/garbage
+           Super important because this model is highly unstable and has just released on 2025 October
+           Borrow Ouro model of ByteDance to demo looped transformer in paper: https://arxiv.org/abs/2502.17416
+        """
         if not text or len(text.strip()) < 5:
             return True
         
