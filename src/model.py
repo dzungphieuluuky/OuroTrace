@@ -281,8 +281,7 @@ class OuroThinkingExperiment:
             "min_new_tokens": 5,
             "do_sample": False,
             "num_beams": 1,
-            "repetition_penalty": 1,  # Slightly increased
-            "no_repeat_ngram_size": 3,   # Prevent 3-gram repetition
+            "repetition_penalty": 1,
             "early_stopping": True,
         }
         
@@ -483,7 +482,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                 pad_token_id=tokenizer.pad_token_id,
                 do_sample=False,
                 repetition_penalty=1,
-                no_repeat_ngram_size=3,
                 max_batch_tokens=self.max_batch_size * self.max_new_tokens,
             )
         
