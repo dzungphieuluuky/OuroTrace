@@ -30,24 +30,24 @@ class OuroThinkingExperiment:
         self.tokenizer = None
         self.task_templates = {}
 
-    def load_model_with_ut_steps(
-        self, total_ut_steps: int, early_exit_threshold: float = 1.0
-    ):
+    def load_model_with_ut_steps(self, total_ut_steps: int):
         """Load model with specific UT steps configuration"""
         quantization_config = None
         if self.use_4bit_quant:
             print("→ Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
+        # Auto-enable torch.compile and batching only for ut_steps=1
+        auto_compile = (total_ut_steps == 1) and self.use_torch_compile
+        
         print(f"\n{'='*60}")
         print(f"⚙️  LOADING MODEL CONFIGURATION")
         print(f"{'='*60}")
         print(f"Model Path: {self.model_path}")
         print(f"Requested UT Steps: {total_ut_steps}")
-        print(f"Early Exit Threshold: {early_exit_threshold}")
         print(f"Data Type: {self.dtype}")
         print(f"4-bit Quantization: {self.use_4bit_quant}")
-        print(f"Torch Compile: {self.use_torch_compile}")
+        print(f"Torch Compile: {auto_compile} (auto={'ON' if total_ut_steps==1 else 'OFF'})")
 
         # Load base config
         base_config = AutoConfig.from_pretrained(
@@ -58,12 +58,11 @@ class OuroThinkingExperiment:
         print(f"   Original UT steps: {getattr(base_config, 'total_ut_steps', 'N/A')}")
         print(f"   Original early exit: {getattr(base_config, 'early_exit_threshold', 'N/A')}")
         
-        # Apply UT step configuration
+        # Apply UT step configuration (keep default early_exit_threshold)
         base_config.total_ut_steps = total_ut_steps
-        base_config.early_exit_threshold = early_exit_threshold
         print(f"\n→ Modified config:")
         print(f"   New UT steps: {base_config.total_ut_steps}")
-        print(f"   New early exit: {base_config.early_exit_threshold}")
+        print(f"   Early exit threshold: {base_config.early_exit_threshold} (from default)")
                 
         tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, 
@@ -91,12 +90,12 @@ class OuroThinkingExperiment:
             quantization_config=quantization_config,
         )
 
-        if self.use_torch_compile:
+        if auto_compile:
             print("→ Applying torch.compile()")
             model = torch.compile(
                 model, 
                 mode="reduce-overhead",
-                fullgraph=False  # Allow graph breaks
+                fullgraph=False
             )
 
         model.eval()
@@ -119,54 +118,91 @@ class OuroThinkingExperiment:
         
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
-            "early_exit_threshold": early_exit_threshold,
+            "early_exit_threshold": base_config.early_exit_threshold,
         }
-
-# model.py
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates strictly aligned with Ouroboros Paper.
+        Pre-compute prompt templates with step-by-step reasoning requirements.
         
-        ALIGNMENT NOTES:
-        - N-ary: DIRECT IO. No CoT. (Paper: "train ... without any chain-of-thought")
-        - P-hop: DIRECT IO. (Paper: "output the character")
-        - i-GSM: CoT Enabled. (Paper: "Answer with CoT. E#I = 4. =⇒ ...")
+        DESIGN NOTES:
+        - All tasks require explicit intermediate steps
+        - Strict formatting with flexible content (prevent example overfitting)
+        - N-ary: Show each addition step
+        - P-hop: Show each hop transition
+        - i-GSM: Show variable substitution and evaluation steps
         """
         self.tokenizer = tokenizer
         
         task_configs = {
-            # 1. N-ARY ADDITION (Paper Baseline Style: Direct IO)
-            # The latent recurrence (ut_steps=4) is responsible for the math, not the output tokens.
+            # 1. N-ARY ADDITION - Show cumulative sum at each step
             "n_ary": {
-                "system": "You are an arithmetic calculator. Add numbers sequentially from left to right. Only output the final sum after the word Answer:",
-                "example_user": "315 + 120 + 045 + 824 =",
-                "example_asst": "Answer: 1304",
-                "force_start": "Answer:", 
-            },
-            
-            # 2. P-HOP INDUCTION (Paper Style: Direct Output)
-            # Associative recall task.
-            "p_hop": {
-                "system": "You are a sequence tracer. Find the starting token in the sequence, then follow N hops to the next tokens. Only output the final target token after the word Answer:",
-                "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                "example_asst": "Answer: B",
-                "force_start": "Answer:", 
-            },
-            
-            # 3. SYMBOLIC i-GSM (Paper Style: CoT with '=>')
-            # "Answer with CoT. E#I = 4. =⇒ E#I = 4..."
-            "igsm": {
-                "system": "You are a symbolic equation solver. Evaluate expressions modulo 7. Show each variable assignment. Finally, output the value of the target variable after the word Answer:",
-                "example_user": "Question. E#I := 4. E#J := E#I. H#J := E#J + 2 * E#I. H#J?",
-                "example_asst": (
-                    "E#I = 4. =⇒ E#I = 4. "
-                    "E#J = E#I. =⇒ E#J = 4. "
-                    "H#J = 4 + 2 * 4 = 12 = 5. =⇒ H#J = 5.\n"
-                    "Answer: 5"
+                "system": (
+                    "You are a step-by-step calculator. For addition problems:\n"
+                    "1. Start with the first number as your running total\n"
+                    "2. For each subsequent number, show: [previous total] + [next number] = [new total]\n"
+                    "3. Continue until all numbers are added\n"
+                    "4. End with 'Final Answer: [result]'\n"
+                    "Use clear step labels (Step 1, Step 2, etc.)."
                 ),
-                # Paper format implies starting the trace immediately
-                "force_start": "\n", 
+                "example_user": "123 + 456 + 789 =",
+                "example_asst": (
+                    "Step 1: Start with 123\n"
+                    "Step 2: 123 + 456 = 579\n"
+                    "Step 3: 579 + 789 = 1368\n"
+                    "Final Answer: 1368"
+                ),
+                "force_start": "Step 1:", 
+            },
+            
+            # 2. P-HOP INDUCTION - Show each hop explicitly
+            "p_hop": {
+                "system": (
+                    "You are a sequence tracer. To find the result after N hops:\n"
+                    "1. Identify the starting token in the sequence\n"
+                    "2. For each hop, show: Hop [number]: At [current token] → Next is [next token]\n"
+                    "3. After all hops, state 'Final Answer: [final token]'\n"
+                    "Always show your current position and next move."
+                ),
+                "example_user": "Sequence: X Y Z X Y. Start: X. Hop 2 times.",
+                "example_asst": (
+                    "Starting position: X (index 0)\n"
+                    "Hop 1: At X → Next is Y\n"
+                    "Hop 2: At Y → Next is Z\n"
+                    "Final Answer: Z"
+                ),
+                "force_start": "Starting position:", 
+            },
+            
+            # 3. SYMBOLIC i-GSM - Show variable evaluation with substitution
+            "igsm": {
+                "system": (
+                    "You are an equation solver working modulo 7. For each assignment:\n"
+                    "1. Show the variable being assigned\n"
+                    "2. If it references other variables, show substitution: VAR := expression [substitute values] = raw_result\n"
+                    "3. Then show modulo 7: raw_result mod 7 = final_value\n"
+                    "4. Track all variable values\n"
+                    "5. For the final query, show full calculation then 'Final Answer: [result]'\n"
+                    "Format each step clearly with the variable name."
+                ),
+                "example_user": "Question. A#X := 3. B#Y := A#X. C#Z := B#Y + A#X. C#Z?",
+                "example_asst": (
+                    "Step 1: A#X := 3\n"
+                    "  3 mod 7 = 3\n"
+                    "  A#X = 3\n\n"
+                    "Step 2: B#Y := A#X\n"
+                    "  Substitute: B#Y := 3\n"
+                    "  3 mod 7 = 3\n"
+                    "  B#Y = 3\n\n"
+                    "Step 3: C#Z := B#Y + A#X\n"
+                    "  Substitute: C#Z := 3 + 3 = 6\n"
+                    "  6 mod 7 = 6\n"
+                    "  C#Z = 6\n\n"
+                    "Query: C#Z?\n"
+                    "  C#Z = 6\n"
+                    "Final Answer: 6"
+                ),
+                "force_start": "Step 1:", 
             }
         }
         
@@ -187,7 +223,6 @@ class OuroThinkingExperiment:
             static_prompt_text = static_prompt_text.rstrip()
             static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
             
-            # For N-ary and P-hop, we force "Answer:" to ensure valid parsing
             force_text = config["force_start"].strip()
             force_start_tokens = tokenizer(
                 force_text, 
@@ -202,25 +237,21 @@ class OuroThinkingExperiment:
                 "force_start_text": config["force_start"]
             }
         
-        print("[+] Task templates pre-computed.")
+        print("[+] Task templates pre-computed (step-by-step reasoning mode).")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
-        """
-        Extract final answer. 
-        SYNCED with Ouroboros Paper Templates (looks for 'Answer:').
-        """
+        """Extract final answer with improved parsing"""
         pred = "0"
         
         try:
             full_response = full_response.strip()
             
             if task_type == "p_hop":
-                # P-HOP: Expecting a single letter (e.g., "Answer: B")
                 patterns = [
-                    r'Answer:\s*([A-Z])\b',       # <--- NEW: Matches paper-aligned template
-                    r'\[FINAL\]\s*([A-Z])\b',     # Legacy match
-                    r'Final:\s*([A-Z])\b',        
-                    r'\b([A-Z])\s*$',             # Last resort: Letter at the very end
+                    r'Answer:\s*([A-Z])\b',
+                    r'\[FINAL\]\s*([A-Z])\b',
+                    r'Final:\s*([A-Z])\b',
+                    r'\b([A-Z])\s*$',
                 ]
                 
                 for pattern in patterns:
@@ -232,13 +263,14 @@ class OuroThinkingExperiment:
                     pred = "ERROR"
             
             else:
-                # N-ARY & i-GSM: Expecting numbers (e.g., "Answer: 1304")
+                # N-ARY & i-GSM: Extract numbers
                 patterns = [
-                    r'Answer:\s*(-?\d+)',         # <--- NEW: Matches paper-aligned template
-                    r'\[FINAL\]\s*(-?\d+)',       # Legacy match
+                    r'Answer:\s*(-?\d+)',
+                    r'\[FINAL\]\s*(-?\d+)',
                     r'Final:\s*(-?\d+)',
-                    r'=\s*(-?\d+)\s*$',           # Matches " ... = 1304" (i-GSM CoT style)
-                    r'\b(-?\d+)\s*$',             # Last resort: Number at the very end
+                    r'⇒\s*(-?\d+)\s*\.',  # Compact CoT format
+                    r'=\s*(-?\d+)\s*$',
+                    r'\b(-?\d+)\s*$',
                 ]
                 
                 for pattern in patterns:
@@ -247,9 +279,6 @@ class OuroThinkingExperiment:
                         pred = matches[-1]
                         break
                 else:
-                    # Fallback for i-GSM: sometimes the answer is embedded in the last equation 
-                    # like "H#J = 5" without an explicit "Answer:" prefix if the model gets lazy.
-                    # We try to find the last number in the text.
                     lines = [l.strip() for l in full_response.split('\n') if l.strip()]
                     if lines:
                         last_line = lines[-1]
@@ -268,34 +297,26 @@ class OuroThinkingExperiment:
         return pred
 
     def _detect_degenerate_output(self, text: str) -> bool:
-        """Detect if output is degenerate/garbage
-           Super important because this model is highly unstable and has just released on 2025 October
-           Borrow Ouro model of ByteDance to demo looped transformer in paper: https://arxiv.org/abs/2502.17416
-        """
+        """Detect if output is degenerate/garbage"""
         if not text or len(text.strip()) < 5:
             return True
         
-        # Check for excessive newlines
         if text.count('\n\n\n') > 3:
             return True
         
-        # Check for excessive brackets
         bracket_ratio = (text.count('[') + text.count(']')) / max(len(text), 1)
         if bracket_ratio > 0.3:
             return True
         
-        # Check for very repetitive content
         if len(text) > 100:
             unique_chars = len(set(text))
             if unique_chars < 10:
                 return True
         
-        # Check for excessive whitespace
         whitespace_ratio = (text.count(' ') + text.count('\n')) / max(len(text), 1)
         if whitespace_ratio > 0.7:
             return True
         
-        # Check for single character repetition
         if len(text) > 50:
             for char in ['[', ']', '\n', ' ', '.']:
                 if text.count(char) > len(text) * 0.4:
@@ -315,7 +336,6 @@ class OuroThinkingExperiment:
     ) -> Dict[str, Any]:
         """Optimized prediction with improved generation control"""
         
-        # Verify model config
         if not hasattr(model.config, 'total_ut_steps'):
             print("❌ ERROR: Model missing total_ut_steps config!")
             return {
@@ -329,14 +349,12 @@ class OuroThinkingExperiment:
                 "is_degenerate": False,
             }
 
-        # Build templates if needed
         if not hasattr(self, "task_templates") or task_type not in self.task_templates:
             self._build_task_templates(tokenizer)
 
         template = self.task_templates[task_type]
         device = model.device
 
-        # Construct input sequence
         static_ids = template["static_input_ids"].to(device)
         
         user_tokens = tokenizer(
@@ -352,10 +370,10 @@ class OuroThinkingExperiment:
 
         start_time = time.perf_counter()
 
-        # Generation config
+        # Adjusted generation config for concise outputs
         default_config = {
-            "max_new_tokens": 512,
-            "min_new_tokens": 5,
+            "max_new_tokens": 256,  # Reduced from 512
+            "min_new_tokens": 3,
             "do_sample": False,
             "num_beams": 1,
             "repetition_penalty": 1.0,
@@ -390,15 +408,12 @@ class OuroThinkingExperiment:
 
         generation_time = time.perf_counter() - start_time
 
-        # Extract generated text
         prompt_length = input_ids.shape[1]
         generated_ids = outputs.sequences[0, prompt_length:]
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
-        # Construct full response
         full_response = template["force_start_text"] + " " + generated_text
         
-        # Check for degenerate output
         is_degenerate = self._detect_degenerate_output(full_response)
         
         if is_degenerate:
@@ -499,7 +514,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
         max_batch_size: int = 4,
-        max_new_tokens: int = 512,
+        max_new_tokens: int = 256,  # Reduced default
     ):
         super().__init__(model_path, dtype, use_4bit_quant, use_torch_compile)
         self.max_batch_size = max_batch_size
@@ -544,7 +559,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         if not prompts:
             return []
         
-        # Check if model supports batch generation
         if not hasattr(model, 'generate_batch'):
             print("⚠️ Model doesn't support generate_batch(). Using sequential.")
             return self._sequential_fallback(
@@ -584,7 +598,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         results = [None] * len(prompts)
         request_ids = list(batch_outputs.keys())
         
-        # Map outputs to prompts
         if all(isinstance(rid, str) for rid in request_ids):
             input_to_index = {
                 " ".join(map(str, inp)): idx 
@@ -604,7 +617,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                             batch_time / len(prompts)
                         )
         
-        # Fill missing results
         for i in range(len(prompts)):
             if results[i] is None:
                 results[i] = {
@@ -641,7 +653,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
         full_response = template["force_start_text"] + " " + generated_text
 
-        # Check for garbage output
         is_degenerate = self._detect_degenerate_output(full_response)
         
         if is_degenerate:
