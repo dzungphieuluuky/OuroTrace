@@ -45,8 +45,8 @@ class OuroThinkingExperiment:
             self.model_path, 
             trust_remote_code=True
         )
-        
-        # Apply UT step configuration
+        print(f"→ Base model config loaded. Current UT steps: {base_config.total_ut_steps}")
+        # Apply the UT step configuration BEFORE loading the model
         base_config.total_ut_steps = total_ut_steps
         base_config.early_exit_threshold = early_exit_threshold
                 

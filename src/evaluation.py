@@ -104,7 +104,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
                 }
             )
 
-        acc = correct / len(samples)
+        acc = correct / len(samples) if samples else 0.0
         print(f"    ✅ Accuracy: {acc:.2%}")
 
     # --- PART 2: STANDARD BENCHMARKS (lm-eval) ---
