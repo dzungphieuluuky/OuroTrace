@@ -359,7 +359,6 @@ class OuroThinkingExperiment:
             "do_sample": False,
             "num_beams": 1,
             "repetition_penalty": 1.0,
-            "early_stopping": True,
         }
         
         if generation_config:
