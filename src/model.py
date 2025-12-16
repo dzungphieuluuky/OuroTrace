@@ -17,7 +17,7 @@ class OuroThinkingExperiment:
     def __init__(
         self,
         model_path: str,
-        dtype=torch.float16,
+        dtype=torch.bfloat16,
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
     ):
@@ -157,7 +157,7 @@ class OuroThinkingExperiment:
                     "input_prefix": "" 
                 }
             }
-                        
+
             for task_type, config in task_configs.items():
                 # 1. Build static context (Unchanged logic)
                 static_messages = [
@@ -474,7 +474,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
     def __init__(
         self,
         model_path: str,
-        dtype=torch.float16,
+        dtype=torch.bfloat16,
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
         max_batch_size: int = 4,
