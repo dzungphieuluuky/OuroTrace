@@ -122,126 +122,105 @@ class OuroThinkingExperiment:
             "early_exit_threshold": early_exit_threshold,
         }
 
+# model.py
+
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates with multi-shot examples.
-        n_ary: 2 shots | p_hop: 3 shots (varying hops) | igsm: 3 shots (varying equations)
+        Pre-compute prompt templates strictly aligned with Ouroboros Paper.
+        
+        ALIGNMENT NOTES:
+        - N-ary: DIRECT IO. No CoT. (Paper: "train ... without any chain-of-thought")
+        - P-hop: DIRECT IO. (Paper: "output the character")
+        - i-GSM: CoT Enabled. (Paper: "Answer with CoT. E#I = 4. =⇒ ...")
         """
         self.tokenizer = tokenizer
         
-        task_configurations = {
-            # 1. N-ARY ADDITION (2 shots)
+        task_configs = {
+            # 1. N-ARY ADDITION (Paper Baseline Style: Direct IO)
+            # The latent recurrence (ut_steps=4) is responsible for the math, not the output tokens.
             "n_ary": {
-                "system_message": "Sequential calculator. Output ONLY calculation steps. NO tex.",
-                "example_pairs": [
-                    {
-                        "user_message": "5+3=",
-                        "assistant_response": "[1] 0\n[2] 0+5=5\n[3] 5+3=8\n[F] 8"
-                    },
-                    {
-                        "user_message": "10+20+30=",
-                        "assistant_response": "[1] 0\n[2] 0+10=10\n[3] 10+20=30\n[4] 30+30=60\n[F] 60"
-                    }
-                ],
-                "forced_start_token": "\n[1]"
+                "system": "Output the final sum directly.",
+                "example_user": "315 + 120 + 045 + 824 =",
+                "example_asst": "Answer: 1304",
+                "force_start": "Answer:", 
             },
             
-            # 2. P-HOP INDUCTION (3 shots - hops 1,2,3)
+            # 2. P-HOP INDUCTION (Paper Style: Direct Output)
+            # Associative recall task.
             "p_hop": {
-                "system_message": "Trace sequence. Output ONLY token transitions.",
-                "example_pairs": [
-                    {
-                        "user_message": "Seq: ABCD. Start: A. Hop 1.",
-                        "assistant_response": "\n[T] A→B\n[F] B"
-                    },
-                    {
-                        "user_message": "Seq: ABCDAB. Start: A. Hop 2.",
-                        "assistant_response": "\n[T] A→B→C\n[F] C"
-                    },
-                    {
-                        "user_message": "Seq: ABCDABC. Start: A. Hop 3.",
-                        "assistant_response": "\n[T] A→B→C→D\n[F] D"
-                    }
-                ],
-                "forced_start_token": "\n[T]"
+                "system": "Output the final target token directly.",
+                "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
+                "example_asst": "Answer: B",
+                "force_start": "Answer:", 
             },
             
-            # 3. SYMBOLIC i-GSM (3 shots - 2,3,4 equations)
+            # 3. SYMBOLIC i-GSM (Paper Style: CoT with '=>')
+            # "Answer with CoT. E#I = 4. =⇒ E#I = 4..."
             "igsm": {
-                "system_message": "DAG solver mod 7. Output ONLY equations.",
-                "example_pairs": [
-                    {
-                        "user_message": "A:=3. B:=A. B?",
-                        "assistant_response": "\n[1] A=3\n[2] B=3\n[F] 3"
-                    },
-                    {
-                        "user_message": "E:=4. F:=E. G:=E+F. G?",
-                        "assistant_response": "\n[1] E=4\n[2] F=4\n[3] G=4+4=1\n[F] 1"
-                    },
-                    {
-                        "user_message": "X:=2. Y:=X. Z:=X+Y. W:=Z+Y. W?",
-                        "assistant_response": "\n[1] X=2\n[2] Y=2\n[3] Z=2+2=4\n[4] W=4+2=6\n[F] 6"
-                    }
-                ],
-                "forced_start_token": "\n[1]"
+                "system": "Solve the equations modulo 7. Answer with CoT.",
+                "example_user": "Question. E#I := 4. E#J := E#I. H#J := E#J + 2 * E#I. H#J?",
+                "example_asst": (
+                    "E#I = 4. =⇒ E#I = 4. "
+                    "E#J = E#I. =⇒ E#J = 4. "
+                    "H#J = 4 + 2 * 4 = 12 = 5. =⇒ H#J = 5.\n"
+                    "Answer: 5"
+                ),
+                # Paper format implies starting the trace immediately
+                "force_start": "\n", 
             }
         }
-
-        for task_type, configuration in task_configurations.items():
-            # Build multi-shot message context
-            conversation_messages = [
-                {"role": "system", "content": configuration["system_message"]}
+        
+        self.task_templates = {}
+        
+        for task_type, config in task_configs.items():
+            static_messages = [
+                {"role": "system", "content": config["system"]},
+                {"role": "user", "content": config["example_user"]},
+                {"role": "assistant", "content": config["example_asst"]}
             ]
             
-            for example in configuration["example_pairs"]:
-                conversation_messages.append({
-                    "role": "user", 
-                    "content": example["user_message"]
-                })
-                conversation_messages.append({
-                    "role": "assistant", 
-                    "content": example["assistant_response"]
-                })
-            
-            # Tokenize static prompt template
             static_prompt_text = tokenizer.apply_chat_template(
-                conversation_messages, 
+                static_messages, 
                 tokenize=False, 
                 add_generation_prompt=True
             )
-            static_tokenized_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+            static_prompt_text = static_prompt_text.rstrip()
+            static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
             
-            # Tokenize forced start sequence
-            forced_start_tokenized = tokenizer(
-                configuration["forced_start_token"], 
+            # For N-ary and P-hop, we force "Answer:" to ensure valid parsing
+            force_text = config["force_start"].strip()
+            force_start_tokens = tokenizer(
+                force_text, 
                 return_tensors="pt", 
                 add_special_tokens=False
             )
             
-            # Store pre-computed template components
             self.task_templates[task_type] = {
-                "static_input_ids": static_tokenized_inputs.input_ids,
-                "static_attention_mask": static_tokenized_inputs.attention_mask,
-                "force_start_ids": forced_start_tokenized.input_ids,
-                "input_prefix": "",
-                "force_start_text": configuration["forced_start_token"]
+                "static_input_ids": static_inputs.input_ids,
+                "static_attention_mask": static_inputs.attention_mask,
+                "force_start_ids": force_start_tokens.input_ids,
+                "force_start_text": config["force_start"]
             }
         
-        print("[+] Task templates pre-computed (n_ary:2-shot | p_hop:3-shot | igsm:3-shot)")
+        print("[+] Task templates pre-computed.")
+
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
-        """Extract final answer using robust regex patterns"""
+        """
+        Extract final answer. 
+        SYNCED with Ouroboros Paper Templates (looks for 'Answer:').
+        """
         pred = "0"
         
         try:
             full_response = full_response.strip()
             
             if task_type == "p_hop":
-                # For p_hop, look for letter answers
+                # P-HOP: Expecting a single letter (e.g., "Answer: B")
                 patterns = [
-                    r'\[FINAL\]\s*([A-D])\b',
-                    r'Final:\s*([A-D])\b',
-                    r'Next token is\s*([A-D])\b',
-                    r'\b([A-D])\s*$',
+                    r'Answer:\s*([A-Z])\b',       # <--- NEW: Matches paper-aligned template
+                    r'\[FINAL\]\s*([A-Z])\b',     # Legacy match
+                    r'Final:\s*([A-Z])\b',        
+                    r'\b([A-Z])\s*$',             # Last resort: Letter at the very end
                 ]
                 
                 for pattern in patterns:
@@ -253,12 +232,13 @@ class OuroThinkingExperiment:
                     pred = "ERROR"
             
             else:
-                # For math tasks, look for numbers
+                # N-ARY & i-GSM: Expecting numbers (e.g., "Answer: 1304")
                 patterns = [
-                    r'\[FINAL\]\s*(\d+)',
-                    r'Final:\s*(\d+)',
-                    r'=\s*(\d+)\s*$',
-                    r'\b(\d+)\s*$',
+                    r'Answer:\s*(-?\d+)',         # <--- NEW: Matches paper-aligned template
+                    r'\[FINAL\]\s*(-?\d+)',       # Legacy match
+                    r'Final:\s*(-?\d+)',
+                    r'=\s*(-?\d+)\s*$',           # Matches " ... = 1304" (i-GSM CoT style)
+                    r'\b(-?\d+)\s*$',             # Last resort: Number at the very end
                 ]
                 
                 for pattern in patterns:
@@ -267,11 +247,13 @@ class OuroThinkingExperiment:
                         pred = matches[-1]
                         break
                 else:
-                    # Last resort: find any number in last line
+                    # Fallback for i-GSM: sometimes the answer is embedded in the last equation 
+                    # like "H#J = 5" without an explicit "Answer:" prefix if the model gets lazy.
+                    # We try to find the last number in the text.
                     lines = [l.strip() for l in full_response.split('\n') if l.strip()]
                     if lines:
                         last_line = lines[-1]
-                        numbers = re.findall(r'\b(\d+)\b', last_line)
+                        numbers = re.findall(r'-?\d+', last_line)
                         if numbers:
                             pred = numbers[-1]
                         else:
