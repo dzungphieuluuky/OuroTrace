@@ -543,19 +543,8 @@ def _display_task_results(results: List[Dict[str, Any]], task_type: str) -> None
     if 'is_degenerate' in df_sample.columns:
         display_cols.append('is_degenerate')
     
-    display_cols = [c for c in display_cols if c in df_sample.columns]
+    print(df_sample[display_cols])
     
-    # Format for better display
-    df_display = df_sample[display_cols].copy()
-    
-    # Truncate long inputs
-    if 'test_input' in df_display.columns:
-        df_display['test_input'] = df_display['test_input'].str[:50]
-    
-    print(df_display.to_string(index=False, max_colwidth=50))
-    print()
-
-
 # Optional: Save results function
 def save_results(
     all_results: List[Dict],
