@@ -523,7 +523,7 @@ def _display_task_results(results: List[Dict[str, Any]], task_type: str) -> None
     print(f"{'─'*70}")
     
     df_sample = pd.DataFrame(results).head(20)
-    display_cols = ['test_input', 'expected_answer', 'prediction', 'is_correct']
+    display_cols = ['test_input', 'full_response', 'expected_answer', 'prediction', 'is_correct']
     
     # Add degenerate flag if present
     if 'is_degenerate' in df_sample.columns:
