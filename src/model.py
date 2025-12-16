@@ -139,7 +139,7 @@ class OuroThinkingExperiment:
             # 1. N-ARY ADDITION (Paper Baseline Style: Direct IO)
             # The latent recurrence (ut_steps=4) is responsible for the math, not the output tokens.
             "n_ary": {
-                "system": "Output the final sum directly.",
+                "system": "You are an arithmetic calculator. Add numbers sequentially from left to right. Only output the final sum after the word Answer:",
                 "example_user": "315 + 120 + 045 + 824 =",
                 "example_asst": "Answer: 1304",
                 "force_start": "Answer:", 
@@ -148,7 +148,7 @@ class OuroThinkingExperiment:
             # 2. P-HOP INDUCTION (Paper Style: Direct Output)
             # Associative recall task.
             "p_hop": {
-                "system": "Output the final target token directly.",
+                "system": "You are a sequence tracer. Find the starting token in the sequence, then follow N hops to the next tokens. Only output the final target token after the word Answer:",
                 "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
                 "example_asst": "Answer: B",
                 "force_start": "Answer:", 
@@ -157,7 +157,7 @@ class OuroThinkingExperiment:
             # 3. SYMBOLIC i-GSM (Paper Style: CoT with '=>')
             # "Answer with CoT. E#I = 4. =⇒ E#I = 4..."
             "igsm": {
-                "system": "Solve the equations modulo 7. Answer with CoT.",
+                "system": "You are a symbolic equation solver. Evaluate expressions modulo 7. Show each variable assignment. Finally, output the value of the target variable after the word Answer:",
                 "example_user": "Question. E#I := 4. E#J := E#I. H#J := E#J + 2 * E#I. H#J?",
                 "example_asst": (
                     "E#I = 4. =⇒ E#I = 4. "
