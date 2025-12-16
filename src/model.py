@@ -261,18 +261,19 @@ class OuroThinkingExperiment:
         start_time = time.perf_counter()
 
         gen_config = generation_config or {
-            "max_new_tokens": 1024,
+            "max_new_tokens": 512,
             "do_sample": False,
             "num_beams": 1,
             "min_length": 5,
-            "repetition_penalty": 1.2
+            "repetition_penalty": 1
         }
 
         outputs = model.generate(
             input_ids=input_ids,
             attention_mask=attention_mask,
             pad_token_id=tokenizer.eos_token_id,
-            use_cache=True,
+            use_cache=False,
+            disable_compile=False,
             return_dict_in_generate=True,
             output_scores=False,
             **gen_config,
