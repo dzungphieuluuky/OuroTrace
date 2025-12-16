@@ -123,71 +123,111 @@ class OuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-            """
-            Pre-compute prompt templates for faster inference.
-            UPDATED: Refined Few-Shot examples to prevent babbling (added Step Prefixes and Guardrails).
-            """
-            self.tokenizer = tokenizer
+        """
+        Pre-compute prompt templates with multi-shot examples.
+        n_ary: 2 shots | p_hop: 3 shots (varying hops) | igsm: 3 shots (varying equations)
+        """
+        self.tokenizer = tokenizer
+        
+        task_configurations = {
+            # 1. N-ARY ADDITION (2 shots)
+            "n_ary": {
+                "system_message": "Sequential calculator. Output ONLY calculation steps. NO tex.",
+                "example_pairs": [
+                    {
+                        "user_message": "5+3=",
+                        "assistant_response": "[1] 0\n[2] 0+5=5\n[3] 5+3=8\n[F] 8"
+                    },
+                    {
+                        "user_message": "10+20+30=",
+                        "assistant_response": "[1] 0\n[2] 0+10=10\n[3] 10+20=30\n[4] 30+30=60\n[F] 60"
+                    }
+                ],
+                "forced_start_token": "\n[1]"
+            },
             
-            task_configs = {
-                # 1. N-ARY ADDITION
-                "n_ary": {
-                    "system": "Sequential calculator. Output ONLY calculation steps. NO text.",
-                    "example_user": "10 + 20 + 30 =",
-                    "example_asst": "[1] 0\n[2] 0+10=10\n[3] 10+20=30\n[4] 30+30=60\n[F] 60",
-                    "force_start": "\n[1]", 
-                    "input_prefix": "" 
-                },
-                
-                # 2. P-HOP INDUCTION
-                "p_hop": {
-                    "system": "Trace sequence. Output ONLY token transitions.",
-                    "example_user": "Sequence: ABCDAB. Start: A. Hop 1.",
-                    "example_asst": "\n[T] A→B\n[F] B",
-                    "force_start": "\n[T]", 
-                    "input_prefix": "" 
-                },
-                
-                # 3. SYMBOLIC i-GSM
-                "igsm": {
-                    "system": "DAG solver mod 7. Output ONLY equations.",
-                    "example_user": "E#I:=4. E#J:=E#I. F#K:=E#J. H#J:=E#J+F#K. H#J?",
-                    "example_asst": "\n[1] E#I=4\n[2] E#J=4\n[3] F#K=4\n[4] H#J=4+4=1\n[F] 1",
-                    "force_start": "\n[1]", 
-                    "input_prefix": "" 
-                }
+            # 2. P-HOP INDUCTION (3 shots - hops 1,2,3)
+            "p_hop": {
+                "system_message": "Trace sequence. Output ONLY token transitions.",
+                "example_pairs": [
+                    {
+                        "user_message": "Seq: ABCD. Start: A. Hop 1.",
+                        "assistant_response": "\n[T] A→B\n[F] B"
+                    },
+                    {
+                        "user_message": "Seq: ABCDAB. Start: A. Hop 2.",
+                        "assistant_response": "\n[T] A→B→C\n[F] C"
+                    },
+                    {
+                        "user_message": "Seq: ABCDABC. Start: A. Hop 3.",
+                        "assistant_response": "\n[T] A→B→C→D\n[F] D"
+                    }
+                ],
+                "forced_start_token": "\n[T]"
+            },
+            
+            # 3. SYMBOLIC i-GSM (3 shots - 2,3,4 equations)
+            "igsm": {
+                "system_message": "DAG solver mod 7. Output ONLY equations.",
+                "example_pairs": [
+                    {
+                        "user_message": "A:=3. B:=A. B?",
+                        "assistant_response": "\n[1] A=3\n[2] B=3\n[F] 3"
+                    },
+                    {
+                        "user_message": "E:=4. F:=E. G:=E+F. G?",
+                        "assistant_response": "\n[1] E=4\n[2] F=4\n[3] G=4+4=1\n[F] 1"
+                    },
+                    {
+                        "user_message": "X:=2. Y:=X. Z:=X+Y. W:=Z+Y. W?",
+                        "assistant_response": "\n[1] X=2\n[2] Y=2\n[3] Z=2+2=4\n[4] W=4+2=6\n[F] 6"
+                    }
+                ],
+                "forced_start_token": "\n[1]"
             }
+        }
 
-            for task_type, config in task_configs.items():
-                # 1. Build static context (Unchanged logic)
-                static_messages = [
-                    {"role": "system", "content": config["system"]},
-                    {"role": "user", "content": config["example_user"]},
-                    {"role": "assistant", "content": config["example_asst"]}
-                ]
-                
-                static_prompt_text = tokenizer.apply_chat_template(
-                    static_messages, tokenize=False, add_generation_prompt=True
-                )
-                static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
-                
-                # 2. Tokenize Force Start (Unchanged logic)
-                force_start_tokens = tokenizer(
-                    config["force_start"], 
-                    return_tensors="pt", 
-                    add_special_tokens=False
-                )
-                
-                self.task_templates[task_type] = {
-                    "static_input_ids": static_inputs.input_ids,
-                    "static_attention_mask": static_inputs.attention_mask,
-                    "force_start_ids": force_start_tokens.input_ids,
-                    "input_prefix": config["input_prefix"],
-                    "force_start_text": config["force_start"]
-                }
+        for task_type, configuration in task_configurations.items():
+            # Build multi-shot message context
+            conversation_messages = [
+                {"role": "system", "content": configuration["system_message"]}
+            ]
             
-            print("[+] Task templates pre-computed (Corrected with Step Prefixes and Guardrails)")
-
+            for example in configuration["example_pairs"]:
+                conversation_messages.append({
+                    "role": "user", 
+                    "content": example["user_message"]
+                })
+                conversation_messages.append({
+                    "role": "assistant", 
+                    "content": example["assistant_response"]
+                })
+            
+            # Tokenize static prompt template
+            static_prompt_text = tokenizer.apply_chat_template(
+                conversation_messages, 
+                tokenize=False, 
+                add_generation_prompt=True
+            )
+            static_tokenized_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+            
+            # Tokenize forced start sequence
+            forced_start_tokenized = tokenizer(
+                configuration["forced_start_token"], 
+                return_tensors="pt", 
+                add_special_tokens=False
+            )
+            
+            # Store pre-computed template components
+            self.task_templates[task_type] = {
+                "static_input_ids": static_tokenized_inputs.input_ids,
+                "static_attention_mask": static_tokenized_inputs.attention_mask,
+                "force_start_ids": forced_start_tokenized.input_ids,
+                "input_prefix": "",
+                "force_start_text": configuration["forced_start_token"]
+            }
+        
+        print("[+] Task templates pre-computed (n_ary:2-shot | p_hop:3-shot | igsm:3-shot)")
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer using robust regex patterns"""
         pred = "0"
