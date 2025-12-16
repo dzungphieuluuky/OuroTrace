@@ -123,69 +123,77 @@ class OuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-        """Pre-compute prompt templates for faster inference"""
-        self.tokenizer = tokenizer
-        
-        task_configs = {
-            "n_ary": {
-                "system": "You are a precise arithmetic calculator. Follow the exact step-by-step format shown in the example. Output only the calculation steps, nothing else.",
-                "example_user": "10 + 20 + 30 =",
-                "example_asst": "[STEP 1] Current: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Current: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Current: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
-                "force_start": "[STEP 1]",
-            },
+            """
+            Pre-compute prompt templates for faster inference.
+            UPDATED: Refined Few-Shot examples to prevent babbling (added Step Prefixes and Guardrails).
+            """
+            self.tokenizer = tokenizer
             
-            "p_hop": {
-                "system": "You are a sequence tracer. Follow the exact format shown in the example. Trace through the sequence step-by-step and output only the final answer.",
-                "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                "example_asst": "[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
-                "force_start": "[TRACE]",
-            },
-            
-            "igsm": {
-                "system": "You are a symbolic equation solver. Solve equations modulo 7. Follow the exact format shown in the example with numbered equations.",
-                "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
-                "example_asst": "[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
-                "force_start": "[EQ 1]",
+            task_configs = {
+                # 1. N-ARY ADDITION (TÍCH HỢP STEP PREFIX VÀ GUARDRAILS)
+                "n_ary": {
+                    # Thêm từ khóa kiểm soát: MUST, DO NOT
+                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
+                    "example_user": "10 + 20 + 30 =",
+                    # Thêm [STEP X] và [FINAL]
+                    "example_asst": "[STEP 1] Current: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Current: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Current: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
+                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
+                    "force_start": "\n[STEP 1]", 
+                    "input_prefix": "" 
+                },
+                
+                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
+                "p_hop": {
+                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
+                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
+                    "example_user": "Sequence: ABCDAB. Start: A. Hop 1 times.",
+                    # Rút gọn ví dụ: dùng [TRACE]
+                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
+                    "force_start": "\n[TRACE]", 
+                    "input_prefix": "" 
+                },
+                
+                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
+                "igsm": {
+                    # Tăng cường Guardrail
+                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
+                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
+                    # Thêm [EQ X] cho từng bước và [FINAL]
+                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
+                    "force_start": "\n[EQ 1]", 
+                    "input_prefix": "" 
+                }
             }
-        }
-        
-        self.task_templates = {}
-        
-        for task_type, config in task_configs.items():
-            # Build static context with chat template
-            static_messages = [
-                {"role": "system", "content": config["system"]},
-                {"role": "user", "content": config["example_user"]},
-                {"role": "assistant", "content": config["example_asst"]}
-            ]
             
-            static_prompt_text = tokenizer.apply_chat_template(
-                static_messages, 
-                tokenize=False, 
-                add_generation_prompt=True
-            )
+            for task_type, config in task_configs.items():
+                # 1. Build static context (Unchanged logic)
+                static_messages = [
+                    {"role": "system", "content": config["system"]},
+                    {"role": "user", "content": config["example_user"]},
+                    {"role": "assistant", "content": config["example_asst"]}
+                ]
+                
+                static_prompt_text = tokenizer.apply_chat_template(
+                    static_messages, tokenize=False, add_generation_prompt=True
+                )
+                static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+                
+                # 2. Tokenize Force Start (Unchanged logic)
+                force_start_tokens = tokenizer(
+                    config["force_start"], 
+                    return_tensors="pt", 
+                    add_special_tokens=False
+                )
+                
+                self.task_templates[task_type] = {
+                    "static_input_ids": static_inputs.input_ids,
+                    "static_attention_mask": static_inputs.attention_mask,
+                    "force_start_ids": force_start_tokens.input_ids,
+                    "input_prefix": config["input_prefix"],
+                    "force_start_text": config["force_start"]
+                }
             
-            # Remove any trailing whitespace
-            static_prompt_text = static_prompt_text.rstrip()
-            
-            static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
-            
-            # Tokenize force start separately
-            force_start_tokens = tokenizer(
-                config["force_start"], 
-                return_tensors="pt", 
-                add_special_tokens=False
-            )
-            
-            self.task_templates[task_type] = {
-                "static_input_ids": static_inputs.input_ids,
-                "static_attention_mask": static_inputs.attention_mask,
-                "force_start_ids": force_start_tokens.input_ids,
-                "force_start_text": config["force_start"],
-                "system_content": config["system"],
-            }
-        
-        print("[+] Task templates pre-computed successfully")
+            print("[+] Task templates pre-computed (Corrected with Step Prefixes and Guardrails)")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer using robust regex patterns"""
