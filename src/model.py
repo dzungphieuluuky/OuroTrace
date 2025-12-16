@@ -130,41 +130,34 @@ class OuroThinkingExperiment:
             self.tokenizer = tokenizer
             
             task_configs = {
-                # 1. N-ARY ADDITION (TÍCH HỢP STEP PREFIX VÀ GUARDRAILS)
+                # 1. N-ARY ADDITION
                 "n_ary": {
-                    # Thêm từ khóa kiểm soát: MUST, DO NOT
-                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
+                    "system": "Sequential calculator. Output ONLY calculation steps. NO text.",
                     "example_user": "10 + 20 + 30 =",
-                    # Thêm [STEP X] và [FINAL]
-                    "example_asst": "[STEP 1] Current: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Current: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Current: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
-                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
-                    "force_start": "\n[STEP 1]", 
+                    "example_asst": "[1] 0\n[2] 0+10=10\n[3] 10+20=30\n[4] 30+30=60\n[F] 60",
+                    "force_start": "\n[1]", 
                     "input_prefix": "" 
                 },
                 
-                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
+                # 2. P-HOP INDUCTION
                 "p_hop": {
-                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
-                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
-                    "example_user": "Sequence: ABCDAB. Start: A. Hop 1 times.",
-                    # Rút gọn ví dụ: dùng [TRACE]
-                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
-                    "force_start": "\n[TRACE]", 
+                    "system": "Trace sequence. Output ONLY token transitions.",
+                    "example_user": "Sequence: ABCDAB. Start: A. Hop 1.",
+                    "example_asst": "\n[T] A→B\n[F] B",
+                    "force_start": "\n[T]", 
                     "input_prefix": "" 
                 },
                 
-                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
+                # 3. SYMBOLIC i-GSM
                 "igsm": {
-                    # Tăng cường Guardrail
-                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
-                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
-                    # Thêm [EQ X] cho từng bước và [FINAL]
-                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
-                    "force_start": "\n[EQ 1]", 
+                    "system": "DAG solver mod 7. Output ONLY equations.",
+                    "example_user": "E#I:=4. E#J:=E#I. F#K:=E#J. H#J:=E#J+F#K. H#J?",
+                    "example_asst": "\n[1] E#I=4\n[2] E#J=4\n[3] F#K=4\n[4] H#J=4+4=1\n[F] 1",
+                    "force_start": "\n[1]", 
                     "input_prefix": "" 
                 }
             }
-            
+                        
             for task_type, config in task_configs.items():
                 # 1. Build static context (Unchanged logic)
                 static_messages = [
