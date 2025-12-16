@@ -21,6 +21,7 @@ class OuroThinkingExperiment:
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
     ):
+        # Clear CUDA cache before loading new model
         torch.cuda.empty_cache()
         self.model_path = model_path
         self.dtype = dtype
@@ -38,17 +39,31 @@ class OuroThinkingExperiment:
             print("→ Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
-        print(f"Loading model: UT steps={total_ut_steps}, Early exit={early_exit_threshold}")
+        print(f"\n{'='*60}")
+        print(f"⚙️  LOADING MODEL CONFIGURATION")
+        print(f"{'='*60}")
+        print(f"Model Path: {self.model_path}")
+        print(f"Requested UT Steps: {total_ut_steps}")
+        print(f"Early Exit Threshold: {early_exit_threshold}")
+        print(f"Data Type: {self.dtype}")
+        print(f"4-bit Quantization: {self.use_4bit_quant}")
+        print(f"Torch Compile: {self.use_torch_compile}")
 
         # Load base config
         base_config = AutoConfig.from_pretrained(
             self.model_path, 
             trust_remote_code=True
         )
-        print(f"→ Base model config loaded. Current UT steps: {base_config.total_ut_steps}")
-        # Apply the UT step configuration BEFORE loading the model
+        print(f"\n→ Base config loaded")
+        print(f"   Original UT steps: {getattr(base_config, 'total_ut_steps', 'N/A')}")
+        print(f"   Original early exit: {getattr(base_config, 'early_exit_threshold', 'N/A')}")
+        
+        # Apply UT step configuration
         base_config.total_ut_steps = total_ut_steps
         base_config.early_exit_threshold = early_exit_threshold
+        print(f"\n→ Modified config:")
+        print(f"   New UT steps: {base_config.total_ut_steps}")
+        print(f"   New early exit: {base_config.early_exit_threshold}")
                 
         tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, 
@@ -58,8 +73,14 @@ class OuroThinkingExperiment:
         
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
+        
+        print(f"\n→ Tokenizer loaded")
+        print(f"   Vocab size: {tokenizer.vocab_size}")
+        print(f"   PAD token: {tokenizer.pad_token}")
+        print(f"   EOS token: {tokenizer.eos_token}")
 
         # Load model with modified config
+        print(f"\n→ Loading model weights...")
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
             config=base_config,
@@ -75,8 +96,22 @@ class OuroThinkingExperiment:
             model = torch.compile(model)
 
         model.eval()
-        print(f"✅ Model loaded on {model.device}")
-        print(f"✅ VERIFIED: Model configured with total_ut_steps = {model.config.total_ut_steps}")
+        
+        # Final verification
+        print(f"\n{'='*60}")
+        print(f"✅ MODEL LOADED SUCCESSFULLY")
+        print(f"{'='*60}")
+        print(f"Device: {model.device}")
+        print(f"Model dtype: {model.dtype}")
+        print(f"VERIFIED UT steps: {model.config.total_ut_steps}")
+        print(f"VERIFIED early exit: {model.config.early_exit_threshold}")
+        
+        if model.config.total_ut_steps != total_ut_steps:
+            print(f"\n⚠️  WARNING: UT STEPS MISMATCH!")
+            print(f"   Requested: {total_ut_steps}")
+            print(f"   Actual: {model.config.total_ut_steps}")
+        
+        print(f"{'='*60}\n")
         
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
@@ -126,12 +161,12 @@ class OuroThinkingExperiment:
                 add_generation_prompt=True
             )
             
-            # Remove any trailing whitespace that might cause issues
+            # Remove any trailing whitespace
             static_prompt_text = static_prompt_text.rstrip()
             
             static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
             
-            # Tokenize force start separately - no special tokens
+            # Tokenize force start separately
             force_start_tokens = tokenizer(
                 config["force_start"], 
                 return_tensors="pt", 
@@ -153,16 +188,15 @@ class OuroThinkingExperiment:
         pred = "0"
         
         try:
-            # Clean up response first
             full_response = full_response.strip()
             
             if task_type == "p_hop":
                 # For p_hop, look for letter answers
                 patterns = [
-                    r'\[FINAL\]\s*([A-D])\b',  # [FINAL] B
-                    r'Final:\s*([A-D])\b',      # Final: B
-                    r'Next token is\s*([A-D])\b',  # Next token is B
-                    r'\b([A-D])\s*$',           # Just the letter at the end
+                    r'\[FINAL\]\s*([A-D])\b',
+                    r'Final:\s*([A-D])\b',
+                    r'Next token is\s*([A-D])\b',
+                    r'\b([A-D])\s*$',
                 ]
                 
                 for pattern in patterns:
@@ -176,10 +210,10 @@ class OuroThinkingExperiment:
             else:
                 # For math tasks, look for numbers
                 patterns = [
-                    r'\[FINAL\]\s*(\d+)',       # [FINAL] 60
-                    r'Final:\s*(\d+)',          # Final: 60
-                    r'=\s*(\d+)\s*$',           # = 60 at end
-                    r'\b(\d+)\s*$',             # Just number at end
+                    r'\[FINAL\]\s*(\d+)',
+                    r'Final:\s*(\d+)',
+                    r'=\s*(\d+)\s*$',
+                    r'\b(\d+)\s*$',
                 ]
                 
                 for pattern in patterns:
@@ -207,7 +241,11 @@ class OuroThinkingExperiment:
         return pred
 
     def _detect_degenerate_output(self, text: str) -> bool:
-        """Detect if output is degenerate/chaotic"""
+        """Detect if output is degenerate/chaotic/garbage
+           Super important because this model is highly unstable and has just released on 2025 October"""
+        if not text or len(text.strip()) < 5:
+            return True
+        
         # Check for excessive newlines
         if text.count('\n\n\n') > 3:
             return True
@@ -222,6 +260,17 @@ class OuroThinkingExperiment:
             unique_chars = len(set(text))
             if unique_chars < 10:
                 return True
+        
+        # Check for excessive whitespace
+        whitespace_ratio = (text.count(' ') + text.count('\n')) / max(len(text), 1)
+        if whitespace_ratio > 0.7:
+            return True
+        
+        # Check for single character repetition
+        if len(text) > 50:
+            for char in ['[', ']', '\n', ' ', '.']:
+                if text.count(char) > len(text) * 0.4:
+                    return True
         
         return False
 
@@ -242,12 +291,13 @@ class OuroThinkingExperiment:
             print("❌ ERROR: Model missing total_ut_steps config!")
             return {
                 "error": "Bad model config", 
-                "prediction": "0",
+                "prediction": "ERROR",
                 "full_response": "",
                 "generation_time": 0,
                 "generated_tokens": 0,
                 "input_tokens": 0,
-                "ut_steps": ut_steps
+                "ut_steps": ut_steps,
+                "is_degenerate": False,
             }
 
         # Build templates if needed
@@ -260,7 +310,6 @@ class OuroThinkingExperiment:
         # Construct input sequence
         static_ids = template["static_input_ids"].to(device)
         
-        # Tokenize user input without special tokens
         user_tokens = tokenizer(
             user_input, 
             return_tensors="pt", 
@@ -269,19 +318,18 @@ class OuroThinkingExperiment:
         
         force_start_ids = template["force_start_ids"].to(device)
 
-        # Concatenate: [static context] + [user input] + [force start]
         input_ids = torch.cat([static_ids, user_tokens, force_start_ids], dim=1)
         attention_mask = torch.ones_like(input_ids, device=device)
 
         start_time = time.perf_counter()
 
-        # Improved generation config
+        # Generation config
         default_config = {
-            "max_new_tokens": 512,  # Reduced from 1024
+            "max_new_tokens": 512,
             "min_new_tokens": 5,
             "do_sample": False,
             "num_beams": 1,
-            "repetition_penalty": 1,
+            "repetition_penalty": 1.0,
             "early_stopping": True,
         }
         
@@ -294,7 +342,7 @@ class OuroThinkingExperiment:
                 attention_mask=attention_mask,
                 pad_token_id=tokenizer.eos_token_id,
                 eos_token_id=tokenizer.eos_token_id,
-                use_cache=True,
+                use_cache=False,
                 return_dict_in_generate=True,
                 output_scores=False,
                 **default_config,
@@ -308,7 +356,8 @@ class OuroThinkingExperiment:
                 "generation_time": 0,
                 "generated_tokens": 0,
                 "input_tokens": input_ids.shape[1],
-                "ut_steps": ut_steps
+                "ut_steps": ut_steps,
+                "is_degenerate": False,
             }
 
         generation_time = time.perf_counter() - start_time
@@ -322,8 +371,11 @@ class OuroThinkingExperiment:
         full_response = template["force_start_text"] + " " + generated_text
         
         # Check for degenerate output
-        if self._detect_degenerate_output(full_response):
-            print(f"⚠️ Degenerate output detected for task {task_type}")
+        is_degenerate = self._detect_degenerate_output(full_response)
+        
+        if is_degenerate:
+            print(f"⚠️ GARBAGE OUTPUT detected for {task_type}")
+            print(f"   Response preview: {full_response[:200]}...")
             pred = "DEGENERATE"
         else:
             pred = self._extract_final_answer(full_response, task_type)
@@ -335,6 +387,7 @@ class OuroThinkingExperiment:
             "generated_tokens": generated_ids.shape[0],
             "input_tokens": input_ids.shape[1],
             "ut_steps": ut_steps,
+            "is_degenerate": is_degenerate,
         }
 
     @torch.no_grad()
@@ -433,7 +486,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         
         template = self.task_templates[task_type]
         
-        # Tokenize all user inputs
         user_encodings = self.tokenizer(
             prompts, 
             add_special_tokens=False,
@@ -481,7 +533,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                 eos_token_id=tokenizer.eos_token_id,
                 pad_token_id=tokenizer.pad_token_id,
                 do_sample=False,
-                repetition_penalty=1,
+                repetition_penalty=1.0,
                 max_batch_tokens=self.max_batch_size * self.max_new_tokens,
             )
         
@@ -504,7 +556,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         results = [None] * len(prompts)
         request_ids = list(batch_outputs.keys())
         
-        # Map outputs to prompts using input matching
+        # Map outputs to prompts
         if all(isinstance(rid, str) for rid in request_ids):
             input_to_index = {
                 " ".join(map(str, inp)): idx 
@@ -524,7 +576,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                             batch_time / len(prompts)
                         )
         
-        # Fill any missing results
+        # Fill missing results
         for i in range(len(prompts)):
             if results[i] is None:
                 results[i] = {
@@ -533,7 +585,8 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                     'generation_time': batch_time / len(prompts),
                     'generated_tokens': 0,
                     'input_tokens': input_lengths[i],
-                    'ut_steps': ut_steps
+                    'ut_steps': ut_steps,
+                    'is_degenerate': False,
                 }
         
         return results
@@ -549,7 +602,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         ut_steps: int,
         sample_time: float,
     ):
-        """Process single batch output"""
+        """Process single batch output with garbage detection"""
         if hasattr(output, "generated_tokens"):
             generated_ids = output.generated_tokens
         elif hasattr(output, "sequences") and len(output.sequences) > 0:
@@ -560,7 +613,14 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
         full_response = template["force_start_text"] + " " + generated_text
 
-        pred = self._extract_final_answer(full_response, task_type)
+        # Check for garbage output
+        is_degenerate = self._detect_degenerate_output(full_response)
+        
+        if is_degenerate:
+            print(f"⚠️ GARBAGE OUTPUT detected in batch for {task_type} (idx={prompt_idx})")
+            pred = "DEGENERATE"
+        else:
+            pred = self._extract_final_answer(full_response, task_type)
 
         return {
             "full_response": full_response,
@@ -570,6 +630,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
             "input_tokens": input_length,
             "ut_steps": ut_steps,
             "prompt_idx": prompt_idx,
+            "is_degenerate": is_degenerate,
         }
 
     def _sequential_fallback(
