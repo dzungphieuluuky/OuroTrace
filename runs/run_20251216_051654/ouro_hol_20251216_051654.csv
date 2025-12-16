@@ -1,0 +1,179 @@
+task_category,task_name,prompt,prediction,target,is_correct
+Reasoning Primitive,var_assign_depth_0_code," = 45
+e = 59
+d = 38
+z = 62
+r = 11
+print(z)
+Answer:...","62
+
+w = 67",62,False
+Reasoning Primitive,var_assign_depth_0_code," = 51
+b = 59
+h = 36
+j = 60
+x = 45
+print(h)
+Answer:...","36
+
+w = 67",36,False
+Reasoning Primitive,var_assign_depth_0_code," = 22
+q = 73
+r = 63
+n = 40
+l = 44
+print(l)
+Answer:...","44
+
+n = 44",44,False
+Reasoning Primitive,var_assign_depth_0_code," = 98
+d = 89
+h = 73
+g = 36
+t = 41
+print(j)
+Answer:...","36
+
+w = 67",29,False
+Reasoning Primitive,var_assign_depth_0_code," = 74
+z = 57
+u = 95
+w = 52
+n = 62
+print(n)
+Answer:...","62
+
+w = 52",62,False
+Reasoning Primitive,var_assign_depth_0_math,"h = 47. Let x = 50. Let b = 64. What is a?
+Answer:...","40
+
+Let a = 4",40,False
+Reasoning Primitive,var_assign_depth_0_math,"f = 41. Let t = 56. Let v = 86. What is l?
+Answer:...","66
+
+Let l = 6",29,False
+Reasoning Primitive,var_assign_depth_0_math,"u = 67. Let x = 44. Let l = 34. What is q?
+Answer:...","34
+
+Let x = 4",43,False
+Reasoning Primitive,var_assign_depth_0_math,"s = 22. Let j = 17. Let t = 78. What is t?
+Answer:...","78
+
+Let a = 5",78,False
+Reasoning Primitive,var_assign_depth_0_math,"s = 13. Let y = 32. Let r = 91. What is r?
+Answer:...","91
+
+Let a = 7",91,False
+Reasoning Primitive,var_assign_depth_0_equation,"76. g := 58. s := 44. i := 32. t := 84. t?
+Answer:...","44
+
+x := 12",84,False
+Reasoning Primitive,var_assign_depth_0_equation,"33. h := 94. l := 45. s := 55. k := 24. k?
+Answer:...","45. k?
+
+p :=",24,False
+Reasoning Primitive,var_assign_depth_0_equation," 64. p := 11. t := 21. w := 81. k := 6. h?
+Answer:...","81.
+
+s := 1",41,False
+Reasoning Primitive,var_assign_depth_0_equation," 37. x := 72. w := 65. p := 8. m := 12. t?
+Answer:...","12.
+
+t := 1",37,False
+Reasoning Primitive,var_assign_depth_0_equation,"= 19. e := 84. a := 8. o := 89. i := 9. q?
+Answer:...","9.
+
+q := 10",49,False
+Reasoning Primitive,var_assign_depth_1_code,"1
+x = 74
+z = p
+w = 73
+s = w
+c = x
+print(z)
+Answer:...","73
+
+x = 74",22,False
+Reasoning Primitive,var_assign_depth_1_code,"96
+s = d
+d = 4
+q = r
+r = 71
+f = d
+print(q)
+Answer:...","71
+
+x = 69",71,False
+Reasoning Primitive,var_assign_depth_1_code,"2
+l = p
+m = r
+p = 63
+e = 57
+c = e
+print(l)
+Answer:...","57
+
+x = 64",63,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+u = q
+f = 17
+q = 18
+z = q
+v = q
+print(z)
+Answer:...","92
+
+x = 96",18,False
+Reasoning Primitive,var_assign_depth_1_code,"
+
+y = 21
+o = e
+n = e
+e = 92
+i = e
+print(i)
+Answer:...","92
+
+j = 19",92,False
+Reasoning Primitive,var_assign_depth_1_math,"k = 45. Let e = 39. Let g = 58. What is q?
+Answer:...","58
+
+Let r = 3",39,False
+Reasoning Primitive,var_assign_depth_1_math,"t v = 42. Let y = l. Let p = r. What is s?
+Answer:...","31
+
+Let p = 3",90,False
+Reasoning Primitive,var_assign_depth_1_math," s = 25. Let i = n. Let n = 78. What is g?
+Answer:...","31
+
+Let g = 3",43,False
+Reasoning Primitive,var_assign_depth_1_math,"t e = 20. Let f = i. Let b = e. What is h?
+Answer:...","20
+
+Let a = 1",35,False
+Reasoning Primitive,var_assign_depth_1_math,"t v = 19. Let m = v. Let a = p. What is a?
+Answer:...","31
+
+Let a = 3",31,False
+Reasoning Primitive,var_assign_depth_1_equation,":= q. l := 55. a := q. e := q. f := 24. e?
+Answer:...","24. e?
+
+g.",37,False
+Reasoning Primitive,var_assign_depth_1_equation,"= o. x := o. o := 30. h := 73. e := 56. g?
+Answer:...","66.
+
+The code is:",30,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 66. g := 69. h := d. z := i. d := 42. x?
+Answer:...","42
+
+x? y? z",42,False
+Reasoning Primitive,var_assign_depth_1_equation,"= w. d := 18. w := 83. q := 67. r := d. i?
+Answer:...","83
+
+w. i?",18,False
+Reasoning Primitive,var_assign_depth_1_equation,"= 31. d := 39. s := g. z := g. l := 60. z?
+Answer:...","60.
+
+z?
+Answer",31,False
