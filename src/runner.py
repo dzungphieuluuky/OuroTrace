@@ -260,7 +260,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             )
                             task_results.append(result_entry)
                             all_results.append(result_entry)
-                            print(pd.DataFrame([result_entry])[['test_input', 'full_response']].to_string(index=False))
+                            print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                     
                     except Exception as e:
                         print(f"\n⚠️ Batch {batch_idx//batch_size + 1} failed: {e}")
@@ -279,7 +279,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 )
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']].to_string(index=False))
+                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
 
                             except Exception as e2:
                                 print(f"⚠️ Item failed: {e2}")
@@ -296,7 +296,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 )
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']].to_string(index=False))
+                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
             
             else:
                 # SEQUENTIAL PROCESSING
@@ -316,7 +316,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         )
                         task_results.append(result_entry)
                         all_results.append(result_entry)
-                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']].to_string(index=False))
+                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
 
                     except Exception as e:
                         print(f"⚠️ Item failed: {e}")
@@ -333,7 +333,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         )
                         task_results.append(result_entry)
                         all_results.append(result_entry)
-                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']].to_string(index=False))
+                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
 
             # Log and display task summary
             _log_task_summary(
