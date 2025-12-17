@@ -263,7 +263,7 @@ class SafeOuroThinkingExperiment:
                     "You are a step-by-step calculator. Add numbers from left to right, showing each step. "
                     "For each number, show the running sum. After all steps, output the final answer on a new line as [FINAL] <number>."
                 ),
-                "example_user": "487 + 13 + 259 + 731 + 42 =",
+                "example_user": "<BEGIN OF EXAMPLE>487 + 13 + 259 + 731 + 42 =",
                 "example_asst": (
                     "[STEP 1] Start with 487.\n"
                     "[STEP 2] Add 13: 487 + 13 = 500.\n"
@@ -271,6 +271,7 @@ class SafeOuroThinkingExperiment:
                     "[STEP 4] Add 731: 759 + 731 = 1490.\n"
                     "[STEP 5] Add 42: 1490 + 42 = 1532.\n"
                     "[FINAL] 1532"
+                    "---<END OF EXAMPLE>---"
                 ),
                 "force_start": "\n[STEP 1]",
             },
@@ -280,13 +281,14 @@ class SafeOuroThinkingExperiment:
                     "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for N hops. "
                     "At each step, state the current token and the next token. After all hops, output the final token as [FINAL] <token>."
                 ),
-                "example_user": "Sequence: D B A C D C B A D B C A. Start: C. Hop 4 times.",
+                "example_user": "<BEGIN OF EXAMPLE>Sequence: D B A C D C B A D B C A. Start: C. Hop 4 times.",
                 "example_asst": (
                     "[STEP 1] Start at C. Next token is D.\n"
                     "[STEP 2] Move to D. Next token is B.\n"
                     "[STEP 3] Move to B. Next token is A.\n"
                     "[STEP 4] Move to A. Next token is D.\n"
                     "[FINAL] D"
+                    "---<END OF EXAMPLE>---"
                 ),
                 "force_start": "\n[STEP 1]",
             },
@@ -296,12 +298,13 @@ class SafeOuroThinkingExperiment:
                     "You are a symbolic equation solver. Solve each assignment step by step, showing variable values after each step. "
                     "All calculations are modulo 7. After all steps, output the final answer as [FINAL] <number>."
                 ),
-                "example_user": "Question. K#M := F#N + 3. F#N := 2. J#P := K#M + F#N. J#P?",
+                "example_user": "<BEGIN OF EXAMPLE>Question. K#M := F#N + 3. F#N := 2. J#P := K#M + F#N. J#P?",
                 "example_asst": (
                     "[STEP 1] F#N = 2.\n"
                     "[STEP 2] K#M = F#N + 3 = 2 + 3 = 5.\n"
                     "[STEP 3] J#P = K#M + F#N = 5 + 2 = 7 ≡ 0 (mod 7).\n"
                     "[FINAL] 0"
+                    "---<END OF EXAMPLE>---"
                 ),
                 "force_start": "\n[STEP 1]",
             }
@@ -312,8 +315,8 @@ class SafeOuroThinkingExperiment:
         for task_type, config in task_configs.items():
             static_messages = [
                 {"role": "system", "content": config["system"]},
-                {"role": "user", "content": config["example_user"]},
-                {"role": "assistant", "content": config["example_asst"]}
+                {"role": "user", "content": "<BEGIN OF EXAMPLE>\n" + config["example_user"]},
+                {"role": "assistant", "content": config["example_asst"] + "\n<END OF EXAMPLE>"},
             ]
 
             static_prompt_text = tokenizer.apply_chat_template(
