@@ -13,8 +13,8 @@ from .data_generator import (
     create_perplexity_data, 
     load_and_preprocess_data
 )
-from .safe_model import OuroBatchExperiment
-# from .model import OuroBatchExperiment
+from .safe_model import SafeOuroBatchExperiment, SafeOuroThinkingExperiment
+from .model import OuroBatchExperiment, OuroThinkingExperiment
 from .evaluation import run_holistic_evaluation
 
 
@@ -81,7 +81,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"{'='*70}\n")
 
     # 3. Setup Experiment Handler
-    experiment = OuroBatchExperiment(
+    experiment = SafeOuroBatchExperiment(
         model_path,
         dtype=config["MODEL"].get("dtype", torch.float16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
@@ -262,6 +262,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             task_results.append(result_entry)
                             all_results.append(result_entry)
                             print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                            experiment.monitor_and_maybe_abort(result_entry, task_type)
                     
                     except Exception as e:
                         print(f"\n⚠️ Batch {batch_idx//batch_size + 1} failed: {e}")
@@ -281,7 +282,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
                                 print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-
+                                experiment.monitor_and_maybe_abort(result_entry, task_type)
                             except Exception as e2:
                                 print(f"⚠️ Item failed: {e2}")
                                 error_result = {
@@ -298,7 +299,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
                                 print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-            
+                                experiment.monitor_and_maybe_abort(result_entry, task_type)
             else:
                 # SEQUENTIAL PROCESSING
                 print(f"Processing {len(items)} items sequentially...")
@@ -318,7 +319,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         task_results.append(result_entry)
                         all_results.append(result_entry)
                         print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-
+                        experiment.monitor_and_maybe_abort(result_entry, task_type)
                     except Exception as e:
                         print(f"⚠️ Item failed: {e}")
                         error_result = {
@@ -335,7 +336,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         task_results.append(result_entry)
                         all_results.append(result_entry)
                         print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-
+                        experiment.monitor_and_maybe_abort(result_entry, task_type)
             # Log and display task summary
             _log_task_summary(
                 task_results, task_type, ut_steps, task_start_time, use_wandb

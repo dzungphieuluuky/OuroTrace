@@ -10,7 +10,7 @@ from transformers import (
     GenerationConfig,
 )
 from tqdm.auto import tqdm
-
+from .output_monitor import OutputQualityMonitor
 
 class SafeOptimizations:
     """Safe optimization methods that don't contaminate model state"""
@@ -82,7 +82,7 @@ class SafeOptimizations:
         print("   ✓ Warmup complete")
 
 
-class OuroThinkingExperiment:
+class SafeOuroThinkingExperiment:
     """Core experiment class for Ouro model testing"""
 
     def __init__(
@@ -99,6 +99,26 @@ class OuroThinkingExperiment:
         self.use_torch_compile = use_torch_compile
         self.tokenizer = None
         self.task_templates = {}
+        self.quality_monitor = None
+
+    def initialize_quality_monitor(
+        self,
+        garbage_threshold: float = 0.3,
+        example_similarity_threshold: float = 0.85,
+        min_samples: int = 10,
+        window_size: int = 20
+    ):
+        """Initialize output quality monitoring"""
+        self.quality_monitor = OutputQualityMonitor(
+            garbage_threshold=garbage_threshold,
+            example_similarity_threshold=example_similarity_threshold,
+            min_samples_before_check=min_samples,
+            window_size=window_size
+        )
+        print(f"[+] Quality monitor initialized:")
+        print(f"    → Garbage threshold: {garbage_threshold*100:.0f}%")
+        print(f"    → Example similarity threshold: {example_similarity_threshold*100:.0f}%")
+        print(f"    → Min samples before check: {min_samples}")
 
     def load_model_with_ut_steps(self, total_ut_steps: int):
         """Load model with specific UT steps configuration and apply safe optimizations"""
@@ -234,7 +254,7 @@ class OuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-        """Pre-compute prompt templates with step-by-step reasoning guidance and more varied examples"""
+        """Pre-compute prompt templates with step-by-step reasoning guidance and varied examples"""
         self.tokenizer = tokenizer
 
         task_configs = {
@@ -243,7 +263,6 @@ class OuroThinkingExperiment:
                     "You are a step-by-step calculator. Add numbers from left to right, showing each step. "
                     "For each number, show the running sum. After all steps, output the final answer on a new line as [FINAL] <number>."
                 ),
-                # Random, non-trivial numbers
                 "example_user": "487 + 13 + 259 + 731 + 42 =",
                 "example_asst": (
                     "[STEP 1] Start with 487.\n"
@@ -261,7 +280,6 @@ class OuroThinkingExperiment:
                     "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for N hops. "
                     "At each step, state the current token and the next token. After all hops, output the final token as [FINAL] <token>."
                 ),
-                # Chaotic sequence using only A, B, C, D
                 "example_user": "Sequence: D B A C D C B A D B C A. Start: C. Hop 4 times.",
                 "example_asst": (
                     "[STEP 1] Start at C. Next token is D.\n"
@@ -278,7 +296,6 @@ class OuroThinkingExperiment:
                     "You are a symbolic equation solver. Solve each assignment step by step, showing variable values after each step. "
                     "All calculations are modulo 7. After all steps, output the final answer as [FINAL] <number>."
                 ),
-                # Shuffled equations, not in dependency order
                 "example_user": "Question. K#M := F#N + 3. F#N := 2. J#P := K#M + F#N. J#P?",
                 "example_asst": (
                     "[STEP 1] F#N = 2.\n"
@@ -317,11 +334,16 @@ class OuroThinkingExperiment:
                 "static_input_ids": static_inputs.input_ids,
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
-                "force_start_text": config["force_start"]
+                "force_start_text": config["force_start"],
+                "example_response": config["example_asst"]  # Store for monitoring
             }
+            
+            # Register example responses with quality monitor
+            if self.quality_monitor:
+                self.quality_monitor.set_example_response(task_type, config["example_asst"])
 
-        print("[+] Task templates pre-computed (step-by-step reasoning, varied examples, p_hop uses only A-D).")
-    
+        print("[+] Task templates pre-computed (step-by-step reasoning, varied examples).")
+
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
@@ -331,10 +353,9 @@ class OuroThinkingExperiment:
             
             if task_type == "p_hop":
                 patterns = [
-                    r'Answer:\s*([A-Z])\b',
-                    r'\[FINAL\]\s*([A-Z])\b',
-                    r'Final:\s*([A-Z])\b',
-                    r'\b([A-Z])\s*$',
+                    r'\[FINAL\]\s*([A-D])\b',
+                    r'Final:\s*([A-D])\b',
+                    r'\b([A-D])\s*$',
                 ]
                 
                 for pattern in patterns:
@@ -347,10 +368,8 @@ class OuroThinkingExperiment:
             
             else:
                 patterns = [
-                    r'Answer:\s*(-?\d+)',
                     r'\[FINAL\]\s*(-?\d+)',
                     r'Final:\s*(-?\d+)',
-                    r'⇒\s*(-?\d+)\s*\.',
                     r'=\s*(-?\d+)\s*$',
                     r'\b(-?\d+)\s*$',
                 ]
@@ -409,14 +428,14 @@ class OuroThinkingExperiment:
     def _get_optimal_generation_config(self, task_type: str) -> Dict:
         """Get optimized generation parameters for task type"""
         task_token_limits = {
-            "n_ary": 128,
-            "p_hop": 128,
-            "igsm": 256,
+            "n_ary": 256,   # Need steps
+            "p_hop": 256,   # Need steps
+            "igsm": 512,    # Need reasoning steps
         }
         
         return {
-            "max_new_tokens": task_token_limits.get(task_type, 128),
-            "min_new_tokens": 3,
+            "max_new_tokens": task_token_limits.get(task_type, 256),
+            "min_new_tokens": 10,
             "do_sample": False,
             "num_beams": 1,
             "repetition_penalty": 1.0,
@@ -445,6 +464,7 @@ class OuroThinkingExperiment:
                 "input_tokens": 0,
                 "ut_steps": ut_steps,
                 "is_degenerate": False,
+                "test_input": user_input,
             }
 
         if not hasattr(self, "task_templates") or task_type not in self.task_templates:
@@ -496,6 +516,7 @@ class OuroThinkingExperiment:
                 "input_tokens": input_ids.shape[1],
                 "ut_steps": ut_steps,
                 "is_degenerate": False,
+                "test_input": user_input,
             }
 
         generation_time = time.perf_counter() - start_time
@@ -523,6 +544,7 @@ class OuroThinkingExperiment:
             "input_tokens": input_ids.shape[1],
             "ut_steps": ut_steps,
             "is_degenerate": is_degenerate,
+            "test_input": user_input,
         }
 
     @torch.no_grad()
@@ -566,37 +588,53 @@ class OuroThinkingExperiment:
             input_slice = input_ids[:, i:end_loc]
             target_slice = input_slice.clone()
 
-            if i > 0:
-                context_len = input_slice.size(1) - stride
-                if context_len > 0:
-                    target_slice[:, :context_len] = -100
-
-            if (target_slice != -100).sum() == 0:
+            if input_slice.size(1) < 2:
                 continue
 
-            outputs = model(
-                input_ids=input_slice,
-                attention_mask=attention_mask[:, i:end_loc],
-                labels=target_slice,
-            )
-
-            if torch.isnan(outputs.loss):
-                continue
-
-            num_valid = (target_slice != -100).sum().item()
-            total_loss += (outputs.loss * num_valid).item()
-            total_tokens += num_valid
+            with torch.no_grad():
+                outputs = model(
+                    input_ids=input_slice,
+                    attention_mask=attention_mask[:, i:end_loc],
+                    labels=target_slice,
+                )
+                loss = outputs.loss
+                num_tokens = input_slice.size(1) - 1  # exclude BOS
+                total_loss += loss.item() * num_tokens
+                total_tokens += num_tokens
 
         if total_tokens == 0:
             return float("nan"), float("nan")
 
         avg_loss = total_loss / total_tokens
         perplexity = torch.exp(torch.tensor(avg_loss)).item()
+        return avg_loss, perplexity
 
-        return perplexity, avg_loss
+    def monitor_and_maybe_abort(self, result: Dict[str, Any], task_type: str):
+        """
+        Add result to quality monitor and check for experiment failure.
+        If failure is detected, log details and raise SystemExit.
+        """
+        if self.quality_monitor is None:
+            return
 
+        self.quality_monitor.add_result(result, task_type)
+        failure = self.quality_monitor.check_failure_conditions()
+        if failure:
+            print("\n" + "="*60)
+            print("❌ EXPERIMENT TERMINATED DUE TO OUTPUT QUALITY FAILURE")
+            print(f"Reason: {failure.reason}")
+            print("Details:")
+            for k, v in failure.failure_stats.items():
+                if isinstance(v, list):
+                    print(f"  {k}:")
+                    for idx, item in enumerate(v, 1):
+                        print(f"    [{idx}] {item}")
+                else:
+                    print(f"  {k}: {v}")
+            print("="*60 + "\n")
+            raise SystemExit(f"Experiment failed: {failure.reason}")
 
-class OuroBatchExperiment(OuroThinkingExperiment):
+class SafeOuroBatchExperiment(SafeOuroThinkingExperiment):
     """Extended experiment class with batch processing"""
 
     def __init__(
