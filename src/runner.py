@@ -329,6 +329,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         )
                         task_results.append(result_entry)
                         all_results.append(result_entry)
+                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']].to_string(index=False))
 
             # Log and display task summary
             _log_task_summary(
