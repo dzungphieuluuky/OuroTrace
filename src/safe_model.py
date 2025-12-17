@@ -91,6 +91,7 @@ class SafeOuroThinkingExperiment:
         dtype=torch.bfloat16,
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
+        k_repeat_abort: int = 5,
     ):
         torch.cuda.empty_cache()
         self.model_path = model_path
@@ -100,7 +101,24 @@ class SafeOuroThinkingExperiment:
         self.tokenizer = None
         self.task_templates = {}
         self.quality_monitor = None
+        self.last_k_outputs = []
+        self.k_repeat_abort = k_repeat_abort
 
+    def check_repeated_outputs_and_abort(self, output: str):
+        """Abort if the same output is generated for k consecutive inputs."""
+        self.last_k_outputs.append(output)
+        if len(self.last_k_outputs) > self.k_repeat_abort:
+            self.last_k_outputs.pop(0)
+        if (
+            len(self.last_k_outputs) == self.k_repeat_abort
+            and all(o == self.last_k_outputs[0] for o in self.last_k_outputs)
+        ):
+            print("\n" + "="*60)
+            print(f"❌ EXPERIMENT TERMINATED: Model generated the same output {self.k_repeat_abort} times in a row.")
+            print(f"Repeated output:\n{self.last_k_outputs[0]}")
+            print("="*60 + "\n")
+            raise SystemExit(f"Experiment failed: {self.k_repeat_abort} repeated outputs")
+    
     def initialize_quality_monitor(
         self,
         garbage_threshold: float = 0.3,
@@ -494,7 +512,7 @@ class SafeOuroThinkingExperiment:
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
         full_response = template["force_start_text"] + " " + generated_text
-        
+        self.check_repeated_outputs_and_abort(full_response)
         is_degenerate = self._detect_degenerate_output(full_response)
         
         if is_degenerate:
@@ -750,7 +768,7 @@ class SafeOuroBatchExperiment(SafeOuroThinkingExperiment):
 
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
         full_response = template["force_start_text"] + " " + generated_text
-
+        self.check_repeated_outputs_and_abort(full_response)
         is_degenerate = self._detect_degenerate_output(full_response)
         
         if is_degenerate:
