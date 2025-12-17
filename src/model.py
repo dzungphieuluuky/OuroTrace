@@ -92,11 +92,7 @@ class OuroThinkingExperiment:
 
         if auto_compile:
             print("→ Applying torch.compile()")
-            model = torch.compile(
-                model, 
-                mode="reduce-overhead",
-                fullgraph=False
-            )
+            model = torch.compile(model)
 
         model.eval()
         
