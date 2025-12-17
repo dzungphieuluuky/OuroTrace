@@ -272,30 +272,37 @@ class SafeOuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-        """Pre-compute prompt templates for zero-shot prompting (no examples)"""
+        """Pre-compute prompt templates for zero-shot prompting (no examples), using curly brackets for step variables."""
         self.tokenizer = tokenizer
 
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a step-by-step calculator. Start with {current_sum} = 0. At step {i}, you output \n[STEP {i}] {current_sum} + {next_number} = {new_sum}. "
+                    "You are a step-by-step calculator. The current sum starts at 0. "
+                    "At each step i, output the calculation in the form: {current_sum} + {current_number} = {next_sum}. "
                     "After all steps, output the final answer on a new line as [FINAL] {final_sum}."
                 ),
                 "force_start": "\n[STEP 1]",
+                "user_template": "{} ="
             },
             "p_hop": {
                 "system": (
                     "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for {N} hops. "
-                    "At each step, state the {current_token} -> {next_token}. After all hops, output the final token as [FINAL] {final_token}."
+                    "You start at step 1 from the start token."
+                    "At each step {i}, output the transition in the form: {current_token} -> {next_token}. "
+                    "After all hops, when step {i} == {N}, output the final token as [FINAL] {final_token}."
                 ),
                 "force_start": "\n[STEP 1]",
+                "user_template": "{}"
             },
             "igsm": {
                 "system": (
-                    "You are a symbolic equation solver. Solve each assignment step by step, at each step, you should ouput {current_equation}. "
-                    "All calculations are modulo 7. After all steps, output the final answer as [FINAL] {final_answer}."
+                    "You are a symbolic equation solver. Solve each assignment step by step. "
+                    "At each step {i}, output the assignment in the form: {var_i} = {expression_i} = {value_i} (mod 7). "
+                    "After all steps, output the final answer as [FINAL] {final_value}."
                 ),
                 "force_start": "\n[STEP 1]",
+                "user_template": "{}"
             }
         }
 
@@ -326,10 +333,11 @@ class SafeOuroThinkingExperiment:
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
                 "force_start_text": config["force_start"],
+                "user_template": config.get("user_template", "{}"),
                 "example_response": None  # No example for zero-shot
             }
 
-        print("[+] Task templates pre-computed (zero-shot mode, no examples).")
+        print("[+] Task templates pre-computed (zero-shot, curly bracket step variables).")    
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
