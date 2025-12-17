@@ -197,10 +197,10 @@ class SafeOuroThinkingExperiment:
             print(f"🚀 APPLYING SAFE OPTIMIZATIONS (UT > 1)")
             print(f"{'─'*60}")
             
-            try:
-                SafeOptimizations.enable_static_cache(model)
-            except Exception as e:
-                print(f"   ⚠️ Static cache failed: {e}")
+            # try:
+            #     SafeOptimizations.enable_static_cache(model)
+            # except Exception as e:
+            #     print(f"   ⚠️ Static cache failed: {e}")
             
             try:
                 model = SafeOptimizations.optimize_attention_backend(model)

@@ -322,11 +322,11 @@ def apply_all_safe_optimizations(
     }
     
     # 1. Enable static cache
-    try:
-        SafeOptimizationMixin.enable_static_cache(model, max_seq_length=2048)
-        optimization_results["static_cache"] = True
-    except Exception as e:
-        print(f"⚠️ Static cache failed: {e}")
+    # try:
+    #     SafeOptimizationMixin.enable_static_cache(model, max_seq_length=2048)
+    #     optimization_results["static_cache"] = True
+    # except Exception as e:
+    #     print(f"⚠️ Static cache failed: {e}")
     
     # 2. Optimize attention backend
     try:
