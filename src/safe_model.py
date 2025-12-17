@@ -278,22 +278,22 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a step-by-step calculator. Add numbers from left to right, showing each step. "
-                    "For each number, show the running sum. After all steps, output the final answer on a new line as [FINAL] <number>."
+                    "You are a step-by-step calculator. Start with {current_sum} = 0. At step {i}, you output \n[STEP {i}] {current_sum} + {next_number} = {new_sum}. "
+                    "After all steps, output the final answer on a new line as [FINAL] {final_sum}."
                 ),
                 "force_start": "\n[STEP 1]",
             },
             "p_hop": {
                 "system": (
-                    "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for N hops. "
-                    "At each step, state the current token and the next token. After all hops, output the final token as [FINAL] <token>."
+                    "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for {N} hops. "
+                    "At each step, state the {current_token} -> {next_token}. After all hops, output the final token as [FINAL] {final_token}."
                 ),
                 "force_start": "\n[STEP 1]",
             },
             "igsm": {
                 "system": (
-                    "You are a symbolic equation solver. Solve each assignment step by step, showing variable values after each step. "
-                    "All calculations are modulo 7. After all steps, output the final answer as [FINAL] <number>."
+                    "You are a symbolic equation solver. Solve each assignment step by step, at each step, you should ouput {current_equation}. "
+                    "All calculations are modulo 7. After all steps, output the final answer as [FINAL] {final_answer}."
                 ),
                 "force_start": "\n[STEP 1]",
             }
