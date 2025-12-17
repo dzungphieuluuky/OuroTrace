@@ -539,14 +539,14 @@ def _display_sample_results(results: List[Dict[str, Any]], task_type: str, num_s
     print(f"{'─'*70}")
     
     df_sample = pd.DataFrame(results).head(num_samples)
-    display_cols = ['test_input', 'full_response', 'prediction', 'expected_answer', 'is_correct']
+    display_cols = ['test_input', 'full_response', 'generated_tokens', 'is_correct']
     
     # Add degenerate flag if present
     if 'is_degenerate' in df_sample.columns:
         display_cols.append('is_degenerate')
     
     # Truncate long text for display
-    for col in ['test_input', 'full_response', 'expected_answer', 'prediction']:
+    for col in ['test_input', 'full_response', 'generated_tokens']:
         if col in df_sample.columns:
             df_sample[col] = df_sample[col].astype(str).str[:60]
     
