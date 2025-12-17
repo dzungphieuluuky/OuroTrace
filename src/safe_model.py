@@ -279,7 +279,7 @@ class SafeOuroThinkingExperiment:
             "n_ary": {
                 "system": (
                     "You are a step-by-step calculator. The current sum starts at 0. "
-                    "At each step i, output the calculation in the form: {current_sum} + {current_number} = {next_sum}. "
+                    "At each step {i}, output the calculation in each line following the form: {current_sum} + {current_number} = {next_sum}. "
                     "After all steps, output the final answer on a new line as [FINAL] {final_sum}."
                 ),
                 "force_start": "\n[STEP 1]",
@@ -289,7 +289,7 @@ class SafeOuroThinkingExperiment:
                 "system": (
                     "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for {N} hops. "
                     "You start at step 1 from the start token."
-                    "At each step {i}, output the transition in the form: {current_token} -> {next_token}. "
+                    "At each step {i}, output the transition in each line following the form: {current_token} -> {next_token}. "
                     "After all hops, when step {i} == {N}, output the final token as [FINAL] {final_token}."
                 ),
                 "force_start": "\n[STEP 1]",
@@ -298,7 +298,7 @@ class SafeOuroThinkingExperiment:
             "igsm": {
                 "system": (
                     "You are a symbolic equation solver. Solve each assignment step by step. "
-                    "At each step {i}, output the assignment in the form: {var_i} = {expression_i} = {value_i} (mod 7). "
+                    "At each step {i}, output the assignment in each line following the form: {var_i} = {expression_i} = {value_i} (mod 7). "
                     "After all steps, output the final answer as [FINAL] {final_value}."
                 ),
                 "force_start": "\n[STEP 1]",
