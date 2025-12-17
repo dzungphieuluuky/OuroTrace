@@ -118,122 +118,77 @@ class OuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-        """
-        Pre-compute prompt templates with step-by-step reasoning requirements.
-        
-        DESIGN NOTES:
-        - All tasks require explicit intermediate steps
-        - Strict formatting with flexible content (prevent example overfitting)
-        - N-ary: Show each addition step
-        - P-hop: Show each hop transition
-        - i-GSM: Show variable substitution and evaluation steps
-        """
-        self.tokenizer = tokenizer
-        
-        task_configs = {
-            # 1. N-ARY ADDITION - Show cumulative sum at each step
-            "n_ary": {
-                "system": (
-                    "You are a step-by-step calculator. For addition problems:\n"
-                    "1. Start with the first number as your running total\n"
-                    "2. For each subsequent number, show: [previous total] + [next number] = [new total]\n"
-                    "3. Continue until all numbers are added\n"
-                    "4. End with 'Final Answer: [result]'\n"
-                    "Use clear step labels (Step 1, Step 2, etc.)."
-                ),
-                "example_user": "123 + 456 + 789 =",
-                "example_asst": (
-                    "Step 1: Start with 123\n"
-                    "Step 2: 123 + 456 = 579\n"
-                    "Step 3: 579 + 789 = 1368\n"
-                    "Final Answer: 1368"
-                ),
-                "force_start": "Step 1:", 
-            },
+            """
+            Pre-compute prompt templates for faster inference.
+            UPDATED: Refined Few-Shot examples to prevent babbling (added Step Prefixes and Guardrails).
+            """
+            self.tokenizer = tokenizer
             
-            # 2. P-HOP INDUCTION - Show each hop explicitly
-            "p_hop": {
-                "system": (
-                    "You are a sequence tracer. To find the result after N hops:\n"
-                    "1. Identify the starting token in the sequence\n"
-                    "2. For each hop, show: Hop [number]: At [current token] → Next is [next token]\n"
-                    "3. After all hops, state 'Final Answer: [final token]'\n"
-                    "Always show your current position and next move."
-                ),
-                "example_user": "Sequence: X Y Z X Y. Start: X. Hop 2 times.",
-                "example_asst": (
-                    "Starting position: X (index 0)\n"
-                    "Hop 1: At X → Next is Y\n"
-                    "Hop 2: At Y → Next is Z\n"
-                    "Final Answer: Z"
-                ),
-                "force_start": "Starting position:", 
-            },
-            
-            # 3. SYMBOLIC i-GSM - Show variable evaluation with substitution
-            "igsm": {
-                "system": (
-                    "You are an equation solver working modulo 7. For each assignment:\n"
-                    "1. Show the variable being assigned\n"
-                    "2. If it references other variables, show substitution: VAR := expression [substitute values] = raw_result\n"
-                    "3. Then show modulo 7: raw_result mod 7 = final_value\n"
-                    "4. Track all variable values\n"
-                    "5. For the final query, show full calculation then 'Final Answer: [result]'\n"
-                    "Format each step clearly with the variable name."
-                ),
-                "example_user": "Question. A#X := 3. B#Y := A#X. C#Z := B#Y + A#X. C#Z?",
-                "example_asst": (
-                    "Step 1: A#X := 3\n"
-                    "  3 mod 7 = 3\n"
-                    "  A#X = 3\n\n"
-                    "Step 2: B#Y := A#X\n"
-                    "  Substitute: B#Y := 3\n"
-                    "  3 mod 7 = 3\n"
-                    "  B#Y = 3\n\n"
-                    "Step 3: C#Z := B#Y + A#X\n"
-                    "  Substitute: C#Z := 3 + 3 = 6\n"
-                    "  6 mod 7 = 6\n"
-                    "  C#Z = 6\n\n"
-                    "Query: C#Z?\n"
-                    "  C#Z = 6\n"
-                    "Final Answer: 6"
-                ),
-                "force_start": "Step 1:", 
+            task_configs = {
+                # 1. N-ARY ADDITION (TÍCH HỢP STEP PREFIX VÀ GUARDRAILS)
+                "n_ary": {
+                    # Thêm từ khóa kiểm soát: MUST, DO NOT
+                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
+                    "example_user": "10 + 20 + 30 =",
+                    # Thêm [STEP X] và [FINAL]
+                    "example_asst": "[STEP 1] Sum: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Sum: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Sum: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
+                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
+                    "force_start": "\n[STEP 1]", 
+                    "input_prefix": "" 
+                },
+                
+                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
+                "p_hop": {
+                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
+                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
+                    "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
+                    # Rút gọn ví dụ: dùng [TRACE]
+                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
+                    "force_start": "\n[TRACE] Start at", 
+                    "input_prefix": "" 
+                },
+                
+                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
+                "igsm": {
+                    # Tăng cường Guardrail
+                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
+                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
+                    # Thêm [EQ X] cho từng bước và [FINAL]
+                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
+                    "force_start": "\n[EQ 1]", 
+                    "input_prefix": "" 
+                }
             }
-        }
-        
-        self.task_templates = {}
-        
-        for task_type, config in task_configs.items():
-            static_messages = [
-                {"role": "system", "content": config["system"]},
-                {"role": "user", "content": config["example_user"]},
-                {"role": "assistant", "content": config["example_asst"]}
-            ]
             
-            static_prompt_text = tokenizer.apply_chat_template(
-                static_messages, 
-                tokenize=False, 
-                add_generation_prompt=True
-            )
-            static_prompt_text = static_prompt_text.rstrip()
-            static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+            for task_type, config in task_configs.items():
+                # 1. Build static context (Unchanged logic)
+                static_messages = [
+                    {"role": "system", "content": config["system"]},
+                    {"role": "user", "content": config["example_user"]},
+                    {"role": "assistant", "content": config["example_asst"]}
+                ]
+                
+                static_prompt_text = tokenizer.apply_chat_template(
+                    static_messages, tokenize=False, add_generation_prompt=True
+                )
+                static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+                
+                # 2. Tokenize Force Start (Unchanged logic)
+                force_start_tokens = tokenizer(
+                    config["force_start"], 
+                    return_tensors="pt", 
+                    add_special_tokens=False
+                )
+                
+                self.task_templates[task_type] = {
+                    "static_input_ids": static_inputs.input_ids,
+                    "static_attention_mask": static_inputs.attention_mask,
+                    "force_start_ids": force_start_tokens.input_ids,
+                    "input_prefix": config["input_prefix"],
+                    "force_start_text": config["force_start"]
+                }
             
-            force_text = config["force_start"].strip()
-            force_start_tokens = tokenizer(
-                force_text, 
-                return_tensors="pt", 
-                add_special_tokens=False
-            )
-            
-            self.task_templates[task_type] = {
-                "static_input_ids": static_inputs.input_ids,
-                "static_attention_mask": static_inputs.attention_mask,
-                "force_start_ids": force_start_tokens.input_ids,
-                "force_start_text": config["force_start"]
-            }
-        
-        print("[+] Task templates pre-computed (step-by-step reasoning mode).")
+            print("[+] Task templates pre-computed (Corrected with Step Prefixes and Guardrails)")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
