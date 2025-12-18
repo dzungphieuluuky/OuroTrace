@@ -131,7 +131,7 @@ class SafeOuroThinkingExperiment:
             self.model_path,
             config=base_config,
             device_map="cuda",
-            attn_implementation="sdpa_paged",
+            attn_implementation="flash_attention_2",
             torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
             quantization_config=quantization_config,
@@ -165,7 +165,6 @@ class SafeOuroThinkingExperiment:
             model, tokenizer, total_ut_steps
         )
         model = opt_result["model"]
-        tokenizer = opt_result.get("tokenizer", tokenizer)
 
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
