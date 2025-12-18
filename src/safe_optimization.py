@@ -343,11 +343,11 @@ def apply_all_safe_optimizations(
         print(f"⚠️ Inference optimization failed: {e}")
     
     # 4. Setup mixed precision
-    try:
-        dtype = SafeOptimizationMixin.setup_mixed_precision(torch.bfloat16)
-        optimization_results["mixed_precision"] = True
-    except Exception as e:
-        print(f"⚠️ Mixed precision setup failed: {e}")
+    # try:
+    #     dtype = SafeOptimizationMixin.setup_mixed_precision(torch.bfloat16)
+    #     optimization_results["mixed_precision"] = True
+    # except Exception as e:
+    #     print(f"⚠️ Mixed precision setup failed: {e}")
     
     # 5. Optimize memory allocation
     try:
