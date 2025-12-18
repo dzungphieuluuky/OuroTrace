@@ -161,14 +161,13 @@ class SafeOuroThinkingExperiment:
         print(f"{'='*60}\n")
         
         # APPLY SAFE OPTIMIZATIONS (especially important for UT > 1)
-        print(f"\n→ Applying safe optimizations (safe for all UT steps)...")
         opt_result = apply_all_safe_optimizations(
             model, tokenizer, total_ut_steps
         )
         model = opt_result["model"]
         tokenizer = opt_result.get("tokenizer", tokenizer)
         print(f"Optimization results: {pd.DataFrame(opt_result['optimization_results'])}")
-        
+
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
             "early_exit_threshold": base_config.early_exit_threshold,
