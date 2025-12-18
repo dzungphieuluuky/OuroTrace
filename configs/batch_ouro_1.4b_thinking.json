@@ -16,9 +16,9 @@
     "WANDB": {
         "enabled": true,
         "project": "ouro-1.4b-thinking",
-        "run_name": "auto_timestamp",
+        "run_name": "",
         "entity": null,
-        "mode": "offline"
+        "mode": "online"
     },
     "DATA": {
         "load_existing": false,
@@ -36,7 +36,7 @@
         }
     },
     "OPTIMIZATION": {
-        "enable_batch": false,
+        "enable_batch": true,
         "max_batch_size": 8,
         "max_new_tokens": 512
     },

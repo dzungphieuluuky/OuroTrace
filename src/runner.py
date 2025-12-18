@@ -42,7 +42,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
 
         try:
             run = wandb.init(
-                project=wb_conf.get("project", "ouro-looped-transformer"),
+                project=wb_conf.get("project", "ouro-trace"),
                 entity=wb_conf.get("entity", None),
                 name=wb_conf.get("run_name", f"run_{int(time.time())}"),
                 config=config,
@@ -83,7 +83,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     # 3. Setup Experiment Handler
     experiment = SafeOuroBatchExperiment(
         model_path,
-        dtype=config["MODEL"].get("dtype", torch.float16),
+        dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
         use_torch_compile=config["MODEL"].get("use_torch_compile", False),
         max_batch_size=optimization_config.get("max_batch_size", 4),
@@ -133,7 +133,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
         # AUTO-OPTIMIZATION: Determine if batching should be enabled
-        enable_batch = (ut_steps == 1)
+        enable_batch = (ut_steps == 1) and optimization_config.get("enable_batch", True)
         
         print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
         print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
