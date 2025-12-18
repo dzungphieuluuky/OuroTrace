@@ -349,7 +349,7 @@ class SafeOuroThinkingExperiment:
             "repetition_penalty": 1.0,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def predict(
         self,
         user_inputs: Union[str, List[str]],
@@ -526,7 +526,7 @@ class SafeOuroThinkingExperiment:
             "test_input": user_input,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def calculate_perplexity(
         self,
         model,
