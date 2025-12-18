@@ -294,25 +294,34 @@ class SafeOuroThinkingExperiment:
                 "force_start": "\nStep 1:",
             },
             "p_hop": {
+                # Data format: "Sequence: A D C B... Start: A. Hop 16 times."
                 "system": (
-                    "You are a sequence tracer. You will be given a sequence of tokens and a starting point. "
-                    "Your goal is to move through the sequence step-by-step for the specified number of hops. "
-                    "If you reach the end of the sequence, wrap around to the beginning (circular sequence).\n\n"
-                    "For each hop, output exactly: 'Hop {X}: At {current_token} -> Next is {next_token}'.\n"
-                    "After completing all hops, provide the final token as: [FINAL] {token}."
+                    "You are a sequence tracer. You will be given a sequence of tokens, a starting node, and a number of hops.\n"
+                    "Rule: Find the current node in the sequence and move to the very next token. If you are at the end, wrap around to the start.\n"
+                    "STRICT: Do not repeat the input sequence. Do not list the alphabet.\n\n"
+                    "Format each hop: 'Hop {X}: At {current} -> Next is {target}'\n"
+                    "End with: '[FINAL] {token}'\n\n"
+                    "Example:\n"
+                    "Input: Sequence: A B D C. Start: A. Hop 2 times.\n"
+                    "Hop 1: At A -> Next is B\n"
+                    "Hop 2: At B -> Next is D\n"
+                    "[FINAL] D"
                 ),
                 "force_start": "\nHop 1:",
             },
             "igsm": {
+                # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J + F#K. H#J?"
                 "system": (
-                    "You are a symbolic math solver operating strictly in the ring of integers modulo 7 (Z/7Z). "
-                    "All additions and multiplications must be reduced modulo 7 at every step (results must be 0-6).\n\n"
-                    "Given a set of variable assignments, solve for the query variable step by step:\n"
-                    "1. Identify the variables in the assignment order.\n"
-                    "2. Substitute known values into the expression.\n"
-                    "3. Calculate the result and apply modulo 7.\n\n"
-                    "Format each step as: 'Step {X}: {variable} = {expression} = {value} (mod 7)'.\n"
-                    "Final Answer format: [FINAL] {value}."
+                    "You are a symbolic math solver working strictly in Modulo 7 (results 0-6).\n"
+                    "You will receive a list of variable assignments using ':=' and a final query.\n"
+                    "Rule: Solve for variables in order of dependency. Reduce every addition, subtraction, or multiplication by Modulo 7.\n\n"
+                    "Format: 'Step {X}: {var} = {substituted expression} = {value} (mod 7)'\n"
+                    "End with: '[FINAL] {value}'\n\n"
+                    "Example:\n"
+                    "Input: Question. A#B := 3. C#D := A#B + 5. C#D?\n"
+                    "Step 1: A#B = 3 = 3 (mod 7)\n"
+                    "Step 2: C#D = 3 + 5 = 1 (mod 7)\n"
+                    "[FINAL] 1"
                 ),
                 "force_start": "\nStep 1:",
             }
