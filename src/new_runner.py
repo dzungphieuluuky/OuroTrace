@@ -442,6 +442,9 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(df_ppl.to_string(index=False))
         print()
 
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # 8. Paper-Aligned Metrics Analysis
     if all_results:
         print(f"\n{'='*70}")
@@ -474,10 +477,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 save_plots=True
             )
             
-            # Save metrics to CSV
-            from datetime import datetime
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            
             for metric_name, df in paper_metrics.items():
                 if not df.empty:
                     filename = f"./results_{timestamp}/{metric_name}_{timestamp}.csv"
@@ -494,10 +493,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         wandb.finish()
         print("✅ W&B session closed")
         print(f"{'='*70}\n")
-    
-    if not paper_metrics:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
+
     # Save results to csv files 
     save_results(all_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
 
