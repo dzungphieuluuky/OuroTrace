@@ -148,7 +148,7 @@ class SafeOuroThinkingExperiment:
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
         # Auto-enable torch.compile only for ut_steps=1
-        auto_compile = (total_ut_steps == 1) and self.use_torch_compile
+        auto_compile = self.use_torch_compile
         
         print(f"\n{'='*60}")
         print(f"⚙️  LOADING MODEL CONFIGURATION")
@@ -157,7 +157,7 @@ class SafeOuroThinkingExperiment:
         print(f"Requested UT Steps: {total_ut_steps}")
         print(f"Data Type: {self.dtype}")
         print(f"4-bit Quantization: {self.use_4bit_quant}")
-        print(f"Torch Compile: {auto_compile} (auto={'ON' if total_ut_steps==1 else 'OFF'})")
+        print(f"Torch Compile: {auto_compile}")
 
         # Load base config
         base_config = AutoConfig.from_pretrained(
