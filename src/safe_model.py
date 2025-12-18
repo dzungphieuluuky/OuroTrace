@@ -272,37 +272,57 @@ class SafeOuroThinkingExperiment:
         }
 
     def _build_task_templates(self, tokenizer):
-        """Pre-compute prompt templates for zero-shot prompting (no examples), using curly brackets for step variables."""
+        """Pre-compute prompt templates using structured {placeholders} to guide step-by-step reasoning"""
         self.tokenizer = tokenizer
 
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a step-by-step calculator. The current sum starts at 0. "
-                    "At each step {i}, output the calculation in each line following the form: {current_sum} + {current_number} = {next_sum}. "
-                    "After all steps, output the final answer on a new line as [FINAL] {final_sum}."
+                    "You are a step-by-step calculator. Add numbers from left to right.\n"
+                    "At each step {i}, show the calculation: {current_sum} + {number_i} = {new_sum}\n"
+                    "Start with step 1 where {current_sum} is the first number.\n"
+                    "After processing all numbers, output: [FINAL] {final_sum}"
+                ),
+                "example_user": "315 + 120 + 45 =",
+                "example_asst": (
+                    "[STEP 1] {current_sum} = 315\n"
+                    "[STEP 2] 315 + 120 = 435\n"
+                    "[STEP 3] 435 + 45 = 480\n"
+                    "[FINAL] 480"
                 ),
                 "force_start": "\n[STEP 1]",
-                "user_template": "{} ="
             },
+
             "p_hop": {
                 "system": (
-                    "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for {N} hops. "
-                    "You start at step 1 from the start token."
-                    "At each step {i}, output the transition in each line following the form: {current_token} -> {next_token}. "
-                    "After all hops, when step {i} == {N}, output the final token as [FINAL] {final_token}."
+                    "You are a sequence tracer. Follow the sequence for {N} hops starting from {start_token}.\n"
+                    "At each step {i}, show the transition: {current_token} -> {next_token}\n"
+                    "After {N} hops, output: [FINAL] {final_token}"
+                ),
+                "example_user": "Sequence: A B C D A B. Start: A. Hop 2 times.",
+                "example_asst": (
+                    "[STEP 1] A -> B\n"
+                    "[STEP 2] B -> C\n"
+                    "[FINAL] C"
                 ),
                 "force_start": "\n[STEP 1]",
-                "user_template": "{}"
             },
+
             "igsm": {
                 "system": (
-                    "You are a symbolic equation solver. Solve each assignment step by step. "
-                    "At each step {i}, output the assignment in each line following the form: {var_i} = {expression_i} = {value_i} (mod 7). "
-                    "After all steps, output the final answer as [FINAL] {final_value}."
+                    "You are a symbolic equation solver. All calculations are modulo 7.\n"
+                    "At each step {i}, evaluate the assignment: {variable_i} = {expression_i} = {value_i} (mod 7)\n"
+                    "Solve equations in dependency order.\n"
+                    "After all assignments, output: [FINAL] {target_value}"
+                ),
+                "example_user": "Question. E#I := 4. E#J := E#I. H#J := E#J + 2. H#J?",
+                "example_asst": (
+                    "[STEP 1] E#I = 4\n"
+                    "[STEP 2] E#J = E#I = 4\n"
+                    "[STEP 3] H#J = 4 + 2 = 6 (mod 7)\n"
+                    "[FINAL] 6"
                 ),
                 "force_start": "\n[STEP 1]",
-                "user_template": "{}"
             }
         }
 
@@ -311,7 +331,8 @@ class SafeOuroThinkingExperiment:
         for task_type, config in task_configs.items():
             static_messages = [
                 {"role": "system", "content": config["system"]},
-                # No example user/assistant messages for zero-shot!
+                {"role": "user", "content": config["example_user"]},
+                {"role": "assistant", "content": config["example_asst"]}
             ]
 
             static_prompt_text = tokenizer.apply_chat_template(
@@ -333,11 +354,14 @@ class SafeOuroThinkingExperiment:
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
                 "force_start_text": config["force_start"],
-                "user_template": config.get("user_template", "{}"),
-                "example_response": None  # No example for zero-shot
+                "example_response": config["example_asst"]  # Store for monitoring
             }
+            
+            # Register example responses with quality monitor
+            if self.quality_monitor:
+                self.quality_monitor.set_example_response(task_type, config["example_asst"])
 
-        print("[+] Task templates pre-computed (zero-shot, curly bracket step variables).")    
+        print("[+] Task templates pre-computed (structured {placeholder} format for constrained generation).")
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
