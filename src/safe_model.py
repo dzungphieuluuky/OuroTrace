@@ -278,49 +278,28 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a step-by-step calculator.\n"
-                    "At each step {i}, output each line as: {current_sum} + {number_i} = {new_sum}\n"
-                    "Start with step 1 where {current_sum} is the first number in the {prompt}.\n"
-                    "After processing all numbers, output: [FINAL] {final_sum}"
-                ),
-                "example_user": "315 + 120 + 45 =",
-                "example_asst": (
-                    "[STEP 1] {current_sum} = 315\n"
-                    "[STEP 2] {current_sum} + {number_2} = {new_sum}\n"
-                    "[STEP 3] {current_sum} + {number_3} = {new_sum}\n"
-                    "[FINAL] {final_sum}"
+                    "You are a step-by-step calculator. The current sum starts at 0. "
+                    "At each step {i}, output the calculation in each line following the form: {current_sum} + {current_number} = {next_sum}. "
+                    "After all steps, output the final answer on a new line as [FINAL] {final_sum}."
                 ),
                 "force_start": "\n[STEP 1]",
             },
 
             "p_hop": {
                 "system": (
-                    "You are a sequence tracer. Follow the sequence for {N} hops starting from {start_token}.\n"
-                    "At each step {i}, output each line as: {current_token} -> {next_token}\n"
-                    "After {N} hops, output: [FINAL] {final_token}"
-                ),
-                "example_user": "Sequence: A B C D A B. Start: A. Hop 2 times.",
-                "example_asst": (
-                    "[STEP 1] A -> B\n"
-                    "[STEP 2] B -> C\n"
-                    "[FINAL] C"
+                    "You are a sequence tracer. Given a sequence and a start token, follow the sequence step by step for {N} hops. "
+                    "You start at step 1 from the start token."
+                    "At each step {i}, output the transition in each line following the form: {current_token} -> {next_token}. "
+                    "After all hops, when step {i} == {N}, output the final token as [FINAL] {final_token}."
                 ),
                 "force_start": "\n[STEP 1]",
             },
 
             "igsm": {
                 "system": (
-                    "You are a symbolic equation solver. All calculations are modulo 7.\n"
-                    "At each step {i}, output each line as: {variable_i} = {expression_i} = {value_i} (mod 7)\n"
-                    "Solve equations in dependency order.\n"
-                    "After all assignments, output: [FINAL] {target_value}"
-                ),
-                "example_user": "Question. E#I := 4. E#J := E#I. H#J := E#J + 2. H#J?",
-                "example_asst": (
-                    "[STEP 1] E#I = 4\n"
-                    "[STEP 2] E#J = E#I = 4\n"
-                    "[STEP 3] H#J = 4 + 2 = 6 (mod 7)\n"
-                    "[FINAL] 6"
+                    "You are a symbolic equation solver. Solve each assignment step by step. "
+                    "At each step {i}, output the assignment in each line following the form: {var_i} = {expression_i} = {value_i} (mod 7). "
+                    "After all steps, output the final answer as [FINAL] {final_value}."
                 ),
                 "force_start": "\n[STEP 1]",
             }
@@ -358,7 +337,7 @@ class SafeOuroThinkingExperiment:
             }
             
             # Register example responses with quality monitor
-            if self.quality_monitor:
+            if self.quality_monitor and "example_asst" in config:
                 self.quality_monitor.set_example_response(task_type, config["example_asst"])
 
         print("[+] Task templates pre-computed (structured {placeholder} format for constrained generation).")
