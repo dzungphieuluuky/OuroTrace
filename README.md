@@ -36,7 +36,5 @@ from src import (
 
  ## Run This Notebook
 
- ## 📓 Run This Notebook
-
 - [Open in Kaggle](https://www.kaggle.com/code/dzung271828/ouro-trace)
 - [Open in Google Colab](https://colab.research.google.com/github/dzungphieuluuky/OuroTrace/blob/claude/ouro-trace.ipynb)
