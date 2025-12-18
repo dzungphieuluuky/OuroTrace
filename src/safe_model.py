@@ -354,7 +354,7 @@ class SafeOuroThinkingExperiment:
                 "example_response": config.get("example_asst", None)
             }
 
-        print("[+] Task templates pre-computed (system prompt matches data format).")
+        print("[+] Task templates pre-computed (this templates version runs properly on kaggle 10:35 18/12/2025 NLP thuyết trình).")
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
