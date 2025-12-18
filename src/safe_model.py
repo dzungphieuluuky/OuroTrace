@@ -278,17 +278,17 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a step-by-step calculator. Add numbers from left to right.\n"
-                    "At each step {i}, show the calculation: {current_sum} + {number_i} = {new_sum}\n"
-                    "Start with step 1 where {current_sum} is the first number.\n"
+                    "You are a step-by-step calculator.\n"
+                    "At each step {i}, output each line as: {current_sum} + {number_i} = {new_sum}\n"
+                    "Start with step 1 where {current_sum} is the first number in the {prompt}.\n"
                     "After processing all numbers, output: [FINAL] {final_sum}"
                 ),
                 "example_user": "315 + 120 + 45 =",
                 "example_asst": (
                     "[STEP 1] {current_sum} = 315\n"
-                    "[STEP 2] 315 + 120 = 435\n"
-                    "[STEP 3] 435 + 45 = 480\n"
-                    "[FINAL] 480"
+                    "[STEP 2] {current_sum} + {number_2} = {new_sum}\n"
+                    "[STEP 3] {current_sum} + {number_3} = {new_sum}\n"
+                    "[FINAL] {final_sum}"
                 ),
                 "force_start": "\n[STEP 1]",
             },
@@ -296,7 +296,7 @@ class SafeOuroThinkingExperiment:
             "p_hop": {
                 "system": (
                     "You are a sequence tracer. Follow the sequence for {N} hops starting from {start_token}.\n"
-                    "At each step {i}, show the transition: {current_token} -> {next_token}\n"
+                    "At each step {i}, output each line as: {current_token} -> {next_token}\n"
                     "After {N} hops, output: [FINAL] {final_token}"
                 ),
                 "example_user": "Sequence: A B C D A B. Start: A. Hop 2 times.",
@@ -311,7 +311,7 @@ class SafeOuroThinkingExperiment:
             "igsm": {
                 "system": (
                     "You are a symbolic equation solver. All calculations are modulo 7.\n"
-                    "At each step {i}, evaluate the assignment: {variable_i} = {expression_i} = {value_i} (mod 7)\n"
+                    "At each step {i}, output each line as: {variable_i} = {expression_i} = {value_i} (mod 7)\n"
                     "Solve equations in dependency order.\n"
                     "After all assignments, output: [FINAL] {target_value}"
                 ),
