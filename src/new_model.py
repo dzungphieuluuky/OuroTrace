@@ -1,4 +1,3 @@
-import pandas as pd
 import torch
 import time
 import re
@@ -12,7 +11,77 @@ from transformers import (
 )
 from tqdm.auto import tqdm
 from .output_monitor import OutputQualityMonitor
-from.safe_optimization import apply_all_safe_optimizations
+
+
+class SafeOptimizations:
+    """Safe optimization methods that don't contaminate model state"""
+    
+    @staticmethod
+    def enable_static_cache(model, max_seq_length: int = 2048):
+        """Pre-allocate static KV cache"""
+        if hasattr(model, 'generation_config'):
+            model.generation_config.cache_implementation = "static"
+            model.generation_config.max_cache_length = max_seq_length
+            print("   ✓ Static KV cache enabled")
+    
+    @staticmethod
+    def optimize_attention_backend(model):
+        """Enable Flash Attention / Memory-Efficient SDPA"""
+        if torch.cuda.is_available() and hasattr(torch.nn.functional, 'scaled_dot_product_attention'):
+            torch.backends.cuda.enable_flash_sdp(True)
+            torch.backends.cuda.enable_mem_efficient_sdp(True)
+            print("   ✓ Flash Attention / SDPA enabled")
+        return model
+    
+    @staticmethod
+    def apply_inference_optimizations(model):
+        """Apply safe inference-only optimizations"""
+        model.eval()
+        for param in model.parameters():
+            param.requires_grad = False
+        
+        if hasattr(model, 'generation_config'):
+            model.generation_config.use_cache = True
+        
+        if torch.cuda.is_available():
+            # TF32 for faster matmul on Ampere+ GPUs
+            torch.backends.cuda.matmul.allow_tf32 = True
+            torch.backends.cudnn.allow_tf32 = True
+            print("   ✓ TF32 enabled for matmul")
+            
+            # cuDNN auto-tuning
+            torch.backends.cudnn.benchmark = True
+            print("   ✓ cuDNN auto-tuning enabled")
+        
+        return model
+    
+    @staticmethod
+    def optimize_memory():
+        """Optimize CUDA memory allocation"""
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            print("   ✓ Memory pool optimized")
+    
+    @staticmethod
+    def warmup_model(model, tokenizer, num_passes: int = 3):
+        """Warmup CUDA kernels"""
+        device = model.device
+        dummy_input = tokenizer("warmup test", return_tensors="pt")
+        input_ids = dummy_input.input_ids.to(device)
+        
+        print(f"   → Running {num_passes} warmup passes...")
+        with torch.no_grad():
+            for i in range(num_passes):
+                _ = model.generate(
+                    input_ids=input_ids,
+                    max_new_tokens=32,
+                    use_cache=True,
+                    do_sample=False,
+                )
+        
+        torch.cuda.empty_cache()
+        print("   ✓ Warmup complete")
+
 
 class SafeOuroThinkingExperiment:
     """Core experiment class for Ouro model testing with unified prediction"""
@@ -55,8 +124,6 @@ class SafeOuroThinkingExperiment:
             print(f"❌ EXPERIMENT TERMINATED: Model generated the same output {self.k_repeat_abort} times in a row.")
             print(f"Repeated output:\n{self.last_k_outputs[0]}")
             print("="*60 + "\n")
-
-            torch.cuda.empty_cache()
             raise SystemExit(f"Experiment failed: {self.k_repeat_abort} repeated outputs")
     
     def initialize_quality_monitor(
@@ -85,6 +152,7 @@ class SafeOuroThinkingExperiment:
             print("→ Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
+        # Auto-enable torch.compile only for ut_steps=1
         auto_compile = self.use_torch_compile
         
         print(f"\n{'='*60}")
@@ -144,6 +212,42 @@ class SafeOuroThinkingExperiment:
 
         model.eval()
         
+        # APPLY SAFE OPTIMIZATIONS (especially important for UT > 1)
+        if total_ut_steps > 1:
+            print(f"\n{'─'*60}")
+            print(f"🚀 APPLYING SAFE OPTIMIZATIONS (UT > 1)")
+            print(f"{'─'*60}")
+            
+            try:
+                model = SafeOptimizations.optimize_attention_backend(model)
+            except Exception as e:
+                print(f"   ⚠️ Attention optimization failed: {e}")
+            
+            try:
+                model = SafeOptimizations.apply_inference_optimizations(model)
+            except Exception as e:
+                print(f"   ⚠️ Inference optimization failed: {e}")
+            
+            try:
+                SafeOptimizations.optimize_memory()
+            except Exception as e:
+                print(f"   ⚠️ Memory optimization failed: {e}")
+            
+            try:
+                SafeOptimizations.warmup_model(model, tokenizer, num_passes=3)
+            except Exception as e:
+                print(f"   ⚠️ Warmup failed: {e}")
+            
+            print(f"{'─'*60}")
+        else:
+            # Still apply basic optimizations for UT=1
+            print(f"\n→ Applying basic optimizations (UT=1)...")
+            try:
+                model = SafeOptimizations.apply_inference_optimizations(model)
+                SafeOptimizations.optimize_memory()
+            except Exception as e:
+                print(f"   ⚠️ Optimization failed: {e}")
+        
         # Final verification
         print(f"\n{'='*60}")
         print(f"✅ MODEL LOADED SUCCESSFULLY")
@@ -154,18 +258,12 @@ class SafeOuroThinkingExperiment:
         print(f"VERIFIED early exit: {model.config.early_exit_threshold}")
         
         if model.config.total_ut_steps != total_ut_steps:
-            print(f"\n WARNING: UT STEPS MISMATCH!")
+            print(f"\n⚠️  WARNING: UT STEPS MISMATCH!")
             print(f"   Requested: {total_ut_steps}")
             print(f"   Actual: {model.config.total_ut_steps}")
         
         print(f"{'='*60}\n")
         
-        # APPLY SAFE OPTIMIZATIONS (especially important for UT > 1)
-        opt_result = apply_all_safe_optimizations(
-            model, tokenizer, total_ut_steps
-        )
-        model = opt_result["model"]
-
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
             "early_exit_threshold": base_config.early_exit_threshold,
@@ -173,85 +271,96 @@ class SafeOuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Zero-shot templates: No examples, just pure format rules.
+        Pre-compute prompt templates with system prompts that match the data format
+        generated by create_test_datasets in data_generator.py.
         """
         self.tokenizer = tokenizer
-        
+
         task_configs = {
             "n_ary": {
+                # Data format: "408 + 819 + 667 + 413 ="
                 "system": (
-                    "ADDITION FORMAT:\n"
-                    "1. Count input numbers\n"
-                    "2. Start: 'Step 1: 0 + [first] = [sum1]'\n"
-                    "3. Continue: 'Step N: [prev] + [next] = [new]'\n"
-                    "4. End: '[FINAL] [total]'\n\n"
-                    "RULES:\n"
-                    "- Use ONLY numbers from user input\n"
-                    "- NO examples, NO commentary\n"
-                    "- Generate steps dynamically based on input count\n"
+                    "You are a calculator. Given an addition problem with several numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
+                    "show your work step by step. For each number, add it to the running total and show the calculation. "
+                    "After all steps, output only the final sum on a new line as [FINAL] [sum].\n"
+                    "Example:\n"
+                    "Input: {number_i} + {number_i+1} + {number_i+2} + ... =\n"
+                    "Output:\n"
+                    "Step {i}: 0 + {number_i} = {sum_i}\n"
+                    "Step {i+1}: {sum_i} + {number_i+1} = {sum_i+1}\n"
+                    "Step {i+2}: {sum_i+1} + {number_i+2} = {sum_i+2}\n"
+                    "..."
+                    "[FINAL] {final_sum}"
                 ),
                 "force_start": "\nStep 1:",
-                "no_examples": True
             },
             "p_hop": {
+                # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
                 "system": (
-                    "SEQUENCE TRACING FORMAT:\n"
-                    "1. Parse sequence, start, hop count\n"
-                    "2. Start: 'Hop 1: At [start] -> Next is [next1]'\n"
-                    "3. Continue: 'Hop N: At [current] -> Next is [next]'\n"
-                    "4. End: '[FINAL] [final_token]'\n\n"
-                    "RULES:\n"
-                    "- Use ONLY tokens from user input\n"
-                    "- NO sequence listing, NO alphabet\n"
-                    "- NO examples, generate hops dynamically\n"
+                    "You are a sequence tracer."
+                    "trace the sequence step by step. At each hop, follow strictly and exactly the format below. "
+                    "Output each line as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
+                    "Example:\n"
+                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop {N} times.\n"
+                    "Output:\n"
+                    "Hop {i}: At {token_i} → Next is {token_{i+1}}\n"
+                    "Hop {i+1}: At {token_{i+1}} → Next is {token_{i+2}}\n"
+                    "..."
+                    "Hop {N}: At {token_N} → Next is {token_final}\n"
+                    "[FINAL] {token_final}"
                 ),
                 "force_start": "\nHop 1:",
-                "no_examples": True
             },
             "igsm": {
+                # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
                 "system": (
-                    "MODULO 7 SOLVER FORMAT:\n"
-                    "1. Parse assignments in order\n"
-                    "2. Start: 'Step 1: [var1] = [expr1] = [val1] (mod 7)'\n"
-                    "3. Continue: 'Step N: [varN] = [exprN] = [valN] (mod 7)'\n"
-                    "4. End: '[FINAL] [answer]'\n\n"
-                    "RULES:\n"
-                    "- All results modulo 7 (0-6)\n"
-                    "- Use ONLY variables from user input\n"
-                    "- NO examples, NO extra calculations\n"
+                    "You are a symbolic math solver working modulo 7. Given a list of assignments and a query, "
+                    "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
+                    "Output each line as: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
+                    "Example:\n"
+                    "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
+                    "Output:\n"
+                    "Step {i}: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
+                    "Step {i+1}: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
+                    "Step {i+2}: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
+                    "..."
+                    "[FINAL] {final_value}"
                 ),
                 "force_start": "\nStep 1:",
-                "no_examples": True
             }
         }
-        
+
         self.task_templates = {}
+
         for task_type, config in task_configs.items():
-            static_messages = [{"role": "system", "content": config["system"]}]
+            static_messages = [
+                {"role": "system", "content": config["system"]}
+            ]
+
             static_prompt_text = tokenizer.apply_chat_template(
                 static_messages,
                 tokenize=False,
                 add_generation_prompt=True
             ).rstrip()
-            
             static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
-            
+
             force_text = config["force_start"].strip()
             force_start_tokens = tokenizer(
                 force_text,
                 return_tensors="pt",
                 add_special_tokens=False
             )
-            
+
             self.task_templates[task_type] = {
                 "static_input_ids": static_inputs.input_ids,
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
-                "force_start_text": config["force_start"],
-                "no_examples": config["no_examples"]
+                "force_start_text": config.get("force_start", ""),
+                "example_response": config.get("example_asst", None)
             }
-        
-        print("[+] Zero-shot task templates pre-computed (no examples).")
+
+        print("[+] Task templates pre-computed.")
+
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
@@ -349,7 +458,7 @@ class SafeOuroThinkingExperiment:
             "repetition_penalty": 1.0,
         }
 
-    @torch.inference_mode()
+    @torch.no_grad()
     def predict(
         self,
         user_inputs: Union[str, List[str]],
@@ -526,7 +635,7 @@ class SafeOuroThinkingExperiment:
             "test_input": user_input,
         }
 
-    @torch.inference_mode()
+    @torch.no_grad()
     def calculate_perplexity(
         self,
         model,
@@ -611,6 +720,4 @@ class SafeOuroThinkingExperiment:
                 else:
                     print(f"  {k}: {v}")
             print("="*60 + "\n")
-            
-            torch.cuda.empty_cache()
             raise SystemExit(f"Experiment failed: {failure.reason}")
