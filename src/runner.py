@@ -5,6 +5,11 @@ import torch
 import pandas as pd
 from tqdm.auto import tqdm
 from typing import Dict, List, Any, Optional, Tuple
+from .evaluation_metrics import (
+    OuroMetrics,
+    analyze_experiment_results,
+    PaperComplianceChecker
+)
 
 # Import utilities (adjust paths as needed)
 from .utils import generate_test_id
@@ -59,7 +64,8 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             run = None
 
     # 2. Extract and Display Configuration
-    model_path = config["MODEL"]["path"]
+    model_config = config["MODEL"]
+    model_path = model_config["path"]
     ut_steps_list = config["INFERENCE_STEPS"]
     data_config = config["DATA"]
     eval_settings = config["EVAL_SETTINGS"]
@@ -70,9 +76,9 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"{'='*70}")
     print(f"Model Path: {model_path}")
     print(f"UT Steps to Test: {ut_steps_list}")
-    print(f"Data Type: {config['MODEL'].get('dtype', torch.float16)}")
-    print(f"4-bit Quantization: {config['MODEL'].get('use_4bit_quant', True)}")
-    print(f"Torch Compile: {config['MODEL'].get('use_torch_compile', False)} (auto-controlled)")
+    print(f"Data Type: {model_config.get('dtype', torch.float16)}")
+    print(f"4-bit Quantization: {model_config.get('use_4bit_quant', True)}")
+    print(f"Torch Compile: {model_config.get('use_torch_compile', False)} (auto-controlled)")
     print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
     print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
     print(f"Batching: Auto (enabled only for UT=1)")
@@ -133,7 +139,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
         # AUTO-OPTIMIZATION: Determine if batching should be enabled
-        enable_batch = (ut_steps >= 1) and optimization_config.get("enable_batch", True)
+        enable_batch = (ut_steps == 1) and optimization_config.get("enable_batch", True)
         
         print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
         print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
@@ -426,6 +432,49 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print("✅ W&B session closed")
         print(f"{'='*70}\n")
 
+# 9. Paper-Aligned Metrics Analysis
+    if all_results:
+        print(f"\n{'='*70}")
+        print(f"📊 PAPER-ALIGNED ANALYSIS")
+        print(f"{'='*70}\n")
+        
+        # Determine model size
+        model_path = config["MODEL"]["path"]
+        if "1.4" in model_path.lower():
+            model_size_b = 1.4
+            model_name = "Ouro-1.4B"
+            if "thinking" in model_path.lower():
+                model_name = "Ouro-1.4B-Thinking"
+        elif "2.6" in model_path.lower():
+            model_size_b = 2.6
+            model_name = "Ouro-2.6B"
+            if "thinking" in model_path.lower():
+                model_name = "Ouro-2.6B-Thinking"
+        else:
+            model_size_b = 1.4  # default
+            model_name = "Ouro"
+        
+        # Run analysis
+        try:
+            paper_metrics = analyze_experiment_results(
+                all_results,
+                model_name=model_name,
+                model_size_b=model_size_b,
+                save_plots=True
+            )
+            
+            # Save metrics to CSV
+            from datetime import datetime
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            
+            for metric_name, df in paper_metrics.items():
+                if not df.empty:
+                    filename = f"./results/{metric_name}_{timestamp}.csv"
+                    df.to_csv(filename, index=False)
+                    print(f"✅ Saved {metric_name} to {filename}")
+        
+        except Exception as e:
+            print(f"⚠️ Paper metrics analysis failed: {e}")
     return all_results, perplexity_results, holistic_results
 
 
