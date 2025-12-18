@@ -80,7 +80,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"Torch Compile: {model_config.get('use_torch_compile', False)} (auto-controlled)")
     print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
     print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
-    print(f"Batching: Auto (enabled only for UT=1)")
+    print(f"Batching: {optimization_config.get('enable_batch', True)}")
     print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', False)}")
     print(f"Early Exit: Auto (from model config)")
     print(f"{'='*70}\n")
@@ -138,7 +138,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
         # AUTO-OPTIMIZATION: Determine if batching should be enabled
-        enable_batch = (ut_steps == 1) and optimization_config.get("enable_batch", True)
+        enable_batch = (ut_steps >= 1) and optimization_config.get("enable_batch", True)
         
         print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
         print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
