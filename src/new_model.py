@@ -131,7 +131,7 @@ class SafeOuroThinkingExperiment:
             self.model_path,
             config=base_config,
             device_map="cuda",
-            attn_implementation="flash_attention_2",
+            attn_implementation="sdpa_paged",
             torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
             quantization_config=quantization_config,
