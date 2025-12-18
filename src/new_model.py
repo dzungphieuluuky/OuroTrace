@@ -166,7 +166,6 @@ class SafeOuroThinkingExperiment:
         )
         model = opt_result["model"]
         tokenizer = opt_result.get("tokenizer", tokenizer)
-        print(f"Optimization results: {pd.DataFrame(opt_result['optimization_results'])}")
 
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,

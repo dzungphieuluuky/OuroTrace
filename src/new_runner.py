@@ -464,6 +464,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             model_size_b = 1.4  # default
             model_name = "Ouro"
         
+        paper_metrics = {}
         # Run analysis
         try:
             paper_metrics = analyze_experiment_results(
@@ -494,6 +495,9 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print("✅ W&B session closed")
         print(f"{'='*70}\n")
     
+    if not paper_metrics:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
     # Save results to csv files 
     save_results(all_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
 
