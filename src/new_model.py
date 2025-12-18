@@ -298,15 +298,15 @@ class SafeOuroThinkingExperiment:
                 "system": (
                     "You are a sequence tracer."
                     "trace the sequence step by step. At each hop, follow strictly and exactly the format below. "
-                    "Output each line as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
+                    "Output each line as Hop {X}: At {token} → Next is {token}. After all hops, output the result as [FINAL] {token}.\n"
                     "Example:\n"
-                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop {N} times.\n"
+                    "Input: Sequence: {list of tokens} Start: {token_1}. Hop {N} times.\n"
                     "Output:\n"
-                    "Hop {i}: At {token_i} → Next is {token_{i+1}}\n"
-                    "Hop {i+1}: At {token_{i+1}} → Next is {token_{i+2}}\n"
+                    "Hop {i}: At {current_token} → Next is {next_token}\n"
+                    "Hop {i+1}: At {current_token} → Next is {next_token}\n"
                     "..."
-                    "Hop {N}: At {token_N} → Next is {token_final}\n"
-                    "[FINAL] {token_final}"
+                    "Hop {N}: At {current_token} → Next is {next_token}\n"
+                    "[FINAL] {final_token}"
                 ),
                 "force_start": "\nHop 1:",
             },
@@ -317,11 +317,11 @@ class SafeOuroThinkingExperiment:
                     "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
                     "Output each line as: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
                     "Example:\n"
-                    "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
+                    "Input: Question. {list of equations}\n"
                     "Output:\n"
-                    "Step {i}: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step {i+1}: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step {i+2}: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
+                    "Step {i}: {some variable} = {some expression} = {value}\n"
+                    "Step {i+1}: {some variable} = {some expression} = {value}\n"
+                    "Step {i+2}: {some variable} = {some expression} = {value}\n"
                     "..."
                     "[FINAL] {final_value}"
                 ),
