@@ -1,3 +1,4 @@
+from turtle import pd
 import torch
 import time
 import re
@@ -11,77 +12,7 @@ from transformers import (
 )
 from tqdm.auto import tqdm
 from .output_monitor import OutputQualityMonitor
-
-
-class SafeOptimizations:
-    """Safe optimization methods that don't contaminate model state"""
-    
-    @staticmethod
-    def enable_static_cache(model, max_seq_length: int = 2048):
-        """Pre-allocate static KV cache"""
-        if hasattr(model, 'generation_config'):
-            model.generation_config.cache_implementation = "static"
-            model.generation_config.max_cache_length = max_seq_length
-            print("   ✓ Static KV cache enabled")
-    
-    @staticmethod
-    def optimize_attention_backend(model):
-        """Enable Flash Attention / Memory-Efficient SDPA"""
-        if torch.cuda.is_available() and hasattr(torch.nn.functional, 'scaled_dot_product_attention'):
-            torch.backends.cuda.enable_flash_sdp(True)
-            torch.backends.cuda.enable_mem_efficient_sdp(True)
-            print("   ✓ Flash Attention / SDPA enabled")
-        return model
-    
-    @staticmethod
-    def apply_inference_optimizations(model):
-        """Apply safe inference-only optimizations"""
-        model.eval()
-        for param in model.parameters():
-            param.requires_grad = False
-        
-        if hasattr(model, 'generation_config'):
-            model.generation_config.use_cache = True
-        
-        if torch.cuda.is_available():
-            # TF32 for faster matmul on Ampere+ GPUs
-            torch.backends.cuda.matmul.allow_tf32 = True
-            torch.backends.cudnn.allow_tf32 = True
-            print("   ✓ TF32 enabled for matmul")
-            
-            # cuDNN auto-tuning
-            torch.backends.cudnn.benchmark = True
-            print("   ✓ cuDNN auto-tuning enabled")
-        
-        return model
-    
-    @staticmethod
-    def optimize_memory():
-        """Optimize CUDA memory allocation"""
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            print("   ✓ Memory pool optimized")
-    
-    @staticmethod
-    def warmup_model(model, tokenizer, num_passes: int = 3):
-        """Warmup CUDA kernels"""
-        device = model.device
-        dummy_input = tokenizer("warmup test", return_tensors="pt")
-        input_ids = dummy_input.input_ids.to(device)
-        
-        print(f"   → Running {num_passes} warmup passes...")
-        with torch.no_grad():
-            for i in range(num_passes):
-                _ = model.generate(
-                    input_ids=input_ids,
-                    max_new_tokens=32,
-                    use_cache=True,
-                    do_sample=False,
-                )
-        
-        torch.cuda.empty_cache()
-        print("   ✓ Warmup complete")
-
+from.safe_optimization import apply_all_safe_optimizations
 
 class SafeOuroThinkingExperiment:
     """Core experiment class for Ouro model testing with unified prediction"""
@@ -213,42 +144,6 @@ class SafeOuroThinkingExperiment:
 
         model.eval()
         
-        # APPLY SAFE OPTIMIZATIONS (especially important for UT > 1)
-        if total_ut_steps > 1:
-            print(f"\n{'─'*60}")
-            print(f"🚀 APPLYING SAFE OPTIMIZATIONS (UT > 1)")
-            print(f"{'─'*60}")
-            
-            try:
-                model = SafeOptimizations.optimize_attention_backend(model)
-            except Exception as e:
-                print(f"   ⚠️ Attention optimization failed: {e}")
-            
-            try:
-                model = SafeOptimizations.apply_inference_optimizations(model)
-            except Exception as e:
-                print(f"   ⚠️ Inference optimization failed: {e}")
-            
-            try:
-                SafeOptimizations.optimize_memory()
-            except Exception as e:
-                print(f"   ⚠️ Memory optimization failed: {e}")
-            
-            try:
-                SafeOptimizations.warmup_model(model, tokenizer, num_passes=3)
-            except Exception as e:
-                print(f"   ⚠️ Warmup failed: {e}")
-            
-            print(f"{'─'*60}")
-        else:
-            # Still apply basic optimizations for UT=1
-            print(f"\n→ Applying basic optimizations (UT=1)...")
-            try:
-                model = SafeOptimizations.apply_inference_optimizations(model)
-                SafeOptimizations.optimize_memory()
-            except Exception as e:
-                print(f"   ⚠️ Optimization failed: {e}")
-        
         # Final verification
         print(f"\n{'='*60}")
         print(f"✅ MODEL LOADED SUCCESSFULLY")
@@ -264,6 +159,15 @@ class SafeOuroThinkingExperiment:
             print(f"   Actual: {model.config.total_ut_steps}")
         
         print(f"{'='*60}\n")
+        
+        # APPLY SAFE OPTIMIZATIONS (especially important for UT > 1)
+        print(f"\n→ Applying safe optimizations (safe for all UT steps)...")
+        opt_result = apply_all_safe_optimizations(
+            model, tokenizer, total_ut_steps
+        )
+        model = opt_result["model"]
+        tokenizer = opt_result.get("tokenizer", tokenizer)
+        print(f"Optimization results: {pd.DataFrame(opt_result['optimization_results'])}")
         
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,

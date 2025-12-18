@@ -302,7 +302,7 @@ def apply_all_safe_optimizations(
     model, 
     tokenizer, 
     ut_steps: int,
-    config: Dict
+    config: Dict = None
 ) -> Dict:
     """
     Apply all safe optimizations for a given UT step configuration.

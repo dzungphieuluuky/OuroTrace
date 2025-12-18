@@ -21,7 +21,6 @@ from .data_generator import (
 from .new_model import SafeOuroThinkingExperiment
 from .evaluation import run_holistic_evaluation
 
-
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
     """
     Run experiment with automatic batch/compile optimization based on UT steps.
