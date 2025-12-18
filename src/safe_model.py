@@ -100,9 +100,11 @@ class SafeOuroThinkingExperiment:
         self.use_torch_compile = use_torch_compile
         self.tokenizer = None
         self.task_templates = {}
-        self.quality_monitor = None
         self.last_k_outputs = []
         self.k_repeat_abort = k_repeat_abort
+
+        # Initialize quality monitor to prevent kaggle GPU loss meaninglessly
+        self.initialize_quality_monitor()
 
     def check_repeated_outputs_and_abort(self, output: str):
         """Abort if the same output is generated for k consecutive inputs."""
@@ -201,11 +203,7 @@ class SafeOuroThinkingExperiment:
         # Apply torch.compile only for UT=1
         if auto_compile:
             print("→ Applying torch.compile()")
-            model = torch.compile(
-                model, 
-                mode="reduce-overhead",
-                fullgraph=False
-            )
+            model = torch.compile(model)
 
         model.eval()
         
