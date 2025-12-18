@@ -173,68 +173,114 @@ class SafeOuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates with enhanced system prompts for p_hop and igsm.
+        Version 4: Zero examples, only format rules and input processing instructions.
         """
         self.tokenizer = tokenizer
-
+        
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator. Given an addition problem with several numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
-                    "show your work step by step. For each number, add it to the running total and show the calculation. "
-                    "After all steps, output only the final sum on a new line as [FINAL] [sum].\n"
-                    "Example:\n"
-                    "Input: {number_i} + {number_i+1} + {number_i+2} + ... =\n"
-                    "Output:\n"
-                    "Step {i}: 0 + {number_i} = {sum_i}\n"
-                    "Step {i+1}: {sum_i} + {number_i+1} = {sum_i+1}\n"
-                    "Step {i+2}: {sum_i+1} + {number_i+2} = {sum_i+2}\n"
-                    "..."
-                    "[FINAL] {final_sum}"
+                    "INPUT PROCESSING PIPELINE:\n\n"
+                    "STEP 1: Parse user input to extract numbers\n"
+                    "  - Input format: 'X + Y + Z + ... ='\n"
+                    "  - Extract numbers X, Y, Z, etc.\n"
+                    "  - Store in list: numbers = [X, Y, Z, ...]\n\n"
+                    "STEP 2: Initialize computation\n"
+                    "  - total = 0\n"
+                    "  - step_counter = 1\n\n"
+                    "STEP 3: Generate output following EXACT format:\n"
+                    "  FOR each number in numbers:\n"
+                    "    PRINT: 'Step {step_counter}: {total} + {number} = {total + number}'\n"
+                    "    total = total + number\n"
+                    "    step_counter += 1\n"
+                    "  ENDFOR\n"
+                    "  PRINT: '[FINAL] {total}'\n\n"
+                    "FORMAT CONSTRAINTS:\n"
+                    "1. First line MUST start with 'Step 1:'\n"
+                    "2. Use EXACTLY the numbers from user input\n"
+                    "3. Running total starts at 0\n"
+                    "4. Final line MUST be '[FINAL] {sum}'\n"
+                    "5. NO other text or formatting\n"
+                    "6. NO references to examples or patterns\n"
+                    "7. ALL numbers must come from user input\n\n"
+                    "EXECUTION BEGINS WITH USER INPUT.\n"
+                    "RESPONSE MUST USE USER'S NUMBERS ONLY.\n"
                 ),
                 "force_start": "\nStep 1:",
+                "input_focused": True
             },
             "p_hop": {
-                # Data format: "Sequence: A D C B... Start: A. Hop 16 times."
                 "system": (
-                    "You are a sequence tracer. You will be given a sequence of tokens, a starting node, and a number of hops.\n"
-                    "Rule: Find the current node in the sequence and move to the very next token. If you are at the end, wrap around to the start.\n"
-                    "STRICT: Do not repeat the input sequence. Do not list the alphabet.\n\n"
-                    "Format each hop: 'Hop {X}: At {current} -> Next is {target}'\n"
-                    "End with: '[FINAL] {token}'\n\n"
-                    "Example:\n"
-                    "Input: Sequence: A B D C. Start: A. Hop 2 times.\n"
-                    "Hop 1: At A -> Next is B\n"
-                    "Hop 2: At B -> Next is D\n"
-                    "[FINAL] D"
+                    "INPUT PROCESSING PIPELINE:\n\n"
+                    "STEP 1: Parse user input\n"
+                    "  - Extract sequence tokens\n"
+                    "  - Extract starting token\n"
+                    "  - Extract hop count N\n\n"
+                    "STEP 2: Initialize tracing\n"
+                    "  - current = starting_token\n"
+                    "  - hop_counter = 1\n\n"
+                    "STEP 3: Generate output following EXACT format:\n"
+                    "  FOR i = 1 to N:\n"
+                    "    Find current in sequence\n"
+                    "    next = token after current (wrap around)\n"
+                    "    PRINT: 'Hop {hop_counter}: At {current} -> Next is {next}'\n"
+                    "    current = next\n"
+                    "    hop_counter += 1\n"
+                    "  ENDFOR\n"
+                    "  PRINT: '[FINAL] {current}'\n\n"
+                    "FORMAT CONSTRAINTS:\n"
+                    "1. First line MUST start with 'Hop 1:'\n"
+                    "2. Use EXACTLY the tokens from user input\n"
+                    "3. Do NOT list sequence or alphabet\n"
+                    "4. Final line MUST be '[FINAL] {token}'\n"
+                    "5. NO other text or formatting\n"
+                    "6. NO references to examples\n"
+                    "7. ALL tokens must come from user input\n\n"
+                    "EXECUTION BEGINS WITH USER INPUT.\n"
+                    "RESPONSE MUST USE USER'S TOKENS ONLY.\n"
                 ),
                 "force_start": "\nHop 1:",
+                "input_focused": True
             },
             "igsm": {
-                # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J + F#K. H#J?"
                 "system": (
-                    "You are a symbolic math solver working strictly in Modulo 7 (results 0-6).\n"
-                    "You will receive a list of variable assignments using ':=' and a final query.\n"
-                    "Rule: Solve for variables in order of dependency. Reduce every addition, subtraction, or multiplication by Modulo 7.\n\n"
-                    "Format: 'Step {X}: {var} = {substituted expression} = {value} (mod 7)'\n"
-                    "End with: '[FINAL] {value}'\n\n"
-                    "Example:\n"
-                    "Input: Question. A#B := 3. C#D := A#B + 5. C#D?\n"
-                    "Step 1: A#B = 3 = 3 (mod 7)\n"
-                    "Step 2: C#D = 3 + 5 = 1 (mod 7)\n"
-                    "[FINAL] 1"
+                    "INPUT PROCESSING PIPELINE:\n\n"
+                    "STEP 1: Parse user input\n"
+                    "  - Split by '.' to get assignments\n"
+                    "  - Last part is query\n"
+                    "  - Store assignments in order\n\n"
+                    "STEP 2: Initialize modulo 7 solver\n"
+                    "  - variables = {}\n"
+                    "  - step_counter = 1\n\n"
+                    "STEP 3: Generate output following EXACT format:\n"
+                    "  FOR each assignment 'var := expr':\n"
+                    "    Evaluate expr modulo 7 using variables dict\n"
+                    "    value = result % 7\n"
+                    "    variables[var] = value\n"
+                    "    PRINT: 'Step {step_counter}: {var} = {expr} = {value} (mod 7)'\n"
+                    "    step_counter += 1\n"
+                    "  ENDFOR\n"
+                    "  answer = variables[query]\n"
+                    "  PRINT: '[FINAL] {answer}'\n\n"
+                    "FORMAT CONSTRAINTS:\n"
+                    "1. First line MUST start with 'Step 1:'\n"
+                    "2. Use EXACTLY the variables from user input\n"
+                    "3. All calculations modulo 7 (results 0-6)\n"
+                    "4. Final line MUST be '[FINAL] {value}'\n"
+                    "5. NO other text or formatting\n"
+                    "6. NO references to examples\n"
+                    "7. ALL values must come from user input\n\n"
+                    "EXECUTION BEGINS WITH USER INPUT.\n"
+                    "RESPONSE MUST USE USER'S VARIABLES ONLY.\n"
                 ),
                 "force_start": "\nStep 1:",
+                "input_focused": True
             }
         }
-
+        
         self.task_templates = {}
-
         for task_type, config in task_configs.items():
-            static_messages = [
-                {"role": "system", "content": config["system"]}
-            ]
-
+            static_messages = [{"role": "system", "content": config["system"]}]
             static_prompt_text = tokenizer.apply_chat_template(
                 static_messages,
                 tokenize=False,
@@ -242,24 +288,25 @@ class SafeOuroThinkingExperiment:
             ).rstrip()
             
             static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
-
+            
             force_text = config["force_start"].strip()
             force_start_tokens = tokenizer(
                 force_text,
                 return_tensors="pt",
                 add_special_tokens=False
             )
-
+            
             self.task_templates[task_type] = {
                 "static_input_ids": static_inputs.input_ids,
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
-                "force_start_text": config.get("force_start", ""),
-                "example_response": config.get("example_asst", None)
+                "force_start_text": config["force_start"],
+                "input_focused": config["input_focused"],
+                "no_examples": True
             }
-
-        print("[+] Task templates pre-computed with enhanced p_hop and igsm logic.")
-
+        
+        print("[+] Task templates v4: Pre-computed with zero examples.")
+        
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
