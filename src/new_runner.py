@@ -85,6 +85,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"Early Exit: Auto (from model config)")
     print(f"{'='*70}\n")
 
+    
     # 3. Setup Experiment Handler
     experiment = SafeOuroThinkingExperiment(
         model_path,
@@ -116,6 +117,19 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"\nDataset Summary:")
     for task_type, items in test_datasets.items():
         print(f"   {task_type:12s}: {len(items):4d} samples")
+    print(f"{'='*70}\n")
+
+    # Check experiment compliance with paper
+    checker = PaperComplianceChecker()
+    
+    task_alignment = checker.check_task_alignment(list(test_datasets.keys()))
+    ut_coverage = checker.check_ut_steps_coverage(ut_steps_list)
+    
+    print(f"\n{'='*70}")
+    print(f"📋 PAPER COMPLIANCE CHECK")
+    print(f"{'='*70}")
+    print(f"Task Alignment: {task_alignment}")
+    print(f"UT Steps Coverage: {ut_coverage}")
     print(f"{'='*70}\n")
 
     # 5. Prepare Perplexity Data (if needed)

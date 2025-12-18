@@ -14,6 +14,7 @@ Key metrics from the paper that you can measure:
 Place this in: evaluation.py or metrics.py
 """
 
+import os
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Any, Tuple, Optional
