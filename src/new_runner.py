@@ -246,8 +246,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             else:
                 print(f"Batch Size: 1 (Sequential)")
                 print(f"Strategy: Sequential Processing")
-                if not enable_batch and ut_steps > 1:
-                    print(f"Note: Batching disabled for UT={ut_steps} (stability)")
             
             print()
 
