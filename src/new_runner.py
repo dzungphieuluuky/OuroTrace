@@ -75,14 +75,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"{'='*70}")
     print(f"Model Path: {model_path}")
     print(f"UT Steps to Test: {ut_steps_list}")
-    print(f"Data Type: {model_config.get('dtype', torch.float16)}")
+    print(f"Data Type: {model_config.get('dtype', torch.bfloat16)}")
     print(f"4-bit Quantization: {model_config.get('use_4bit_quant', True)}")
-    print(f"Torch Compile: {model_config.get('use_torch_compile', False)} (auto-controlled)")
+    print(f"Torch Compile: {model_config.get('use_torch_compile', True)}")
     print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
     print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
     print(f"Batching: {optimization_config.get('enable_batch', True)}")
-    print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', False)}")
-    print(f"Early Exit: Auto (from model config)")
+    print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', True)}")
+    print(f"Early Exit: {eval_settings.get('early_exit_threshold', 1.0)}")
     print(f"{'='*70}\n")
 
     
@@ -91,7 +91,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         model_path,
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
-        use_torch_compile=config["MODEL"].get("use_torch_compile", False),
+        use_torch_compile=config["MODEL"].get("use_torch_compile", True),
         max_batch_size=optimization_config.get("max_batch_size", 4),
         max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
@@ -152,12 +152,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
         # AUTO-OPTIMIZATION: Determine if batching should be enabled
-        enable_batch = (ut_steps >= 1) and optimization_config.get("enable_batch", True)
+        enable_batch = optimization_config.get("enable_batch", True)
         
         print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
         print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Torch Compile: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Reason: {'Fast path (UT=1)' if enable_batch else 'STABILITY (UT > 1)'}")
+        print(f"   Torch Compile: {'✅ ENABLED' if model_config.get('use_torch_compile', True) else '❌ DISABLED'}")
+        print(f"   NOTE: torch.compile is not the culprit, batching with generate(), not with generate_batch() function.")
         print()
 
         # Load model with specific UT steps configuration
@@ -172,6 +172,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             print("🔧 Building task templates...")
             experiment._build_task_templates(tokenizer)
             experiment._templates_precomputed = True
+            print("✅ Task templates built\n")
             print()
 
         # A. PERPLEXITY EVALUATION
@@ -501,7 +502,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
 
     # Save config file into yaml file
     save_config(config, output_dir=f"./results_{timestamp}", timestamp=timestamp)
-    
+
     return all_results, perplexity_results, holistic_results
 
 
