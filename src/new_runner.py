@@ -253,7 +253,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             # Process items in batches or sequentially using unified predict()
             if batch_size > 1 and len(items) >= batch_size:
                 # BATCHED PROCESSING
-                num_batches = (len(items) + batch_size - 1) // batch_size
+                num_batches = (len(items) + batch_size - 1) // batch_size if enable_batch else 1
                 print(f"Running {num_batches} batches...")
                 
                 for batch_idx in tqdm(
@@ -481,7 +481,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             
             for metric_name, df in paper_metrics.items():
                 if not df.empty:
-                    filename = f"./results/{metric_name}_{timestamp}.csv"
+                    filename = f"./results_{timestamp}/{metric_name}_{timestamp}.csv"
                     df.to_csv(filename, index=False)
                     print(f"✅ Saved {metric_name} to {filename}")
         
@@ -495,7 +495,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         wandb.finish()
         print("✅ W&B session closed")
         print(f"{'='*70}\n")
+    
+    # Save results to csv files 
+    save_results(all_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
 
+    # Save config file into yaml file
+    save_config(config, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+    
     return all_results, perplexity_results, holistic_results
 
 
@@ -630,6 +636,7 @@ def save_results(
     all_results: List[Dict],
     perplexity_results: List[Dict],
     holistic_results: List[Dict],
+    timestamp: Optional[str] = None,
     output_dir: str = "./results"
 ) -> None:
     """Save experiment results to CSV files."""
@@ -637,12 +644,13 @@ def save_results(
     from datetime import datetime
     
     os.makedirs(output_dir, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    if timestamp is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     if all_results:
-        accuracy_file = os.path.join(output_dir, f"accuracy_{timestamp}.csv")
-        pd.DataFrame(all_results).to_csv(accuracy_file, index=False)
-        print(f"✅ Saved accuracy results to {accuracy_file}")
+        all_file = os.path.join(output_dir, f"all_{timestamp}.csv")
+        pd.DataFrame(all_results).to_csv(all_file, index=False)
+        print(f"✅ Saved all results to {all_file}")
     
     if perplexity_results:
         ppl_file = os.path.join(output_dir, f"perplexity_{timestamp}.csv")
@@ -653,3 +661,30 @@ def save_results(
         holistic_file = os.path.join(output_dir, f"holistic_{timestamp}.csv")
         pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)
         print(f"✅ Saved holistic results to {holistic_file}")
+
+def save_config(
+    config: dict,
+    timestamp: Optional[str] = None,
+    output_dir: str = "./results"
+) -> None:
+    """Save experiment configuration to a YAML file."""
+    import os
+    import yaml
+    from datetime import datetime
+    
+    os.makedirs(output_dir, exist_ok=True)
+    if timestamp is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # sanitize config before saving
+    clean = {}
+    for k, v in config.items():
+        if isinstance(v, dict):
+            clean[k] = {kk: str(vv) for kk, vv in v.items()}
+        else:
+            clean[k] = str(v)
+            
+    config_file = os.path.join(output_dir, f"config_{timestamp}.yaml")
+    with open(config_file, 'w') as f:
+        yaml.dump(clean, f)
+    print(f"✅ Saved config to {config_file}")
