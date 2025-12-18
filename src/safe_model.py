@@ -331,8 +331,8 @@ class SafeOuroThinkingExperiment:
         for task_type, config in task_configs.items():
             static_messages = [
                 {"role": "system", "content": config["system"]},
-                {"role": "user", "content": config["example_user"]},
-                {"role": "assistant", "content": config["example_asst"]}
+                # {"role": "user", "content": config["example_user"]},
+                # {"role": "assistant", "content": config["example_asst"]}
             ]
 
             static_prompt_text = tokenizer.apply_chat_template(
