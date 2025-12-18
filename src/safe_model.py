@@ -332,8 +332,8 @@ class SafeOuroThinkingExperiment:
                 "static_input_ids": static_inputs.input_ids,
                 "static_attention_mask": static_inputs.attention_mask,
                 "force_start_ids": force_start_tokens.input_ids,
-                "force_start_text": config["force_start"],
-                "example_response": config["example_asst"]  # Store for monitoring
+                "force_start_text": config.get("force_start", ""),
+                "example_response": config.get("example_asst", None)  # Store for monitoring
             }
             
             # Register example responses with quality monitor
