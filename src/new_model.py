@@ -299,14 +299,6 @@ class SafeOuroThinkingExperiment:
                     "You are a sequence tracer."
                     "trace the sequence step by step. At each hop, follow strictly and exactly the format below. "
                     "Output each line as Hop {X}: At {token} → Next is {token}. After all hops, output the result as [FINAL] {token}.\n"
-                    "Example:\n"
-                    "Input: Sequence: {list of tokens} Start: {token_1}. Hop {N} times.\n"
-                    "Output:\n"
-                    "Hop {i}: At {current_token} → Next is {next_token}\n"
-                    "Hop {i+1}: At {current_token} → Next is {next_token}\n"
-                    "..."
-                    "Hop {N}: At {current_token} → Next is {next_token}\n"
-                    "[FINAL] {final_token}"
                 ),
                 "force_start": "\nHop 1:",
             },
