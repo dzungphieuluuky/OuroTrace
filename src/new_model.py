@@ -124,6 +124,8 @@ class SafeOuroThinkingExperiment:
             print(f"❌ EXPERIMENT TERMINATED: Model generated the same output {self.k_repeat_abort} times in a row.")
             print(f"Repeated output:\n{self.last_k_outputs[0]}")
             print("="*60 + "\n")
+
+            torch.cuda.empty_cache()
             raise SystemExit(f"Experiment failed: {self.k_repeat_abort} repeated outputs")
     
     def initialize_quality_monitor(
@@ -711,4 +713,6 @@ class SafeOuroThinkingExperiment:
                 else:
                     print(f"  {k}: {v}")
             print("="*60 + "\n")
+            
+            torch.cuda.empty_cache()
             raise SystemExit(f"Experiment failed: {failure.reason}")
