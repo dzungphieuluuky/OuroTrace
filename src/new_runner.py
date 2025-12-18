@@ -323,6 +323,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
             else:
                 # SEQUENTIAL PROCESSING
+                print(f"Batch size < 1 or not enough items, processing sequentially.")
                 print(f"Processing {len(items)} items sequentially...")
                 
                 for item in tqdm(items, desc=f"   {task_type}", leave=False):
