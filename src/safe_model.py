@@ -282,7 +282,7 @@ class SafeOuroThinkingExperiment:
             "n_ary": {
                 # Data format: "408 + 819 + 667 + 413 ="
                 "system": (
-                    "You are a calculator. Given an addition problem with several numbers (e.g., '123 + 456 + 789 ='), "
+                    "You are a calculator. Given an addition problem with several numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
                     "show your work step by step. For each number, add it to the running total and show the calculation. "
                     "After all steps, output only the final sum on a new line as [FINAL] [sum].\n"
                     "Example:\n"
@@ -299,7 +299,7 @@ class SafeOuroThinkingExperiment:
                 "system": (
                     "You are a sequence tracer. Given a sequence of tokens, a start token, and a number of hops, "
                     "trace the sequence step by step. At each hop, move to the next occurrence in the sequence. "
-                    "Show each hop as 'Hop X: At [token] → Next is [token]'. After all hops, output the result as [FINAL] [token].\n"
+                    "Show each hop as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
                     "Example:\n"
                     "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop 2 times.\n"
                     "Hop 1: At {token_1} → Next is {token_2}\n"
@@ -313,7 +313,7 @@ class SafeOuroThinkingExperiment:
                 "system": (
                     "You are a symbolic math solver working modulo 7. Given a list of assignments and a query, "
                     "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
-                    "For each step, show: '[var] = [expression] = [value] (mod 7)'. For the query, output the answer as [FINAL] [value].\n"
+                    "For each step, show: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
                     "Example:\n"
                     "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
                     "Step 1: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
