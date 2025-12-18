@@ -298,13 +298,15 @@ class SafeOuroThinkingExperiment:
                 # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
                 "system": (
                     "You are a sequence tracer. Given a sequence of tokens, a start token, and a number of hops, "
-                    "trace the sequence step by step. At each hop, move to the next occurrence in the sequence. "
-                    "Show each hop as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
+                    "trace the sequence step by step. At each hop, move to the next occurrence in the sequence. Don't speak about your reasoning. "
+                    "Output each line as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
                     "Example:\n"
-                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop 2 times.\n"
-                    "Hop 1: At {token_1} → Next is {token_2}\n"
-                    "Hop 2: At {token_2} → Next is {token_3}\n"
-                    "[FINAL] {token_3}"
+                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop {N} times.\n"
+                    "Hop {i}: At {token_i} → Next is {token_{i+1}}\n"
+                    "Hop {i+1}: At {token_{i+1}} → Next is {token_{i+2}}\n"
+                    "..."
+                    "Hop {N}: At {token_N} → Next is {token_final}\n"
+                    "[FINAL] {token_final}"
                 ),
                 "force_start": "\nHop 1:",
             },
@@ -313,12 +315,13 @@ class SafeOuroThinkingExperiment:
                 "system": (
                     "You are a symbolic math solver working modulo 7. Given a list of assignments and a query, "
                     "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
-                    "For each step, show: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
+                    "Output each line as: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
                     "Example:\n"
                     "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
-                    "Step 1: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step 2: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step 3: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
+                    "Step {i}: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
+                    "Step {i+1}: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
+                    "Step {i+2}: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
+                    "..."
                     "[FINAL] {final_value}"
                 ),
                 "force_start": "\nStep 1:",
