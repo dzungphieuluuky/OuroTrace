@@ -18,7 +18,7 @@ from .data_generator import (
     create_perplexity_data, 
     load_and_preprocess_data
 )
-from .model import SafeOuroThinkingExperiment
+from .new_model import SafeOuroThinkingExperiment
 from .evaluation import run_holistic_evaluation
 import os
 import yaml
