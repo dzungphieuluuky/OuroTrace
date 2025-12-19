@@ -43,5 +43,6 @@
     "reasoning_primitives": {
         "num_samples": 100
     },
-    "ENABLE_HEAVY_BENCHMARKS": false
+    "ENABLE_HEAVY_BENCHMARKS": false,
+    "PERIODIC_SAVE_INTERVAL": 300
 }

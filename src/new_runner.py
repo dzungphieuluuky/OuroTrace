@@ -1,3 +1,4 @@
+import os
 import time
 import wandb
 import gc
@@ -144,6 +145,18 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     all_results = []
     holistic_results = []
 
+    # 6. Setup output directory and periodic saving
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_dir = f"./results_{timestamp}"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save config ONCE at the start
+    save_config(config, output_dir=output_dir)
+
+    periodic_save_interval = config.get("PERIODIC_SAVE_INTERVAL", 300)  # default: 5 min
+    last_save_time = time.time()
+
     # 6. Main Experiment Loop (over different UT steps)
     for ut_step_idx, ut_steps in enumerate(ut_steps_list):
         print(f"\n{'='*70}")
@@ -209,6 +222,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             
             except Exception as e:
                 print(f"⚠️ Perplexity calculation failed: {e}\n")
+            now = time.time()
+            if now - last_save_time >= periodic_save_interval:
+                save_results(
+                    all_results, perplexity_results, holistic_results,
+                    output_dir=output_dir, overwrite=True
+                )
+                last_save_time = now
 
         # B. ACCURACY & PERFORMANCE EVALUATION
         print(f"{'='*70}")
@@ -319,6 +339,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 all_results.append(result_entry)
                                 print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
+                    now = time.time()
+                    if now - last_save_time >= periodic_save_interval:
+                        save_results(
+                            all_results, perplexity_results, holistic_results,
+                            output_dir=output_dir, timestamp=timestamp, overwrite=True
+                        )
+                        last_save_time = now
+
             else:
                 # SEQUENTIAL PROCESSING
                 print(f"Batch size < 1 or not enough items, processing sequentially.")
@@ -358,6 +386,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         all_results.append(result_entry)
                         print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                         experiment.monitor_and_maybe_abort(result_entry, task_type)
+                    now = time.time()
+                    if now - last_save_time >= periodic_save_interval:
+                        save_results(
+                            all_results, perplexity_results, holistic_results,
+                            output_dir=output_dir, timestamp=timestamp, overwrite=True
+                        )
+                        last_save_time = now
             
             # Log and display task summary
             _log_task_summary(
@@ -380,6 +415,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 print(f"✅ Holistic evaluation completed\n")
             except Exception as e:
                 print(f"⚠️ Holistic evaluation failed: {e}\n")
+            now = time.time()
+            if now - last_save_time >= periodic_save_interval:
+                save_results(
+                    all_results, perplexity_results, holistic_results,
+                    output_dir=output_dir, overwrite=True
+                )
+                last_save_time = now
 
         # Cleanup GPU memory
         print(f"{'='*70}")
@@ -395,6 +437,10 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"📊 FINAL EXPERIMENT SUMMARY")
     print(f"{'='*70}\n")
     
+    # timestamp for saving
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     if all_results:
         df_all = pd.DataFrame(all_results)
         
@@ -440,8 +486,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(df_ppl.to_string(index=False))
         print()
 
-    from datetime import datetime
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # 8. Paper-Aligned Metrics Analysis
     if all_results:
@@ -632,46 +676,44 @@ def save_results(
     all_results: List[Dict],
     perplexity_results: List[Dict],
     holistic_results: List[Dict],
-    timestamp: Optional[str] = None,
-    output_dir: str = "./results"
+    output_dir: str,
+    overwrite: bool = True
 ) -> None:
-    """Save experiment results to CSV files."""
+    """Save experiment results to CSV files. Overwrites if overwrite=True."""
     import os
-    from datetime import datetime
-    
+
     os.makedirs(output_dir, exist_ok=True)
-    if timestamp is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
+    def save_csv(data, fname):
+        if overwrite and os.path.exists(fname):
+            os.remove(fname)
+        pd.DataFrame(data).to_csv(fname, index=False)
+
     if all_results:
-        all_file = os.path.join(output_dir, f"all_{timestamp}.csv")
-        pd.DataFrame(all_results).to_csv(all_file, index=False)
-        print(f"✅ Saved all results to {all_file}")
-    
+        all_file = os.path.join(output_dir, "all_latest.csv")
+        save_csv(all_results, all_file)
+        print(f"✅ Periodic save: all results to {all_file}")
+
     if perplexity_results:
-        ppl_file = os.path.join(output_dir, f"perplexity_{timestamp}.csv")
-        pd.DataFrame(perplexity_results).to_csv(ppl_file, index=False)
-        print(f"✅ Saved perplexity results to {ppl_file}")
-    
+        ppl_file = os.path.join(output_dir, "perplexity_latest.csv")
+        save_csv(perplexity_results, ppl_file)
+        print(f"✅ Periodic save: perplexity results to {ppl_file}")
+
     if holistic_results:
-        holistic_file = os.path.join(output_dir, f"holistic_{timestamp}.csv")
-        pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)
-        print(f"✅ Saved holistic results to {holistic_file}")
+        holistic_file = os.path.join(output_dir, "holistic_latest.csv")
+        save_csv(holistic_results, holistic_file)
+        print(f"✅ Periodic save: holistic results to {holistic_file}")
 
 def save_config(
     config: dict,
-    timestamp: Optional[str] = None,
-    output_dir: str = "./results"
+    output_dir: str
 ) -> None:
-    """Save experiment configuration to a YAML file."""
+    """Save experiment configuration to a YAML file (once at the start)."""
     import os
     import yaml
-    from datetime import datetime
-    
+
     os.makedirs(output_dir, exist_ok=True)
-    if timestamp is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
     # sanitize config before saving
     clean = {}
     for k, v in config.items():
@@ -679,8 +721,8 @@ def save_config(
             clean[k] = {kk: str(vv) for kk, vv in v.items()}
         else:
             clean[k] = str(v)
-            
-    config_file = os.path.join(output_dir, f"config_{timestamp}.yaml")
+
+    config_file = os.path.join(output_dir, "config.yaml")
     with open(config_file, 'w') as f:
         yaml.dump(clean, f)
     print(f"✅ Saved config to {config_file}")
