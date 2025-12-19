@@ -24,18 +24,13 @@ from .new_model import SafeOuroThinkingExperiment
 from .evaluation import run_holistic_evaluation
 
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
-    """
-    Run experiment with automatic batch/compile optimization based on UT steps.
-    
-    AUTO-OPTIMIZATION RULES:
-    - UT Steps = 1: Enable batching + torch.compile (fast path)
-    - UT Steps > 1: Disable batching + torch.compile (stability)
-    
+    """Run batch experiment based on the provided configuration.
+
     Args:
-        config: Configuration dictionary with MODEL, DATA, EVAL_SETTINGS, etc.
-    
+        config (dict): Experiment configuration dictionary.
+
     Returns:
-        Tuple of (accuracy_results, perplexity_results, holistic_results)
+        Tuple[List[Dict], List[Dict], List[Dict]]: All results, perplexity results, holistic results.
     """
     # 1. Initialize W&B
     use_wandb = config.get("WANDB", {}).get("enabled", False)
@@ -79,7 +74,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"Data Type: {model_config.get('dtype', torch.bfloat16)}")
     print(f"4-bit Quantization: {model_config.get('use_4bit_quant', True)}")
     print(f"Torch Compile: {model_config.get('use_torch_compile', True)}")
-    print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
+    print(f"Max Batch Size: {optimization_config.get('max_batch_size', 8)}")
     print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
     print(f"Batching: {optimization_config.get('enable_batch', True)}")
     print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', True)}")
@@ -93,7 +88,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
         use_torch_compile=config["MODEL"].get("use_torch_compile", True),
-        max_batch_size=optimization_config.get("max_batch_size", 4),
+        max_batch_size=optimization_config.get("max_batch_size", 8),
         max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
 
@@ -155,7 +150,8 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     # Save config ONCE at the start
     save_config(config, output_dir=output_dir)
 
-    periodic_save_interval = config.get("PERIODIC_SAVE_INTERVAL", 300)  # default: 5 min
+    # save results periodically to prevent accidental collapse on long runs
+    periodic_save_interval = config.get("PERIODIC_SAVE_INTERVAL", 300)  # default 5 minutes
     last_save_time = time.time()
 
     # 6. Main Experiment Loop (over different UT steps)
@@ -344,7 +340,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                     if now - last_save_time >= periodic_save_interval:
                         save_results(
                             all_results, perplexity_results, holistic_results,
-                            output_dir=output_dir, timestamp=timestamp, overwrite=True
+                            output_dir=output_dir, overwrite=True
                         )
                         last_save_time = now
 
@@ -391,7 +387,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                     if now - last_save_time >= periodic_save_interval:
                         save_results(
                             all_results, perplexity_results, holistic_results,
-                            output_dir=output_dir, timestamp=timestamp, overwrite=True
+                            output_dir=output_dir, overwrite=True
                         )
                         last_save_time = now
             
@@ -538,10 +534,10 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
     # Save results to csv files 
-    save_results(all_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+    save_results(all_results, perplexity_results, holistic_results, output_dir=output_dir, overwrite=True)
 
     # Save config file into yaml file
-    save_config(config, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+    save_config(config, output_dir=output_dir)
 
     return all_results, perplexity_results, holistic_results
 
