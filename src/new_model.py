@@ -295,49 +295,38 @@ class SafeOuroThinkingExperiment:
         self.tokenizer = tokenizer
 
         task_configs = {
-            "n_ary": {
-                "system": (
-                    "Add numbers step-by-step in this format:\n"
-                    "Step <i>: <sum_so_far> + <next_num> = <new_sum>\n"
-                    "Start with Step 1: 0 + <first> = <result>\n"
-                    "End with [FINAL] <total>\n\n"
-                    "STRICT RULES:\n"
-                    "• Output ONLY the format above\n"
-                    "• NO explanations or words\n"
-                    "• NO repeating the input\n"
-                    "• NO extra symbols\n"
-                    "Begin Step 1 immediately."
-                ),
-                "force_start": "\nStep 1:",
-            },
-            "p_hop": {
-                "system": (
-                    "Trace hops in this format:\n"
-                    "Hop <i>: At <current_token> → Next is <next_token>\n"
-                    "End with [FINAL] <final_token>\n\n"
-                    "STRICT RULES:\n"
-                    "• Output ONLY the format above\n"
-                    "• NO explanations or words\n"
-                    "• NO repeating the sequence\n"
-                    "• NO extra symbols\n"
-                    "Begin Hop 1 immediately."
-                ),
-                "force_start": "\nHop 1:",
-            },
-            "igsm": {
-                "system": (
-                    "Evaluate (mod 7) in this format:\n"
-                    "Step <i>: <var> = <expr> = <calc> (mod 7) = <result>\n"
-                    "End with [FINAL] <answer>\n\n"
-                    "STRICT RULES:\n"
-                    "• Output ONLY the format above\n"
-                    "• NO explanations or words\n"
-                    "• NO repeating the problem\n"
-                    "• NO extra parentheses\n"
-                    "Begin Step 1 immediately."
-                ),
-                "force_start": "\nStep 1:",
-            }
+                "n_ary": {
+                    # Thêm từ khóa kiểm soát: MUST, DO NOT
+                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
+                    "example_user": "10 + 20 + 30 =",
+                    # Thêm [STEP X] và [FINAL]
+                    "example_asst": "[STEP 1] Sum: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Sum: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Sum: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
+                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
+                    "force_start": "\n[STEP 1]", 
+                    "input_prefix": "" 
+                },
+                
+                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
+                "p_hop": {
+                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
+                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
+                    "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
+                    # Rút gọn ví dụ: dùng [TRACE]
+                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
+                    "force_start": "\n[TRACE] Start at", 
+                    "input_prefix": "" 
+                },
+                
+                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
+                "igsm": {
+                    # Tăng cường Guardrail
+                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
+                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
+                    # Thêm [EQ X] cho từng bước và [FINAL]
+                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
+                    "force_start": "\n[EQ 1]", 
+                    "input_prefix": "" 
+                }
         }
 
         self.task_templates = {}
