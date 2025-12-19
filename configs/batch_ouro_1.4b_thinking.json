@@ -24,11 +24,11 @@
         "load_existing": false,
         "data_file_path": "",
         "n_ary": {
-            "ops_levels": [4, 8, 16],
+            "ops_levels": [2, 4, 8, 16, 32],
             "num_samples_per_level": 8
         },
         "p_hop": {
-            "hop_levels": [2, 4, 8],
+            "hop_levels": [16, 24, 32],
             "num_samples_per_level": 8
         },
         "igsm": {

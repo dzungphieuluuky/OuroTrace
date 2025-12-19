@@ -454,15 +454,12 @@ class SafeOuroThinkingExperiment:
             self._build_task_templates(tokenizer)
 
         template = self.task_templates[task_type]
+        device = model.device
 
         # Handle single or batch input
         is_single = isinstance(user_inputs, str)
         if is_single:
             user_inputs = [user_inputs]
-
-        # Validate inputs
-        if not user_inputs or any(not inp.strip() for inp in user_inputs):
-            raise ValueError("Empty or invalid user inputs provided")
 
         # Concatenate prompt parts as strings for each input
         prompts = [
@@ -470,61 +467,47 @@ class SafeOuroThinkingExperiment:
             for user_input in user_inputs
         ]
 
-        # Tokenize with explicit parameters to avoid tensor creation issues
+        # Tokenize all prompts at once (let tokenizer handle padding)
         inputs = tokenizer(
             prompts,
             return_tensors="pt",
             padding=True,
             truncation=True,
-            pad_to_multiple_of=8,  # Better for memory alignment
-            return_attention_mask=True,
         )
+        inputs = {k: v.to(device) for k, v in inputs.items()}
+
         start_time = time.perf_counter()
 
-        if generation_config:
-            gen_config_dict = generation_config
-        else:
-            gen_config_dict = {
-                "max_new_tokens": 512,
-                "do_sample": False,
-                "num_beams": 1,
-                "min_length": 5,
-                "repetition_penalty": 1
-            }
-        
-        generation_config = GenerationConfig(**gen_config_dict)
-        # Generate with error handling
-        try:
-            outputs = model.generate(
-                input_ids=inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                pad_token_id=tokenizer.eos_token_id,
-                use_cache=False,
-                disable_compile=False,
-                return_dict_in_generate=True,
-                output_scores=False,
-                generation_config=generation_config
-            )
-        except Exception as e:
-            raise RuntimeError(f"Generation failed: {str(e)}")
+        gen_config = generation_config or {
+            "max_new_tokens": 512,
+            "do_sample": False,
+            "num_beams": 1,
+            "min_length": 5,
+            "repetition_penalty": 1
+        }
+        prediction_generation_config = GenerationConfig(*gen_config)
+        outputs = model.generate(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            pad_token_id=tokenizer.eos_token_id,
+            use_cache=False,
+            disable_compile=False,
+            return_dict_in_generate=True,
+            output_scores=False,
+            generation_config=prediction_generation_config,
+        )
 
         generation_time = time.perf_counter() - start_time
 
         results = []
         for i in range(len(user_inputs)):
             prompt_length = inputs["input_ids"][i].shape[0]
+            # Find where the prompt ends in the generated sequence
             gen_seq = outputs.sequences[i]
-            
-            # Safer slicing approach
-            if gen_seq.shape[0] > prompt_length:
-                generated_ids = gen_seq[prompt_length:]
-            else:
-                generated_ids = torch.tensor([], dtype=torch.long)
-                
+            generated_ids = gen_seq[inputs["input_ids"].shape[1]:] if gen_seq.shape[0] > inputs["input_ids"].shape[1] else gen_seq[prompt_length:]
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
             full_response = template["force_start_text"] + generated_text
             pred = self._extract_final_answer(full_response, task_type)
-            
             results.append({
                 "full_response": full_response,
                 "prediction": pred,
@@ -534,7 +517,7 @@ class SafeOuroThinkingExperiment:
                 "ut_steps": ut_steps,
             })
 
-        return results[0] if is_single else results            
+        return results[0] if is_single else results
     
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
         """Create an error result dictionary"""
