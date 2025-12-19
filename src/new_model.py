@@ -399,7 +399,7 @@ class SafeOuroThinkingExperiment:
                 tokenize=False,
                 add_generation_prompt=True
             )
-
+            print(f"DEBUG: Generated prompt for task '{task_type}':\n{prompt}\n")
             if self.check_chat_format(prompt):
                 print(f"   ✓ Chat format verified for input.")
             else:
