@@ -140,7 +140,7 @@ class OutputQualityMonitor:
                 'total_samples': garbage_check['total_count'],
                 'example_outputs': garbage_check['samples']
             }
-            return ExperimentFailureException(
+            raise ExperimentFailureException(
                 f"EXCESSIVE GARBAGE OUTPUTS: {garbage_check['garbage_rate']*100:.1f}% "
                 f"(threshold: {self.garbage_threshold*100:.1f}%)",
                 failure_stats
@@ -155,7 +155,7 @@ class OutputQualityMonitor:
                 'threshold': f"{self.example_similarity_threshold*100:.1f}% similarity",
                 'example_cases': memorization_check['cases']
             }
-            return ExperimentFailureException(
+            raise ExperimentFailureException(
                 f"EXAMPLE MEMORIZATION DETECTED: {memorization_check['memorization_rate']*100:.1f}% "
                 f"of responses are copying examples",
                 failure_stats

@@ -10,7 +10,7 @@ from transformers import (
     GenerationConfig,
 )
 from tqdm.auto import tqdm
-from .output_monitor import OutputQualityMonitor
+from .output_monitor import OutputQualityMonitor, ExperimentFailureException
 
 
 class SafeOptimizations:
@@ -112,7 +112,11 @@ class SafeOuroThinkingExperiment:
         self.initialize_quality_monitor()
 
     def check_repeated_outputs_and_abort(self, output: str):
-        """Abort if the same output is generated for k consecutive inputs."""
+        if not hasattr(self, "last_k_outputs"):
+            self.last_k_outputs = []
+        if not hasattr(self, "k_repeat_abort"):
+            self.k_repeat_abort = 5  # or set via config
+
         self.last_k_outputs.append(output)
         if len(self.last_k_outputs) > self.k_repeat_abort:
             self.last_k_outputs.pop(0)
@@ -120,11 +124,8 @@ class SafeOuroThinkingExperiment:
             len(self.last_k_outputs) == self.k_repeat_abort
             and all(o == self.last_k_outputs[0] for o in self.last_k_outputs)
         ):
-            print("\n" + "="*60)
-            print(f"❌ EXPERIMENT TERMINATED: Model generated the same output {self.k_repeat_abort} times in a row.")
-            print(f"Repeated output:\n{self.last_k_outputs[0]}")
-            print("="*60 + "\n")
-            raise SystemExit(f"Experiment failed: {self.k_repeat_abort} repeated outputs")
+            print(f"❌ Aborting due to repeated outputs...")
+            raise ExperimentFailureException(f"Experiment failed: {self.k_repeat_abort} repeated outputs")
     
     def initialize_quality_monitor(
         self,
@@ -654,7 +655,7 @@ class SafeOuroThinkingExperiment:
     def monitor_and_maybe_abort(self, result: Dict[str, Any], task_type: str):
         """
         Add result to quality monitor and check for experiment failure.
-        If failure is detected, log details and raise SystemExit.
+        If failure is detected, log details and raise ExperimentFailureException.
         """
         if self.quality_monitor is None:
             return
@@ -674,4 +675,4 @@ class SafeOuroThinkingExperiment:
                 else:
                     print(f"  {k}: {v}")
             print("="*60 + "\n")
-            raise SystemExit(f"Experiment failed: {failure.reason}")
+            raise ExperimentFailureException(f"Experiment failed: {failure.reason}")
