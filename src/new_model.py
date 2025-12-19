@@ -295,38 +295,53 @@ class SafeOuroThinkingExperiment:
         self.tokenizer = tokenizer
 
         task_configs = {
-                "n_ary": {
-                    # Thêm từ khóa kiểm soát: MUST, DO NOT
-                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
-                    "example_user": "10 + 20 + 30 =",
-                    # Thêm [STEP X] và [FINAL]
-                    "example_asst": "[STEP 1] Sum: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Sum: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Sum: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
-                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
-                    "force_start": "\n[STEP 1]", 
-                    "input_prefix": "" 
-                },
-                
-                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
-                "p_hop": {
-                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
-                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
-                    "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                    # Rút gọn ví dụ: dùng [TRACE]
-                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
-                    "force_start": "\n[TRACE] Start at", 
-                    "input_prefix": "" 
-                },
-                
-                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
-                "igsm": {
-                    # Tăng cường Guardrail
-                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
-                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
-                    # Thêm [EQ X] cho từng bước và [FINAL]
-                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
-                    "force_start": "\n[EQ 1]", 
-                    "input_prefix": "" 
-                }
+            "n_ary": {
+                # Data format: "408 + 819 + 667 + 413 ="
+                "system": (
+                    "You are a calculator. Given an addition problem with several numbers (e.g., '123 + 456 + 789 ='), "
+                    "You are a calculator. Given an addition problem with several numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
+                    "show your work step by step. For each number, add it to the running total and show the calculation. "
+                    "After all steps, output only the final sum on a new line as [FINAL] [sum].\n"
+                    "Example:\n"
+                    "Input: {number_1} + {number_2} + {number_3} + ... =\n"
+                    "Step 1: \n"
+                    "Step 2: {number_1} + {number_2} = {sum_2}\n"
+                    "Step 3: {sum_2} + {number_3} = {sum_3}\n"
+                    "[FINAL] {final_sum}"
+                ),
+                "force_start": "Step 1:",
+            },
+            "p_hop": {
+                # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
+                "system": (
+                    "You are a sequence tracer. Given a sequence of tokens, a start token, and a number of hops, "
+                    "trace the sequence step by step. At each hop, move to the next occurrence in the sequence. "
+                    "Show each hop as 'Hop X: At [token] → Next is [token]'. After all hops, output the result as [FINAL] [token].\n"
+                    "Show each hop as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
+                    "Example:\n"
+                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop 2 times.\n"
+                    "Hop 1: At {token_1} → Next is {token_2}\n"
+                    "Hop 2: At {token_2} → Next is {token_3}\n"
+                    "[FINAL] {token_3}"
+                ),
+                "force_start": "Hop 1:",
+            },
+            "igsm": {
+                # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
+                "system": (
+                    "You are a symbolic math solver working modulo 7. Given a list of assignments and a query, "
+                    "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
+                    "For each step, show: '[var] = [expression] = [value] (mod 7)'. For the query, output the answer as [FINAL] [value].\n"
+                    "For each step, show: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
+                    "Example:\n"
+                    "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
+                    "Step 1: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
+                    "Step 2: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
+                    "Step 3: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
+                    "[FINAL] {final_value}"
+                ),
+                "force_start": "Step 1:",
+            }
         }
 
         self.task_templates = {}
