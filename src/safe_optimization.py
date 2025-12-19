@@ -274,7 +274,7 @@ class WarmupOptimization:
         input_ids = inputs.input_ids.to(device)
         attention_mask = inputs.attention_mask.to(device)
         
-        with torch.no_grad():
+        with torch.inference_mode():
             for i in range(num_warmup):
                 _ = model.generate(
                     input_ids=input_ids,
