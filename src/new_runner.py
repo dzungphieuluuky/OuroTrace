@@ -49,7 +49,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 config=config,
                 mode=wb_conf.get("mode", "online"),
                 settings=wandb.Settings(
-                    start_timeout=wb_conf.get("timeout", 30), 
                     _disable_stats=True
                 ),
             )
