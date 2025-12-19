@@ -391,9 +391,13 @@ class SafeOuroThinkingExperiment:
             prompt = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
-                add_generation_prompt=True
+                add_generation_prompt=True,
             )
-            print(f"DEBUG: Generated prompt for task '{task_type}':\n{prompt}\n")
+            # Add_generate_prompt is true so it will append <|im_start|>assistant
+            # Now add the force_start_text to guide generation
+            prompt += template["force_start_text"]
+
+            print(f"DEBUG: Full prompt for '{task_type}':\n{prompt}\n")
             if self.check_chat_format(prompt):
                 print(f"   ✓ Chat format verified for input.")
             else:
@@ -424,7 +428,7 @@ class SafeOuroThinkingExperiment:
                 use_cache=True,
                 return_dict_in_generate=True,
                 output_scores=False,
-                **default_config,
+                generation_config=GenerationConfig(**default_config),
             )
         except Exception as e:
             print(f"❌ Generation failed: {e}")
@@ -436,7 +440,8 @@ class SafeOuroThinkingExperiment:
         results = []
         for i in range(len(user_inputs)):
             prompt_length = attention_mask[i].sum().item()
-            generated_ids = outputs.sequences[i, prompt_length:]
+
+            generated_ids = outputs.sequences[i, input_ids.shape[1]:]
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
             full_response = template["force_start_text"] + " " + generated_text
 
