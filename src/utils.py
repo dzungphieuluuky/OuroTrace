@@ -4,6 +4,63 @@ import zipfile
 import hashlib
 import sys
 from IPython import get_ipython
+import pandas as pd
+from typing import List, Dict
+
+def save_results(
+    all_results: List[Dict],
+    perplexity_results: List[Dict],
+    holistic_results: List[Dict],
+    output_dir: str,
+    overwrite: bool = True
+) -> None:
+    """Save experiment results to CSV files. Overwrites if overwrite=True."""
+    import os
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    def save_csv(data, fname):
+        if overwrite and os.path.exists(fname):
+            os.remove(fname)
+        pd.DataFrame(data).to_csv(fname, index=False)
+
+    if all_results:
+        all_file = os.path.join(output_dir, "all_latest.csv")
+        save_csv(all_results, all_file)
+        print(f"✅ Periodic save: all results to {all_file}")
+
+    if perplexity_results:
+        ppl_file = os.path.join(output_dir, "perplexity_latest.csv")
+        save_csv(perplexity_results, ppl_file)
+        print(f"✅ Periodic save: perplexity results to {ppl_file}")
+
+    if holistic_results:
+        holistic_file = os.path.join(output_dir, "holistic_latest.csv")
+        save_csv(holistic_results, holistic_file)
+        print(f"✅ Periodic save: holistic results to {holistic_file}")
+
+def save_config(
+    config: dict,
+    output_dir: str
+) -> None:
+    """Save experiment configuration to a YAML file (once at the start)."""
+    import os
+    import yaml
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    # sanitize config before saving
+    clean = {}
+    for k, v in config.items():
+        if isinstance(v, dict):
+            clean[k] = {kk: str(vv) for kk, vv in v.items()}
+        else:
+            clean[k] = str(v)
+
+    config_file = os.path.join(output_dir, "config.yaml")
+    with open(config_file, 'w') as f:
+        yaml.dump(clean, f)
+    print(f"✅ Saved config to {config_file}")
 
 def configure_environment_paths():
     """Detect environment and configure paths"""
