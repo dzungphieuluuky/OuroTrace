@@ -454,7 +454,6 @@ class SafeOuroThinkingExperiment:
             self._build_task_templates(tokenizer)
 
         template = self.task_templates[task_type]
-        device = next(model.parameters()).device  # More reliable device detection
 
         # Handle single or batch input
         is_single = isinstance(user_inputs, str)
@@ -477,17 +476,9 @@ class SafeOuroThinkingExperiment:
             return_tensors="pt",
             padding=True,
             truncation=True,
-            max_length=tokenizer.model_max_length,  # Explicit max length
             pad_to_multiple_of=8,  # Better for memory alignment
             return_attention_mask=True,
         )
-        
-        # Move to device with validation
-        try:
-            inputs = {k: v.to(device) for k, v in inputs.items()}
-        except RuntimeError as e:
-            raise RuntimeError(f"Failed to move inputs to device {device}: {e}")
-
         start_time = time.perf_counter()
 
         if generation_config:
@@ -528,7 +519,7 @@ class SafeOuroThinkingExperiment:
             if gen_seq.shape[0] > prompt_length:
                 generated_ids = gen_seq[prompt_length:]
             else:
-                generated_ids = torch.tensor([], dtype=torch.long, device=device)
+                generated_ids = torch.tensor([], dtype=torch.long)
                 
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
             full_response = template["force_start_text"] + generated_text
