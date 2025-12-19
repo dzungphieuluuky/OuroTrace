@@ -322,7 +322,8 @@ class SafeOuroThinkingExperiment:
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
-            static_messages = [{"role": "system", "content": config["system"]}]
+            static_messages = [{"role": "system", 
+                                "content": config["system"]}]
             static_prompt_text = tokenizer.apply_chat_template(
                 static_messages, tokenize=False, add_generation_prompt=True
             ).rstrip()
@@ -440,6 +441,10 @@ class SafeOuroThinkingExperiment:
         ut_steps: int,
         generation_config: dict = None,
     ):
+        """
+        Unified prediction with automatic padding handled by tokenizer.
+        Concatenates prompt parts as strings before tokenization.
+        """
         # VERIFY model has the right config
         if not hasattr(model.config, 'total_ut_steps'):
             print("❌ ERROR: Model missing total_ut_steps config!")
@@ -461,63 +466,105 @@ class SafeOuroThinkingExperiment:
             user_inputs = [user_inputs]
 
         # Concatenate prompt parts as strings for each input
-        prompts = [
+        full_prompts = [
             f"{template['static_prompt_text']}{user_input}{template['force_start_text']}"
             for user_input in user_inputs
         ]
 
-        # Tokenize all prompts at once (let tokenizer handle padding)
+        # Tokenize all prompts at once (tokenizer handles padding automatically)
         inputs = tokenizer(
-            prompts,
+            full_prompts,
             return_tensors="pt",
-            padding=True,
+            padding=True,           # Tokenizer handles left-padding
             truncation=True,
+            return_attention_mask=True,
         )
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
+        # Get the actual prompt lengths (excluding padding) for each sample
+        # attention_mask has 0s for padding, 1s for real tokens
+        prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
+
         start_time = time.perf_counter()
 
-        gen_config = generation_config or {
-            "max_new_tokens": 512,
-            "do_sample": False,
-            "num_beams": 1,
-            "min_length": 5,
-            "repetition_penalty": 1
-        }
-        prediction_generation_config = GenerationConfig(**gen_config)
-        outputs = model.generate(
-            input_ids=inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],
-            pad_token_id=tokenizer.eos_token_id,
-            use_cache=False,
-            disable_compile=False,
-            return_dict_in_generate=True,
-            output_scores=False,
-            generation_config=prediction_generation_config,
-        )
+        # Prepare generation config
+        default_config = self._get_optimal_generation_config(task_type)
+        if generation_config:
+            default_config.update(generation_config)
+        
+        try:
+            outputs = model.generate(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+                use_cache=True,
+                return_dict_in_generate=True,
+                output_scores=False,
+                **default_config,
+            )
+        except Exception as e:
+            print(f"❌ Generation failed: {e}")
+            error_results = [self._create_error_result(inp, ut_steps, str(e)) for inp in user_inputs]
+            return error_results[0] if is_single else error_results
 
         generation_time = time.perf_counter() - start_time
 
+        # Process outputs for each sample in batch
         results = []
         for i in range(len(user_inputs)):
-            prompt_length = inputs["input_ids"][i].shape[0]
-            # Find where the prompt ends in the generated sequence
+            # Get the actual prompt length for this specific sample (excluding padding)
+            actual_prompt_length = prompt_lengths[i]
+            
+            # Extract the full generated sequence for this sample
             gen_seq = outputs.sequences[i]
-            generated_ids = gen_seq[inputs["input_ids"].shape[1]:] if gen_seq.shape[0] > inputs["input_ids"].shape[1] else gen_seq[prompt_length:]
+            
+            # The generated sequence includes the prompt + new tokens
+            # We need to skip both padding AND the actual prompt
+            # Since padding is on the left, and prompt follows padding:
+            # [pad, pad, ..., prompt tokens..., generated tokens...]
+            # We can use: skip first `input_ids.shape[1]` tokens (which includes padding)
+            # OR skip based on actual_prompt_length from the end of padding
+            
+            # Method 1: Skip the entire input_ids length (simpler and safer)
+            input_length = inputs["input_ids"].shape[1]  # This includes padding
+            if gen_seq.shape[0] > input_length:
+                generated_ids = gen_seq[input_length:]
+            else:
+                generated_ids = torch.tensor([], dtype=gen_seq.dtype, device=device)
+            
+            # Decode generated tokens
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
-            full_response = template["force_start_text"] + generated_text
-            pred = self._extract_final_answer(full_response, task_type)
-            results.append({
+            
+            # Construct full response
+            full_response = template["force_start_text"] + " " + generated_text
+            
+            # Check for repeated outputs
+            self.check_repeated_outputs_and_abort(full_response)
+            
+            # Detect garbage
+            is_degenerate = self._detect_degenerate_output(full_response)
+            
+            if is_degenerate:
+                print(f"⚠️ GARBAGE OUTPUT detected for {task_type} (batch item {i})")
+                print(f"   Response preview: {full_response[:200]}...")
+                pred = "DEGENERATE"
+            else:
+                pred = self._extract_final_answer(full_response, task_type)
+            
+            result = {
                 "full_response": full_response,
                 "prediction": pred,
                 "generation_time": generation_time / len(user_inputs),
                 "generated_tokens": generated_ids.shape[0],
-                "input_tokens": prompt_length,
+                "input_tokens": actual_prompt_length,  # Use actual length without padding
                 "ut_steps": ut_steps,
-            })
+                "is_degenerate": is_degenerate,
+                "test_input": user_inputs[i],
+            }
+            results.append(result)
 
-        return results[0] if is_single else results
-    
+        return results[0] if is_single else results    
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
         """Create an error result dictionary"""
         return {
