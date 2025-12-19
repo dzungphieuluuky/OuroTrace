@@ -41,26 +41,29 @@ def save_results(
 
 def save_config(
     config: dict,
-    output_dir: str
+    output_dir: str = "./default_config"
 ) -> None:
-    """Save experiment configuration to a YAML file (once at the start)."""
+    """Save experiment configuration to a YAML file with native types."""
     import os
     import yaml
-
     os.makedirs(output_dir, exist_ok=True)
+    config_path = os.path.join(output_dir, "config.yaml")
+    
+    def sanitize_config(cfg):
+        """Convert config to YAML-safe format"""
+        clean = {}
+        for k, v in cfg.items():
+            if isinstance(v, dict):
+                clean[k] = sanitize_config(v)
+            elif str(type(v)).find('torch.') != -1:
+                clean[k] = str(v)
+            else:
+                clean[k] = v
+        return clean
 
-    # sanitize config before saving
-    clean = {}
-    for k, v in config.items():
-        if isinstance(v, dict):
-            clean[k] = {kk: str(vv) for kk, vv in v.items()}
-        else:
-            clean[k] = str(v)
-
-    config_file = os.path.join(output_dir, "config.yaml")
-    with open(config_file, 'w') as f:
-        yaml.dump(clean, f)
-    print(f"✅ Saved config to {config_file}")
+    with open(config_path, 'w') as f:
+        yaml.dump(sanitize_config(config), f)
+    print(f"✅ Configuration saved to {config_path}")
 
 def configure_environment_paths():
     """Detect environment and configure paths"""
