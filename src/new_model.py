@@ -70,7 +70,7 @@ class SafeOptimizations:
         input_ids = dummy_input.input_ids.to(device)
         
         print(f"   → Running {num_passes} warmup passes...")
-        with torch.no_grad():
+        with torch.inference_mode():
             for i in range(num_passes):
                 _ = model.generate(
                     input_ids=input_ids,
@@ -354,7 +354,7 @@ class SafeOuroThinkingExperiment:
             }
         print("[+] Task templates (string only) pre-computed.")
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def predict(
         self,
         user_inputs: Union[str, List[str]],
@@ -387,15 +387,19 @@ class SafeOuroThinkingExperiment:
         # Build chat messages for each input
         prompts = []
         for user_input in user_inputs:
+            # construct one message
             messages = [
                 {"role": "system", "content": template["system"]},
                 {"role": "user", "content": user_input},
             ]
+
+            # Apply chat template (adding <|im_start|>assistant)
             prompt = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=True
             )
+            
             if self.check_chat_format(prompt):
                 print(f"   ✓ Chat format verified for input.")
             else:
@@ -578,7 +582,7 @@ class SafeOuroThinkingExperiment:
             "test_input": user_input,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def calculate_perplexity(
         self,
         model,
@@ -622,7 +626,7 @@ class SafeOuroThinkingExperiment:
             if input_slice.size(1) < 2:
                 continue
 
-            with torch.no_grad():
+            with torch.inference_mode():
                 outputs = model(
                     input_ids=input_slice,
                     attention_mask=attention_mask[:, i:end_loc],
