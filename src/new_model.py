@@ -434,34 +434,47 @@ class SafeOuroThinkingExperiment:
     @torch.inference_mode()
     def predict(
         self,
-        user_input: str,
+        user_inputs: Union[str, List[str]],
         task_type: str,
         model,
         tokenizer,
         ut_steps: int,
         generation_config: dict = None,
     ):
-            # VERIFY model has the right config
+        # VERIFY model has the right config
         if not hasattr(model.config, 'total_ut_steps'):
             print("❌ ERROR: Model missing total_ut_steps config!")
-            return {"error": "Bad model config", "prediction": "0"}
+            if isinstance(user_inputs, list):
+                return [self._create_error_result(inp, ut_steps) for inp in user_inputs]
+            else:
+                return self._create_error_result(user_inputs, ut_steps)
 
-        """Optimized prediction with repetition penalty to prevent loops"""
+        # Ensure task templates are built
         if not hasattr(self, "task_templates") or task_type not in self.task_templates:
             self._build_task_templates(tokenizer)
 
         template = self.task_templates[task_type]
         device = model.device
 
-        input_ids = template["static_input_ids"].to(device)
-        user_query = template["input_prefix"] + user_input
-        user_tokens = tokenizer(
-            user_query, return_tensors="pt", add_special_tokens=False
-        ).input_ids.to(device)
-        force_start_ids = template["force_start_ids"].to(device)
+        # Handle single or batch input
+        is_single = isinstance(user_inputs, str)
+        if is_single:
+            user_inputs = [user_inputs]
 
-        input_ids = torch.cat([input_ids, user_tokens, force_start_ids], dim=1)
-        attention_mask = torch.ones_like(input_ids, device=device)
+        # Concatenate prompt parts as strings for each input
+        prompts = [
+            f"{template['static_prompt_text']}{user_input}{template['force_start_text']}"
+            for user_input in user_inputs
+        ]
+
+        # Tokenize all prompts at once (let tokenizer handle padding)
+        inputs = tokenizer(
+            prompts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+        )
+        inputs = {k: v.to(device) for k, v in inputs.items()}
 
         start_time = time.perf_counter()
 
@@ -474,8 +487,8 @@ class SafeOuroThinkingExperiment:
         }
 
         outputs = model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
             pad_token_id=tokenizer.eos_token_id,
             use_cache=False,
             disable_compile=False,
@@ -486,22 +499,26 @@ class SafeOuroThinkingExperiment:
 
         generation_time = time.perf_counter() - start_time
 
-        prompt_length = input_ids.shape[1]
-        generated_ids = outputs.sequences[0, prompt_length:]
-        generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
+        results = []
+        for i in range(len(user_inputs)):
+            prompt_length = inputs["input_ids"][i].shape[0]
+            # Find where the prompt ends in the generated sequence
+            gen_seq = outputs.sequences[i]
+            generated_ids = gen_seq[inputs["input_ids"].shape[1]:] if gen_seq.shape[0] > inputs["input_ids"].shape[1] else gen_seq[prompt_length:]
+            generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
+            full_response = template["force_start_text"] + generated_text
+            pred = self._extract_final_answer(full_response, task_type)
+            results.append({
+                "full_response": full_response,
+                "prediction": pred,
+                "generation_time": generation_time / len(user_inputs),
+                "generated_tokens": generated_ids.shape[0],
+                "input_tokens": prompt_length,
+                "ut_steps": ut_steps,
+            })
 
-        full_response = template["force_start_text"] + generated_text
-        pred = self._extract_final_answer(full_response, task_type)
-
-        return {
-            "full_response": full_response,
-            "prediction": pred,
-            "generation_time": generation_time,
-            "generated_tokens": generated_ids.shape[0],
-            "input_tokens": input_ids.shape[1],
-            "ut_steps": ut_steps,
-        }
-    
+        return results[0] if is_single else results
+            
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
         """Create an error result dictionary"""
         return {

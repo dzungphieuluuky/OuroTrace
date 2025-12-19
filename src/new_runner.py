@@ -271,7 +271,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             model=model,
                             tokenizer=tokenizer,
                             ut_steps=ut_steps,
-                            enable_batch=enable_batch,
                         )
 
                         # Process each output
@@ -295,7 +294,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                     model=model,
                                     tokenizer=tokenizer,
                                     ut_steps=ut_steps,
-                                    enable_batch=False,
                                 )
                                 result_entry = _create_result_entry(
                                     output, item, task_type, ut_steps
@@ -335,7 +333,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             model=model,
                             tokenizer=tokenizer,
                             ut_steps=ut_steps,
-                            enable_batch=False,
                         )
                         result_entry = _create_result_entry(
                             output, item, task_type, ut_steps
