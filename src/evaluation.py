@@ -73,7 +73,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
 
             # Simple Generation (Greedy)
             inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-            with torch.no_grad():
+            with torch.inference_mode():
                 outputs = model.generate(
                     **inputs,
                     max_new_tokens=10,

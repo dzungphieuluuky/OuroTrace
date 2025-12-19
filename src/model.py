@@ -275,7 +275,7 @@ class OuroThinkingExperiment:
         
         return False
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def predict_with_metrics_optimized(
         self,
         user_input: str,
@@ -384,7 +384,7 @@ class OuroThinkingExperiment:
             "is_degenerate": is_degenerate,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def calculate_perplexity(
         self,
         model,
@@ -496,7 +496,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         
         return input_id_lists
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def batch_predict_with_metrics(
         self, 
         prompts: List[str], 

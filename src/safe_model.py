@@ -69,7 +69,7 @@ class SafeOptimizations:
         input_ids = dummy_input.input_ids.to(device)
         
         print(f"   → Running {num_passes} warmup passes...")
-        with torch.no_grad():
+        with torch.inference_mode():
             for i in range(num_passes):
                 _ = model.generate(
                     input_ids=input_ids,
@@ -457,7 +457,7 @@ class SafeOuroThinkingExperiment:
             "repetition_penalty": 1.0,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def predict_with_metrics_optimized(
         self,
         user_input: str,
@@ -563,7 +563,7 @@ class SafeOuroThinkingExperiment:
             "test_input": user_input,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def calculate_perplexity(
         self,
         model,
@@ -607,7 +607,7 @@ class SafeOuroThinkingExperiment:
             if input_slice.size(1) < 2:
                 continue
 
-            with torch.no_grad():
+            with torch.inference_mode():
                 outputs = model(
                     input_ids=input_slice,
                     attention_mask=attention_mask[:, i:end_loc],
@@ -691,7 +691,7 @@ class SafeOuroBatchExperiment(SafeOuroThinkingExperiment):
         
         return input_id_lists
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def batch_predict_with_metrics(
         self, 
         prompts: List[str], 

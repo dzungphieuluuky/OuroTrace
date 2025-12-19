@@ -67,7 +67,7 @@ class SafeOptimizationMixin:
         """
         print("✅ Applying inference optimizations")
         
-        # 1. Disable gradient computation (already done with @torch.no_grad)
+        # 1. Disable gradient computation (already done with @torch.inference_mode)
         model.eval()
         for param in model.parameters():
             param.requires_grad = False
