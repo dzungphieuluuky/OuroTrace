@@ -18,10 +18,8 @@ from .data_generator import (
     create_perplexity_data, 
     load_and_preprocess_data
 )
-from .safe_model import SafeOuroBatchExperiment, SafeOuroThinkingExperiment
-from .model import OuroBatchExperiment, OuroThinkingExperiment
+from .new_model import SafeOuroThinkingExperiment
 from .evaluation import run_holistic_evaluation
-
 
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
     """
@@ -76,22 +74,23 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"{'='*70}")
     print(f"Model Path: {model_path}")
     print(f"UT Steps to Test: {ut_steps_list}")
-    print(f"Data Type: {model_config.get('dtype', torch.float16)}")
+    print(f"Data Type: {model_config.get('dtype', torch.bfloat16)}")
     print(f"4-bit Quantization: {model_config.get('use_4bit_quant', True)}")
-    print(f"Torch Compile: {model_config.get('use_torch_compile', False)} (auto-controlled)")
+    print(f"Torch Compile: {model_config.get('use_torch_compile', True)}")
     print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
     print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
-    print(f"Batching: Auto (enabled only for UT=1)")
-    print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', False)}")
-    print(f"Early Exit: Auto (from model config)")
+    print(f"Batching: {optimization_config.get('enable_batch', True)}")
+    print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', True)}")
+    print(f"Early Exit: {eval_settings.get('early_exit_threshold', 1.0)}")
     print(f"{'='*70}\n")
 
+    
     # 3. Setup Experiment Handler
-    experiment = SafeOuroBatchExperiment(
+    experiment = SafeOuroThinkingExperiment(
         model_path,
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
-        use_torch_compile=config["MODEL"].get("use_torch_compile", False),
+        use_torch_compile=config["MODEL"].get("use_torch_compile", True),
         max_batch_size=optimization_config.get("max_batch_size", 4),
         max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
@@ -119,6 +118,19 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"   {task_type:12s}: {len(items):4d} samples")
     print(f"{'='*70}\n")
 
+    # Check experiment compliance with paper
+    checker = PaperComplianceChecker()
+    
+    task_alignment = checker.check_task_alignment(list(test_datasets.keys()))
+    ut_coverage = checker.check_ut_steps_coverage(ut_steps_list)
+    
+    print(f"\n{'='*70}")
+    print(f"📋 PAPER COMPLIANCE CHECK")
+    print(f"{'='*70}")
+    print(f"Task Alignment: {task_alignment}")
+    print(f"UT Steps Coverage: {ut_coverage}")
+    print(f"{'='*70}\n")
+
     # 5. Prepare Perplexity Data (if needed)
     perplexity_results = []
     perplexity_data = []
@@ -139,12 +151,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
         # AUTO-OPTIMIZATION: Determine if batching should be enabled
-        enable_batch = (ut_steps == 1) and optimization_config.get("enable_batch", True)
+        enable_batch = optimization_config.get("enable_batch", True)
         
         print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
         print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Torch Compile: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Reason: {'Fast path (UT=1)' if enable_batch else 'STABILITY (UT > 1)'}")
+        print(f"   Torch Compile: {'✅ ENABLED' if model_config.get('use_torch_compile', True) else '❌ DISABLED'}")
+        print(f"   NOTE: torch.compile is not the culprit, batching with generate(), not with generate_batch() function.")
         print()
 
         # Load model with specific UT steps configuration
@@ -159,6 +171,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             print("🔧 Building task templates...")
             experiment._build_task_templates(tokenizer)
             experiment._templates_precomputed = True
+            print("✅ Task templates built\n")
             print()
 
         # A. PERPLEXITY EVALUATION
@@ -217,7 +230,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
 
             # Determine optimal batch size for this task (only if batch enabled)
             batch_size = 1
-            if enable_batch and hasattr(model, 'generate_batch'):
+            if enable_batch:
                 task_batch_limits = {
                     "n_ary": 8,
                     "p_hop": 4,
@@ -232,15 +245,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             else:
                 print(f"Batch Size: 1 (Sequential)")
                 print(f"Strategy: Sequential Processing")
-                if not enable_batch and ut_steps > 1:
-                    print(f"Note: Batching disabled for UT={ut_steps} (stability)")
             
             print()
 
-            # Process items in batches or sequentially
+            # Process items in batches or sequentially using unified predict()
             if batch_size > 1 and len(items) >= batch_size:
                 # BATCHED PROCESSING
-                num_batches = (len(items) + batch_size - 1) // batch_size
+                num_batches = (len(items) + batch_size - 1) // batch_size if enable_batch else 1
                 print(f"Running {num_batches} batches...")
                 
                 for batch_idx in tqdm(
@@ -253,14 +264,16 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                     prompts = [item["prompt"] for item in batch_items]
 
                     try:
-                        batch_outputs = experiment.batch_predict_with_metrics(
-                            prompts=prompts,
+                        # Use unified predict() with list of prompts
+                        batch_outputs = experiment.predict(
+                            user_inputs=prompts,
                             task_type=task_type,
                             model=model,
                             tokenizer=tokenizer,
-                            ut_steps=ut_steps
+                            ut_steps=ut_steps,
                         )
 
+                        # Process each output
                         for output, item in zip(batch_outputs, batch_items):
                             result_entry = _create_result_entry(
                                 output, item, task_type, ut_steps
@@ -275,12 +288,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         # Fallback to sequential for this batch
                         for item in batch_items:
                             try:
-                                output = experiment.predict_with_metrics_optimized(
-                                    user_input=item["prompt"],
+                                output = experiment.predict(
+                                    user_inputs=item["prompt"],
                                     task_type=task_type,
                                     model=model,
                                     tokenizer=tokenizer,
-                                    ut_steps=ut_steps
+                                    ut_steps=ut_steps,
                                 )
                                 result_entry = _create_result_entry(
                                     output, item, task_type, ut_steps
@@ -308,16 +321,18 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
             else:
                 # SEQUENTIAL PROCESSING
+                print(f"Batch size < 1 or not enough items, processing sequentially.")
                 print(f"Processing {len(items)} items sequentially...")
                 
                 for item in tqdm(items, desc=f"   {task_type}", leave=False):
                     try:
-                        output = experiment.predict_with_metrics_optimized(
-                            user_input=item["prompt"],
+                        # Use unified predict() with single prompt
+                        output = experiment.predict(
+                            user_inputs=item["prompt"],
                             task_type=task_type,
                             model=model,
                             tokenizer=tokenizer,
-                            ut_steps=ut_steps
+                            ut_steps=ut_steps,
                         )
                         result_entry = _create_result_entry(
                             output, item, task_type, ut_steps
@@ -343,6 +358,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         all_results.append(result_entry)
                         print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                         experiment.monitor_and_maybe_abort(result_entry, task_type)
+            
             # Log and display task summary
             _log_task_summary(
                 task_results, task_type, ut_steps, task_start_time, use_wandb
@@ -424,15 +440,10 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(df_ppl.to_string(index=False))
         print()
 
-    # 8. Close W&B
-    if use_wandb and run:
-        print(f"{'='*70}")
-        print("🔗 Finalizing W&B...")
-        wandb.finish()
-        print("✅ W&B session closed")
-        print(f"{'='*70}\n")
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-# 9. Paper-Aligned Metrics Analysis
+    # 8. Paper-Aligned Metrics Analysis
     if all_results:
         print(f"\n{'='*70}")
         print(f"📊 PAPER-ALIGNED ANALYSIS")
@@ -454,6 +465,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             model_size_b = 1.4  # default
             model_name = "Ouro"
         
+        paper_metrics = {}
         # Run analysis
         try:
             paper_metrics = analyze_experiment_results(
@@ -463,18 +475,29 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 save_plots=True
             )
             
-            # Save metrics to CSV
-            from datetime import datetime
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            
             for metric_name, df in paper_metrics.items():
                 if not df.empty:
-                    filename = f"./results/{metric_name}_{timestamp}.csv"
+                    filename = f"./results_{timestamp}/{metric_name}_{timestamp}.csv"
                     df.to_csv(filename, index=False)
                     print(f"✅ Saved {metric_name} to {filename}")
         
         except Exception as e:
             print(f"⚠️ Paper metrics analysis failed: {e}")
+
+    # 9. Close W&B
+    if use_wandb and run:
+        print(f"{'='*70}")
+        print("🔗 Finalizing W&B...")
+        wandb.finish()
+        print("✅ W&B session closed")
+        print(f"{'='*70}\n")
+
+    # Save results to csv files 
+    save_results(all_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+
+    # Save config file into yaml file
+    save_config(config, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+
     return all_results, perplexity_results, holistic_results
 
 
@@ -520,7 +543,6 @@ def _create_result_entry(
         "generation_time": result.get("generation_time", 0.0),
         "generated_tokens": result.get("generated_tokens", 0),
         "input_tokens": result.get("input_tokens", 0),
-        "prompt_idx": result.get("prompt_idx", 0),
         "is_degenerate": result.get("is_degenerate", False),
     }
 
@@ -610,6 +632,7 @@ def save_results(
     all_results: List[Dict],
     perplexity_results: List[Dict],
     holistic_results: List[Dict],
+    timestamp: Optional[str] = None,
     output_dir: str = "./results"
 ) -> None:
     """Save experiment results to CSV files."""
@@ -617,12 +640,13 @@ def save_results(
     from datetime import datetime
     
     os.makedirs(output_dir, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    if timestamp is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     if all_results:
-        accuracy_file = os.path.join(output_dir, f"accuracy_{timestamp}.csv")
-        pd.DataFrame(all_results).to_csv(accuracy_file, index=False)
-        print(f"✅ Saved accuracy results to {accuracy_file}")
+        all_file = os.path.join(output_dir, f"all_{timestamp}.csv")
+        pd.DataFrame(all_results).to_csv(all_file, index=False)
+        print(f"✅ Saved all results to {all_file}")
     
     if perplexity_results:
         ppl_file = os.path.join(output_dir, f"perplexity_{timestamp}.csv")
@@ -633,3 +657,30 @@ def save_results(
         holistic_file = os.path.join(output_dir, f"holistic_{timestamp}.csv")
         pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)
         print(f"✅ Saved holistic results to {holistic_file}")
+
+def save_config(
+    config: dict,
+    timestamp: Optional[str] = None,
+    output_dir: str = "./results"
+) -> None:
+    """Save experiment configuration to a YAML file."""
+    import os
+    import yaml
+    from datetime import datetime
+    
+    os.makedirs(output_dir, exist_ok=True)
+    if timestamp is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # sanitize config before saving
+    clean = {}
+    for k, v in config.items():
+        if isinstance(v, dict):
+            clean[k] = {kk: str(vv) for kk, vv in v.items()}
+        else:
+            clean[k] = str(v)
+            
+    config_file = os.path.join(output_dir, f"config_{timestamp}.yaml")
+    with open(config_file, 'w') as f:
+        yaml.dump(clean, f)
+    print(f"✅ Saved config to {config_file}")
