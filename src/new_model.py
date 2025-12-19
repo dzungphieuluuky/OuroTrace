@@ -12,7 +12,6 @@ from transformers import (
 from tqdm.auto import tqdm
 from .output_monitor import OutputQualityMonitor
 
-
 class SafeOptimizations:
     """Safe optimization methods that don't contaminate model state"""
     
@@ -485,7 +484,7 @@ class SafeOuroThinkingExperiment:
             "min_length": 5,
             "repetition_penalty": 1
         }
-        prediction_generation_config = GenerationConfig(*gen_config)
+        prediction_generation_config = GenerationConfig(**gen_config)
         outputs = model.generate(
             input_ids=inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
