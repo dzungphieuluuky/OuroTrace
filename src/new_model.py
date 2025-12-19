@@ -521,6 +521,7 @@ class SafeOuroThinkingExperiment:
         input_ids_list = []
         for user_tokens in user_tokens_list:
             full_seq = torch.cat([static_ids, user_tokens, force_start_ids], dim=0)
+            print(f"DEBUG: {tokenizer.decode(full_seq)}")
             input_ids_list.append(full_seq)
         
         # Pad sequences to same length (following HF docs: left padding for generation)
