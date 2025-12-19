@@ -269,7 +269,7 @@ class SafeOuroThinkingExperiment:
             "early_exit_threshold": base_config.early_exit_threshold,
         }
     
-    def check_chat_format(response: str) -> bool:
+    def check_chat_format(self, response: str) -> bool:
         """
         Check if the response string contains the correct chat format:
         <|im_start|>system ... <|im_end|>
@@ -399,7 +399,7 @@ class SafeOuroThinkingExperiment:
                 tokenize=False,
                 add_generation_prompt=True
             )
-            
+
             if self.check_chat_format(prompt):
                 print(f"   ✓ Chat format verified for input.")
             else:
