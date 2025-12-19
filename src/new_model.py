@@ -7,8 +7,8 @@ from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
     BitsAndBytesConfig,
+    GenerationConfig,
 )
-from transformers.generation import GenerationConfig
 from tqdm.auto import tqdm
 from .output_monitor import OutputQualityMonitor
 
