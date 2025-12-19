@@ -535,6 +535,7 @@ class SafeOuroThinkingExperiment:
             })
 
         return results[0] if is_single else results            
+    
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
         """Create an error result dictionary"""
         return {
