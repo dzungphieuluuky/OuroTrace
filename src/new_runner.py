@@ -131,13 +131,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
 
         # AUTO-OPTIMIZATION: Determine if batching should be enabled
         enable_batch = (ut_steps == 1) and optimization_config.get("enable_batch", True)
-        
-        print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
-        print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Torch Compile: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Reason: {'Fast path (UT=1)' if enable_batch else 'STABILITY (UT > 1)'}")
-        print()
-
         # Load model with specific UT steps configuration
         try:
             model, tokenizer, model_config, config_dict = experiment.load_model_with_ut_steps(ut_steps)
