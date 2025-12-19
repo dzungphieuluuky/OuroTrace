@@ -1,32 +1,46 @@
 DATA:
   data_file_path: ''
-  igsm: '{''num_samples_total'': 100}'
-  load_existing: 'False'
-  n_ary: '{''ops_levels'': [2, 4, 8, 16, 32], ''num_samples_per_level'': 100}'
-  p_hop: '{''hop_levels'': [16, 24, 32], ''num_samples_per_level'': 100}'
-ENABLE_HEAVY_BENCHMARKS: 'False'
+  igsm:
+    num_samples_total: 100
+  load_existing: false
+  n_ary:
+    ops_levels:
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+    num_samples_per_level: 100
+  p_hop:
+    hop_levels:
+      - 16
+      - 24
+      - 32
+    num_samples_per_level: 100
+ENABLE_HEAVY_BENCHMARKS: false
 EVAL_SETTINGS:
-  calculate_perplexity: 'True'
-  early_exit_threshold: '1.0'
-  ppl_max_length: '2048'
-  ppl_num_samples: '50'
-  ppl_stride: '512'
-INFERENCE_STEPS: '[2]'
+  calculate_perplexity: true
+  early_exit_threshold: 1.0
+  ppl_max_length: 2048
+  ppl_num_samples: 50
+  ppl_stride: 512
+INFERENCE_STEPS:
+  - 2
 MODEL:
   dtype: torch.bfloat16
   path: ByteDance/Ouro-1.4B-Thinking
-  use_4bit_quant: 'False'
-  use_torch_compile: 'False'
+  use_4bit_quant: false
+  use_torch_compile: false
 OPTIMIZATION:
-  enable_batch: 'True'
-  max_batch_size: '12'
-  max_new_tokens: '512'
-PERIODIC_SAVE_INTERVAL: '300'
+  enable_batch: true
+  max_batch_size: 12
+  max_new_tokens: 512
+PERIODIC_SAVE_INTERVAL: 300
 WANDB:
-  enabled: 'True'
-  entity: None
+  enabled: true
+  entity: null
   mode: online
   project: ouro-1.4b-thinking
   run_name: ''
 reasoning_primitives:
-  num_samples: '100'
+  num_samples: 100
