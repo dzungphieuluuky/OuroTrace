@@ -321,19 +321,37 @@ class SafeOuroThinkingExperiment:
         }
 
         self.task_templates = {}
+
         for task_type, config in task_configs.items():
-            static_messages = [{"role": "system", 
-                                "content": config["system"]}]
+            static_messages = [
+                {"role": "system", 
+                 "content": config["system"]}
+            ]
+
             static_prompt_text = tokenizer.apply_chat_template(
-                static_messages, tokenize=False, add_generation_prompt=True
+                static_messages,
+                tokenize=False,
+                add_generation_prompt=True
             ).rstrip()
+            
+            static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+
             force_text = config["force_start"].strip()
+            force_start_tokens = tokenizer(
+                force_text,
+                return_tensors="pt",
+                add_special_tokens=False
+            )
+
             self.task_templates[task_type] = {
-                "static_prompt_text": static_prompt_text,
+                "static_input_ids": static_inputs.input_ids,
+                "static_attention_mask": static_inputs.attention_mask,
+                "force_start_ids": force_start_tokens.input_ids,
                 "force_start_text": config.get("force_start", ""),
-                "example_response": None
+                "example_response": config.get("example_asst", None)
             }
-        print("[+] Task templates (string only) pre-computed.")
+
+        print("[+] Task templates pre-computed.")
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing"""
         pred = "0"
@@ -440,62 +458,105 @@ class SafeOuroThinkingExperiment:
         tokenizer,
         ut_steps: int,
         generation_config: dict = None,
-    ):
+        enable_batch: bool = True,
+    ) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
         """
-        Unified prediction with automatic padding handled by tokenizer.
-        Concatenates prompt parts as strings before tokenization.
+        Unified prediction function that handles both single and batch inputs.
+        
+        Args:
+            user_inputs: Single string or list of strings
+            task_type: Type of task (n_ary, p_hop, igsm)
+            model: The model to use for generation
+            tokenizer: The tokenizer
+            ut_steps: Number of UT steps
+            generation_config: Optional generation config overrides
+            enable_batch: Whether to enable batch processing (only for UT=1)
+            
+        Returns:
+            Single dict if user_inputs is str, list of dicts if user_inputs is list
         """
-        # VERIFY model has the right config
-        if not hasattr(model.config, 'total_ut_steps'):
-            print("❌ ERROR: Model missing total_ut_steps config!")
-            if isinstance(user_inputs, list):
-                return [self._create_error_result(inp, ut_steps) for inp in user_inputs]
-            else:
-                return self._create_error_result(user_inputs, ut_steps)
-
-        # Ensure task templates are built
-        if not hasattr(self, "task_templates") or task_type not in self.task_templates:
-            self._build_task_templates(tokenizer)
-
-        template = self.task_templates[task_type]
-        device = model.device
-
-        # Handle single or batch input
+        # Handle single input case
         is_single = isinstance(user_inputs, str)
         if is_single:
             user_inputs = [user_inputs]
-
-        # Concatenate prompt parts as strings for each input
-        full_prompts = [
-            f"{template['static_prompt_text']}{user_input}{template['force_start_text']}"
-            for user_input in user_inputs
-        ]
-
-        # Tokenize all prompts at once (tokenizer handles padding automatically)
-        inputs = tokenizer(
-            full_prompts,
+        
+        # Validate model config
+        if not hasattr(model.config, 'total_ut_steps'):
+            print("❌ ERROR: Model missing total_ut_steps config!")
+            error_results = [self._create_error_result(inp, ut_steps) for inp in user_inputs]
+            return error_results[0] if is_single else error_results
+        
+        # Build templates if needed
+        if not hasattr(self, "task_templates") or task_type not in self.task_templates:
+            self._build_task_templates(tokenizer)
+        
+        template = self.task_templates[task_type]
+        device = model.device
+        
+        # Prepare batch inputs following HuggingFace docs
+        batch_size = len(user_inputs)
+        
+        # Get static template components
+        static_ids = template["static_input_ids"].squeeze(0)  # Remove batch dim
+        force_start_ids = template["force_start_ids"].squeeze(0)  # Remove batch dim
+        
+        # Tokenize all user inputs (without special tokens)
+        user_tokens_list = tokenizer(
+            user_inputs,
             return_tensors="pt",
-            padding=True,           # Tokenizer handles left-padding
-            truncation=True,
-            return_attention_mask=True,
-        )
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        # Get the actual prompt lengths (excluding padding) for each sample
-        # attention_mask has 0s for padding, 1s for real tokens
-        prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
-
-        start_time = time.perf_counter()
-
-        # Prepare generation config
+            add_special_tokens=False,
+            padding=False,  # Don't pad yet, we'll do it after concatenation
+        ).input_ids
+        
+        # Build full sequences: [static + user_input + force_start] for each sample
+        input_ids_list = []
+        for user_tokens in user_tokens_list:
+            full_seq = torch.cat([static_ids, user_tokens, force_start_ids], dim=0)
+            input_ids_list.append(full_seq)
+        
+        # Pad sequences to same length (following HF docs: left padding for generation)
+        # Since tokenizer has padding_side="left", this will pad on the left
+        max_length = max(seq.shape[0] for seq in input_ids_list)
+        
+        padded_input_ids = []
+        attention_masks = []
+        
+        for seq in input_ids_list:
+            pad_length = max_length - seq.shape[0]
+            if pad_length > 0:
+                # Left padding
+                padded_seq = torch.cat([
+                    torch.full((pad_length,), tokenizer.pad_token_id, dtype=seq.dtype, device=device),
+                    seq.to(device)
+                ], dim=0)
+                attention_mask = torch.cat([
+                    torch.zeros(pad_length, dtype=torch.long, device=device),
+                    torch.ones(seq.shape[0], dtype=torch.long, device=device)
+                ], dim=0)
+            else:
+                padded_seq = seq.to(device)
+                attention_mask = torch.ones(seq.shape[0], dtype=torch.long, device=device)
+            
+            padded_input_ids.append(padded_seq)
+            attention_masks.append(attention_mask)
+        
+        # Stack into batch tensors
+        input_ids = torch.stack(padded_input_ids, dim=0)  # [batch_size, max_length]
+        attention_mask = torch.stack(attention_masks, dim=0)  # [batch_size, max_length]
+        
+        # Get optimal config for task type
         default_config = self._get_optimal_generation_config(task_type)
         if generation_config:
             default_config.update(generation_config)
         
+        # Start timing
+        start_time = time.perf_counter()
+        
+        # Generate
         try:
             outputs = model.generate(
-                input_ids=inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
+                input_ids=input_ids,
+                attention_mask=attention_mask,
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
                 use_cache=True,
@@ -507,33 +568,17 @@ class SafeOuroThinkingExperiment:
             print(f"❌ Generation failed: {e}")
             error_results = [self._create_error_result(inp, ut_steps, str(e)) for inp in user_inputs]
             return error_results[0] if is_single else error_results
-
+        
         generation_time = time.perf_counter() - start_time
-
+        
         # Process outputs for each sample in batch
         results = []
-        for i in range(len(user_inputs)):
-            # Get the actual prompt length for this specific sample (excluding padding)
-            actual_prompt_length = prompt_lengths[i]
+        for i in range(batch_size):
+            # Get the prompt length for this sample (excluding padding)
+            prompt_length = attention_mask[i].sum().item()
             
-            # Extract the full generated sequence for this sample
-            gen_seq = outputs.sequences[i]
-            
-            # The generated sequence includes the prompt + new tokens
-            # We need to skip both padding AND the actual prompt
-            # Since padding is on the left, and prompt follows padding:
-            # [pad, pad, ..., prompt tokens..., generated tokens...]
-            # We can use: skip first `input_ids.shape[1]` tokens (which includes padding)
-            # OR skip based on actual_prompt_length from the end of padding
-            
-            # Method 1: Skip the entire input_ids length (simpler and safer)
-            input_length = inputs["input_ids"].shape[1]  # This includes padding
-            if gen_seq.shape[0] > input_length:
-                generated_ids = gen_seq[input_length:]
-            else:
-                generated_ids = torch.tensor([], dtype=gen_seq.dtype, device=device)
-            
-            # Decode generated tokens
+            # Extract generated tokens (everything after the prompt)
+            generated_ids = outputs.sequences[i, prompt_length:]
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
             
             # Construct full response
@@ -555,16 +600,17 @@ class SafeOuroThinkingExperiment:
             result = {
                 "full_response": full_response,
                 "prediction": pred,
-                "generation_time": generation_time / len(user_inputs),
+                "generation_time": generation_time / batch_size,  # Distribute time across batch
                 "generated_tokens": generated_ids.shape[0],
-                "input_tokens": actual_prompt_length,  # Use actual length without padding
+                "input_tokens": prompt_length,
                 "ut_steps": ut_steps,
                 "is_degenerate": is_degenerate,
                 "test_input": user_inputs[i],
             }
             results.append(result)
-
-        return results[0] if is_single else results    
+        
+        # Return single result or list based on input
+        return results[0] if is_single else results
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
         """Create an error result dictionary"""
         return {
