@@ -308,16 +308,16 @@ class SafeOuroThinkingExperiment:
                 "Example:\n"
                 "Input: {number_1} + {number_2} + ... + {number_N} =\n"
                 "Output:\n"
-                "[STEP 0] Sum: 0\n"
-                "..."
-                "[STEP {i}] Add {number_i}: 0 + {number_i} = {sum_i}\n"
-                "[STEP {i + 1}] Add {number_{i+1}}: {sum_i} + {number_{i+1}} = {sum_{i+1}}\n"
-                "[STEP {i + 2}] Add {number_{i+2}}: {sum_{i+1}} + {number_{i+2}} = {sum_{i+2}}\n"
+                "0. Sum: 0\n"
                 "...\n"
-                "[STEP {2*N}] Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
+                "{i}. Add {number_i}: {sum_{i-1}} + {number_i} = {sum_i}\n"
+                "{i + 1}. Add {number_{i+1}}: {sum_i} + {number_{i+1}} = {sum_{i+1}}\n"
+                "{i + 2}. Add {number_{i+2}}: {sum_{i+1}} + {number_{i+2}} = {sum_{i+2}}\n"
+                "...\n"
+                "{N}. Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
                 "[FINAL] {final_sum}"
             ),
-            "force_start": "[STEP 1]",
+            "force_start": "",
         },
         "p_hop": {
             # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
@@ -330,13 +330,13 @@ class SafeOuroThinkingExperiment:
                 "Example:\n"
                 "Input: Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.\n"
                 "Output:\n"
-                "[TRACE] Start at {start_token}. Found '{start_token}' in sequence. Next token is {token_2}.\n"
-                "[TRACE] At {token_2}. Found '{token_2}' in sequence. Next token is {token_3}.\n"
+                "1. Start at {start_token}. Found '{start_token}' in sequence. Next token is {token_2}.\n"
+                "2. At {token_2}. Found '{token_2}' in sequence. Next token is {token_3}.\n"
                 "...\n"
-                "[TRACE] At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
+                "H. At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
                 "[FINAL] {final_token}"
             ),
-            "force_start": "[TRACE] Start at",
+            "force_start": "",
         },
         "igsm": {
             # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
@@ -349,14 +349,14 @@ class SafeOuroThinkingExperiment:
                 "Example:\n"
                 "Input: Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?\n"
                 "Output:\n"
-                "[EQ {i}] {var_{i}} = {expr_{i}} (mod 7) = {value_{i}}.\n"
-                "[EQ {i + 1}] {var_{i+1}} = {expr_{i+1}} (mod 7) = {value_{i+1}}.\n"
-                "[EQ {i + 2}] {var_{i+2}} = {expr_{i+2}} (mod 7) = {value_{i+2}}.\n"
+                "{i}. {var_{i}} = {expr_{i}} (mod 7) = {value_{i}}.\n"
+                "{i + 1}. {var_{i+1}} = {expr_{i+1}} (mod 7) = {value_{i+1}}.\n"
+                "{i + 2}. {var_{i+2}} = {expr_{i+2}} (mod 7) = {value_{i+2}}.\n"
                 "...\n"
-                "[EQ {N}] {var_N} = {expr_N} (mod 7) = {value_N}.\n"
+                "{N}. {var_N} = {expr_N} (mod 7) = {value_N}.\n"
                 "[FINAL] {final_value}"
             ),
-            "force_start": "[EQ 1]",
+            "force_start": "",
         }
     }
 
