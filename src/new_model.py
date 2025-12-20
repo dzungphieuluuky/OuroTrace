@@ -317,7 +317,7 @@ class SafeOuroThinkingExperiment:
                 "❌ NO generating steps beyond the input count\n"
                 "❌ NO explanations or commentary"
             ),
-            "force_start": "",
+            "force_start": "Step 1:",
         },
         "p_hop": {
             "system": (
