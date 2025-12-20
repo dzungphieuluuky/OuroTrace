@@ -213,41 +213,31 @@ class SafeOuroThinkingExperiment:
 
         model.eval()
         
-        # APPLY SAFE OPTIMIZATIONS (especially important for UT > 1)
-        if total_ut_steps > 1:
-            print(f"\n{'─'*60}")
-            print(f"🚀 APPLYING SAFE OPTIMIZATIONS (UT > 1)")
-            print(f"{'─'*60}")
-            
-            try:
-                model = SafeOptimizations.optimize_attention_backend(model)
-            except Exception as e:
-                print(f"   ⚠️ Attention optimization failed: {e}")
-            
-            try:
-                model = SafeOptimizations.apply_inference_optimizations(model)
-            except Exception as e:
-                print(f"   ⚠️ Inference optimization failed: {e}")
-            
-            try:
-                SafeOptimizations.optimize_memory()
-            except Exception as e:
-                print(f"   ⚠️ Memory optimization failed: {e}")
-            
-            try:
-                SafeOptimizations.warmup_model(model, tokenizer, num_passes=3)
-            except Exception as e:
-                print(f"   ⚠️ Warmup failed: {e}")
-            
-            print(f"{'─'*60}")
-        else:
-            # Still apply basic optimizations for UT=1
-            print(f"\n→ Applying basic optimizations (UT=1)...")
-            try:
-                model = SafeOptimizations.apply_inference_optimizations(model)
-                SafeOptimizations.optimize_memory()
-            except Exception as e:
-                print(f"   ⚠️ Optimization failed: {e}")
+        print(f"\n{'─'*60}")
+        print(f"🚀 APPLYING SAFE OPTIMIZATIONS")
+        print(f"{'─'*60}")
+        
+        try:
+            model = SafeOptimizations.optimize_attention_backend(model)
+        except Exception as e:
+            print(f"   ⚠️ Attention optimization failed: {e}")
+        
+        try:
+            model = SafeOptimizations.apply_inference_optimizations(model)
+        except Exception as e:
+            print(f"   ⚠️ Inference optimization failed: {e}")
+        
+        try:
+            SafeOptimizations.optimize_memory()
+        except Exception as e:
+            print(f"   ⚠️ Memory optimization failed: {e}")
+        
+        try:
+            SafeOptimizations.warmup_model(model, tokenizer, num_passes=3)
+        except Exception as e:
+            print(f"   ⚠️ Warmup failed: {e}")
+        
+        print(f"{'─'*60}")
         
         # Final verification
         print(f"\n{'='*60}")
