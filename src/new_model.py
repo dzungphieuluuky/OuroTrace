@@ -302,11 +302,10 @@ class SafeOuroThinkingExperiment:
                 "Output:\n"
                 "0. Sum: 0\n"
                 "...\n"
-                "{i}. Add {number_i}: {sum_{i-1}} + {number_i} = {sum_i}\n"
-                "{i + 1}. Add {number_{i+1}}: {sum_i} + {number_{i+1}} = {sum_{i+1}}\n"
-                "{i + 2}. Add {number_{i+2}}: {sum_{i+1}} + {number_{i+2}} = {sum_{i+2}}\n"
-                "...\n"
-                "{final step}. Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
+                "{curent step}. Add {current number}: {previous sum} + {current number} = {new sum}\n"
+                "{next step}. Add {next number}: {new sum} + {next number} = {next new sum}\n"
+                "<perform calculation for intermediate steps>\n"
+                "{final step}. Add {final number}: {previous sum} + {final number} = {final_sum}\n"
                 "[FINAL] {final_sum}"
             ),
             "force_start": "0. Sum: 0\n",
