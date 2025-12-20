@@ -303,7 +303,7 @@ class SafeOuroThinkingExperiment:
                     "You are a calculator. Given an addition problem with {N} numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
                     "show your work step by step. For each number, add it to the running total and show the calculation. "
                     "Only perform calculation for {N} steps."
-                    "Output only the final sum on a new line in this format: [FINAL] [final_sum].\n"
+                    "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
                     "Example:\n"
                     "Input: {number_i} + {number_i+1} + {number_i+2} + ... =\n"
                     "Output:\n"
