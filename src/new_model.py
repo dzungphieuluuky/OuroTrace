@@ -289,99 +289,67 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator. Add numbers step-by-step, then output the final sum.\n\n"
-                    "PROCESS:\n"
-                    "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
-                    "2. Show your addition steps (internal reasoning)\n"
-                    "3. Mark the final answer with [FINAL]\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
+                    "Add numbers step-by-step. STOP after processing all input numbers.\n\n"
                     "FORMAT:\n"
-                    "Step 1: 0 + {first_number} = {first_sum}\n"
-                    "Step 2: {first_sum} + {second_number} = {total_sum}\n"
-                    "[FINAL] {total_sum}\n"
-                    "**STOP**\n\n"  # Explicit stop marker
-                    "CRITICAL RULES:\n"
-                    "• For 2 numbers, use EXACTLY 2 steps (Step 1 and Step 2)\n"
-                    "• Each step processes ONE COMPLETE NUMBER\n"
-                    "• ALWAYS end with '[FINAL] {answer}'\n"
-                    "• **IMMEDIATELY STOP ALL GENERATION AFTER '[FINAL] {answer}'**\n"
-                    "• **DO NOT GENERATE ANYTHING AFTER [FINAL]**\n"
-                    "• **DO NOT ADD EXTRA EXAMPLES OR INPUTS**\n\n"
-                    "EXAMPLES (DO NOT COPY):\n"
-                    "Input: 553 + 553 =\n"
-                    "Step 1: 0 + 553 = 553\n"
-                    "Step 2: 553 + 553 = 1106\n"
-                    "[FINAL] 1106\n"
-                    "\n"  # Single newline only
-                    "Input: 242 + 774 =\n"
-                    "Step 1: 0 + 242 = 242\n"
-                    "Step 2: 242 + 774 = 1016\n"
-                    "[FINAL] 1016\n"
+                    "Step 1: 0 + {A} = {R1}\n"
+                    "Step 2: {R1} + {B} = {R2}\n"
+                    "[FINAL] {R2} <END>\n\n"
+                    "CRITICAL STOPPING RULES:\n"
+                    "• Input has N numbers → Generate EXACTLY N steps\n"
+                    "• After Step N, output '[FINAL] {result} <END>'\n"
+                    "• <END> means STOP GENERATION IMMEDIATELY\n"
+                    "• DO NOT generate Step N+1, N+2, etc.\n\n"
+                    "COUNT CAREFULLY:\n"
+                    "Input: {A} + {B} = → Has 2 numbers → Step 1, Step 2, [FINAL] <END>\n"
+                    "Input: {A} + {B} + {C} = → Has 3 numbers → Step 1, Step 2, Step 3, [FINAL] <END>\n\n"
+                    "ABSOLUTELY FORBIDDEN:\n"
+                    "❌ NEVER generate more steps than input numbers\n"
+                    "❌ NEVER continue after <END>\n"
+                    "❌ NEVER repeat previous numbers\n"
+                    "❌ NEVER invent new numbers"
                 ),
-                "force_start": "Step",
-            },  
-        "p_hop": {
-            "system": (
-                "You are a sequence position tracker.\n\n"
-                "INSTRUCTIONS:\n"
-                "1. Count the number of hops requested (call this N)\n"
-                "2. Perform exactly N hop steps\n"
-                "3. Stop after N hops and output [FINAL]\n\n"
-                "FORMAT:\n"
-                "Hop {1}: At {token_1} → Next is {token_2}\n"
-                "Hop {2}: At {token_2} → Next is {token_3}\n"
-                "Hop {3}: At {token_3} → Next is {token_4}\n"
-                "...\n"
-                "Hop {N}: At {token_N} → Next is {final_token}\n"
-                "[FINAL] {final_token}\n\n"
-                "CRITICAL RULES:\n"
-                "• Perform exactly the requested number of hops\n"
-                "• Follow the sequence order (if sequence repeats, wrap around)\n"
-                "• After hop N, immediately output [FINAL]\n"
-                "• Use only tokens from the input sequence\n\n"
-                "PATTERN EXPLANATION:\n"
-                "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
-                "If input says 'Hop 5 times' → Output 5 hop lines + [FINAL]\n\n"
-                "FORBIDDEN:\n"
-                "❌ NO extra hops beyond the requested count\n"
-                "❌ NO inventing tokens not in the sequence\n"
-                "❌ NO explanations or commentary"
-            ),
-            "force_start": "Hop 1:",
-        },
-        "igsm": {
-            "system": (
-                "You are a symbolic expression evaluator (modulo 7).\n\n"
-                "INSTRUCTIONS:\n"
-                "1. Count the number of assignments (call this N)\n"
-                "2. Evaluate exactly N assignments\n"
-                "3. Stop after N steps and output [FINAL]\n\n"
-                "FORMAT:\n"
-                "Step {1}: {var_1} = {value_1} (mod 7) = {result_1}\n"
-                "Step {2}: {var_2} = {substituted_expr} = {computed} (mod 7) = {result_2}\n"
-                "Step {3}: {var_3} = {substituted_expr} = {computed} (mod 7) = {result_3}\n"
-                "...\n"
-                "Step {N}: {query_var} = {value} (mod 7) = {answer}\n"
-                "[FINAL] {answer}\n\n"
-                "CRITICAL RULES:\n"
-                "• Process each assignment exactly once\n"
-                "• Substitute variable values immediately\n"
-                "• Show computation before applying mod 7\n"
-                "• Final result must be in range [0, 6]\n"
-                "• After evaluating the query, immediately output [FINAL]\n\n"
-                "OPERATION PATTERNS:\n"
-                "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
-                "Copy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n"
-                "Addition: {C} := {A} + {B} where A=5, B=4 means {C} = 5 + 4 = 9 (mod 7) = 2\n\n"
-                "FORBIDDEN:\n"
-                "❌ NO skipping assignments\n"
-                "❌ NO continuing after the query is answered\n"
-                "❌ NO results outside [0, 6]\n"
-                "❌ NO explanations or commentary"
-            ),
-            "force_start": "Step 1:",
+                "force_start": "Step 1:",
+            },
+            "p_hop": {
+                "system": (
+                    "Trace hops step-by-step. STOP after requested number of hops.\n\n"
+                    "FORMAT:\n"
+                    "Hop 1: At {A} → Next is {B}\n"
+                    "Hop 2: At {B} → Next is {C}\n"
+                    "[FINAL] {C} <END>\n\n"
+                    "CRITICAL STOPPING RULES:\n"
+                    "• Input says 'Hop N times' → Generate EXACTLY N hops\n"
+                    "• After Hop N, output '[FINAL] {token} <END>'\n"
+                    "• <END> means STOP GENERATION IMMEDIATELY\n"
+                    "• DO NOT generate Hop N+1, N+2, etc.\n\n"
+                    "COUNT CAREFULLY:\n"
+                    "'Hop 2 times' → Hop 1, Hop 2, [FINAL] <END>\n"
+                    "'Hop 5 times' → Hop 1, Hop 2, Hop 3, Hop 4, Hop 5, [FINAL] <END>\n\n"
+                    "ABSOLUTELY FORBIDDEN:\n"
+                    "❌ NEVER generate more hops than requested\n"
+                    "❌ NEVER continue after <END>\n"
+                    "❌ NEVER invent tokens"
+                ),
+                "force_start": "Hop 1:",
+            },
+            "igsm": {
+                "system": (
+                    "Evaluate mod 7 step-by-step. STOP after answering the query.\n\n"
+                    "FORMAT:\n"
+                    "Step 1: {V} = {E} = {N} (mod 7) = {R}\n"
+                    "[FINAL] {R} <END>\n\n"
+                    "CRITICAL STOPPING RULES:\n"
+                    "• Process each assignment once\n"
+                    "• After answering query, output '[FINAL] {answer} <END>'\n"
+                    "• <END> means STOP GENERATION IMMEDIATELY\n"
+                    "• Answer must be in [0,6]\n\n"
+                    "ABSOLUTELY FORBIDDEN:\n"
+                    "❌ NEVER continue after <END>\n"
+                    "❌ NEVER generate extra steps"
+                ),
+                "force_start": "Step 1:",
+            }
         }
-    }
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
@@ -519,11 +487,15 @@ class SafeOuroThinkingExperiment:
         return results[0] if is_single else results
         
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
-        """Extract final answer with improved parsing"""
+        """Extract final answer with improved parsing, aligned with prompt templates"""
         pred = "0"
         
         try:
             full_response = full_response.strip()
+            
+            # First, try to extract everything before <END> if it exists
+            if "<END>" in full_response:
+                full_response = full_response.split("<END>")[0].strip()
             
             if task_type == "p_hop":
                 patterns = [
@@ -540,7 +512,7 @@ class SafeOuroThinkingExperiment:
                 else:
                     pred = "ERROR"
             
-            else:
+            else:  # n_ary and igsm
                 patterns = [
                     r'\[FINAL\]\s*(-?\d+)',
                     r'Final:\s*(-?\d+)',
@@ -554,6 +526,7 @@ class SafeOuroThinkingExperiment:
                         pred = matches[-1]
                         break
                 else:
+                    # Fallback: get last number from last non-empty line
                     lines = [l.strip() for l in full_response.split('\n') if l.strip()]
                     if lines:
                         last_line = lines[-1]
