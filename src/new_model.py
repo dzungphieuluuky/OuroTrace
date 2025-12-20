@@ -297,27 +297,27 @@ class SafeOuroThinkingExperiment:
                     "FORMAT:\n"
                     "Step 1: 0 + {first_number} = {first_sum}\n"
                     "Step 2: {first_sum} + {second_number} = {total_sum}\n"
-                    "[FINAL] {total_sum}\n\n"
+                    "[FINAL] {total_sum} [END]\n\n"
                     "CRITICAL RULES:\n"
                     "• For 2 numbers, use EXACTLY 2 steps (Step 1 and Step 2)\n"
                     "• For N numbers, use EXACTLY N steps\n"
                     "• Each step processes ONE COMPLETE NUMBER\n"
                     "• Numbers can have 1-3 digits - treat them as whole values\n"
-                    "• ALWAYS end with '[FINAL] {answer}'\n"
-                    "• STOP generating immediately after '[FINAL] {answer}'\n\n"
+                    "• ALWAYS end with '[FINAL] {answer} [END]'\n"
+                    "• STOP generating immediately after '[FINAL] {answer} [END]'\n\n"
                     "EXAMPLES:\n"
                     "Input: 553 + 553 =\n"
                     "Step 1: 0 + 553 = 553\n"
                     "Step 2: 553 + 553 = 1106\n"
-                    "[FINAL] 1106\n\n"
+                    "[FINAL] 1106 [END]\n\n"
                     "Input: 242 + 774 =\n"
                     "Step 1: 0 + 242 = 242\n"
                     "Step 2: 242 + 774 = 1016\n"
-                    "[FINAL] 1016\n\n"
+                    "[FINAL] 1016 [END]\n\n"
                     "Input: 642 + 508 =\n"
                     "Step 1: 0 + 642 = 642\n"
                     "Step 2: 642 + 508 = 1150\n"
-                    "[FINAL] 1150\n"
+                    "[FINAL] 1150 [END]\n"
                 ),
                 "force_start": "Step"   
         },
@@ -467,6 +467,9 @@ class SafeOuroThinkingExperiment:
         if generation_config:
             default_config.update(generation_config)
 
+
+        # ADD STOP STRING TO ENSURE CLEAN CUT-OFF
+        generation_config["stop_strings"] = ["[END]"]
         start_time = time.perf_counter()
         try:
             outputs = model.generate(
