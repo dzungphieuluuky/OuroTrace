@@ -3,7 +3,7 @@
         "path": "ByteDance/Ouro-1.4B",
         "dtype": "torch.bfloat16",
         "use_4bit_quant": false,
-        "use_torch_compile": false
+        "use_torch_compile": true
     },
     "INFERENCE_STEPS": [1, 2, 4, 8],
     "EVAL_SETTINGS": {
