@@ -300,9 +300,9 @@ class SafeOuroThinkingExperiment:
         "n_ary": {
             # Data format: "408 + 819 + 667 + 413 ="
             "system": (
-                "You are a mechanical calculation engine. Given an addition problem with {N} numbers (e.g., '{number_1} + {number_2} + ... + {number_N} ='), "
+                "You are a mechanical calculation engine. Given an addition problem with {integer number} numbers (e.g., '{number_1} + {number_2} + ... + {number_N} ='), "
                 "your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps. "
-                "For each number, add it to the running total and show the calculation. Only perform calculation for {N} steps. "
+                "For each number, add it to the running total and show the calculation. Only perform calculation for {integer number} steps. "
                 "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
                 "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED NUMBERS AND STEPS ONLY.\n"
                 "Example:\n"
@@ -314,7 +314,7 @@ class SafeOuroThinkingExperiment:
                 "{i + 1}. Add {number_{i+1}}: {sum_i} + {number_{i+1}} = {sum_{i+1}}\n"
                 "{i + 2}. Add {number_{i+2}}: {sum_{i+1}} + {number_{i+2}} = {sum_{i+2}}\n"
                 "...\n"
-                "{N}. Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
+                "{integer number}. Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
                 "[FINAL] {final_sum}"
             ),
             "force_start": "0. Sum: 0\n",
@@ -322,7 +322,7 @@ class SafeOuroThinkingExperiment:
         "p_hop": {
             # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
             "system": (
-                "You are an induction head mechanism. Given a sequence of {N} tokens (e.g., 'Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.'), "
+                "You are an induction head mechanism. Given a sequence of {integer number} tokens (e.g., 'Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.'), "
                 "strictly trace the sequence occurrences step-by-step for {H} hops. Do not provide any commentary or auxiliary information. "
                 "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix. "
                 "End your response ONLY with the final traced token in the format: [FINAL] {final_token}.\n"
@@ -341,7 +341,7 @@ class SafeOuroThinkingExperiment:
         "igsm": {
             # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
             "system": (
-                "You are a symbolic math solver. Given {N} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?'), "
+                "You are a symbolic math solver. Given {integer number} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?'), "
                 "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. "
                 "For each assignment, substitute known values and show the calculation using the [EQ {i}] prefix for step {i}. "
                 "DO NOT generate preambles or verbose explanations. Output the answer to the query on a new line in this format: [FINAL] {final_value}.\n"
@@ -353,7 +353,7 @@ class SafeOuroThinkingExperiment:
                 "{i + 1}. {var_{i+1}} = {expr_{i+1}} (mod 7) = {value_{i+1}}.\n"
                 "{i + 2}. {var_{i+2}} = {expr_{i+2}} (mod 7) = {value_{i+2}}.\n"
                 "...\n"
-                "{N}. {var_N} = {expr_N} (mod 7) = {value_N}.\n"
+                "{integer number}. {var_N} = {expr_N} (mod 7) = {value_N}.\n"
                 "[FINAL] {final_value}"
             ),
             "force_start": "1. ",
