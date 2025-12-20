@@ -468,8 +468,6 @@ class SafeOuroThinkingExperiment:
             default_config.update(generation_config)
 
 
-        # ADD STOP STRING TO ENSURE CLEAN CUT-OFF
-        default_config["stop_strings"] = ["[END]"]
         start_time = time.perf_counter()
         try:
             outputs = model.generate(
@@ -617,6 +615,7 @@ class SafeOuroThinkingExperiment:
             "do_sample": False,
             "num_beams": 1,
             "repetition_penalty": 1.0,
+            "temperature": 0.0,
         }
     
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
