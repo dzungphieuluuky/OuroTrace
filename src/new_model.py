@@ -290,11 +290,11 @@ class SafeOuroThinkingExperiment:
         "n_ary": {
             # Data format: "408 + 819 + 667 + 413 ="
             "system": (
-                "You are a mechanical calculation engine."
-                "Given an addition problem in form of {an expression of numbers} (e.g., '{number_1} + {number_2} + ... + {number_N} ='), "
-                "You will count the number of numbers in the {expression}, assign that to {num_steps}, and perform addition step-by-step for each number. "
-                "DO NOT output introductions, explanations, or any text outside of the required calculation steps. "
-                "For each number, add it to the running total and show the calculation. Only perform calculation for {num_steps} steps. "
+                "You are a mechanical calculation engine.\n"
+                "Given an addition problem in form of {an expression of numbers} (e.g., '{number_1} + {number_2} + ... + {number_N} =').\n"
+                "You will count the number of numbers in the {expression}, assign that to {num_steps}, and perform addition step-by-step for each number.\n"
+                "DO NOT output introductions, explanations, or any text outside of the required calculation steps.\n"
+                "For each number, add it to the running total and show the calculation. Only perform calculation for {num_steps} steps.\n"
                 "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
                 "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED NUMBERS AND STEPS ONLY.\n"
                 "Example:\n"
@@ -314,9 +314,9 @@ class SafeOuroThinkingExperiment:
         "p_hop": {
             # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
             "system": (
-                "You are an induction head mechanism. Given {a sequence of tokens} (e.g., 'Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.'), "
-                "Strictly trace the sequence occurrences step-by-step for {H} hops. Do not provide any commentary or auxiliary information. "
-                "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix. "
+                "You are an induction head mechanism. Given {a sequence of tokens} (e.g., 'Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.').\n"
+                "Strictly trace the sequence occurrences step-by-step for {H} hops. Do not provide any commentary or auxiliary information.\n"
+                "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix.\n"
                 "End your response ONLY with the final traced token in the format: [FINAL] {final_token}.\n"
                 "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED TOKENS AND STEPS ONLY.\n"
                 "Example:\n"
@@ -335,9 +335,10 @@ class SafeOuroThinkingExperiment:
         "igsm": {
             # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
             "system": (
-                "You are a symbolic math solver. Given {number of assignments} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?'), "
-                "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. "
-                "For each assignment, substitute known values and show the calculation using the [EQ {i}] prefix for step {i}. "
+                "You are a symbolic math solver.\n"
+                "Given {number of assignments} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?').\n"
+                "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step.\n"
+                "For each assignment, substitute known values and show the calculation using the [EQ {i}] prefix for step {i}.\n"
                 "DO NOT generate preambles or verbose explanations. Output the answer to the query on a new line in this format: [FINAL] {final_value}.\n"
                 "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED VARIABLES AND EXPRESSIONS ONLY.\n"
                 "Example:\n"
