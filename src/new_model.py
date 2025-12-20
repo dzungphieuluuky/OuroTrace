@@ -289,106 +289,91 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator performing sequential addition.\n\n"
-                    "OUTPUT STRUCTURE (STRICT):\n"
-                    "• Count '+' signs in input to get N (number of numbers)\n"
-                    "• Output EXACTLY N+1 lines, then STOP:\n"
-                    "  Line 1: Step 1: 0 + {first} = {r1}\n"
-                    "  Line 2: Step 2: {r1} + {second} = {r2}\n"
-                    "  ...\n"
-                    "  Line N: Step N: {rN-1} + {last} = {final}\n"
-                    "  Line N+1: [FINAL] {final}\n"
-                    "• After Line N+1, STOP IMMEDIATELY\n\n"
-                    "FORMAT PER LINE:\n"
-                    "Step {i}: {previous_sum} + {number_i} = {new_sum}\n"
-                    "[FINAL] {answer}\n\n"
-                    "STOPPING RULES:\n"
-                    "• [FINAL] marks the END of generation\n"
-                    "• Generate NO text after [FINAL]\n"
-                    "• Do NOT output 'Input:', examples, or explanations\n"
-                    "• The ONLY valid output is: N step lines + 1 [FINAL] line\n\n"
-                    "LINE COUNT:\n"
-                    "• 2 numbers (1 '+') → 3 lines (Step 1, Step 2, [FINAL])\n"
-                    "• 3 numbers (2 '+') → 4 lines (Step 1, Step 2, Step 3, [FINAL])\n"
-                    "• 4 numbers (3 '+') → 5 lines (Steps 1-4, [FINAL])\n\n"
-                    "FORBIDDEN:\n"
-                    "❌ NO line N+2 or beyond\n"
-                    "❌ NO repeating input numbers\n"
-                    "❌ NO text after [FINAL]\n"
-                    "❌ NO examples or demonstrations\n"
-                    "❌ NO 'Input:' or other commentary"
+                    "You are a calculator. Add numbers step-by-step.\n\n"
+                    "FORMAT:\n"
+                    "Step 1: 0 + <first> = <r1>\n"
+                    "Step 2: <r1> + <second> = <r2>\n"
+                    "[FINAL] <total>\n\n"
+                    "RULES:\n"
+                    "• Add exactly one input number per step\n"
+                    "• Stop when all input numbers are added\n"
+                    "• Then output [FINAL] with total"
                 ),
+                "examples": [
+                    {
+                        "user": "5 + 3 =",
+                        "assistant": "Step 1: 0 + 5 = 5\nStep 2: 5 + 3 = 8\n[FINAL] 8"
+                    },
+                    {
+                        "user": "100 + 50 + 25 =",
+                        "assistant": "Step 1: 0 + 100 = 100\nStep 2: 100 + 50 = 150\nStep 3: 150 + 25 = 175\n[FINAL] 175"
+                    }
+                ],
                 "force_start": "Step 1:",
             },
             "p_hop": {
                 "system": (
-                    "You are a sequence position tracker.\n\n"
-                    "OUTPUT STRUCTURE (STRICT):\n"
-                    "• Read hop count N from input\n"
-                    "• Output EXACTLY N+1 lines, then STOP:\n"
-                    "  Line 1: Hop 1: At {t1} → Next is {t2}\n"
-                    "  Line 2: Hop 2: At {t2} → Next is {t3}\n"
-                    "  ...\n"
-                    "  Line N: Hop N: At {tN-1} → Next is {tN}\n"
-                    "  Line N+1: [FINAL] {tN}\n"
-                    "• After Line N+1, STOP IMMEDIATELY\n\n"
-                    "FORMAT PER LINE:\n"
-                    "Hop {i}: At {current} → Next is {next}\n"
-                    "[FINAL] {token}\n\n"
-                    "STOPPING RULES:\n"
-                    "• [FINAL] marks the END of generation\n"
-                    "• Generate NO text after [FINAL]\n"
-                    "• Do NOT output examples or explanations\n"
-                    "• The ONLY valid output is: N hop lines + 1 [FINAL] line\n\n"
-                    "LINE COUNT:\n"
-                    "• 'Hop 2 times' → 3 lines (Hop 1, Hop 2, [FINAL])\n"
-                    "• 'Hop 5 times' → 6 lines (Hops 1-5, [FINAL])\n\n"
-                    "FORBIDDEN:\n"
-                    "❌ NO line N+2 or beyond\n"
-                    "❌ NO inventing tokens\n"
-                    "❌ NO text after [FINAL]\n"
-                    "❌ NO examples or demonstrations"
+                    "You are a sequence tracer. Follow the sequence for a given number of hops.\n\n"
+                    "FORMAT:\n"
+                    "Hop 1: At <token> → Next is <token>\n"
+                    "Hop 2: At <token> → Next is <token>\n"
+                    "[FINAL] <final_token>\n\n"
+                    "RULES:\n"
+                    "• At each hop, state the current token and the next token\n"
+                    "• Stop after the required number of hops\n"
+                    "• Then output [FINAL] with the last token"
                 ),
+                "examples": [
+                    {
+                        "user": "Sequence: A B C D. Start: A. Hop 2 times.",
+                        "assistant": "Hop 1: At A → Next is B\nHop 2: At B → Next is C\n[FINAL] C"
+                    },
+                    {
+                        "user": "Sequence: X Y Z X Y. Start: Y. Hop 3 times.",
+                        "assistant": "Hop 1: At Y → Next is Z\nHop 2: At Z → Next is X\nHop 3: At X → Next is Y\n[FINAL] Y"
+                    }
+                ],
                 "force_start": "Hop 1:",
             },
             "igsm": {
                 "system": (
-                    "You are a symbolic expression evaluator (modulo 7).\n\n"
-                    "OUTPUT STRUCTURE (STRICT):\n"
-                    "• Count assignments N in input\n"
-                    "• Output EXACTLY N+1 lines, then STOP:\n"
-                    "  Line 1: Step 1: {var1} = {val1} (mod 7) = {r1}\n"
-                    "  Line 2: Step 2: {var2} = {expr} = {val} (mod 7) = {r2}\n"
-                    "  ...\n"
-                    "  Line N: Step N: {query} = {val} (mod 7) = {answer}\n"
-                    "  Line N+1: [FINAL] {answer}\n"
-                    "• After Line N+1, STOP IMMEDIATELY\n\n"
-                    "FORMAT PER LINE:\n"
-                    "Step {i}: {var} = {expression} = {computed} (mod 7) = {result}\n"
-                    "[FINAL] {answer}\n\n"
-                    "STOPPING RULES:\n"
-                    "• [FINAL] marks the END of generation\n"
-                    "• Generate NO text after [FINAL]\n"
-                    "• Answer must be in [0, 6]\n"
-                    "• Do NOT output examples or explanations\n\n"
-                    "OPERATIONS:\n"
-                    "• {A} := {5} → A = 5 (mod 7) = 5\n"
-                    "• {B} := {A} (A=5) → B = 5 (mod 7) = 5\n"
-                    "• {C} := {A}+{B} (A=5,B=4) → C = 5+4 = 9 (mod 7) = 2\n\n"
-                    "FORBIDDEN:\n"
-                    "❌ NO line N+2 or beyond\n"
-                    "❌ NO text after [FINAL]\n"
-                    "❌ NO examples or demonstrations\n"
-                    "❌ NO results outside [0,6]"
+                    "You are a symbolic math solver. Solve assignments step-by-step modulo 7.\n\n"
+                    "FORMAT:\n"
+                    "Step 1: <var> = <expr> (mod 7) = <val>\n"
+                    "Step 2: <var> = <expr> (mod 7) = <val>\n"
+                    "[FINAL] <answer>\n\n"
+                    "RULES:\n"
+                    "• For each assignment, substitute known values and show the calculation\n"
+                    "• Only use information from the input\n"
+                    "• Output [FINAL] with the answer to the query"
                 ),
+                "examples": [
+                    {
+                        "user": "Question. X := 4. Y := X. Z := Y + X. Z?",
+                        "assistant": "Step 1: X = 4 (mod 7) = 4\nStep 2: Y = X (mod 7) = 4\nStep 3: Z = Y + X = 4 + 4 = 8 (mod 7) = 1\n[FINAL] 1"
+                    },
+                    {
+                        "user": "Question. A := 3. B := 5. C := A + B. C?",
+                        "assistant": "Step 1: A = 3 (mod 7) = 3\nStep 2: B = 5 (mod 7) = 5\nStep 3: C = A + B = 3 + 5 = 8 (mod 7) = 1\n[FINAL] 1"
+                    }
+                ],
                 "force_start": "Step 1:",
             }
         }
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
+            # Build 2-shot prompt template as text
+            messages = [{"role": "system", "content": config["system"]}]
+            
+            # Add 2 examples
+            for example in config["examples"]:
+                messages.append({"role": "user", "content": example["user"]})
+                messages.append({"role": "assistant", "content": example["assistant"]})
+
             self.task_templates[task_type] = {
                 "system": config["system"],
+                "messages": messages,
                 "force_start_text": config["force_start"],
             }
         print("[+] Task templates (strict hybrid) pre-computed.")
@@ -427,10 +412,14 @@ class SafeOuroThinkingExperiment:
         prompts = []
         for user_input in user_inputs:
             # construct one message
-            messages = [
-                {"role": "system", "content": template["system"]},
+            messages = template["messages"] + [
                 {"role": "user", "content": user_input},
             ]
+    
+            # messages = [
+            #     {"role": "system", "content": template["system"]},
+            #     {"role": "user", "content": user_input},
+            # ]
 
             # Apply chat template (adding <|im_start|>assistant)
             prompt = tokenizer.apply_chat_template(
