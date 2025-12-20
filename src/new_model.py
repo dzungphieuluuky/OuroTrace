@@ -304,7 +304,7 @@ class SafeOuroThinkingExperiment:
                 "[FINAL] 8\n\n"
                 "Example (100 + 50 =):\n"
                 "Step 1: 0 + 100 = 100\n"
-                "Step 2: 100 + 50 = 150\n"
+                "Step 2: 100 + 50 = 150\n" 
                 "[FINAL] 150"
             ),
             "force_start": "Step 1:",
