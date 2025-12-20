@@ -301,7 +301,6 @@ class SafeOuroThinkingExperiment:
                 "Input: {number_1} + {number_2} + ... + {number_N} =\n"
                 "Output:\n"
                 "0. Sum: 0\n"
-                "...\n"
                 "{curent step}. Add {current number}: {previous sum} + {current number} = {new sum}\n"
                 "{next step}. Add {next number}: {new sum} + {next number} = {next new sum}\n"
                 "<perform calculation for intermediate steps>\n"
@@ -323,9 +322,7 @@ class SafeOuroThinkingExperiment:
                 "Output:\n"
                 "1. Start at {start_token}. Found '{start_token}' in sequence. Next token is {token_2}.\n"
                 "2. At {token_2}. Found '{token_2}' in sequence. Next token is {token_3}.\n"
-                "...\n"
                 "{current hop}. At {token_{current}}. Found '{token_{current}}' in sequence. Next token is {token_{current + 1}}.\n"
-                "...\n"
                 "{H}. At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
                 "[FINAL] {final_token}"
             ),
@@ -346,7 +343,6 @@ class SafeOuroThinkingExperiment:
                 "{i}. {var_{i}} = {expr_{i}} (mod 7) = {value_{i}}.\n"
                 "{i + 1}. {var_{i+1}} = {expr_{i+1}} (mod 7) = {value_{i+1}}.\n"
                 "{i + 2}. {var_{i+2}} = {expr_{i+2}} (mod 7) = {value_{i+2}}.\n"
-                "...\n"
                 "{final step}. {query_var} = {final_expression} (mod 7) = {final_value}.\n"
                 "[FINAL] {final_value}"
             ),
