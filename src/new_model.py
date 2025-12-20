@@ -297,64 +297,63 @@ class SafeOuroThinkingExperiment:
         self.tokenizer = tokenizer
 
         task_configs = {
-            "n_ary": {
-                # Data format: "408 + 819 + 667 + 413 ="
-                "system": (
-                    "You are a calculator. Given an addition problem with {N} numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
-                    "show your work step by step. For each number, add it to the running total and show the calculation. "
-                    "Only perform calculation for {N} steps."
-                    "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
-                    "Example:\n"
-                    "Input: {number_i} + {number_i+1} + {number_i+2} + ... =\n"
-                    "Output:\n"
-                    "Step {i}: 0 + {number_i} = {sum_i}\n"
-                    "Step {i+1}: {sum_i} + {number_i+1} = {sum_i+1}\n"
-                    "Step {i+2}: {sum_i+1} + {number_i+2} = {sum_i+2}\n"
-                    "..."
-                    "Step {N}: {sum_N-1} + {number_N} = {final_sum}\n"
-                    "[FINAL] {final_sum}"
-                ),
-                "force_start": "Step 1:",
-            },
-            "p_hop": {
-                # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
-                "system": (
-                    "You are a sequence tracer."
-                    "Trace the sequence step by step. At each hop, follow strictly and exactly the format below. "
-                    "You will be given a sequence, a {start_token}, and {N} hops to perform. "
-                    "Output each line as 'Hop {X}: At {token} → Next is {token}'."
-                    "After {N} hops, output the result in this format: [FINAL] {token}.\n"
-                    "Example:\n"
-                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop {N} times.\n"
-                    "Output:\n"
-                    "Hop {i}: At {token_i} → Next is {token_{i+1}}\n"
-                    "Hop {i+1}: At {token_{i+1}} → Next is {token_{i+2}}\n"
-                    "..."
-                    "Hop {N}: At {token_N} → Next is {token_final}\n"
-                    "[FINAL] {token_final}"
-                ),
-                "force_start": "Hop 1:",
-            },
-            "igsm": {
-                # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
-                "system": (
-                    "You are a symbolic math solver working modulo 7. Given a list of {N} assignments and a query, "
-                    "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
-                    "Output each line as: '{var} = {expression} = {value} (mod 7)'."
-                    "For the query, output the final answer in this format: [FINAL] {value}.\n"
-                    "Example:\n"
-                    "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
-                    "Output:\n"
-                    "Step {i}: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step {i+1}: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step {i+2}: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
-                    "..."
-                    "Step {N}: {query_token} = {expression} = {final_value} (mod 7)\n"
-                    "[FINAL] {final_value}"
-                ),
-                "force_start": "Step 1:",
-            }
+        "n_ary": {
+            # Data format: "408 + 819 + 667 + 413 ="
+            "system": (
+                "You are a mechanical calculation engine. Given an addition problem with {N} numbers (e.g., '{number_1} + {number_2} + ... + {number_N} ='), "
+                "your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps. "
+                "For each number, add it to the running total and show the calculation. Only perform calculation for {N} steps. "
+                "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
+                "Example:\n"
+                "Input: {number_1} + {number_2} + ... + {number_N} =\n"
+                "Output:\n"
+                "[STEP 1] Sum: 0\n"
+                "[STEP 2] Add {number_1}: 0 + {number_1} = {sum_1}\n"
+                "[STEP 3] Sum: {sum_1}\n"
+                "[STEP 4] Add {number_2}: {sum_1} + {number_2} = {sum_2}\n"
+                "...\n"
+                "[STEP {2*N}] Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
+                "[FINAL] {final_sum}"
+            ),
+            "force_start": "[STEP 1]",
+        },
+        "p_hop": {
+            # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
+            "system": (
+                "You are an induction head mechanism. Given a sequence of {N} tokens (e.g., 'Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.'), "
+                "strictly trace the sequence occurrences step-by-step for {H} hops. Do not provide any commentary or auxiliary information. "
+                "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix. "
+                "End your response ONLY with the final traced token in the format: [FINAL] {final_token}.\n"
+                "Example:\n"
+                "Input: Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.\n"
+                "Output:\n"
+                "[TRACE] Start at {start_token}. Found '{start_token}' in sequence. Next token is {token_2}.\n"
+                "[TRACE] At {token_2}. Found '{token_2}' in sequence. Next token is {token_3}.\n"
+                "...\n"
+                "[TRACE] At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
+                "[FINAL] {final_token}"
+            ),
+            "force_start": "[TRACE] Start at",
+        },
+        "igsm": {
+            # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
+            "system": (
+                "You are a symbolic math solver. Given {N} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?'), "
+                "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. "
+                "For each assignment, substitute known values and show the calculation using the [EQ {i}] prefix for step {i}. "
+                "DO NOT generate preambles or verbose explanations. Output the answer to the query on a new line in this format: [FINAL] {final_value}.\n"
+                "Example:\n"
+                "Input: Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?\n"
+                "Output:\n"
+                "[EQ 1] {var_1} = {expr_1} (mod 7) = {value_1}.\n"
+                "[EQ 2] {var_2} = {expr_2} (mod 7) = {value_2}.\n"
+                "...\n"
+                "[EQ {N}] {var_N} = {expr_N} (mod 7) = {value_N}.\n"
+                "[FINAL] {final_value}"
+            ),
+            "force_start": "[EQ 1]",
         }
+    }
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
