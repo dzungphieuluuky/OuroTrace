@@ -289,110 +289,56 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator. Add numbers step-by-step, then output the final sum.\n\n"
-                    "PROCESS:\n"
-                    "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
-                    "2. Show your addition steps (internal reasoning)\n"
-                    "3. Mark the final answer with [FINAL]\n\n"
-                    "FORMAT:\n"
-                    "Step 1: 0 + {first_number} = {first_sum}\n"
-                    "Step 2: {first_sum} + {second_number} = {total_sum}\n"
-                    "[FINAL] {total_sum} [END]\n\n"
-                    "CRITICAL RULES:\n"
-                    "• For 2 numbers, use EXACTLY 2 steps (Step 1 and Step 2)\n"
-                    "• For N numbers, use EXACTLY N steps\n"
-                    "• Each step processes ONE COMPLETE NUMBER\n"
-                    "• Numbers can have 1-3 digits - treat them as whole values\n"
-                    "• ALWAYS end with '[FINAL] {answer} [END]'\n"
-                    "• STOP generating immediately after '[FINAL] {answer} [END]'\n\n"
-                    "EXAMPLES:\n"
-                    "Input: 553 + 553 =\n"
-                    "Step 1: 0 + 553 = 553\n"
-                    "Step 2: 553 + 553 = 1106\n"
-                    "[FINAL] 1106 [END]\n\n"
-                    "Input: 242 + 774 =\n"
-                    "Step 1: 0 + 242 = 242\n"
-                    "Step 2: 242 + 774 = 1016\n"
-                    "[FINAL] 1016 [END]\n\n"
-                    "Input: 642 + 508 =\n"
-                    "Step 1: 0 + 642 = 642\n"
-                    "Step 2: 642 + 508 = 1150\n"
-                    "[FINAL] 1150 [END]\n"
+                    "Add numbers step-by-step. Output format:\n"
+                    "Step 1: 0 + {A} = {R1}\n"
+                    "Step 2: {R1} + {B} = {R2}\n"
+                    "[FINAL] {R2}\n\n"
+                    "Rules:\n"
+                    "• For N input numbers, output N steps\n"
+                    "• End with [FINAL] {answer}\n"
+                    "• Stop after [FINAL]\n"
+                    "• No examples, no repetition"
                 ),
-                "force_start": "Step"   
-        },
-        "p_hop": {
-            "system": (
-                "You are a sequence tracker. Trace hops step-by-step, then output the final position.\n\n"
-                "PROCESS:\n"
-                "1. Show your hop trace (internal reasoning)\n"
-                "2. Mark the final position with [FINAL]\n\n"
-                "FORMAT:\n"
-                "Hop 1: At {t1} → Next is {t2}\n"
-                "Hop 2: At {t2} → Next is {t3}\n"
-                "(continue as needed)\n"
-                "Hop N: At {tN-1} → Next is {tN}\n"
-                "[FINAL] {tN}\n\n"
-                "RULES:\n"
-                "• Show each hop step-by-step\n"
-                "• Count requested hops (N)\n"
-                "• Output exactly N hops\n"
-                "• End with '[FINAL] {token}'\n"
-                "• Stop immediately after [FINAL]\n\n"
-                "EXAMPLES:\n"
-                "Input: Sequence: A B C. Start: A. Hop 2 times.\n"
-                "Hop 1: At A → Next is B\n"
-                "Hop 2: At B → Next is C\n"
-                "[FINAL] C\n\n"
-                "CRITICAL:\n"
-                "• After outputting [FINAL] {token}, STOP\n"
-                "• Do not continue after [FINAL]\n"
-                "• Perform exactly the requested number of hops"
-            ),
-            "force_start": "Hop",
-        },
-        "igsm": {
-            "system": (
-                "You are a symbolic evaluator (mod 7). Evaluate step-by-step, then output the final answer.\n\n"
-                "PROCESS:\n"
-                "1. Show your evaluation steps (internal reasoning)\n"
-                "2. Mark the final answer with [FINAL]\n\n"
-                "FORMAT:\n"
-                "Step 1: {var1} = {val1} (mod 7) = {r1}\n"
-                "Step 2: {var2} = {expr} = {computed} (mod 7) = {r2}\n"
-                "(continue as needed)\n"
-                "Step N: {query} = {value} (mod 7) = {answer}\n"
-                "[FINAL] {answer}\n\n"
-                "RULES:\n"
-                "• Show each evaluation step\n"
-                "• Substitute variables\n"
-                "• Apply mod 7\n"
-                "• End with '[FINAL] {answer}'\n"
-                "• Answer must be [0-6]\n"
-                "• Stop immediately after [FINAL]\n\n"
-                "EXAMPLES:\n"
-                "Input: A := 5. B := 3. C := A + B. C?\n"
-                "Step 1: A = 5 (mod 7) = 5\n"
-                "Step 2: B = 3 (mod 7) = 3\n"
-                "Step 3: C = A + B = 5 + 3 = 8 (mod 7) = 1\n"
-                "[FINAL] 1\n\n"
-                "CRITICAL:\n"
-                "• After outputting [FINAL] {answer}, STOP\n"
-                "• Do not continue after [FINAL]\n"
-                "• Process all assignments before query"
-            ),
-            "force_start": "Step",
+                "force_start": "Step 1:",
+            },
+            "p_hop": {
+                "system": (
+                    "Trace sequence hops. Output format:\n"
+                    "Hop 1: At {A} → Next is {B}\n"
+                    "Hop 2: At {B} → Next is {C}\n"
+                    "[FINAL] {C}\n\n"
+                    "Rules:\n"
+                    "• For N hops, output N lines\n"
+                    "• End with [FINAL] {token}\n"
+                    "• Stop after [FINAL]\n"
+                    "• No examples, no repetition"
+                ),
+                "force_start": "Hop 1:",
+            },
+            "igsm": {
+                "system": (
+                    "Evaluate mod 7. Output format:\n"
+                    "Step 1: {V} = {E} = {N} (mod 7) = {R}\n"
+                    "[FINAL] {R}\n\n"
+                    "Rules:\n"
+                    "• Process all assignments\n"
+                    "• End with [FINAL] {answer}\n"
+                    "• Answer in [0,6]\n"
+                    "• Stop after [FINAL]\n"
+                    "• No examples, no repetition"
+                ),
+                "force_start": "Step 1:",
+            }
         }
-    }
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
             self.task_templates[task_type] = {
                 "system": config["system"],
-                "force_start_text": config["force_start"],
+                "force_start": config["force_start"],
             }
-        print("[+] Task templates (strict hybrid) pre-computed.")
-
+        
+        print("[+] Task templates (production - minimal, no examples) pre-computed.")
     @torch.inference_mode()
     def predict(
         self,
