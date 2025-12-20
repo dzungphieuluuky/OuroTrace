@@ -287,40 +287,39 @@ class SafeOuroThinkingExperiment:
         self.tokenizer = tokenizer
 
         task_configs = {
-        "n_ary": {
-            "system": (
-                "You are a calculator. Add numbers step-by-step, then output the final sum.\n\n"
-                "PROCESS:\n"
-                "1. Show your addition steps (internal reasoning)\n"
-                "2. Mark the final answer with [FINAL]\n\n"
-                "FORMAT:\n"
-                "Step 1: 0 + {first} = {r1}\n"
-                "Step 2: {r1} + {second} = {r2}\n"
-                "(continue as needed)\n"
-                "Step N: {rN-1} + {last} = {sum}\n"
-                "[FINAL] {sum}\n\n"
-                "RULES:\n"
-                "• Show your work step-by-step\n"
-                "• Count input numbers (N)\n"
-                "• Output exactly N steps\n"
-                "• End with '[FINAL] {answer}'\n"
-                "• Stop immediately after [FINAL]\n\n"
-                "EXAMPLES:\n"
-                "Input: 5 + 3 =\n"
-                "Step 1: 0 + 5 = 5\n"
-                "Step 2: 5 + 3 = 8\n"
-                "[FINAL] 8\n\n"
-                "Input: 10 + 20 + 30 =\n"
-                "Step 1: 0 + 10 = 10\n"
-                "Step 2: 10 + 20 = 30\n"
-                "Step 3: 30 + 30 = 60\n"
-                "[FINAL] 60\n\n"
-                "CRITICAL:\n"
-                "• After outputting [FINAL] {answer}, STOP\n"
-                "• Do not continue after [FINAL]\n"
-                "• Each input number used exactly once"
-            ),
-            "force_start": "Step",
+            "n_ary": {
+                "system": (
+                    "You are a calculator. Add numbers step-by-step, then output the final sum.\n\n"
+                    "PROCESS:\n"
+                    "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
+                    "2. Show your addition steps (internal reasoning)\n"
+                    "3. Mark the final answer with [FINAL]\n\n"
+                    "FORMAT:\n"
+                    "Step 1: 0 + {first_number} = {first_sum}\n"
+                    "Step 2: {first_sum} + {second_number} = {total_sum}\n"
+                    "[FINAL] {total_sum}\n\n"
+                    "CRITICAL RULES:\n"
+                    "• For 2 numbers, use EXACTLY 2 steps (Step 1 and Step 2)\n"
+                    "• For N numbers, use EXACTLY N steps\n"
+                    "• Each step processes ONE COMPLETE NUMBER\n"
+                    "• Numbers can have 1-3 digits - treat them as whole values\n"
+                    "• ALWAYS end with '[FINAL] {answer}'\n"
+                    "• STOP generating immediately after '[FINAL] {answer}'\n\n"
+                    "EXAMPLES:\n"
+                    "Input: 553 + 553 =\n"
+                    "Step 1: 0 + 553 = 553\n"
+                    "Step 2: 553 + 553 = 1106\n"
+                    "[FINAL] 1106\n\n"
+                    "Input: 242 + 774 =\n"
+                    "Step 1: 0 + 242 = 242\n"
+                    "Step 2: 242 + 774 = 1016\n"
+                    "[FINAL] 1016\n\n"
+                    "Input: 642 + 508 =\n"
+                    "Step 1: 0 + 642 = 642\n"
+                    "Step 2: 642 + 508 = 1150\n"
+                    "[FINAL] 1150\n"
+                ),
+                "force_start": "Step"   
         },
         "p_hop": {
             "system": (
