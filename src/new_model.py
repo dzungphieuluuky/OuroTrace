@@ -305,17 +305,18 @@ class SafeOuroThinkingExperiment:
                 "• Each input number appears in EXACTLY ONE step\n"
                 "• Number of steps = number of input numbers\n"
                 "• After step N, immediately output [FINAL]\n"
-                "• Strictly generate no more response after generating {final_sum}\n"
+                "• No more output after outputting [FINAL]\n"
                 "• NO additional steps after all numbers are processed\n\n"
                 "PATTERN EXPLANATION:\n"
-                "Input '{A} + {B} =' has 2 numbers → Output 2 steps + [FINAL]\n"
-                "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + [FINAL]\n"
-                "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output 4 steps + [FINAL]\n\n"
+                "Input '{A} + {B} =' has 2 numbers → Output [FINAL]\n"
+                "Input '{A} + {B} + {C} =' has 3 numbers → Output [FINAL]\n"
+                "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output [FINAL]\n\n"
                 "FORBIDDEN:\n"
                 "❌ NO repeating the same number in multiple steps\n"
                 "❌ NO continuing after all input numbers are used\n"
                 "❌ NO generating steps beyond the input count\n"
                 "❌ NO explanations or commentary"
+                "❌ NO output other than [FINAL]"
             ),
             "force_start": "[FINAL] ",
         },
@@ -336,16 +337,17 @@ class SafeOuroThinkingExperiment:
                 "CRITICAL RULES:\n"
                 "• Perform exactly the requested number of hops\n"
                 "• Follow the sequence order (if sequence repeats, wrap around)\n"
-                "• Strictly generate no more response after generating {final_token}\n"
                 "• After hop N, immediately output [FINAL]\n"
+                "• No more output after outputting [FINAL]\n"
                 "• Use only tokens from the input sequence\n\n"
                 "PATTERN EXPLANATION:\n"
-                "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
-                "If input says 'Hop 5 times' → Output 5 hop lines + [FINAL]\n\n"
+                "If input says 'Hop 3 times' → Output [FINAL]\n"
+                "If input says 'Hop 5 times' → Output [FINAL]\n\n"
                 "FORBIDDEN:\n"
                 "❌ NO extra hops beyond the requested count\n"
                 "❌ NO inventing tokens not in the sequence\n"
                 "❌ NO explanations or commentary"
+                "❌ NO output other than [FINAL]"
             ),
             "force_start": "[FINAL] ",
         },
@@ -368,8 +370,8 @@ class SafeOuroThinkingExperiment:
                 "• Substitute variable values immediately\n"
                 "• Show computation before applying mod 7\n"
                 "• Final result must be in range [0, 6]\n"
-                "• Strictly generate no more response after generating {answer}\n"
-                "• After evaluating the query, immediately output {answer}\n\n"
+                "• no more output after outputting [FINAL]\n"
+                "• After evaluating the query, immediately output [FINAL]\n\n"
                 "OPERATION PATTERNS:\n"
                 "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
                 "Copy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n"
@@ -379,6 +381,7 @@ class SafeOuroThinkingExperiment:
                 "❌ NO continuing after the query is answered\n"
                 "❌ NO results outside [0, 6]\n"
                 "❌ NO explanations or commentary"
+                "❌ NO output other than [FINAL]"
             ),
             "force_start": "[FINAL] ",
         }
