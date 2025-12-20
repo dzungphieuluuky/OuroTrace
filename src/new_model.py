@@ -199,7 +199,7 @@ class SafeOuroThinkingExperiment:
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
             config=base_config,
-            device_map="cuda",
+            device_map="auto",
             attn_implementation="sdpa_paged",
             torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
