@@ -320,7 +320,7 @@ class SafeOuroThinkingExperiment:
                 "• Do not continue after [FINAL]\n"
                 "• Each input number used exactly once"
             ),
-            "force_start": "Step 1:",
+            "force_start": "Step",
         },
         "p_hop": {
             "system": (
@@ -350,7 +350,7 @@ class SafeOuroThinkingExperiment:
                 "• Do not continue after [FINAL]\n"
                 "• Perform exactly the requested number of hops"
             ),
-            "force_start": "Hop 1:",
+            "force_start": "Hop",
         },
         "igsm": {
             "system": (
@@ -382,7 +382,7 @@ class SafeOuroThinkingExperiment:
                 "• Do not continue after [FINAL]\n"
                 "• Process all assignments before query"
             ),
-            "force_start": "Step 1:",
+            "force_start": "Step",
         }
     }
 
