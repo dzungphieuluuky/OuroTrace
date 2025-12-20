@@ -317,7 +317,7 @@ class SafeOuroThinkingExperiment:
                 "{N}. Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
                 "[FINAL] {final_sum}"
             ),
-            "force_start": "",
+            "force_start": "0. Sum: 0\n",
         },
         "p_hop": {
             # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
@@ -336,7 +336,7 @@ class SafeOuroThinkingExperiment:
                 "H. At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
                 "[FINAL] {final_token}"
             ),
-            "force_start": "",
+            "force_start": "1. Start at",
         },
         "igsm": {
             # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
@@ -356,7 +356,7 @@ class SafeOuroThinkingExperiment:
                 "{N}. {var_N} = {expr_N} (mod 7) = {value_N}.\n"
                 "[FINAL] {final_value}"
             ),
-            "force_start": "",
+            "force_start": "1. ",
         }
     }
 
