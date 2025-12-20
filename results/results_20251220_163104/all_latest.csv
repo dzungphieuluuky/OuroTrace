@@ -1,0 +1,526 @@
+task_type,difficulty,test_input,expected_answer,prediction,is_correct,test_id,ut_steps,full_response,generation_time,generated_tokens,input_tokens,is_degenerate
+n_ary,2_ops,103 + 535 =,638,1070,False,d3fe7b2d,2,"Step  1: 0 + 103 = 103
+Step 2: 103 + 555 = 658
+[FINAL] 658
+
+SAMPLE
+
+Input:
+535 + 535 =
+
+Step 1: 0 + 535 = 535
+Step 2: 535 + 535 = 1070
+[FINAL] 1070
+
+SAMPLE
+
+Input:
+535 + 535 =
+
+Step 1: 0 + 535 = 535
+Step 2: 535 + 535 = 1070
+[FINAL] 1070
+
+SAMPLE
+
+Input:
+535 + 535 =
+
+Step 1: 0 + 535 = 535
+Step 2: 535 + 535 = 1070
+[FINAL] 1070
+
+SAMPLE
+
+Input:
+535 + 5",7.685935261624991,256,311,False
+n_ary,2_ops,071 + 248 =,319,319,True,3e40c983,2,"Step  1: 0 + 71 = 71
+Step 2: 71 + 248 = 319
+",7.685935261624991,256,311,False
+n_ary,2_ops,146 + 978 =,1124,1106,False,4869328f,2,"Step  1: 0 + 553 = 553
+Step 2: 553 + 553 = 1106
+[FINAL] 1106
+
+SAMPLE
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input",7.685935261624991,256,311,False
+n_ary,2_ops,985 + 063 =,1048,1048,True,8b15f46d,2,"Step  1: 0 + 985 = 985
+Step 2: 985 + 063 = 1048
+[FINAL] 1048
+
+SAMPLE
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 + 456 =
+
+Output:
+1698
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 + 456 =
+
+Output:
+1698
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 + 456 =
+
+Output:
+1698
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 + 456 =
+
+Output:
+1698
+
+Note:
+
+The input",7.685935261624991,256,311,False
+n_ary,2_ops,961 + 080 =,1041,1066,False,c502b163,2,"Step  1: 0 + 961 = 961
+Step 2: 961 + 080 = 1041
+[FINAL] 1041
+
+SAMPLE
+
+Input:
+533 + 533 =
+
+Step 1: 0 + 533 = 533
+Step 2: 533 + 533 = 1066
+[FINAL] 1066
+
+SAMPLE
+
+Input:
+533 + 533 =
+
+Step 1: 0 + 533 = 533
+Step 2: 533 + 533 = 1066
+[FINAL] 1066
+
+SAMPLE
+
+Input:
+533 + 533 =
+
+Step 1: 0 + 533 = 533
+Step 2: 533 + 533 = 1066
+[FINAL] 1066
+
+SAMPLE
+
+Input:
+533 +",7.685935261624991,256,311,False
+n_ary,2_ops,998 + 414 =,1412,1412,True,93586cd5,2,"Step  1: 0 + 998 = 998
+Step 2: 998 + 414 = 1412
+[FINAL] 1412
+
+SAMPLE
+
+Input:
+533 + 533 =
+
+Output:
+1066
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+Note:
+
+The output is the final sum.
+
+",7.685935261624991,256,311,False
+n_ary,2_ops,032 + 077 =,109,110,False,819941a4,2,"Step  1: 0 + 32 = 32
+Step 2: 32 + 77 = 110
+[FINAL] 110
+
+输入:
+000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",7.685935261624991,256,311,False
+n_ary,2_ops,063 + 523 =,586,1056,False,f234482b,2,"Step  1: 0 + 533 = 533
+Step 2: 533 + 523 = 1056
+[FINAL] 1056
+
+SAMPLE
+
+Input:
+533 + 523 =
+
+Output:
+1056
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+533 + 523 =
+
+Output:
+1056
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+533 + 523 =
+
+Output:
+1056
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+533 + 523 =
+
+Output:
+1056
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+533 + 523 =
+
+Output:
+1056
+
+Note:
+
+The input",7.685935261624991,256,311,False
+n_ary,2_ops,078 + 096 =,174,184,False,ac45dc1c,2,"Step  1: 0 + 088 = 088
+Step 2: 088 + 096 = 184
+[FINAL] 184
+
+SAMPLE
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with space-separated numbers.
+
+Input:
+123 + 123 =
+
+Output:
+246
+
+Note:
+
+The input will be a single line with space-separated numbers.
+
+Input:
+123 + 123 =
+
+Output:
+246
+
+Note:
+
+The input will be a single line with space-separated numbers.
+
+Input:
+123 + 123 =
+
+Output:
+246
+
+Note:
+
+The input will be a single line with space-separated numbers.
+
+Input:
+123 + 123 =
+
+Output:
+246
+
+Note:
+
+The input will be a single line with space-separated",7.959302452499998,256,311,False
+n_ary,2_ops,659 + 774 =,1433,1433,True,0e782f91,2,"Step  1: 0 + 659 = 659
+Step 2: 659 + 774 = 1433
+[FINAL] 1433
+",7.959302452499998,256,311,False
+n_ary,2_ops,608 + 084 =,692,692,True,da7d1844,2,"Step  1: 0 + 608 = 608
+Step 2: 608 + 084 = 692
+[FINAL] 692
+
+**Final Answer**
+",7.959302452499998,256,311,False
+n_ary,2_ops,123 + 129 =,252,252,True,71eb0b4d,2,"Step  1: 0 + 123 = 123
+Step 2: 123 + 129 = 252
+[FINAL] 252
+
+SAMPLE
+
+Input:
+533 + 533 =
+
+Output:
+1066
+
+Note:
+
+- The input will be a list of integers.
+- The output should be a string with the result.
+- The output should be formatted as [FINAL] {answer}
+- The answer should be a number.
+- The answer should be formatted as a string with the result.
+- The output should be formatted as [FINAL] {answer}
+- The answer should be formatted as a string with the result.
+- The output should be formatted as [FINAL] {answer}
+- The answer should be formatted as a string with the result.
+- The output should be formatted as [FINAL] {answer}
+- The answer should be formatted as a string with the result.
+- The output should be formatted as [FINAL] {answer}
+- The answer should be formatted as a string with the result.
+- The output",7.959302452499998,256,311,False
+n_ary,2_ops,939 + 504 =,1443,1443,True,f6c99dd7,2,"Step  1: 0 + 939 = 939
+Step 2: 939 + 504 = 1443
+[FINAL] 1443
+
+**Final Answer**
+",7.959302452499998,256,311,False
+n_ary,2_ops,974 + 252 =,1226,1226,True,f4e0feed,2,"Step  1: 0 + 974 = 974
+Step 2: 974 + 252 = 1226
+[FINAL] 1226
+
+**Final Answer**
+",7.959302452499998,256,311,False
+n_ary,2_ops,922 + 239 =,1161,1161,True,ac86e95c,2,"Step  1: 0 + 922 = 922
+Step 2: 922 + 239 = 1161
+[FINAL] 1161
+
+SAMPLE
+
+Input:
+533 + 533 =
+
+Output:
+1066
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output is the sum of the two numbers.
+
+Note:
+
+The output",7.959302452499998,256,311,False
+n_ary,2_ops,155 + 908 =,1063,1461,False,3c55ffa7,2,"Step  1: 0 + 553 = 553
+Step 2: 553 + 908 = 1461
+[FINAL] 1461
+
+SAMPLE
+
+Input:
+553 + 553 =
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+553 553 553
+
+Output:
+1106
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 456 789
+
+Output:
+123456789
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 456 789
+
+Output:
+123456789
+
+Note:
+
+The input will be a single line with multiple space-separated numbers.
+
+Input:
+123 456 78",7.959302452499998,256,311,False

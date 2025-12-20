@@ -1,0 +1,132 @@
+task_type,difficulty,test_input,expected_answer,prediction,is_correct,test_id,ut_steps,full_response,generation_time,generated_tokens,input_tokens,is_degenerate
+n_ary,2_ops,830 + 218 =,1048,2468,False,4856dcce,2,"Step  1: 0 + 830 = 830
+Step 2: 830 + 218 = 1048
+[FINAL] 1048
+
+Input: 1234
+
+Step 1: 0 + 1234 = 1234
+Step 2: 1234 + 1234 = 2468
+[FINAL] 2468
+
+Input: 1234 + 1234 = 2468
+
+Input: 1234 + 1234 = 2468
+
+Input: 1234 + 1234 = 2468
+
+Input: 1234 + 1234 = 2468
+
+Input: 1234 + 1234 = 2468
+
+Input: 1234 + 1234 = 2468
+
+Input: 1234 + 1234 = 2468
+
+Input",9.030774350874992,256,433,False
+n_ary,2_ops,913 + 872 =,1785,1801,False,b6ca4296,2,"Step  1: 0 + 933 = 933
+Step 2: 933 + 872 = 1805
+[FINAL] 1805
+
+Input: 1234 + 567 =
+Step 1: 0 + 1234 = 1234
+Step 2: 1234 + 567 = 1801
+[FINAL] 1801
+
+Input: 1234 + 567 =
+Step 1: 0 + 1234 = 1234
+Step 2: 1234 + 567 = 1801
+[FINAL] 1801
+
+Input: 1234 + 567 =
+Step 1: 0 + 1234 = 1234
+Step 2: 1234 + 567 = 1801
+[FINAL] 1801
+
+Input: 1234 + 567 =
+",9.030774350874992,256,433,False
+n_ary,2_ops,071 + 040 =,111,75,False,3ccb5c0b,2,"Step  1: 0 + 71 = 71
+Step 2: 71 + 04 = 75
+",9.030774350874992,256,433,False
+n_ary,2_ops,635 + 573 =,1208,1208,True,991e9f66,2,"Step  1: 0 + 635 = 635
+Step 2: 635 + 573 = 1208
+[FINAL] 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input: 1208
+
+Input:",9.030774350874992,256,433,False
+n_ary,2_ops,105 + 452 =,557,557,True,aaf3cb68,2,"Step  1: 0 + 105 = 105
+Step 2: 105 + 452 = 557
+[FINAL] 557
+
+输入: 1234
+
+输入: 1234
+
+输入: 1234
+
+输入: 1234
+
+输",9.030774350874992,256,433,False
+n_ary,2_ops,926 + 245 =,1171,1181,False,8ffd55c1,2,"Step  1: 0 + 926 = 926
+Step 2: 926 + 255 = 1181
+[FINAL] 1181
+
+输入: 1234567890
+
+输入: 1234567890
+
+输入: 1234567890
+
+输入: 1234567890
+
+输",9.030774350874992,256,433,False
+n_ary,2_ops,390 + 345 =,735,735,True,7348f11e,2,"Step  1: 0 + 390 = 390
+Step 2: 390 + 345 = 735
+",9.030774350874992,256,433,False
+n_ary,2_ops,050 + 819 =,869,819,False,426e3889,2,"Step  2: 0 + 819 = 819
+",9.030774350874992,256,433,False
