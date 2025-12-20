@@ -300,10 +300,10 @@ class SafeOuroThinkingExperiment:
             "n_ary": {
                 # Data format: "408 + 819 + 667 + 413 ="
                 "system": (
-                    "You are a calculator. Given an addition problem with several numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
+                    "You are a calculator. Given an addition problem with {N} numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
                     "show your work step by step. For each number, add it to the running total and show the calculation. "
-                    "After all steps, output only the final sum on a new line as [FINAL] [sum].\n"
-                    "IMPORTANT: Stop your calculation when you reach the '=' symbol in the input. Do not process any numbers after '='.\n"
+                    "Only perform calculation for {N} steps."
+                    "Output only the final sum on a new line in this format: [FINAL] [final_sum].\n"
                     "Example:\n"
                     "Input: {number_i} + {number_i+1} + {number_i+2} + ... =\n"
                     "Output:\n"
@@ -311,6 +311,7 @@ class SafeOuroThinkingExperiment:
                     "Step {i+1}: {sum_i} + {number_i+1} = {sum_i+1}\n"
                     "Step {i+2}: {sum_i+1} + {number_i+2} = {sum_i+2}\n"
                     "..."
+                    "Step {N}: {sum_N-1} + {number_N} = {final_sum}\n"
                     "[FINAL] {final_sum}"
                 ),
                 "force_start": "Step 1:",
@@ -320,8 +321,9 @@ class SafeOuroThinkingExperiment:
                 "system": (
                     "You are a sequence tracer."
                     "Trace the sequence step by step. At each hop, follow strictly and exactly the format below. "
-                    "Output each line as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
-                    "IMPORTANT: Stop your trace when you reach the '. Start' phrase in the input. Do not process any tokens after '. Start'.\n"
+                    "You will be given a sequence, a {start_token}, and {N} hops to perform. "
+                    "Output each line as 'Hop {X}: At {token} → Next is {token}'."
+                    "After {N} hops, output the result in this format: [FINAL] {token}.\n"
                     "Example:\n"
                     "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop {N} times.\n"
                     "Output:\n"
@@ -336,10 +338,10 @@ class SafeOuroThinkingExperiment:
             "igsm": {
                 # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
                 "system": (
-                    "You are a symbolic math solver working modulo 7. Given a list of assignments and a query, "
+                    "You are a symbolic math solver working modulo 7. Given a list of {N} assignments and a query, "
                     "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
-                    "Output each line as: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
-                    "IMPORTANT: Stop your calculation when you reach the '?' symbol in the input. Do not process any assignments after '?'.\n"
+                    "Output each line as: '{var} = {expression} = {value} (mod 7)'."
+                    "For the query, output the final answer in this format: [FINAL] {value}.\n"
                     "Example:\n"
                     "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
                     "Output:\n"
@@ -347,6 +349,7 @@ class SafeOuroThinkingExperiment:
                     "Step {i+1}: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
                     "Step {i+2}: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
                     "..."
+                    "Step {N}: {query_token} = {expression} = {final_value} (mod 7)\n"
                     "[FINAL] {final_value}"
                 ),
                 "force_start": "Step 1:",
