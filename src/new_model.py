@@ -469,7 +469,7 @@ class SafeOuroThinkingExperiment:
 
 
         # ADD STOP STRING TO ENSURE CLEAN CUT-OFF
-        generation_config["stop_strings"] = ["[END]"]
+        default_config["stop_strings"] = ["[END]"]
         start_time = time.perf_counter()
         try:
             outputs = model.generate(
