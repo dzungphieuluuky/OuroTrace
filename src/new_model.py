@@ -360,7 +360,7 @@ class SafeOuroThinkingExperiment:
                 "force_start_text": config["force_start"],
             }
         print("[+] Task templates (strict hybrid) pre-computed.")
-        
+
     @torch.inference_mode()
     def predict(
         self,
@@ -408,6 +408,7 @@ class SafeOuroThinkingExperiment:
             )
             # Add_generate_prompt is true so it will append <|im_start|>assistant
             # Now add the force_start_text to guide generation
+            # The artiface <|im_start|>assistant is added with \n at the end so we dont need \n at the beginning of force start ahihi
             prompt += template["force_start_text"]
 
             print(f"DEBUG: Full prompt for '{task_type}':\n{prompt}\n")
@@ -415,9 +416,12 @@ class SafeOuroThinkingExperiment:
                 print(f"   ✓ Chat format verified for input.")
             else:
                 print(f"   ⚠️ Chat format NOT verified for input.")
+
+            # add single prompt to batch for batch inference
             prompts.append(prompt)
 
         # Tokenize all prompts at once (let tokenizer handle padding)
+        # adlready set padding left on tokenizer init
         encodings = tokenizer(
             prompts,
             return_tensors="pt",
