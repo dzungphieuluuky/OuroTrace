@@ -297,7 +297,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 )
                                 task_results.append(result_entry)
                                 all_results.append(result_entry)
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                                print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
                         
                         except Exception as e:
@@ -317,7 +317,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                     )
                                     task_results.append(result_entry)
                                     all_results.append(result_entry)
-                                    print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                                    print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                     experiment.monitor_and_maybe_abort(result_entry, task_type)
                                 except Exception as e2:
                                     print(f"⚠️ Item failed: {e2}")
@@ -334,7 +334,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                     )
                                     task_results.append(result_entry)
                                     all_results.append(result_entry)
-                                    print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                                    print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                     experiment.monitor_and_maybe_abort(result_entry, task_type)
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
@@ -364,7 +364,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             )
                             task_results.append(result_entry)
                             all_results.append(result_entry)
-                            print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                            print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                             experiment.monitor_and_maybe_abort(result_entry, task_type)
                         except Exception as e:
                             print(f"⚠️ Item failed: {e}")
@@ -381,7 +381,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             )
                             task_results.append(result_entry)
                             all_results.append(result_entry)
-                            print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                            print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                             experiment.monitor_and_maybe_abort(result_entry, task_type)
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
