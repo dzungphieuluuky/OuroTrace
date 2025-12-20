@@ -301,12 +301,12 @@ class SafeOuroThinkingExperiment:
                 "...\n"
                 "Step {N-1}: {sum_N-2} + {penultimate_number} = {sum_N-1}\n"
                 "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
-                "[FINAL] {final_sum}\n\n"
+                "[FINAL] {final_sum} [END]\n\n"
                 "CRITICAL RULES:\n"
                 "• Each input number appears in EXACTLY ONE step\n"
                 "• Number of steps = number of input numbers\n"
-                "• After step N, immediately output [FINAL]\n"
-                "• NO additional steps after the line contains [FINAL]\n\n"
+                "• After step N, immediately output [FINAL] {final_sum} [END]\n"
+                "• NO additional steps after the line contains [END]\n\n"
                 "PATTERN EXPLANATION:\n"
                 "Input '{A} + {B} =' has 2 numbers → Output 2 steps + [FINAL]\n"
                 "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + [FINAL]\n"
@@ -317,7 +317,7 @@ class SafeOuroThinkingExperiment:
                 "❌ NO generating steps beyond the input count\n"
                 "❌ NO explanations or commentary"
             ),
-            "force_start": "Step 1:",
+            "force_start": "",
         },
         "p_hop": {
             "system": (
