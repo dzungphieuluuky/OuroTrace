@@ -297,68 +297,64 @@ class SafeOuroThinkingExperiment:
         self.tokenizer = tokenizer
 
         task_configs = {
-        "n_ary": {
-            # Data format: "408 + 819 + 667 + 413 ="
-            "system": (
-                "You are a mechanical calculation engine. Given an addition problem with {integer number} numbers (e.g., '{number_1} + {number_2} + ... + {number_N} ='), "
-                "your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps. "
-                "For each number, add it to the running total and show the calculation. Only perform calculation for {integer number} steps. "
-                "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
-                "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED NUMBERS AND STEPS ONLY.\n"
-                "Example:\n"
-                "Input: {number_1} + {number_2} + ... + {number_N} =\n"
-                "Output:\n"
-                "0. Sum: 0\n"
-                "...\n"
-                "{i}. Add {number_i}: {sum_{i-1}} + {number_i} = {sum_i}\n"
-                "{i + 1}. Add {number_{i+1}}: {sum_i} + {number_{i+1}} = {sum_{i+1}}\n"
-                "{i + 2}. Add {number_{i+2}}: {sum_{i+1}} + {number_{i+2}} = {sum_{i+2}}\n"
-                "...\n"
-                "{integer number}. Add {number_N}: {sum_{N-1}} + {number_N} = {final_sum}\n"
-                "[FINAL] {final_sum}"
-            ),
-            "force_start": "0. Sum: 0\n",
-        },
-        "p_hop": {
-            # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
-            "system": (
-                "You are an induction head mechanism. Given a sequence of {integer number} tokens (e.g., 'Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.'), "
-                "strictly trace the sequence occurrences step-by-step for {H} hops. Do not provide any commentary or auxiliary information. "
-                "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix. "
-                "End your response ONLY with the final traced token in the format: [FINAL] {final_token}.\n"
-                "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED TOKENS AND STEPS ONLY.\n"
-                "Example:\n"
-                "Input: Sequence: {token_1} {token_2} ... {token_N}. Start: {start_token}. Hop {H} times.\n"
-                "Output:\n"
-                "1. Start at {start_token}. Found '{start_token}' in sequence. Next token is {token_2}.\n"
-                "2. At {token_2}. Found '{token_2}' in sequence. Next token is {token_3}.\n"
-                "...\n"
-                "H. At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
-                "[FINAL] {final_token}"
-            ),
-            "force_start": "1. Start at",
-        },
-        "igsm": {
-            # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
-            "system": (
-                "You are a symbolic math solver. Given {integer number} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?'), "
-                "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. "
-                "For each assignment, substitute known values and show the calculation using the [EQ {i}] prefix for step {i}. "
-                "DO NOT generate preambles or verbose explanations. Output the answer to the query on a new line in this format: [FINAL] {final_value}.\n"
-                "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED VARIABLES AND EXPRESSIONS ONLY.\n"
-                "Example:\n"
-                "Input: Question. {var_1} := {expr_1}. {var_2} := {expr_2}. ... {var_N} := {expr_N}. {query_var}?\n"
-                "Output:\n"
-                "{i}. {var_{i}} = {expr_{i}} (mod 7) = {value_{i}}.\n"
-                "{i + 1}. {var_{i+1}} = {expr_{i+1}} (mod 7) = {value_{i+1}}.\n"
-                "{i + 2}. {var_{i+2}} = {expr_{i+2}} (mod 7) = {value_{i+2}}.\n"
-                "...\n"
-                "{integer number}. {var_N} = {expr_N} (mod 7) = {value_N}.\n"
-                "[FINAL] {final_value}"
-            ),
-            "force_start": "1. ",
+            "n_ary": {
+                "system": (
+                    "You are a mechanical calculation engine. Given an addition problem with {num_steps} numbers "
+                    "(e.g., '{expr}'), "
+                    "your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside "
+                    "of the required calculation steps. "
+                    "For each number, add it to the running total and show the calculation. Only perform calculation for "
+                    "{num_steps} steps. "
+                    "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
+                    "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED NUMBERS AND STEPS ONLY.\n"
+                    "Example:\n"
+                    "Input: {expr}\n"
+                    "Output:\n"
+                    "0. Sum: 0\n"
+                    "...\n"
+                    "{step_i}. Add {number_i}: {sum_before} + {number_i} = {sum_after}\n"
+                    "[FINAL] {final_sum}\n"
+                ),
+                "force_start": "0. Sum: 0\n",
+            },
+            "p_hop": {
+                "system": (
+                    "You are an induction head mechanism. Given a sequence of {num_steps} tokens "
+                    "(e.g., 'Sequence: {tokens} Start: {start_token}. Hop {H} times.'), "
+                    "strictly trace the sequence occurrences step‑by‑step for {H} hops. Do not provide any commentary or auxiliary information. "
+                    "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix. "
+                    "End your response ONLY with the final traced token in the format: [FINAL] {final_token}.\n"
+                    "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED TOKENS AND STEPS ONLY.\n"
+                    "Example:\n"
+                    "Input: Sequence: {tokens} Start: {start_token}. Hop {H} times.\n"
+                    "Output:\n"
+                    "1. Start at {start_token}. Found '{start_token}' in sequence. Next token is {next_token}.\n"
+                    "...\n"
+                    "{H}. At {current_token}. Found '{current_token}' in sequence. Next token is {final_token}.\n"
+                    "[FINAL] {final_token}\n"
+                ),
+                "force_start": "1. Start at",
+            },
+            "igsm": {
+                "system": (
+                    "You are a symbolic math solver. Given {num_steps} assignments and a query "
+                    "(e.g., 'Question. {assignments} {query}?'), "
+                    "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation‑based, and step‑by‑step. "
+                    "For each assignment, substitute known values and show the calculation using the [EQ {step_i}] prefix for step {step_i}. "
+                    "DO NOT generate preambles or verbose explanations. Output the answer to the query on a new line in this format: "
+                    "[FINAL] {final_value}.\n"
+                    "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED VARIABLES AND EXPRESSIONS ONLY.\n"
+                    "Example:\n"
+                    "Input: Question. {assignments} {query}?\n"
+                    "Output:\n"
+                    "{step_i}. {var_i} = {expr_i} (mod 7) = {value_i}.\n"
+                    "...\n"
+                    "{num_steps}. {var_N} = {expr_N} (mod 7) = {value_N}.\n"
+                    "[FINAL] {final_value}\n"
+                ),
+                "force_start": "1. ",
+            },
         }
-    }
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
