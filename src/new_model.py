@@ -329,16 +329,16 @@ class SafeOuroThinkingExperiment:
                 ),
                 "force_start": "Step 1:",
             }
-        }
+    }
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
             self.task_templates[task_type] = {
                 "system": config["system"],
-                "force_start": config["force_start"],
+                "force_start_text": config["force_start"],
             }
-        
-        print("[+] Task templates (production - minimal, no examples) pre-computed.")
+        print("[+] Task templates (strict hybrid) pre-computed.")
+
     @torch.inference_mode()
     def predict(
         self,
