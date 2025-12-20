@@ -288,65 +288,66 @@ class SafeOuroThinkingExperiment:
 
         task_configs = {
         "n_ary": {
-            # Data format: "408 + 819 + 667 + 413 ="
             "system": (
-                "You are a mechanical calculation engine.\n"
-                "Given an addition problem in form of {an expression of numbers}.\n"
-                "You will count the number of numbers in the {expression}, assign that to {num_steps}, and perform addition step-by-step for each number.\n"
-                "DO NOT output introductions, explanations, or any text outside of the required calculation steps.\n"
-                "For each number, add it to the running total and show the calculation. Only perform calculation for {num_steps} steps.\n"
-                "Output only the final sum on a new line in this format: [FINAL] {final_sum}.\n"
-                "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED NUMBERS AND STEPS ONLY.\n"
-                "Example:\n"
-                "Input: {number_1} + {number_2} + {other numbers} =\n"
-                "Output:\n"
-                "0. Sum: 0\n"
-                "{curent step}. Add {current number}: {previous sum} + {current number} = {new sum}\n"
-                "{next step}. Add {next number}: {new sum} + {next number} = {next new sum}\n"
-                "<perform calculation for intermediate steps>\n"
-                "{final step}. Add {final number}: {previous sum} + {final number} = {final_sum}\n"
-                "[FINAL] {final_sum}"
+                "You are a calculator. Add numbers step-by-step.\n\n"
+                "FORMAT:\n"
+                "Step 1: 0 + <first> = <r1>\n"
+                "Step 2: <r1> + <second> = <r2>\n"
+                "[FINAL] <total>\n\n"
+                "RULES:\n"
+                "• Add exactly one input number per step\n"
+                "• Stop when all input numbers are added\n"
+                "• Then output [FINAL] with total\n\n"
+                "Example (5 + 3 =):\n"
+                "Step 1: 0 + 5 = 5\n"
+                "Step 2: 5 + 3 = 8\n"
+                "[FINAL] 8\n\n"
+                "Example (100 + 50 =):\n"
+                "Step 1: 0 + 100 = 100\n"
+                "Step 2: 100 + 50 = 150\n"
+                "[FINAL] 150"
             ),
-            "force_start": "0. Sum: 0\n",
+            "force_start": "Step 1:",
+            "input_prefix": ""
         },
         "p_hop": {
-            # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
             "system": (
-                "You are an induction head mechanism. Given {a sequence of tokens}.\n"
-                "Strictly trace the sequence occurrences step-by-step for {H} hops. Do not provide any commentary or auxiliary information.\n"
-                "At each hop, indicate the current token and the next token in the sequence using the [TRACE] prefix.\n"
-                "End your response ONLY with the final traced token in the format: [FINAL] {final_token}.\n"
-                "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED TOKENS AND STEPS ONLY.\n"
-                "Example:\n"
-                "Input: Sequence: {token_1} {token_2} {list of remaining tokens}. Start: {start_token}. Hop {H} times.\n"
-                "Output:\n"
-                "1. Start at {start_token}. Found '{start_token}' in sequence. Next token is {token_2}.\n"
-                "2. At {token_2}. Found '{token_2}' in sequence. Next token is {token_3}.\n"
-                "{current hop}. At {token_{current}}. Found '{token_{current}}' in sequence. Next token is {token_{current + 1}}.\n"
-                "{H}. At {token_H}. Found '{token_H}' in sequence. Next token is {final_token}.\n"
-                "[FINAL] {final_token}"
+                "You are a sequence tracer. Follow the sequence for a given number of hops.\n\n"
+                "FORMAT:\n"
+                "Trace 1: Start at <token> → Next is <token>\n"
+                "Trace 2: At <token> → Next is <token>\n"
+                "[FINAL] <final_token>\n\n"
+                "RULES:\n"
+                "• At each hop, state the current token and the next token\n"
+                "• Stop after the required number of hops\n"
+                "• Then output [FINAL] with the last token\n\n"
+                "Example (Sequence: A B C. Start: A. Hop 2 times.):\n"
+                "Trace 1: Start at A → Next is B\n"
+                "Trace 2: At B → Next is C\n"
+                "[FINAL] C"
             ),
-            "force_start": "1. Start at",
+            "force_start": "Trace 1:",
+            "input_prefix": ""
         },
         "igsm": {
-            # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
             "system": (
-                "You are a symbolic math solver.\n"
-                "Given {number of assignments} assignments and a query (e.g., 'Question. {var_1} := {expr_1}. {var_2} := {expr_2}. {query_var}?').\n"
-                "you must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step.\n"
-                "For each assignment, substitute known values and show the calculation using the [EQ {i}] prefix for step {i}.\n"
-                "DO NOT generate preambles or verbose explanations. Output the answer to the query on a new line in this format: [FINAL] {final_value}.\n"
-                "DO NOT COPY EXACTLY EXAMPLE, SUBSTITUTE WITH PROVIDED VARIABLES AND EXPRESSIONS ONLY.\n"
-                "Example:\n"
-                "Input: Question. {var_1} := {expr_1}. {var_2} := {expr_2}. {other equations}. {query_var}?\n"
-                "Output:\n"
-                "{i}. {var_{i}} = {expr_{i}} (mod 7) = {value_{i}}.\n"
-                "{i + 1}. {var_{i+1}} = {expr_{i+1}} (mod 7) = {value_{i+1}}.\n"
-                "{i + 2}. {var_{i+2}} = {expr_{i+2}} (mod 7) = {value_{i+2}}.\n"
-                "{final step}. {query_var} = {final_expression} (mod 7) = {final_value}.\n"
-                "[FINAL] {final_value}"
+                "You are a symbolic math solver. Solve assignments step-by-step modulo 7.\n\n"
+                "FORMAT:\n"
+                "Eq 1: <var> = <expr> (mod 7) = <val>\n"
+                "Eq 2: <var> = <expr> (mod 7) = <val>\n"
+                "[FINAL] <answer>\n\n"
+                "RULES:\n"
+                "• For each assignment, substitute known values and show the calculation\n"
+                "• Only use information from the input\n"
+                "• Output [FINAL] with the answer to the query\n\n"
+                "Example (Question. X := 4. Y := X. Z := Y + X. Z?):\n"
+                "Eq 1: X = 4 (mod 7) = 4\n"
+                "Eq 2: Y = X (mod 7) = 4\n"
+                "Eq 3: Z = Y + X (mod 7) = 1\n"
+                "[FINAL] 1"
             ),
-            "force_start": "1. ",
+            "force_start": "Eq 1:",
+            "input_prefix": ""
         }
     }
 
