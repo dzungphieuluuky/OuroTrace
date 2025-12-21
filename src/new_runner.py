@@ -534,11 +534,20 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     except ExperimentFailureException as efe:
         print(f"\n{'='*70}")
         print(f"❌ EXPERIMENT ABORTED GRACEFULLY: {efe}")
+        print(f"{'='*70}")
+        print("🔗 Finalizing W&B...")
+        wandb.finish()
+        print("✅ W&B session closed")
         print(f"{'='*70}\n")
+
 
     except KeyboardInterrupt:
         print(f"\n{'='*70}")
         print("❌ EXPERIMENT INTERRUPTED BY USER")
+        print(f"{'='*70}\n")
+        print("🔗 Finalizing W&B...")
+        wandb.finish()
+        print("✅ W&B session closed")
         print(f"{'='*70}\n")
 
     # Save results to csv files 
