@@ -307,7 +307,7 @@ class SafeOuroThinkingExperiment:
                     "Step {3}: {sum_2} + {third_number} = {sum_3}\n"
                     "(continue for intermediate steps)\n"
                     "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
-                    "[FINAL] {final_sum} [END]\n\n"
+                    "[FINAL] {final_sum} \n\n"
 
                     "CRITICAL RULES:\n"
                     "• Each input number appears in EXACTLY ONE step\n"
@@ -347,13 +347,13 @@ class SafeOuroThinkingExperiment:
                     "Hop {2}: At {token_2} → Next is {token_3}\n"
                     "(continue for intermediate steps)\n"
                     "Hop {N}: At {token_N} → Next is {final_token}\n"
-                    "[FINAL] {final_token} [END]\n\n"
+                    "[FINAL] {final_token} \n\n"
 
                     "CRITICAL RULES:\n"
                     "• Perform exactly the requested number of hops (N)\n"
                     "• Use only tokens from the input sequence\n"
                     "• After hop N, immediately output [FINAL] and STOP\n"
-                    "• NO extra hops, NO commentary, NO explanations, NO extra lines after [END]\n\n"
+                    "• NO extra hops, NO commentary, NO explanations, NO extra lines after [FINAL]\n\n"
 
                     "PATTERN EXPLANATION:\n"
                     "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
@@ -362,7 +362,7 @@ class SafeOuroThinkingExperiment:
                     "FORBIDDEN:\n"
                     "❌ NO extra hops beyond the requested count\n"
                     "❌ NO inventing tokens not in the sequence\n"
-                    "❌ NO explanations, commentary, or extra lines after [END]"
+                    "❌ NO explanations, commentary, or extra lines after [FINAL]"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -385,7 +385,7 @@ class SafeOuroThinkingExperiment:
                     "Step {2}: {var_2} = {substituted_expr} = {computed} (mod 7) = {result_2}\n"
                     "(continue for intermediate steps)\n"
                     "Step {N}: {query_var} = {value} (mod 7) = {answer}\n"
-                    "[FINAL] {answer} [END]\n\n"
+                    "[FINAL] {answer} \n\n"
 
                     "CRITICAL RULES:\n"
                     "• Process each assignment exactly once\n"
@@ -393,7 +393,7 @@ class SafeOuroThinkingExperiment:
                     "• Show computation before applying mod 7\n"
                     "• Final result must be in range [0, 6]\n"
                     "• After evaluating the query, immediately output [FINAL] and STOP\n"
-                    "• NO skipping assignments, NO commentary, NO explanations, NO extra lines after [END]\n\n"
+                    "• NO skipping assignments, NO commentary, NO explanations, NO extra lines after [FINAL]\n\n"
 
                     "OPERATION PATTERNS:\n"
                     "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
@@ -404,7 +404,7 @@ class SafeOuroThinkingExperiment:
                     "❌ NO skipping assignments\n"
                     "❌ NO continuing after the query is answered\n"
                     "❌ NO results outside [0, 6]\n"
-                    "❌ NO explanations, commentary, or extra lines after [END]"
+                    "❌ NO explanations, commentary, or extra lines after [FINAL]"
                 ),
                 "force_start": "[FINAL]",
             }
@@ -417,7 +417,7 @@ class SafeOuroThinkingExperiment:
                 "force_start_text": config["force_start"],
             }
 
-        print("[+] Task templates (strict, step-by-step, no commentary after [END]) pre-computed.")
+        print("[+] Task templates (strict, step-by-step, no commentary after [FINAL]) pre-computed.")
 
     @torch.inference_mode()
     def predict(
