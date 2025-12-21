@@ -1,0 +1,264 @@
+task_type,difficulty,test_input,expected_answer,prediction,is_correct,test_id,ut_steps,full_response,generation_time,generated_tokens,input_tokens,is_degenerate
+n_ary,2_ops,664 + 702 =,1366,1331,False,0ad23c77,2,"[FINAL]  1331
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,176 + 266 =,442,196,False,f6081f97,2,"[FINAL]  196
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,738 + 719 =,1457,1510,False,d17aab52,2,"[FINAL]  1510
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,310 + 932 =,1242,1331,False,48d2ca94,2,"[FINAL]  1331
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,376 + 413 =,789,900,False,e06f9c02,2,"[FINAL]  900
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,550 + 468 =,1018,1048,False,609b7b79,2,"[FINAL]  1048
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,752 + 124 =,876,1000,False,e06c3c32,2,"[FINAL]  1000
+
+**Final Answer**
+",1.372310347624989,13,468,False
+n_ary,2_ops,346 + 315 =,661,901,False,b865d69e,2,"[FINAL]  901
+
+**Final Answer**",1.372310347624989,13,468,False
+n_ary,2_ops,142 + 780 =,922,14200,False,07a8932f,2,"[FINAL]  14200
+
+**Final Answer**
+",1.4525411597500124,15,468,False
+n_ary,2_ops,292 + 474 =,766,1270,False,5cfffc5c,2,"[FINAL]  1270
+
+**Final Answer**
+",1.4525411597500124,15,468,False
+n_ary,2_ops,263 + 310 =,573,645,False,ae7caa4f,2,"[FINAL]  645
+
+**Final Answer**
+",1.4525411597500124,15,468,False
+n_ary,2_ops,760 + 345 =,1105,1005,False,a7a1dc2f,2,"[FINAL]  1005
+
+**Final Answer**
+",1.4525411597500124,15,468,False
+n_ary,2_ops,199 + 692 =,891,199,False,68298b9b,2,[FINAL]  199 + 692 = 891,1.4525411597500124,15,468,False
+n_ary,2_ops,897 + 868 =,1765,1768,False,5107c0c2,2,"[FINAL]  1768
+
+**Final Answer**",1.4525411597500124,15,468,False
+n_ary,2_ops,370 + 276 =,646,942,False,8413f7b8,2,"[FINAL]  942
+
+**Final Answer**
+",1.4525411597500124,15,468,False
+n_ary,2_ops,983 + 381 =,1364,1275,False,0b54abcb,2,"[FINAL]  1275
+
+**Final Answer**
+",1.4525411597500124,15,468,False
+n_ary,2_ops,655 + 852 =,1507,1409,False,50c49839,2,"[FINAL]  1409
+
+**Final Answer**
+",1.4173531017499954,13,468,False
+n_ary,2_ops,661 + 246 =,907,1077,False,a4a59a7b,2,"[FINAL]  1077
+
+**Final Answer**",1.4173531017499954,13,468,False
+n_ary,2_ops,930 + 257 =,1187,1189,False,3f4a75ef,2,"[FINAL]  1189
+
+**Final Answer**
+",1.4173531017499954,13,468,False
+n_ary,2_ops,696 + 233 =,929,1000,False,19dbfbee,2,"[FINAL]  1000
+
+**Final Answer**
+",1.4173531017499954,13,468,False
+n_ary,2_ops,010 + 463 =,473,1597,False,13eeda8c,2,"[FINAL]  1597
+
+**Final Answer**
+",1.4173531017499954,13,468,False
+n_ary,2_ops,881 + 099 =,980,1080,False,2af31691,2,"[FINAL]  1080
+
+**Final Answer**
+",1.4173531017499954,13,468,False
+n_ary,2_ops,078 + 260 =,338,1040,False,49e3cf41,2,"[FINAL]  1040
+
+**Final Answer**
+",1.4173531017499954,13,468,False
+n_ary,2_ops,534 + 157 =,691,901,False,03d7c8bf,2,"[FINAL]  901
+
+**Final Answer**",1.4173531017499954,13,468,False
+n_ary,2_ops,892 + 426 =,1318,1308,False,7c7b27ec,2,"[FINAL]  1308
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,950 + 883 =,1833,1785,False,d87aa1b0,2,"[FINAL]  1785
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,174 + 619 =,793,144,False,82c4b7ee,2,[FINAL]  144 + 619 =,1.4336082070000202,13,468,False
+n_ary,2_ops,414 + 961 =,1375,1451,False,0e900989,2,"[FINAL]  1451
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,062 + 521 =,583,1731,False,c1bfcb4a,2,"[FINAL]  1731
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,611 + 780 =,1391,1499,False,f6ab1904,2,"[FINAL]  1499
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,531 + 441 =,972,980,False,dd279ce8,2,"[FINAL]  980
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,511 + 156 =,667,1671,False,92d20998,2,"[FINAL]  1671
+
+**Final Answer**
+",1.4336082070000202,13,468,False
+n_ary,2_ops,559 + 816 =,1375,1459,False,56fb5d2e,2,"[FINAL]  1459
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,978 + 488 =,1466,1476,False,5a532571,2,"[FINAL]  1476
+
+**Final Answer:**
+",1.466176374624979,13,468,False
+n_ary,2_ops,208 + 839 =,1047,1729,False,f7dfe313,2,"[FINAL]  1729
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,597 + 160 =,757,1600,False,e3b39915,2,"[FINAL]  1600
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,311 + 779 =,1090,1999,False,ebe2574b,2,"[FINAL]  1999
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,218 + 167 =,385,405,False,4ee49390,2,"[FINAL]  405
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,691 + 695 =,1386,1254,False,686a26b5,2,"[FINAL]  1254
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,734 + 480 =,1214,1114,False,dcef586c,2,"[FINAL]  1114
+
+**Final Answer**
+",1.466176374624979,13,468,False
+n_ary,2_ops,780 + 881 =,1661,1674,False,44831272,2,"[FINAL]  1674
+
+**Final Answer**
+",1.3973453796249942,13,468,False
+n_ary,2_ops,827 + 306 =,1133,1234,False,9c9273ed,2,"[FINAL]  1234
+
+**Final Answer**",1.3973453796249942,13,468,False
+n_ary,2_ops,423 + 509 =,932,1000,False,af67fe77,2,"[FINAL]  1000
+
+**Final Answer**
+",1.3973453796249942,13,468,False
+n_ary,2_ops,351 + 233 =,584,684,False,1fecc969,2,"[FINAL]  684
+
+**Final Answer**",1.3973453796249942,13,468,False
+n_ary,2_ops,886 + 627 =,1513,1503,False,19cbc155,2,"[FINAL]  1503
+
+**Final Answer**
+",1.3973453796249942,13,468,False
+n_ary,2_ops,030 + 804 =,834,1348,False,00aa108e,2,"[FINAL]  1348
+
+**Final Answer**
+",1.3973453796249942,13,468,False
+n_ary,2_ops,930 + 425 =,1355,1385,False,d6caf9d6,2,"[FINAL]  1385
+
+**Final Answer**
+",1.3973453796249942,13,468,False
+n_ary,2_ops,463 + 427 =,890,1000,False,5b441aff,2,"[FINAL]  1000
+
+**Final Answer**
+",1.3973453796249942,13,468,False
+n_ary,2_ops,275 + 245 =,520,500,False,70d43538,2,"[FINAL]  500
+
+**Final Answer**
+",5.033984398999962,128,468,False
+n_ary,2_ops,773 + 830 =,1603,1573,False,b0165cfb,2,"[FINAL]  1573
+
+**Final Answer**
+",5.033984398999962,128,468,False
+n_ary,2_ops,090 + 200 =,290,300,False,1134e7ad,2,"[FINAL]  300
+
+**Final Answer**
+",5.033984398999962,128,468,False
+n_ary,2_ops,102 + 854 =,956,1020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102,False,91a0d509,2,[FINAL]  1020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102010201020102,5.033984398999962,128,468,False
+n_ary,2_ops,698 + 526 =,1224,1210,False,9a8ba383,2,"[FINAL]  1210
+
+**Final Answer**
+",5.033984398999962,128,468,False
+n_ary,2_ops,560 + 329 =,889,1000,False,4e22123d,2,"[FINAL]  1000
+
+**Final Answer**
+",5.033984398999962,128,468,False
+n_ary,2_ops,875 + 003 =,878,1008,False,08023a06,2,"[FINAL]  1008
+
+**Final Answer**
+",5.033984398999962,128,468,False
+n_ary,2_ops,434 + 797 =,1231,1234,False,dfbc2408,2,"[FINAL]  1234
+
+**Final Answer**",5.033984398999962,128,468,False
+n_ary,2_ops,674 + 248 =,922,1024,False,d79e4c61,2,"[FINAL]  1024
+
+**Final Answer**
+",1.404111228999966,13,468,False
+n_ary,2_ops,167 + 942 =,1109,167,False,5d33a7e8,2,[FINAL]  167 + 942 =,1.404111228999966,13,468,False
+n_ary,2_ops,947 + 357 =,1304,1337,False,31115c78,2,"[FINAL]  1337
+
+**Final Answer**
+",1.404111228999966,13,468,False
+n_ary,2_ops,911 + 606 =,1517,1575,False,5a913692,2,"[FINAL]  1575
+
+**Final Answer**
+",1.404111228999966,13,468,False
+n_ary,2_ops,991 + 759 =,1750,1555,False,c7873c37,2,"[FINAL]  1555
+
+**Final Answer**
+",1.404111228999966,13,468,False
+n_ary,2_ops,772 + 495 =,1267,1234567890,False,8e165353,2,[FINAL]  1234567890,1.404111228999966,13,468,False
+n_ary,2_ops,268 + 602 =,870,1000,False,6aed1f29,2,"[FINAL]  1000
+
+**Final Answer**
+",1.404111228999966,13,468,False
+n_ary,2_ops,725 + 618 =,1343,1405,False,8ff7c128,2,"[FINAL]  1405
+
+**Final Answer**
+",1.404111228999966,13,468,False
+n_ary,2_ops,317 + 443 =,760,997,False,2e4b4506,2,"[FINAL]  997
+
+**Final Answer**",1.404381261375022,13,468,False
+n_ary,2_ops,412 + 057 =,469,1000,False,11166144,2,"[FINAL]  1000
+
+**Final Answer**
+",1.404381261375022,13,468,False
+n_ary,2_ops,987 + 290 =,1277,1177,False,ba995590,2,"[FINAL]  1177
+
+**Final Answer**",1.404381261375022,13,468,False
+n_ary,2_ops,674 + 414 =,1088,1000,False,83ec1cd8,2,"[FINAL]  1000
+
+**Final Answer**
+",1.404381261375022,13,468,False
+n_ary,2_ops,993 + 918 =,1911,1918,False,d807b5fc,2,"[FINAL]  1918
+
+**Final Answer**
+",1.404381261375022,13,468,False
+n_ary,2_ops,581 + 287 =,868,1068,False,ee5ea35e,2,"[FINAL]  1068
+
+**Final Answer**",1.404381261375022,13,468,False
+n_ary,2_ops,890 + 846 =,1736,1758,False,f5d5857e,2,"[FINAL]  1758
+
+**Final Answer**
+",1.404381261375022,13,468,False
+n_ary,2_ops,580 + 682 =,1262,1408,False,5fccc3e6,2,"[FINAL]  1408
+
+**Final Answer**
+",1.404381261375022,13,468,False

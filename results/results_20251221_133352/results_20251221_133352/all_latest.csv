@@ -1,0 +1,1837 @@
+task_type,difficulty,test_input,expected_answer,prediction,is_correct,test_id,ut_steps,full_response,generation_time,generated_tokens,input_tokens,is_degenerate
+n_ary,2_ops,975 + 119 =,1094,11,False,c3436e9c,1,"Step 1:  0 + 955 = 955
+
+Step 2: 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 119 = 955 + 11",36.81249132799985,256,367,False
+n_ary,2_ops,755 + 356 =,1111,1056,False,2ae1b570,1,"Step 1:  0 + 555 = 555
+Step 2: 555 + 356 = 1056
+Step 3: 1056 + 0 = 1056
+
+Answer:
+[FINAL] 1056
+
+Note: The answer is the sum of all the numbers.
+
+The",36.81249132799985,82,367,False
+n_ary,2_ops,560 + 408 =,968,96,False,51dd9edb,1,"Step 1:  0 + 560 = 560
+
+Step 2: 560 + 408 = 960
+
+Step 3: 960 + 0 = 960
+
+Final sum: 960
+
+[FINAL] 960
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 960
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 960
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 960
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 96",36.81249132799985,256,367,False
+n_ary,2_ops,377 + 191 =,568,ERROR,False,8e31d216,1,"Step 1:  0 + 377 = 377
+Step 2: 377 + 191 = 568
+Step 3: 568 + 0 = 568
+
+Answer:
+",36.81249132799985,53,367,False
+n_ary,2_ops,426 + 101 =,527,527,True,459ca100,1,"Step 1:  0 + 426 = 426
+
+Step 2: 426 + 101 = 527
+
+Step 3: 527 + 0 = 527
+
+Final sum: 527
+
+[FINAL] 527
+
+Output:
+
+[FINAL] 527
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+",36.81249132799985,256,367,False
+n_ary,2_ops,086 + 256 =,342,360,False,9954a7e2,1,"Step 1:  0 + 86 = 86
+
+Step 2: 86 + 256 = 360
+
+Step 3: 360 + 0 = 360
+
+Answer: 360
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+
+The answer is 360.
+
+The final sum is 360.
+",36.81249132799985,256,367,False
+n_ary,2_ops,634 + 300 =,934,934,True,c4dba861,1,"Step 1:  0 + 634 = 634
+Step 2: 634 + 300 = 934
+Step 3: 934 + 0 = 934
+
+Answer:
+[FINAL] 934 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer:
+[FINAL] 934 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer:
+[FINAL] 934 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer:
+[FINAL] 934 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer:
+[FINAL] 934 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer:
+[FINAL] 934 X'
+
+Note",36.81249132799985,256,367,False
+n_ary,2_ops,732 + 918 =,1650,1620,False,4aa133eb,1,"Step 1:  0 + 732 = 732
+
+Step 2: 732 + 918 = 1620
+
+Step 3: 1620 + 0 = 1620
+
+Final sum: 1620
+
+Output:
+
+[FINAL] 1620
+
+Note:
+
+- The only way to get the correct answer is to follow the steps.
+- The answer is the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct",36.81249132799985,256,367,False
+n_ary,2_ops,604 + 444 =,1048,1000,False,9a8ad0d3,1,"Step 1:  0 + 644 = 644
+
+Step 2: 644 + 444 = 1000
+
+Step 3: 1000 + 0 = 1000
+
+Final sum: 1000
+
+Output:
+
+[FINAL] 1000
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is 1000.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1000.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1000.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1000.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1000.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1000.
+
+The only way to get the correct answer is to follow the",34.86757752599988,256,367,False
+n_ary,2_ops,514 + 935 =,1449,1459,False,1fe47060,1,"Step 1:  0 + 514 = 514
+
+Step 2: 514 + 935 = 1459
+
+Step 3: 1459 + 0 = 1459
+
+Final sum: 1459
+
+Output:
+
+[FINAL] 1459
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1459
+
+The correct answer is:
+
+[FINAL] 1459
+
+The answer is:
+
+[FINAL] 1459
+
+The correct answer is:
+
+[FINAL] 1459
+
+The answer is:
+
+[FINAL] 1459
+
+The correct answer is:
+
+[FINAL] 1459
+
+The answer is:
+
+[FINAL] 1459
+
+The correct answer is:
+
+[FINAL] 1459
+
+The answer is:
+
+[FINAL] 1459
+
+The",34.86757752599988,256,367,False
+n_ary,2_ops,222 + 922 =,1144,1146,False,f6acfdb0,1,"Step 1:  0 + 222 = 222
+
+Step 2: 222 + 922 = 1026
+
+Step 3: 1026 + 222 = 1146
+
+Final sum: 1146
+
+Output:
+
+[FINAL] 1146
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1146
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1146
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1146
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1146
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1146
+
+The only way to get the correct",34.86757752599988,256,367,False
+n_ary,2_ops,233 + 456 =,689,1000,False,ac05e511,1,"Step 1:  0 + 233 = 233
+Step 2: 233 + 567 = 867
+Step 3: 867 + 233 = 1000
+
+Answer: [FINAL] 1000 X'
+
+Note: The answer is a string that contains the final sum. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the question is the string. The string is the answer to the question. The answer to the",34.86757752599988,256,367,False
+n_ary,2_ops,799 + 417 =,1216,1216,True,34e142f4,1,"Step 1:  0 + 799 = 799
+
+Step 2: 799 + 417 = 1216
+
+Step 3: 1216 + 0 = 1216
+
+Final sum: 1216
+
+Output:
+
+[FINAL] 1216
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1216
+
+The",34.86757752599988,116,367,False
+n_ary,2_ops,144 + 988 =,1132,1168,False,1c6293c4,1,"Step 1:  0 + 144 = 144
+
+Step 2: 144 + 988 = 1024
+
+Step 3: 1024 + 144 = 1168
+
+Final sum: 1168
+
+Output:
+
+[FINAL] 1168
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1168
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1168
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1168
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1168
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1168
+
+The only way to get the correct",34.86757752599988,256,367,False
+n_ary,2_ops,062 + 993 =,1055,1063,False,cf617098,1,"Step 1:  0 + 62 = 62
+
+Step 2: 62 + 93 = 153
+
+Step 3: 153 + 993 = 1063
+
+Final sum: 1063
+
+Output:
+
+[FINAL] 1063
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1063
+
+The correct answer is:
+
+[FINAL] 1063
+
+The answer is:
+
+[FINAL] 1063
+
+The correct answer is:
+
+[FINAL] 1063
+
+The answer is:
+
+[FINAL] 1063
+
+The correct answer is:
+
+[FINAL] 1063
+
+The answer is:
+
+[FINAL] 1063
+
+The correct answer is:
+
+[FINAL] 1063
+
+The answer is:
+
+[FINAL] 1063
+
+The correct answer is:",34.86757752599988,256,367,False
+n_ary,2_ops,569 + 899 =,1468,1666,False,cd264e70,1,"Step 1:  0 + 569 = 569
+
+Step 2: 569 + 899 = 1666
+
+Step 3: 1666 + 0 = 1666
+
+Final sum: 1666
+
+Output:
+
+[FINAL] 1666
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1666
+
+The correct answer is:
+
+[FINAL] 1666
+
+The answer is:
+
+[FINAL] 1666
+
+The correct answer is:
+
+[FINAL] 1666
+
+The answer is:
+
+[FINAL] 1666
+
+The correct answer is:
+
+[FINAL] 1666
+
+The answer is:
+
+[FINAL] 1666
+
+The correct answer is:
+
+[FINAL] 1666
+
+The answer is:
+
+[FINAL] 1666
+
+The",34.86757752599988,256,367,False
+n_ary,2_ops,625 + 327 =,952,ERROR,False,b4b374e6,1,"Step 1:  0 + 625 = 625
+Step 2: 625 + 327 = 956
+Step 3: 956 + 0 = 956
+
+Answer:
+",34.85090156000024,53,367,False
+n_ary,2_ops,656 + 881 =,1537,7817,False,11682b67,1,"Step 1:  0 + 656 = 656
+
+Step 2: 656 + 811 = 1467
+
+Step 3: 1467 + 656 = 2163
+
+Step 4: 2163 + 656 = 2817
+
+Step 5: 2817 + 656 = 3463
+
+Step 6: 3463 + 656 = 3917
+
+Step 7: 3917 + 656 = 4563
+
+Step 8: 4563 + 656 = 5163
+
+Step 9: 5163 + 656 = 5817
+
+Step 10: 5817 + 656 = 6463
+
+Step 11: 6463 + 656 = 7163
+
+Step 12: 7163 + 656 = 7817",34.85090156000024,256,367,False
+n_ary,2_ops,869 + 333 =,1202,1236,False,210e6c3e,1,"Step 1:  0 + 899 = 899
+
+Step 2: 899 + 333 = 1236
+
+Step 3: 1236 + 0 = 1236
+
+Final sum: 1236
+
+Output:
+
+[FINAL] 1236
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1236
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1236
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1236
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1236
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1236
+
+The only way to get the correct answer is",34.85090156000024,256,367,False
+n_ary,2_ops,218 + 657 =,875,1,False,902e741e,1,"Step 1:  0 + 218 = 218
+
+Step 2: 218 + 577 = 895
+
+Step 3: 895 + 218 = 1015
+
+Final sum: 1015
+
+Output: [1015] X'
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is: [1015] X'
+
+The correct answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1015] X'
+
+The answer is: [1",34.85090156000024,256,367,False
+n_ary,2_ops,064 + 909 =,973,969,False,e875046a,1,"Step 1:  0 + 64 = 64
+
+Step 2: 64 + 909 = 969
+
+Step 3: 969 + 0 = 969
+
+Final sum: 969
+
+[FINAL] 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 969
+
+Output:
+
+[X] = 969
+
+[X] = 9",34.85090156000024,256,367,False
+n_ary,2_ops,112 + 337 =,449,492,False,78bfe58b,1,"Step 1:  0 + 112 = 112
+Step 2: 112 + 337 = 349
+Step 3: 349 + 112 = 369
+Step 4: 369 + 112 = 389
+Step 5: 389 + 112 = 409
+Step 6: 409 + 112 = 429
+Step 7: 429 + 112 = 432
+Step 8: 432 + 112 = 442
+Step 9: 442 + 112 = 452
+Step 10: 452 + 112 = 462
+Step 11: 462 + 112 = 472
+Step 12: 472 + 112 = 482
+Step 13: 482 + 112 = 492
+Step 14: 492 + ",34.85090156000024,256,367,False
+n_ary,2_ops,393 + 704 =,1097,1393,False,ad2f729d,1,"Step 1:  0 + 393 = 393
+Step 2: 393 + 704 = 1000
+Step 3: 1000 + 393 = 1393
+
+Answer: [FINAL] 1393 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer: [FINAL] 1393 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer: [FINAL] 1393 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer: [FINAL] 1393 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer: [FINAL] 1393 X'
+
+Note: The answer is not a number but a string that contains the final sum.
+
+Example:
+
+Answer: [FINAL] 1393",34.85090156000024,256,367,False
+n_ary,2_ops,987 + 174 =,1161,1167,False,f3e23e8f,1,"Step 1:  0 + 987 = 987
+
+Step 2: 987 + 174 = 1167
+
+Step 3: 1167 + 0 = 1167
+
+Step 4: 1167 + 174 = 1167
+
+Final sum: 1167
+
+Output:
+
+[FINAL] 1167
+
+Note:
+
+- The only way to get the correct answer is to follow the steps.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The answer is the sum of the digits.
+- The",34.85090156000024,256,367,False
+n_ary,2_ops,195 + 254 =,449,254,False,7a7fce9d,1,"Step 1:  0 + 155 = 155
+Step 2: 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254 = 155 + 254",35.07661363000079,256,367,False
+n_ary,2_ops,740 + 598 =,1338,1336,False,27a6ce24,1,"Step 1:  0 + 740 = 740
+
+Step 2: 740 + 598 = 1336
+
+Step 3: 1336 + 0 = 1336
+
+Final sum: 1336
+
+Output:
+
+[FINAL] 1336
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1336
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1336
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1336
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1336
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1336
+
+The only way to get the correct answer is",35.07661363000079,256,367,False
+n_ary,2_ops,870 + 197 =,1067,967,False,99d9ed09,1,"Step 1:  0 + 870 = 870
+
+Step 2: 870 + 197 = 967
+
+Step 3: 967 + 0 = 967
+
+Final sum: 967
+
+Output:
+
+[FINAL] 967
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 967
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 967
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 967
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 967
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 967
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is",35.07661363000079,256,367,False
+n_ary,2_ops,723 + 767 =,1490,1596,False,e3d19e50,1,"Step 1:  0 + 723 = 723
+
+Step 2: 723 + 767 = 1596
+
+Step 3: 1596 + 0 = 1596
+
+Final sum: 1596
+
+[FINAL] 1596
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, please let me know.
+
+The answer is:
+
+[FINAL] 1596
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, please let me know.
+
+The answer is:
+
+[FINAL] 1596
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, please let me know.
+
+The answer is:
+
+[FINAL] 1596
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, please let me know.
+
+The answer is:
+",35.07661363000079,256,367,False
+n_ary,2_ops,097 + 509 =,606,1008,False,27752e69,1,"Step 1:  0 + 509 = 509
+
+Step 2: 509 + 509 = 1008
+
+Step 3: 1008 + 0 = 1008
+
+Final sum: 1008
+
+Output:
+
+[FINAL] 1008
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is 1008.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1008.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1008.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1008.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1008.
+
+The only way to get the correct answer is to follow the steps.
+
+The answer is 1008.
+
+The only way to get the correct answer is to follow the",35.07661363000079,256,367,False
+n_ary,2_ops,612 + 822 =,1434,2064,False,90754859,1,"Step 1:  0 + 612 = 612
+
+Step 2: 612 + 822 = 1452
+
+Step 3: 1452 + 612 = 2064
+
+Final sum: 2064
+
+Output:
+
+[FINAL] 2064
+
+Note:
+
+- The only way to get the correct answer is to follow the steps.
+- The answer is the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not",35.07661363000079,256,367,False
+n_ary,2_ops,103 + 784 =,887,ERROR,False,04a7eaa5,1,"Step 1:  0 + 133 = 133
+Step 2: 133 + 784 = 916
+Step 3: 916 + 0 = 916
+
+Answer:
+",35.07661363000079,53,367,False
+n_ary,2_ops,051 + 246 =,297,100,False,fd67d6bf,1,"Step 1:  0 + 51 = 51
+Step 2: 51 + 26 = 77
+Step 3: 77 + 16 = 93
+Step 4: 93 + 13 = 100
+
+Answer: 100
+
+The final sum is 100.
+
+Output:
+
+[FINAL] 100
+
+```python
+def sum_digits(n):
+    return sum(int(d) for d in str(n))
+
+def main():
+    input_str = ""012345678999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",35.07661363000079,256,367,False
+n_ary,2_ops,430 + 319 =,749,117,False,316cdfef,1,"Step 1:  0 + 430 = 430
+
+Step 2: 430 + 319 = 749
+
+Step 3: 749 + 430 = 1179
+
+Step 4: 1179 + 0 = 1179
+
+Step 5: 1179 + 0 = 1179
+
+Step 6: 1179 + 0 = 1179
+
+Step 7: 1179 + 0 = 1179
+
+Step 8: 1179 + 0 = 1179
+
+Step 9: 1179 + 0 = 1179
+
+Step 10: 1179 + 0 = 1179
+
+Step 11: 1179 + 0 = 1179
+
+Step 12: 1179 + 0 = 1179
+
+Step 13: 1179 + 0 = 117",35.00667986000008,256,367,False
+n_ary,2_ops,198 + 925 =,1123,1,False,b4af188c,1,"Step 1:  0 + 198 = 198
+
+Step 2: 198 + 953 = 1953
+
+Step 3: 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 198 = 1953 + 1",35.00667986000008,256,367,False
+n_ary,2_ops,712 + 383 =,1095,1016,False,0b826d5e,1,"Step 1:  0 + 712 = 712
+
+Step 2: 712 + 383 = 1016
+
+Final sum: 1016
+
+[FINAL] 1016
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 1016
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 1016
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 1016
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, feel free to ask.
+
+The answer is:
+
+[FINAL] 1016
+
+Note: The only way to get the",35.00667986000008,256,367,False
+n_ary,2_ops,241 + 619 =,860,1016,False,6f8dbb47,1,"Step 1:  0 + 241 = 241
+
+Step 2: 241 + 619 = 869
+
+Step 3: 869 + 241 = 1016
+
+[FINAL] 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016
+
+Output:
+
+[X] = 1016
+
+X = 1016",35.00667986000008,256,367,False
+n_ary,2_ops,280 + 193 =,473,13,False,46cde66e,1,"Step 1:  0 + 280 = 280
+
+Step 2: 280 + 193 = 473
+
+Step 3: 473 + 200 = 673
+
+Step 4: 673 + 193 = 863
+
+Step 5: 863 + 200 = 1063
+
+Step 6: 1063 + 193 = 1263
+
+Step 7: 1263 + 200 = 1463
+
+Step 8: 1463 + 193 = 1663
+
+Step 9: 1663 + 200 = 1863
+
+Step 10: 1863 + 193 = 1963
+
+Step 11: 1963 + 200 = 1963
+
+Step 12: 1963 + 193 = 1963
+
+Step 13",35.00667986000008,256,367,False
+n_ary,2_ops,095 + 885 =,980,10,False,9eb7979d,1,"Step 1:  0 + 5 = 5
+Step 2: 5 + 3 = 8
+Step 3: 8 + 2 = 10
+[FINAL] 10
+
+Answer:
+",35.00667986000008,48,367,False
+n_ary,2_ops,559 + 236 =,795,ERROR,False,d197c5e3,1,"Step 1:  0 + 599 = 599
+Step 2: 599 + 236 = 835
+Step 3: 835 + 0 = 835
+
+Answer:
+",35.00667986000008,53,367,False
+n_ary,2_ops,129 + 247 =,376,1,False,d270fec6,1,"Step 1:  0 + 129 = 129
+
+Step 2: 129 + 247 = 376
+
+Step 3: 376 + 129 = 509
+
+Step 4: 509 + 129 = 639
+
+Step 5: 639 + 129 = 769
+
+Step 6: 769 + 129 = 898
+
+Step 7: 898 + 129 = 929
+
+Step 8: 929 + 129 = 949
+
+Step 9: 949 + 129 = 969
+
+Step 10: 969 + 129 = 979
+
+Step 11: 979 + 129 = 999
+
+Step 12: 999 + 129 = 1029
+
+Step 13: 1029 + 129 = 1",35.00667986000008,256,367,False
+n_ary,2_ops,270 + 237 =,507,807,False,bccb744e,1,"Step 1:  0 + 270 = 270
+
+Step 2: 270 + 237 = 507
+
+Step 3: 507 + 200 = 707
+
+Step 4: 707 + 100 = 807
+
+Step 5: 807 + 0 = 807
+
+Final sum: 807
+
+Output:
+
+[FINAL] 807
+
+Note:
+
+- The only way to get the correct answer is to follow the steps.
+- The answer is the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The answer is not the correct one.
+- The",34.969147589000386,256,367,False
+n_ary,2_ops,679 + 338 =,1017,1666,False,5e8f8eb0,1,"Step 1:  0 + 679 = 679
+
+Step 2: 679 + 389 = 1666
+
+Step 3: 1666 + 0 = 1666
+
+Final sum: 1666
+
+[FINAL] 1666
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+text:
+
+",34.969147589000386,256,367,False
+n_ary,2_ops,170 + 339 =,509,13,False,cf2df10b,1,"Step 1:  0 + 170 = 170
+
+Step 2: 170 + 399 = 599
+
+Step 3: 599 + 170 = 769
+
+Step 4: 769 + 170 = 939
+
+Step 5: 939 + 170 = 1019
+
+Step 6: 1019 + 170 = 1169
+
+Step 7: 1169 + 170 = 1239
+
+Step 8: 1239 + 170 = 1419
+
+Step 9: 1419 + 170 = 1569
+
+Step 10: 1569 + 170 = 1759
+
+Step 11: 1759 + 170 = 1969
+
+Step 12: 1969 + 170 = 2169
+
+Step 13",34.969147589000386,256,367,False
+n_ary,2_ops,260 + 099 =,359,26,False,55089f12,1,"Step 1:  0 + 260 = 260
+
+Step 2: 260 + 099 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 260 + 99 = 26",34.969147589000386,256,367,False
+n_ary,2_ops,861 + 126 =,987,987,True,5fe9649d,1,"Step 1:  0 + 861 = 861
+
+Step 2: 861 + 126 = 987
+
+Step 3: 987 + 0 = 987
+
+Final sum: 987
+
+[FINAL] 987 X'
+
+Output:
+
+X = 987
+
+Y = 0
+
+Z = 0
+
+X + Y + Z = 987 + 0 + 0 = 987
+
+X + Y + Z = 987
+
+X = 987
+
+Y = 0
+
+Z = 0
+
+X + Y + Z = 987 + 0 + 0 = 987
+
+X = 987
+
+Y = 0
+
+Z = 0
+
+X + Y + Z = 987 + 0 + 0 = 987
+
+X = 987
+
+Y = 0
+
+Z = 0
+
+X + Y + Z = 987 + 0 + 0 = ",34.969147589000386,256,367,False
+n_ary,2_ops,922 + 719 =,1641,1623,False,8c8fa24f,1,"Step 1:  0 + 922 = 922
+
+Step 2: 922 + 719 = 1623
+
+Step 3: 1623 + 0 = 1623
+
+Final sum: 1623
+
+Output:
+
+[FINAL] 1623
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1623
+
+The correct answer is:
+
+[FINAL] 1623
+
+The answer is:
+
+[FINAL] 1623
+
+The correct answer is:
+
+[FINAL] 1623
+
+The answer is:
+
+[FINAL] 1623
+
+The correct answer is:
+
+[FINAL] 1623
+
+The answer is:
+
+[FINAL] 1623
+
+The correct answer is:
+
+[FINAL] 1623
+
+The answer is:
+
+[FINAL] 1623
+
+The",34.969147589000386,256,367,False
+n_ary,2_ops,275 + 725 =,1000,3305,False,6fdcb2c2,1,"Step 1:  0 + 255 = 255
+
+Step 2: 255 + 725 = 1065
+
+Step 3: 1065 + 255 = 1325
+
+Step 4: 1325 + 255 = 1500
+
+Step 5: 1500 + 255 = 1750
+
+Step 6: 1750 + 255 = 1905
+
+Step 7: 1905 + 255 = 2150
+
+Step 8: 2150 + 255 = 2405
+
+Step 9: 2405 + 255 = 2650
+
+Step 10: 2650 + 255 = 2950
+
+Step 11: 2950 + 255 = 3150
+
+Step 12: 3150 + 255 = 3305",34.969147589000386,256,367,False
+n_ary,2_ops,051 + 357 =,408,ERROR,False,babfb8b5,1,"Step 1:  0 + 51 = 51
+Step 2: 51 + 357 = 408
+Step 3: 408 + 0 = 408
+
+Answer: [FINAL] X'
+
+Note: The answer is not a number but a string that represents the answer.
+
+Example:
+
+Answer: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output: ""123"" X'
+
+Output",34.969147589000386,256,367,False
+n_ary,2_ops,923 + 224 =,1147,2346,False,8d2a3ba7,1,"Step 1:  0 + 933 = 933
+
+Step 2: 933 + 243 = 1173
+
+Step 3: 1173 + 1173 = 2346
+
+Step 4: 2346 + 0 = 2346
+
+Final sum: 2346
+
+Output:
+
+[FINAL] 2346
+
+Note:
+
+- The only way to get the correct answer is to follow the steps.
+- The answer is the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is not the sum of all the numbers.
+- The answer is",34.88329896399955,256,367,False
+n_ary,2_ops,962 + 182 =,1144,1062,False,c2b7276f,1,"Step 1:  0 + 962 = 962
+
+Step 2: 962 + 182 = 1062
+
+Step 3: 1062 + 0 = 1062
+
+Final sum: 1062
+
+Output:
+
+[FINAL] 1062
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1062
+
+The correct answer is:
+
+[FINAL] 1062
+
+The answer is:
+
+[FINAL] 1062
+
+The correct answer is:
+
+[FINAL] 1062
+
+The answer is:
+
+[FINAL] 1062
+
+The correct answer is:
+
+[FINAL] 1062
+
+The answer is:
+
+[FINAL] 1062
+
+The correct answer is:
+
+[FINAL] 1062
+
+The answer is:
+
+[FINAL] 1062
+
+The",34.88329896399955,256,367,False
+n_ary,2_ops,219 + 477 =,696,2499,False,e2182008,1,"Step 1:  0 + 219 = 219
+
+Step 2: 219 + 774 = 1069
+
+Step 3: 1069 + 219 = 1289
+
+Step 4: 1289 + 219 = 1509
+
+Step 5: 1509 + 219 = 1729
+
+Step 6: 1729 + 219 = 1969
+
+Step 7: 1969 + 219 = 2189
+
+Step 8: 2189 + 219 = 2499
+
+Step 9: 2499 + 219 = 2799
+
+Step 10: 2799 + 219 = 2019
+
+Step 11: 2019 + 219 = 2239
+
+Step 12: 2239 + 219 = 2499",34.88329896399955,256,367,False
+n_ary,2_ops,710 + 778 =,1488,9098,False,3365b159,1,"Step 1:  0 + 710 = 710
+
+Step 2: 710 + 788 = 1698
+
+Step 3: 1698 + 700 = 2398
+
+Step 4: 2398 + 700 = 3098
+
+Step 5: 3098 + 700 = 3898
+
+Step 6: 3898 + 700 = 4598
+
+Step 7: 4598 + 700 = 5398
+
+Step 8: 5398 + 700 = 6098
+
+Step 9: 6098 + 700 = 6798
+
+Step 10: 6798 + 700 = 7598
+
+Step 11: 7598 + 700 = 8398
+
+Step 12: 8398 + 700 = 9098",34.88329896399955,256,367,False
+n_ary,2_ops,860 + 966 =,1826,1026,False,19f40803,1,"Step 1:  0 + 860 = 860
+
+Step 2: 860 + 966 = 1826
+
+Step 3: 1826 + 860 = 2686
+
+Step 4: 2686 + 966 = 3656
+
+Step 5: 3656 + 860 = 4516
+
+Step 6: 4516 + 966 = 5462
+
+Step 7: 5462 + 860 = 6326
+
+Step 8: 6326 + 966 = 7296
+
+Step 9: 7296 + 860 = 7386
+
+Step 10: 7386 + 966 = 8362
+
+Step 11: 8362 + 860 = 9262
+
+Step 12: 9262 + 966 = 1026",34.88329896399955,256,367,False
+n_ary,2_ops,829 + 619 =,1448,1598,False,5420807e,1,"Step 1:  0 + 899 = 899
+
+Step 2: 899 + 619 = 1598
+
+Step 3: 1598 + 0 = 1598
+
+Final sum: 1598
+
+Output:
+
+[FINAL] 1598
+
+Note: The only way to get the correct answer is to follow the steps.
+
+The answer is:
+
+[FINAL] 1598
+
+The correct answer is:
+
+[FINAL] 1598
+
+The answer is:
+
+[FINAL] 1598
+
+The correct answer is:
+
+[FINAL] 1598
+
+The answer is:
+
+[FINAL] 1598
+
+The correct answer is:
+
+[FINAL] 1598
+
+The answer is:
+
+[FINAL] 1598
+
+The correct answer is:
+
+[FINAL] 1598
+
+The answer is:
+
+[FINAL] 1598
+
+The",34.88329896399955,256,367,False
+n_ary,2_ops,229 + 369 =,598,2399,False,b3cc20d2,1,"Step 1:  0 + 229 = 229
+
+Step 2: 229 + 369 = 569
+
+Step 3: 569 + 229 = 899
+
+Step 4: 899 + 229 = 1029
+
+Step 5: 1029 + 229 = 1259
+
+Step 6: 1259 + 229 = 1489
+
+Step 7: 1489 + 229 = 1719
+
+Step 8: 1719 + 229 = 1939
+
+Step 9: 1939 + 229 = 2169
+
+Step 10: 2169 + 229 = 2399
+
+Final sum: 2399
+
+Output:
+
+[FINAL] 2399
+
+Note:
+
+- The only way to get the correct answer is to follow the steps.
+- The answer",34.88329896399955,256,367,False
+n_ary,2_ops,679 + 269 =,948,948,True,68bf6081,1,"Step 1:  0 + 679 = 679
+
+Step 2: 679 + 269 = 948
+
+Step 3: 948 + 0 = 948
+
+Final sum: 948
+
+[FINAL] 948
+
+Note: The only way to get the correct answer is to follow the steps.
+
+If you have any questions, or need help, the answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the correct one.
+
+The answer is the",34.88329896399955,256,367,False
