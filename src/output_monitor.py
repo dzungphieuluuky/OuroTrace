@@ -15,9 +15,8 @@ from tqdm.auto import tqdm
 
 class ExperimentFailureException(Exception):
     """Custom exception for experiment failures"""
-    def __init__(self, reason: str, failure_stats: Dict[str, Any]):
+    def __init__(self, reason: str):
         self.reason = reason
-        self.failure_stats = failure_stats
         super().__init__(reason)
 
 
@@ -142,9 +141,8 @@ class OutputQualityMonitor:
             }
             raise ExperimentFailureException(
                 f"EXCESSIVE GARBAGE OUTPUTS: {garbage_check['garbage_rate']*100:.1f}% "
-                f"(threshold: {self.garbage_threshold*100:.1f}%)",
-                failure_stats
-            )
+                f"(threshold: {self.garbage_threshold*100:.1f}%)"
+                )
         
         # Check for example memorization
         memorization_check = self._check_example_memorization()
@@ -157,9 +155,8 @@ class OutputQualityMonitor:
             }
             raise ExperimentFailureException(
                 f"EXAMPLE MEMORIZATION DETECTED: {memorization_check['memorization_rate']*100:.1f}% "
-                f"of responses are copying examples",
-                failure_stats
-            )
+                f"of responses are copying examples"
+                )
         
         return None
     
