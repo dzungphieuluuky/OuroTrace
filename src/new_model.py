@@ -325,6 +325,14 @@ class SafeOuroThinkingExperiment:
                     "❌ NO continuing after all input numbers are used\n"
                     "❌ NO generating steps beyond the input count\n"
                     "❌ NO explanations or commentary"
+    
+                    "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
+                    "you MUST stop generating immediately.\n"
+                    "Do NOT generate: Python code, examples, comments, "
+                    "explanations, or ANYTHING else.\n"
+                    "Your response ends at [END]. Period.\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -363,6 +371,14 @@ class SafeOuroThinkingExperiment:
                     "❌ NO extra hops beyond the requested count\n"
                     "❌ NO inventing tokens not in the sequence\n"
                     "❌ NO explanations, commentary, or extra lines after [END]"
+
+                    "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
+                    "you MUST stop generating immediately.\n"
+                    "Do NOT generate: Python code, examples, comments, "
+                    "explanations, or ANYTHING else.\n"
+                    "Your response ends at [END]. Period.\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -405,6 +421,14 @@ class SafeOuroThinkingExperiment:
                     "❌ NO continuing after the query is answered\n"
                     "❌ NO results outside [0, 6]\n"
                     "❌ NO explanations, commentary, or extra lines after [END]"
+
+                    "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
+                    "you MUST stop generating immediately.\n"
+                    "Do NOT generate: Python code, examples, comments, "
+                    "explanations, or ANYTHING else.\n"
+                    "Your response ends at [END]. Period.\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 ),
                 "force_start": "[FINAL]",
             }
