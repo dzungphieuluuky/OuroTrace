@@ -383,20 +383,12 @@ class SafeOuroThinkingExperiment:
 
         self.task_templates = {}
         for task_type, config in task_configs.items():
-            # Build 2-shot prompt template as text
-            messages = [{"role": "system", "content": config["system"]}]
-            
-            # Add 2 examples
-            for example in config["examples"]:
-                messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
-
             self.task_templates[task_type] = {
                 "system": config["system"],
-                "messages": messages,
                 "force_start_text": config["force_start"],
             }
-        print("[+] Task templates (strict hybrid) pre-computed.")
+        
+        print("[+] Task templates (placeholder-based, no concrete examples) pre-computed.")
 
     @torch.inference_mode()
     def predict(
@@ -432,14 +424,10 @@ class SafeOuroThinkingExperiment:
         prompts = []
         for user_input in user_inputs:
             # construct one message
-            messages = template["messages"] + [
+            messages = [
+                {"role": "system", "content": template["system"]},
                 {"role": "user", "content": user_input},
             ]
-    
-            # messages = [
-            #     {"role": "system", "content": template["system"]},
-            #     {"role": "user", "content": user_input},
-            # ]
 
             # Apply chat template (adding <|im_start|>assistant)
             prompt = tokenizer.apply_chat_template(
