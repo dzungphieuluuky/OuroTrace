@@ -433,10 +433,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"\n{'='*70}")
         print(f"📊 FINAL EXPERIMENT SUMMARY")
         print(f"{'='*70}\n")
-        
-        # timestamp for saving
-        from datetime import datetime
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         if all_results:
             df_all = pd.DataFrame(all_results)
