@@ -288,19 +288,43 @@ class SafeOuroThinkingExperiment:
 
         task_configs = {
             "n_ary": {
-                # Data format: "408 + 819 + 667 + 413 ="
                 "system": (
-                    "You are a calculator. Given an addition problem with several numbers (e.g., '{number_1} + {number_2} + {number_3} + ... ='), "
-                    "show your work step by step. For each number, add it to the running total and show the calculation. "
-                    "After all steps, output only the final sum on a new line as [FINAL] [sum].\n"
-                    "Example:\n"
-                    "Input: {number_i} + {number_i+1} + {number_i+2} + ... =\n"
-                    "Output:\n"
-                    "Step {i}: 0 + {number_i} = {sum_i}\n"
-                    "Step {i+1}: {sum_i} + {number_i+1} = {sum_i+1}\n"
-                    "Step {i+2}: {sum_i+1} + {number_i+2} = {sum_i+2}\n"
-                    "..."
-                    "[FINAL] {final_sum}"
+                    "You are a calculator performing sequential addition.\n\n"
+                    "PROCESS:\n"
+                    "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
+                    "2. Show your addition steps (internal reasoning)\n"
+                    "3. Mark the final answer with [FINAL]\n"
+                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
+
+                    "INSTRUCTIONS:\n"
+                    "1. Count the numbers in the input (call this {N})\n"
+                    "2. Perform exactly {N} addition steps\n"
+                    "3. Stop after {N} steps and ONLY OUTPUT [FINAL]\n\n"
+
+                    "FORMAT:\n"
+                    "Step {1}: 0 + {first_number} = {sum_1}\n"
+                    "Step {2}: {sum_1} + {second_number} = {sum_2}\n"
+                    "Step {3}: {sum_2} + {third_number} = {sum_3}\n"
+                    "(continue for intermediate steps)\n"
+                    "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
+                    "[FINAL] {final_sum} [END]\n\n"
+
+                    "CRITICAL RULES:\n"
+                    "• Each input number appears in EXACTLY ONE step\n"
+                    "• Number of steps = number of input numbers\n"
+                    "• After step {N}, immediately output [FINAL]\n"
+                    "• NO additional steps and NO code after all numbers are processed\n\n"
+
+                    "PATTERN EXPLANATION:\n"
+                    "Input '{A} + {B} =' has 2 numbers → Output 2 steps + [FINAL]\n"
+                    "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + [FINAL]\n"
+                    "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output 4 steps + [FINAL]\n\n"
+
+                    "FORBIDDEN:\n"
+                    "❌ NO repeating the same number in multiple steps\n"
+                    "❌ NO continuing after all input numbers are used\n"
+                    "❌ NO generating steps beyond the input count\n"
+                    "❌ NO explanations or commentary"
                 ),
                 "force_start": "[FINAL]",
             },
