@@ -329,36 +329,82 @@ class SafeOuroThinkingExperiment:
                 "force_start": "[FINAL]",
             },
             "p_hop": {
-                # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
                 "system": (
-                    "You are a sequence tracer."
-                    "trace the sequence step by step. At each hop, follow strictly and exactly the format below. "
-                    "Output each line as 'Hop {X}: At {token} → Next is {token}'. After all hops, output the result as [FINAL] {token}.\n"
-                    "Example:\n"
-                    "Input: Sequence: {token_1} {token_2} {token_3} .... Start: {token_1}. Hop {N} times.\n"
-                    "Output:\n"
-                    "Hop {i}: At {token_i} → Next is {token_{i+1}}\n"
-                    "Hop {i+1}: At {token_{i+1}} → Next is {token_{i+2}}\n"
-                    "..."
-                    "Hop {N}: At {token_N} → Next is {token_final}\n"
-                    "[FINAL] {token_final}"
+                    "You are a sequence tracer performing p-hop induction.\n\n"
+                    "PROCESS:\n"
+                    "1. Identify the start token and number of hops (N) from the input.\n"
+                    "2. Perform exactly N hop steps, each moving to the next linked token in the chain.\n"
+                    "3. Mark the final answer with [FINAL].\n"
+                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
+
+                    "INSTRUCTIONS:\n"
+                    "1. Count the number of hops requested (N).\n"
+                    "2. Perform exactly N hop steps, following the chain in the sequence.\n"
+                    "3. After hop N, output ONLY [FINAL] and NOTHING ELSE.\n\n"
+
+                    "FORMAT:\n"
+                    "Hop {1}: At {token_1} → Next is {token_2}\n"
+                    "Hop {2}: At {token_2} → Next is {token_3}\n"
+                    "(continue for intermediate steps)\n"
+                    "Hop {N}: At {token_N} → Next is {final_token}\n"
+                    "[FINAL] {final_token} [END]\n\n"
+
+                    "CRITICAL RULES:\n"
+                    "• Perform exactly the requested number of hops (N)\n"
+                    "• Use only tokens from the input sequence\n"
+                    "• After hop N, immediately output [FINAL] and STOP\n"
+                    "• NO extra hops, NO commentary, NO explanations, NO extra lines after [END]\n\n"
+
+                    "PATTERN EXPLANATION:\n"
+                    "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
+                    "If input says 'Hop 5 times' → Output 5 hop lines + [FINAL]\n\n"
+
+                    "FORBIDDEN:\n"
+                    "❌ NO extra hops beyond the requested count\n"
+                    "❌ NO inventing tokens not in the sequence\n"
+                    "❌ NO explanations, commentary, or extra lines after [END]"
                 ),
                 "force_start": "[FINAL]",
             },
             "igsm": {
-                # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
                 "system": (
-                    "You are a symbolic math solver working modulo 7. Given a list of assignments and a query, "
-                    "evaluate each variable step by step. For each assignment, substitute known values and show the calculation. "
-                    "Output each line as: '{var} = {expression} = {value} (mod 7)'. For the query, output the answer as [FINAL] {value}.\n"
-                    "Example:\n"
-                    "Input: Question. {token_1} := {value_1}. {token_2} := {token_1}. {token_3} := {token_2} + {token_1}. {token_3}?\n"
-                    "Output:\n"
-                    "Step {i}: {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step {i+1}: {token_2} = {token_1} = {value_1} (mod 7) = {value_after_mod}\n"
-                    "Step {i+2}: {token_3} = {token_2} + {token_1} = {value_2} + {value_1} = {value_3} (mod 7) = {value_after_mod}\n"
-                    "..."
-                    "[FINAL] {final_value}"
+                    "You are a symbolic math solver working modulo 7 for grade-school math problems.\n\n"
+                    "PROCESS:\n"
+                    "1. Identify all assignments and dependencies from the input.\n"
+                    "2. Evaluate each assignment step by step, substituting values as needed.\n"
+                    "3. Mark the final answer with [FINAL].\n"
+                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
+
+                    "INSTRUCTIONS:\n"
+                    "1. Count the number of assignments (N).\n"
+                    "2. Evaluate exactly N assignments, substituting variable values immediately.\n"
+                    "3. After evaluating the query variable, output ONLY [FINAL] and NOTHING ELSE.\n\n"
+
+                    "FORMAT:\n"
+                    "Step {1}: {var_1} = {value_1} (mod 7) = {result_1}\n"
+                    "Step {2}: {var_2} = {substituted_expr} = {computed} (mod 7) = {result_2}\n"
+                    "(continue for intermediate steps)\n"
+                    "Step {N}: {query_var} = {value} (mod 7) = {answer}\n"
+                    "[FINAL] {answer} [END]\n\n"
+
+                    "CRITICAL RULES:\n"
+                    "• Process each assignment exactly once\n"
+                    "• Substitute variable values immediately\n"
+                    "• Show computation before applying mod 7\n"
+                    "• Final result must be in range [0, 6]\n"
+                    "• After evaluating the query, immediately output [FINAL] and STOP\n"
+                    "• NO skipping assignments, NO commentary, NO explanations, NO extra lines after [END]\n\n"
+
+                    "OPERATION PATTERNS:\n"
+                    "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
+                    "Copy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n"
+                    "Addition: {C} := {A} + {B} where A=5, B=4 means {C} = 5 + 4 = 9 (mod 7) = 2\n\n"
+
+                    "FORBIDDEN:\n"
+                    "❌ NO skipping assignments\n"
+                    "❌ NO continuing after the query is answered\n"
+                    "❌ NO results outside [0, 6]\n"
+                    "❌ NO explanations, commentary, or extra lines after [END]"
                 ),
                 "force_start": "[FINAL]",
             }
@@ -589,9 +635,9 @@ class SafeOuroThinkingExperiment:
     def _get_optimal_generation_config(self, task_type: str) -> Dict:
         """Get optimized generation parameters for task type"""
         task_token_limits = {
-            "n_ary": 128,
-            "p_hop": 128,
-            "igsm": 256,
+            "n_ary": 32,
+            "p_hop": 32,
+            "igsm": 32,
         }
         
         return {
