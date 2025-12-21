@@ -147,7 +147,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     os.makedirs(output_dir, exist_ok=True)
 
     # Save config ONCE at the start
-    save_config(config, output_dir=output_dir)
+    save_config(config, output_dir=output_dir, experiment=experiment)
 
     # save results periodically to prevent accidental collapse on long runs
     periodic_save_interval = config.get("PERIODIC_SAVE_INTERVAL", 300)  # default 5 minutes
@@ -547,7 +547,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     save_results(all_results, perplexity_results, holistic_results, output_dir=output_dir, overwrite=True)
 
     # Save config file into yaml file
-    save_config(config, output_dir=output_dir)
+    save_config(config, output_dir=output_dir, experiment=experiment)
 
     return all_results, perplexity_results, holistic_results
 

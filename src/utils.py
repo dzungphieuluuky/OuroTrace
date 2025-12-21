@@ -41,14 +41,15 @@ def save_results(
 
 def save_config(
     config: dict,
-    output_dir: str = "./default_config"
+    output_dir: str = "./default_config",
+    experiment=None
 ) -> None:
-    """Save experiment configuration to a YAML file with native types."""
-    import os
     import yaml
+    """Save experiment configuration and task templates to YAML files."""
     os.makedirs(output_dir, exist_ok=True)
     config_path = os.path.join(output_dir, "config.yaml")
-    
+    templates_path = os.path.join(output_dir, "task_templates.yaml")
+
     def sanitize_config(cfg):
         """Convert config to YAML-safe format"""
         clean = {}
@@ -61,9 +62,30 @@ def save_config(
                 clean[k] = v
         return clean
 
+    # Save config
     with open(config_path, 'w') as f:
         yaml.dump(sanitize_config(config), f)
     print(f"✅ Configuration saved to {config_path}")
+
+    # Save task templates if experiment is provided and has task_templates
+    if experiment is not None and hasattr(experiment, "task_templates"):
+        # Convert any non-serializable objects to string
+        def sanitize_templates(templates):
+            clean = {}
+            for k, v in templates.items():
+                clean[k] = {}
+                for subk, subv in v.items():
+                    # Only keep serializable types
+                    if isinstance(subv, (str, list, dict, int, float, bool, type(None))):
+                        clean[k][subk] = subv
+                    else:
+                        clean[k][subk] = str(subv)
+            return clean
+
+        templates_to_save = sanitize_templates(experiment.task_templates)
+        with open(templates_path, 'w') as f:
+            yaml.dump(templates_to_save, f)
+        print(f"✅ Task templates saved to {templates_path}")
 
 def configure_environment_paths():
     """Detect environment and configure paths"""
