@@ -39,19 +39,20 @@ def save_results(
         save_csv(holistic_results, holistic_file)
         print(f"✅ Periodic save: holistic results to {holistic_file}")
 
+import yaml
+
 def save_config(
     config: dict,
     output_dir: str = "./default_config",
     experiment=None
 ) -> None:
-    import yaml
     """Save experiment configuration and task templates to YAML files."""
+    import os
     os.makedirs(output_dir, exist_ok=True)
     config_path = os.path.join(output_dir, "config.yaml")
     templates_path = os.path.join(output_dir, "task_templates.yaml")
 
     def sanitize_config(cfg):
-        """Convert config to YAML-safe format"""
         clean = {}
         for k, v in cfg.items():
             if isinstance(v, dict):
@@ -63,19 +64,23 @@ def save_config(
         return clean
 
     # Save config
-    with open(config_path, 'w') as f:
-        yaml.dump(sanitize_config(config), f)
+    with open(config_path, 'w', encoding='utf-8') as f:
+        yaml.dump(
+            sanitize_config(config),
+            f,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False
+        )
     print(f"✅ Configuration saved to {config_path}")
 
     # Save task templates if experiment is provided and has task_templates
     if experiment is not None and hasattr(experiment, "task_templates"):
-        # Convert any non-serializable objects to string
         def sanitize_templates(templates):
             clean = {}
             for k, v in templates.items():
                 clean[k] = {}
                 for subk, subv in v.items():
-                    # Only keep serializable types
                     if isinstance(subv, (str, list, dict, int, float, bool, type(None))):
                         clean[k][subk] = subv
                     else:
@@ -83,10 +88,23 @@ def save_config(
             return clean
 
         templates_to_save = sanitize_templates(experiment.task_templates)
-        with open(templates_path, 'w') as f:
-            yaml.dump(templates_to_save, f)
-        print(f"✅ Task templates saved to {templates_path}")
 
+        # Custom representer for block style multiline strings
+        def str_presenter(dumper, data):
+            if '\n' in data:
+                return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+            return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+        yaml.add_representer(str, str_presenter)
+
+        with open(templates_path, 'w', encoding='utf-8') as f:
+            yaml.dump(
+                templates_to_save,
+                f,
+                default_flow_style=False,
+                allow_unicode=True,
+                sort_keys=False
+            )
+        print(f"✅ Task templates saved to {templates_path}")
 def configure_environment_paths():
     """Detect environment and configure paths"""
     try:
