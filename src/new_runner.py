@@ -182,6 +182,8 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 experiment._build_task_templates(tokenizer)
                 experiment._templates_precomputed = True
                 print("✅ Task templates built\n")
+                save_config(config, output_dir=output_dir, experiment=experiment)
+                print("✅ Experiment configuration saved with task templates\n")
                 print()
 
             # A. PERPLEXITY EVALUATION
