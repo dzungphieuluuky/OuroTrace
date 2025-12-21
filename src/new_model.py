@@ -665,7 +665,9 @@ class SafeOuroThinkingExperiment:
             self.task_templates[task_type] = {
                 "system": config["system"],
                 "force_start_text": config["force_start"],
-                "stop_sequences": ["[END]", "SAMPLE", "\n```", "```python", "def ", "#", "**Final", "Example usage"],
+                "stop_sequences": ["[END]", "[FINAL]", "SAMPLE", "\n```", 
+                                   "```python", "def ", "#", "**Final", 
+                                   "Example usage"],
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
