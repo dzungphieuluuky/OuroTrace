@@ -289,61 +289,114 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator performing sequential addition.\n\n"
-                    "PROCESS:\n"
-                    "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
-                    "2. Show your addition steps (internal reasoning)\n"
-                    "3. Mark the final answer with [FINAL]\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
-
-                    "INSTRUCTIONS:\n"
-                    "1. Count the numbers in the input (call this {N})\n"
-                    "2. Perform exactly {N} addition steps\n"
-                    "3. Stop after {N} steps and ONLY OUTPUT [FINAL]\n\n"
-
-                    "FORMAT:\n"
-                    "Step {1}: 0 + {first_number} = {sum_1}\n"
-                    "Step {2}: {sum_1} + {second_number} = {sum_2}\n"
-                    "Step {3}: {sum_2} + {third_number} = {sum_3}\n"
-                    "(continue for intermediate steps)\n"
-                    "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
-                    "[FINAL] {final_sum} [END]\n\n"
-
-                    "CRITICAL RULES:\n"
-                    "• Each input number appears in EXACTLY ONE step\n"
-                    "• Number of steps = number of input numbers\n"
-                    "• After step {N}, immediately output [FINAL]\n"
-                    "• NO additional steps and NO code after all numbers are processed\n\n"
-
-                    "PATTERN EXPLANATION:\n"
-                    "Input '{A} + {B} =' has 2 numbers → Output 2 steps + [FINAL]\n"
-                    "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + [FINAL]\n"
-                    "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output 4 steps + [FINAL]\n\n"
-
-                    "FORBIDDEN:\n"
-                    "❌ NO repeating the same number in multiple steps\n"
-                    "❌ NO continuing after all input numbers are used\n"
-                    "❌ NO generating steps beyond the input count\n"
-                    "❌ NO explanations or commentary\n\n"
+                    "You are solving an ADDITION task.\n\n"
                     
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                    "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
-                    "you MUST stop generating immediately.\n"
-                    "Do NOT generate: Python code, examples, comments, "
-                    "explanations, or ANYTHING else.\n"
-                    "Your response ends at [END]. Period.\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                    "═══════════════════════════════════════════\n"
+                    "TASK EXPLANATION:\n"
+                    "═══════════════════════════════════════════\n"
+                    "You will receive several numbers to add together.\n"
+                    "Your job: Add them one at a time, showing each step.\n\n"
                     
-                    "CORRECT EXAMPLE:\n"
+                    "═══════════════════════════════════════════\n"
+                    "STEP-BY-STEP PROCESS:\n"
+                    "═══════════════════════════════════════════\n"
+                    "1. Start with 0\n"
+                    "2. Add the FIRST number to 0\n"
+                    "3. Add the SECOND number to that result\n"
+                    "4. Add the THIRD number to that result\n"
+                    "5. Continue until ALL numbers are added\n"
+                    "6. Output [FINAL] with the total sum\n"
+                    "7. STOP IMMEDIATELY\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 1:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: 100 + 200 + 300 =\n\n"
+                    
+                    "Solution:\n"
+                    "Step 1: 0 + 100 = 100\n"
+                    "Step 2: 100 + 200 = 300\n"
+                    "Step 3: 300 + 300 = 600\n"
+                    "[FINAL] 600 [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 2:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: 807 + 696 =\n\n"
+                    
+                    "Solution:\n"
                     "Step 1: 0 + 807 = 807\n"
                     "Step 2: 807 + 696 = 1503\n"
                     "[FINAL] 1503 [END]\n\n"
                     
-                    "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
-                    "[FINAL] 1503 [END] ```python\n"
-                    "This is WRONG. Stop at [END]."
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 3:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: 50 + 25 + 10 + 5 =\n\n"
+                    
+                    "Solution:\n"
+                    "Step 1: 0 + 50 = 50\n"
+                    "Step 2: 50 + 25 = 75\n"
+                    "Step 3: 75 + 10 = 85\n"
+                    "Step 4: 85 + 5 = 90\n"
+                    "[FINAL] 90 [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
+                    "═══════════════════════════════════════════\n"
+                    "Step 1: 0 + {first_number} = {result_1}\n"
+                    "Step 2: {result_1} + {second_number} = {result_2}\n"
+                    "Step 3: {result_2} + {third_number} = {result_3}\n"
+                    "... (continue for ALL numbers)\n"
+                    "Step N: {result_N-1} + {last_number} = {final_sum}\n"
+                    "[FINAL] {final_sum} [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CRITICAL RULES:\n"
+                    "═══════════════════════════════════════════\n"
+                    "✓ Count how many numbers are in the input\n"
+                    "✓ Show EXACTLY that many steps (2 numbers = 2 steps, 5 numbers = 5 steps)\n"
+                    "✓ Each number from the input appears in EXACTLY ONE step\n"
+                    "✓ Always start with 0 in Step 1\n"
+                    "✓ Each step adds ONE new number to the running total\n"
+                    "✓ After all steps, write [FINAL] {answer} [END]\n"
+                    "✓ STOP immediately after [END]\n\n"
+                    
+                    "✗ DO NOT skip any numbers from the input\n"
+                    "✗ DO NOT add the same number twice\n"
+                    "✗ DO NOT create extra steps after all numbers are used\n"
+                    "✗ DO NOT split numbers into digits (treat 807 as one number, not 8+0+7)\n"
+                    "✗ DO NOT continue generating after [END]\n"
+                    "✗ DO NOT add code, explanations, or commentary\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "PATTERN RECOGNITION:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input has 2 numbers → Show 2 steps + [FINAL]\n"
+                    "Input has 3 numbers → Show 3 steps + [FINAL]\n"
+                    "Input has 4 numbers → Show 4 steps + [FINAL]\n"
+                    "Input has 5 numbers → Show 5 steps + [FINAL]\n\n"
+                    
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\n"
+                    "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
+                    "Your response ends at [END].\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                    
+                    "CORRECT OUTPUT:\n"
+                    "Step 1: 0 + 179 = 179\n"
+                    "Step 2: 179 + 366 = 545\n"
+                    "[FINAL] 545 [END]\n\n"
+                    
+                    "INCORRECT OUTPUT (DO NOT DO THIS):\n"
+                    "[FINAL] 545 [END] ```python\n"
+                    "This is WRONG. Stop at [END].\n\n"
+                    
+                    "ALSO INCORRECT (DO NOT DO THIS):\n"
+                    "[FINAL] 545 **Final Answer**\n"
+                    "You must end with [END], not **Final Answer**."
                 ),
-                "force_start": "[FINAL]",
+                "force_start": "Step 1:",
             },
             "p_hop": {
                 "system": (
@@ -372,7 +425,7 @@ class SafeOuroThinkingExperiment:
                     "7. STOP IMMEDIATELY\n\n"
                     
                     "═══════════════════════════════════════════\n"
-                    "CONCRETE EXAMPLE:\n"
+                    "CONCRETE EXAMPLE 1:\n"
                     "═══════════════════════════════════════════\n"
                     "Input: Sequence: A B C D E\n"
                     "       Start at: A\n"
@@ -383,6 +436,32 @@ class SafeOuroThinkingExperiment:
                     "Hop 2: At B → Next is C\n"
                     "Hop 3: At C → Next is D\n"
                     "[FINAL] D [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 2:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: Sequence: C A D B A C\n"
+                    "       Start at: C (position 0)\n"
+                    "       Hops: 4\n\n"
+                    
+                    "Solution:\n"
+                    "Hop 1: At C → Next is A\n"
+                    "Hop 2: At A → Next is D\n"
+                    "Hop 3: At D → Next is B\n"
+                    "Hop 4: At B → Next is A\n"
+                    "[FINAL] A [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 3:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: Sequence: D D A B C\n"
+                    "       Start at: D (position 0)\n"
+                    "       Hops: 2\n\n"
+                    
+                    "Solution:\n"
+                    "Hop 1: At D → Next is D\n"
+                    "Hop 2: At D → Next is A\n"
+                    "[FINAL] A [END]\n\n"
                     
                     "═══════════════════════════════════════════\n"
                     "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
@@ -410,18 +489,11 @@ class SafeOuroThinkingExperiment:
                     "✗ DO NOT output just [FINAL] without showing the hops\n\n"
                     
                     "═══════════════════════════════════════════\n"
-                    "ANOTHER EXAMPLE:\n"
+                    "PATTERN RECOGNITION:\n"
                     "═══════════════════════════════════════════\n"
-                    "Input: Sequence: C A D B A C\n"
-                    "       Start at: C (position 0)\n"
-                    "       Hops: 4\n\n"
-                    
-                    "Solution:\n"
-                    "Hop 1: At C → Next is A\n"
-                    "Hop 2: At A → Next is D\n"
-                    "Hop 3: At D → Next is B\n"
-                    "Hop 4: At B → Next is A\n"
-                    "[FINAL] A [END]\n\n"
+                    "Asked for 2 hops → Show 2 hop lines + [FINAL]\n"
+                    "Asked for 3 hops → Show 3 hop lines + [FINAL]\n"
+                    "Asked for 5 hops → Show 5 hop lines + [FINAL]\n\n"
                     
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                     "⚠️ CRITICAL: After [FINAL] {token} [END], STOP.\n"
@@ -439,69 +511,148 @@ class SafeOuroThinkingExperiment:
                     "This is WRONG. Stop at [END].\n\n"
                     
                     "ALSO INCORRECT (DO NOT DO THIS):\n"
-                    "[FINAL] \n\n**Final\n"
+                    "[FINAL] D\n\n**Final\n"
                     "You must show the hop steps BEFORE [FINAL]."
                 ),
-                "force_start": "[FINAL]",
+                "force_start": "Hop 1:",
             },
             "igsm": {
                 "system": (
-                    "You are a symbolic math solver working modulo 7 for grade-school math problems.\n\n"
-                    "PROCESS:\n"
-                    "1. Identify all assignments and dependencies from the input.\n"
-                    "2. Evaluate each assignment step by step, substituting values as needed.\n"
-                    "3. Mark the final answer with [FINAL].\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
-
-                    "INSTRUCTIONS:\n"
-                    "1. Count the number of assignments (N).\n"
-                    "2. Evaluate exactly N assignments, substituting variable values immediately.\n"
-                    "3. After evaluating the query variable, output ONLY [FINAL] and NOTHING ELSE.\n\n"
-
-                    "FORMAT:\n"
-                    "Step {1}: {var_1} = {value_1} (mod 7) = {result_1}\n"
-                    "Step {2}: {var_2} = {substituted_expr} = {computed} (mod 7) = {result_2}\n"
-                    "(continue for intermediate steps)\n"
-                    "Step {N}: {query_var} = {value} (mod 7) = {answer}\n"
-                    "[FINAL] {answer} [END]\n\n"
-
-                    "CRITICAL RULES:\n"
-                    "• Process each assignment exactly once\n"
-                    "• Substitute variable values immediately\n"
-                    "• Show computation before applying mod 7\n"
-                    "• Final result must be in range [0, 6]\n"
-                    "• After evaluating the query, immediately output [FINAL] and STOP\n"
-                    "• NO skipping assignments, NO commentary, NO explanations, NO extra lines after [END]\n\n"
-
-                    "OPERATION PATTERNS:\n"
-                    "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
-                    "Copy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n"
-                    "Addition: {C} := {A} + {B} where A=5, B=4 means {C} = 5 + 4 = 9 (mod 7) = 2\n\n"
-
-                    "FORBIDDEN:\n"
-                    "❌ NO skipping assignments\n"
-                    "❌ NO continuing after the query is answered\n"
-                    "❌ NO results outside [0, 6]\n"
-                    "❌ NO explanations, commentary, or extra lines after [END]\n\n"
+                    "You are solving a MODULAR ARITHMETIC task (mod 7).\n\n"
                     
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                    "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
-                    "you MUST stop generating immediately.\n"
-                    "Do NOT generate: Python code, examples, comments, "
-                    "explanations, or ANYTHING else.\n"
-                    "Your response ends at [END]. Period.\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                    "═══════════════════════════════════════════\n"
+                    "TASK EXPLANATION:\n"
+                    "═══════════════════════════════════════════\n"
+                    "You will receive:\n"
+                    "  • A series of variable assignments (like A := 5, B := A + 3)\n"
+                    "  • A query asking for the value of one variable\n\n"
                     
-                    "CORRECT EXAMPLE:\n"
+                    "Your job: Evaluate each assignment step by step, "
+                    "applying modulo 7 to each result.\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "MODULO 7 QUICK REFERENCE:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Modulo 7 means: divide by 7 and take the REMAINDER.\n"
+                    "Valid results: 0, 1, 2, 3, 4, 5, 6 (never 7 or higher)\n\n"
+                    
+                    "Examples:\n"
+                    "  5 mod 7 = 5 (5 ÷ 7 = 0 remainder 5)\n"
+                    "  8 mod 7 = 1 (8 ÷ 7 = 1 remainder 1)\n"
+                    "  14 mod 7 = 0 (14 ÷ 7 = 2 remainder 0)\n"
+                    "  20 mod 7 = 6 (20 ÷ 7 = 2 remainder 6)\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "STEP-BY-STEP PROCESS:\n"
+                    "═══════════════════════════════════════════\n"
+                    "1. Read the first assignment\n"
+                    "2. Calculate the value\n"
+                    "3. Apply mod 7 to get a result between 0-6\n"
+                    "4. Move to the next assignment\n"
+                    "5. Substitute any variables with their known values\n"
+                    "6. Calculate and apply mod 7\n"
+                    "7. Continue until the queried variable is found\n"
+                    "8. Output [FINAL] with that variable's value\n"
+                    "9. STOP IMMEDIATELY\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 1:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: A := 5\n"
+                    "       B := A + 3\n"
+                    "       Query: B = ?\n\n"
+                    
+                    "Solution:\n"
                     "Step 1: A = 5 (mod 7) = 5\n"
                     "Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n"
                     "[FINAL] 1 [END]\n\n"
                     
-                    "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 2:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: X := 10\n"
+                    "       Y := 4\n"
+                    "       Z := X + Y\n"
+                    "       Query: Z = ?\n\n"
+                    
+                    "Solution:\n"
+                    "Step 1: X = 10 (mod 7) = 3\n"
+                    "Step 2: Y = 4 (mod 7) = 4\n"
+                    "Step 3: Z = X + Y = 3 + 4 = 7 (mod 7) = 0\n"
+                    "[FINAL] 0 [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE 3:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: P := 8\n"
+                    "       Q := P\n"
+                    "       R := Q + P\n"
+                    "       Query: R = ?\n\n"
+                    
+                    "Solution:\n"
+                    "Step 1: P = 8 (mod 7) = 1\n"
+                    "Step 2: Q = P = 1 (mod 7) = 1\n"
+                    "Step 3: R = Q + P = 1 + 1 = 2 (mod 7) = 2\n"
+                    "[FINAL] 2 [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
+                    "═══════════════════════════════════════════\n"
+                    "Step 1: {var} = {value} (mod 7) = {result}\n"
+                    "Step 2: {var} = {expression} = {computed} (mod 7) = {result}\n"
+                    "Step 3: {var} = {expression} = {computed} (mod 7) = {result}\n"
+                    "... (continue for ALL assignments)\n"
+                    "Step N: {query_var} = {value} (mod 7) = {answer}\n"
+                    "[FINAL] {answer} [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CRITICAL RULES:\n"
+                    "═══════════════════════════════════════════\n"
+                    "✓ Process EVERY assignment in order\n"
+                    "✓ Substitute variable values immediately when they appear\n"
+                    "✓ Show the arithmetic calculation BEFORE applying mod 7\n"
+                    "✓ Final answer must be between 0 and 6 (inclusive)\n"
+                    "✓ After finding the query variable, write [FINAL] {answer} [END]\n"
+                    "✓ STOP immediately after [END]\n\n"
+                    
+                    "✗ DO NOT skip any assignments\n"
+                    "✗ DO NOT forget to apply mod 7\n"
+                    "✗ DO NOT output results outside the range 0-6\n"
+                    "✗ DO NOT continue after finding the queried variable\n"
+                    "✗ DO NOT add code, explanations, or commentary\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "OPERATION TYPES:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Direct assignment: A := 5\n"
+                    "  → A = 5 (mod 7) = 5\n\n"
+                    
+                    "Variable copy: B := A (where A = 5)\n"
+                    "  → B = 5 (mod 7) = 5\n\n"
+                    
+                    "Addition: C := A + B (where A = 5, B = 4)\n"
+                    "  → C = 5 + 4 = 9 (mod 7) = 2\n\n"
+                    
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\n"
+                    "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
+                    "Your response ends at [END].\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                    
+                    "CORRECT OUTPUT:\n"
+                    "Step 1: A = 5 (mod 7) = 5\n"
+                    "Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n"
+                    "[FINAL] 1 [END]\n\n"
+                    
+                    "INCORRECT OUTPUT (DO NOT DO THIS):\n"
                     "[FINAL] 1 [END] ```python\n"
-                    "This is WRONG. Stop at [END]."
+                    "This is WRONG. Stop at [END].\n\n"
+                    
+                    "ALSO INCORRECT (DO NOT DO THIS):\n"
+                    "[FINAL] 8 [END]\n"
+                    "8 is NOT valid. Must apply mod 7 to get a result between 0-6."
                 ),
-                "force_start": "[FINAL]",
+                "force_start": "Step 1:",
             }
         }
 
@@ -510,7 +661,7 @@ class SafeOuroThinkingExperiment:
             self.task_templates[task_type] = {
                 "system": config["system"],
                 "force_start_text": config["force_start"],
-                "stop_sequences": ["[END]", "\n```", "python", "def ", "#", "**Final"],
+                "stop_sequences": ["[END]", "\n```", "```python", "def ", "#", "**Final", "Example usage"],
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
