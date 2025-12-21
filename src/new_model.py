@@ -280,133 +280,129 @@ class SafeOuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates using strict format and anti-pattern warnings.
-        Stores only the system prompt and force_start text for each task.
-        Adds explicit instruction to stop calculation at the correct symbol for each task.
+        Pre-compute prompt templates that enforce exact output format.
+        Forces model to show ALL steps before [FINAL] and stop immediately.
         """
         self.tokenizer = tokenizer
 
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator performing sequential addition.\n\n"
-                    "PROCESS:\n"
-                    "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
-                    "2. Show your addition steps (internal reasoning)\n"
-                    "3. Mark the final answer with [FINAL]\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
-
-                    "INSTRUCTIONS:\n"
-                    "1. Count the numbers in the input (call this {N})\n"
-                    "2. Perform exactly {N} addition steps\n"
-                    "3. Stop after {N} steps and ONLY OUTPUT [FINAL]\n\n"
-
-                    "FORMAT:\n"
-                    "Step {1}: 0 + {first_number} = {sum_1}\n"
-                    "Step {2}: {sum_1} + {second_number} = {sum_2}\n"
-                    "Step {3}: {sum_2} + {third_number} = {sum_3}\n"
-                    "(continue for intermediate steps)\n"
-                    "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
-                    "[FINAL] {final_sum} \n\n"
-
-                    "CRITICAL RULES:\n"
-                    "• Each input number appears in EXACTLY ONE step\n"
-                    "• Number of steps = number of input numbers\n"
-                    "• After step {N}, immediately output [FINAL]\n"
-                    "• NO additional steps and NO code after all numbers are processed\n\n"
-
-                    "PATTERN EXPLANATION:\n"
-                    "Input '{A} + {B} =' has 2 numbers → Output 2 steps + [FINAL]\n"
-                    "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + [FINAL]\n"
-                    "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output 4 steps + [FINAL]\n\n"
-
-                    "FORBIDDEN:\n"
-                    "❌ NO repeating the same number in multiple steps\n"
-                    "❌ NO continuing after all input numbers are used\n"
-                    "❌ NO generating steps beyond the input count\n"
-                    "❌ NO explanations or commentary"
+                    "You are a calculator that MUST follow this exact format:\n\n"
+                    "Step 1: 0 + {first} = {sum1}\n"
+                    "Step 2: {sum1} + {second} = {sum2}\n"
+                    "(continue for all numbers)\n"
+                    "[FINAL] {final_sum}\n"
+                    "\n"
+                    "EXAMPLES:\n"
+                    "Example 1:\n"
+                    "Input: 553 + 553 =\n"
+                    "Step 1: 0 + 553 = 553\n"
+                    "Step 2: 553 + 553 = 1106\n"
+                    "[FINAL] 1106\n"
+                    "\n"
+                    "Example 2:\n"
+                    "Input: 242 + 774 =\n"
+                    "Step 1: 0 + 242 = 242\n"
+                    "Step 2: 242 + 774 = 1016\n"
+                    "[FINAL] 1016\n"
+                    "\n"
+                    "Example 3:\n"
+                    "Input: 5 + 3 + 2 =\n"
+                    "Step 1: 0 + 5 = 5\n"
+                    "Step 2: 5 + 3 = 8\n"
+                    "Step 3: 8 + 2 = 10\n"
+                    "[FINAL] 10\n"
+                    "\n"
+                    "RULES:\n"
+                    "1. Show ALL steps (Step 1, Step 2, etc.)\n"
+                    "2. After last step, output ONLY '[FINAL] X' where X is the final sum\n"
+                    "3. STOP generating after '[FINAL] X'\n"
+                    "4. Do NOT add any other text\n"
+                    "\n"
+                    "Now solve this:\n"
                 ),
-                "force_start": "[FINAL]",
+                "force_start": "Step 1:",
+                "stop_strings": ["[FINAL]", "\n\n", "\nStep", "\nExample", "Input:", "Example:"],
             },
             "p_hop": {
                 "system": (
-                    "You are a sequence tracer performing p-hop induction.\n\n"
-                    "PROCESS:\n"
-                    "1. Identify the start token and number of hops (N) from the input.\n"
-                    "2. Perform exactly N hop steps, each moving to the next linked token in the chain.\n"
-                    "3. Mark the final answer with [FINAL].\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
-
-                    "INSTRUCTIONS:\n"
-                    "1. Count the number of hops requested (N).\n"
-                    "2. Perform exactly N hop steps, following the chain in the sequence.\n"
-                    "3. After hop N, output ONLY [FINAL] and NOTHING ELSE.\n\n"
-
-                    "FORMAT:\n"
-                    "Hop {1}: At {token_1} → Next is {token_2}\n"
-                    "Hop {2}: At {token_2} → Next is {token_3}\n"
-                    "(continue for intermediate steps)\n"
-                    "Hop {N}: At {token_N} → Next is {final_token}\n"
-                    "[FINAL] {final_token} \n\n"
-
-                    "CRITICAL RULES:\n"
-                    "• Perform exactly the requested number of hops (N)\n"
-                    "• Use only tokens from the input sequence\n"
-                    "• After hop N, immediately output [FINAL] and STOP\n"
-                    "• NO extra hops, NO commentary, NO explanations, NO extra lines after [FINAL]\n\n"
-
-                    "PATTERN EXPLANATION:\n"
-                    "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
-                    "If input says 'Hop 5 times' → Output 5 hop lines + [FINAL]\n\n"
-
-                    "FORBIDDEN:\n"
-                    "❌ NO extra hops beyond the requested count\n"
-                    "❌ NO inventing tokens not in the sequence\n"
-                    "❌ NO explanations, commentary, or extra lines after [FINAL]"
+                    "You are a sequence tracer that MUST follow this exact format:\n\n"
+                    "Hop 1: At {start} → Next is {token2}\n"
+                    "Hop 2: At {token2} → Next is {token3}\n"
+                    "(continue for all hops)\n"
+                    "[FINAL] {final_token}\n"
+                    "\n"
+                    "EXAMPLES:\n"
+                    "Example 1:\n"
+                    "Input: Sequence: A B C D. Start: B. Hop 2 times.\n"
+                    "Hop 1: At B → Next is C\n"
+                    "Hop 2: At C → Next is D\n"
+                    "[FINAL] D\n"
+                    "\n"
+                    "Example 2:\n"
+                    "Input: Sequence: X Y Z. Start: X. Hop 1 time.\n"
+                    "Hop 1: At X → Next is Y\n"
+                    "[FINAL] Y\n"
+                    "\n"
+                    "Example 3:\n"
+                    "Input: Sequence: 1 2 3 4 5. Start: 3. Hop 3 times.\n"
+                    "Hop 1: At 3 → Next is 4\n"
+                    "Hop 2: At 4 → Next is 5\n"
+                    "Hop 3: At 5 → Next is 1\n"
+                    "[FINAL] 1\n"
+                    "\n"
+                    "RULES:\n"
+                    "1. Show ALL hops (Hop 1, Hop 2, etc.)\n"
+                    "2. After last hop, output ONLY '[FINAL] X' where X is the final token\n"
+                    "3. STOP generating after '[FINAL] X'\n"
+                    "4. Do NOT add any other text\n"
+                    "\n"
+                    "Now solve this:\n"
                 ),
-                "force_start": "[FINAL]",
+                "force_start": "Hop 1:",
+                "stop_strings": ["[FINAL]", "\n\n", "\nHop", "\nExample", "Input:", "Example:"],
             },
             "igsm": {
                 "system": (
-                    "You are a symbolic math solver working modulo 7 for grade-school math problems.\n\n"
-                    "PROCESS:\n"
-                    "1. Identify all assignments and dependencies from the input.\n"
-                    "2. Evaluate each assignment step by step, substituting values as needed.\n"
-                    "3. Mark the final answer with [FINAL].\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
-
-                    "INSTRUCTIONS:\n"
-                    "1. Count the number of assignments (N).\n"
-                    "2. Evaluate exactly N assignments, substituting variable values immediately.\n"
-                    "3. After evaluating the query variable, output ONLY [FINAL] and NOTHING ELSE.\n\n"
-
-                    "FORMAT:\n"
-                    "Step {1}: {var_1} = {value_1} (mod 7) = {result_1}\n"
-                    "Step {2}: {var_2} = {substituted_expr} = {computed} (mod 7) = {result_2}\n"
-                    "(continue for intermediate steps)\n"
-                    "Step {N}: {query_var} = {value} (mod 7) = {answer}\n"
-                    "[FINAL] {answer} \n\n"
-
-                    "CRITICAL RULES:\n"
-                    "• Process each assignment exactly once\n"
-                    "• Substitute variable values immediately\n"
-                    "• Show computation before applying mod 7\n"
-                    "• Final result must be in range [0, 6]\n"
-                    "• After evaluating the query, immediately output [FINAL] and STOP\n"
-                    "• NO skipping assignments, NO commentary, NO explanations, NO extra lines after [FINAL]\n\n"
-
-                    "OPERATION PATTERNS:\n"
-                    "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
-                    "Copy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n"
-                    "Addition: {C} := {A} + {B} where A=5, B=4 means {C} = 5 + 4 = 9 (mod 7) = 2\n\n"
-
-                    "FORBIDDEN:\n"
-                    "❌ NO skipping assignments\n"
-                    "❌ NO continuing after the query is answered\n"
-                    "❌ NO results outside [0, 6]\n"
-                    "❌ NO explanations, commentary, or extra lines after [FINAL]"
+                    "You are a modulo 7 calculator that MUST follow this exact format:\n\n"
+                    "Step 1: {var1} = {val1} (mod 7) = {res1}\n"
+                    "Step 2: {var2} = {expr} = {computed} (mod 7) = {res2}\n"
+                    "(continue for all variables)\n"
+                    "[FINAL] {answer}\n"
+                    "\n"
+                    "EXAMPLES:\n"
+                    "Example 1:\n"
+                    "Input: A := 5. B := 3. C := A + B. C?\n"
+                    "Step 1: A = 5 (mod 7) = 5\n"
+                    "Step 2: B = 3 (mod 7) = 3\n"
+                    "Step 3: C = A + B = 5 + 3 = 8 (mod 7) = 1\n"
+                    "[FINAL] 1\n"
+                    "\n"
+                    "Example 2:\n"
+                    "Input: X := 6. Y := 4. Z := X * Y. Z?\n"
+                    "Step 1: X = 6 (mod 7) = 6\n"
+                    "Step 2: Y = 4 (mod 7) = 4\n"
+                    "Step 3: Z = X * Y = 6 * 4 = 24 (mod 7) = 3\n"
+                    "[FINAL] 3\n"
+                    "\n"
+                    "Example 3:\n"
+                    "Input: P := 10. Q := 8. R := P - Q. R?\n"
+                    "Step 1: P = 10 (mod 7) = 3\n"
+                    "Step 2: Q = 8 (mod 7) = 1\n"
+                    "Step 3: R = P - Q = 3 - 1 = 2 (mod 7) = 2\n"
+                    "[FINAL] 2\n"
+                    "\n"
+                    "RULES:\n"
+                    "1. Show ALL steps (Step 1, Step 2, etc.)\n"
+                    "2. After last step, output ONLY '[FINAL] X' where X is 0-6\n"
+                    "3. STOP generating after '[FINAL] X'\n"
+                    "4. Do NOT add any other text\n"
+                    "\n"
+                    "Now solve this:\n"
                 ),
-                "force_start": "[FINAL]",
+                "force_start": "Step 1:",
+                "stop_strings": ["[FINAL]", "\n\n", "\nStep", "\nExample", "Input:", "Example:"],
             }
         }
 
@@ -415,10 +411,10 @@ class SafeOuroThinkingExperiment:
             self.task_templates[task_type] = {
                 "system": config["system"],
                 "force_start_text": config["force_start"],
+                "stop_strings": config["stop_strings"],
             }
 
-        print("[+] Task templates (strict, step-by-step, no commentary after [FINAL]) pre-computed.")
-
+        print("[+] Task templates with strict format enforcement pre-computed.")
     @torch.inference_mode()
     def predict(
         self,
