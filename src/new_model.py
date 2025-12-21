@@ -292,7 +292,7 @@ class SafeOuroThinkingExperiment:
                     "You are a calculator performing sequential addition.\n\n"
                     "PROCESS:\n"
                     "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
-                    "2. Show your addition steps (internal reasoning)\n"
+                    "2. HIDE your addition steps (internal reasoning)\n"
                     "3. Mark the final answer with [FINAL]\n"
                     "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
 
@@ -326,7 +326,7 @@ class SafeOuroThinkingExperiment:
                     "❌ NO generating steps beyond the input count\n"
                     "❌ NO explanations or commentary"
                 ),
-                "force_start": "Step 1:",
+                "force_start": "[FINAL]",
             },
             "p_hop": {
                 "system": (
