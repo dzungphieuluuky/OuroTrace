@@ -439,6 +439,7 @@ class SafeOuroThinkingExperiment:
             self.task_templates[task_type] = {
                 "system": config["system"],
                 "force_start_text": config["force_start"],
+                "stop_strings": ["[END]", "```", "python", "def ", "Example", "**Final"],
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
@@ -505,7 +506,7 @@ class SafeOuroThinkingExperiment:
 
         # Start timing for each batch item separately
         start_time = time.perf_counter()
-        
+        default_config["stop_strings"] = template["stop_strings"]
         try:
             outputs = model.generate(
                 input_ids=input_ids,
