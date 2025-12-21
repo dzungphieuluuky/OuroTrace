@@ -432,7 +432,7 @@ class SafeOuroThinkingExperiment:
     ) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
         """
         Unified prediction function that handles both single and batch inputs.
-        Uses chat template correctly to avoid misplaced assistant tokens.
+        Correctly counts generated tokens for each sample in batch.
         """
         is_single = isinstance(user_inputs, str)
         if is_single:
@@ -452,34 +452,20 @@ class SafeOuroThinkingExperiment:
         # Build chat messages for each input
         prompts = []
         for user_input in user_inputs:
-            # construct one message
             messages = [
                 {"role": "system", "content": template["system"]},
                 {"role": "user", "content": user_input},
             ]
 
-            # Apply chat template (adding <|im_start|>assistant)
             prompt = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=True,
             )
-            # Add_generate_prompt is true so it will append <|im_start|>assistant
-            # Now add the force_start_text to guide generation
-            # The artiface <|im_start|>assistant is added with \n at the end so we dont need \n at the beginning of force start ahihi
             prompt += template["force_start_text"]
-
-            print(f"DEBUG: Full prompt for '{task_type}':\n{prompt}\n")
-            if self.check_chat_format(prompt):
-                print(f"   ✓ Chat format verified for input.")
-            else:
-                print(f"   ⚠️ Chat format NOT verified for input.")
-
-            # add single prompt to batch for batch inference
             prompts.append(prompt)
 
-        # Tokenize all prompts at once (let tokenizer handle padding)
-        # adlready set padding left on tokenizer init
+        # Tokenize with padding
         encodings = tokenizer(
             prompts,
             return_tensors="pt",
@@ -488,13 +474,15 @@ class SafeOuroThinkingExperiment:
         )
         input_ids = encodings.input_ids.to(device)
         attention_mask = encodings.attention_mask.to(device)
+        input_lengths = attention_mask.sum(dim=1)  # Store original lengths
 
         default_config = self._get_optimal_generation_config(task_type)
         if generation_config:
             default_config.update(generation_config)
 
-
+        # Start timing for each batch item separately
         start_time = time.perf_counter()
+        
         try:
             outputs = model.generate(
                 input_ids=input_ids,
@@ -511,16 +499,29 @@ class SafeOuroThinkingExperiment:
             error_results = [self._create_error_result(inp, ut_steps, str(e)) for inp in user_inputs]
             return error_results[0] if is_single else error_results
 
-        generation_time = time.perf_counter() - start_time
-
+        total_generation_time = time.perf_counter() - start_time
+        
         results = []
         for i in range(len(user_inputs)):
-            prompt_length = attention_mask[i].sum().item()
-
+            # Get the unpadded generated tokens for this specific sample
             generated_ids = outputs.sequences[i, input_ids.shape[1]:]
+            
+            # Find where the padding starts (first pad_token_id)
+            pad_token_id = tokenizer.pad_token_id
+            if pad_token_id is not None:
+                # Find indices of non-pad tokens
+                non_pad_mask = generated_ids != pad_token_id
+                if non_pad_mask.any():
+                    # Last non-pad token index
+                    last_non_pad = non_pad_mask.nonzero()[-1].item() + 1
+                    generated_ids = generated_ids[:last_non_pad]
+            
+            # Decode only the actual generated tokens
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
             full_response = template["force_start_text"] + " " + generated_text
-
+            
+            # Count actual generated tokens
+            actual_generated_tokens = len(generated_ids)
             
             self.check_repeated_outputs_and_abort(full_response)
             is_degenerate = self._detect_degenerate_output(full_response)
@@ -535,17 +536,16 @@ class SafeOuroThinkingExperiment:
             result = {
                 "full_response": full_response,
                 "prediction": pred,
-                "generation_time": generation_time / len(user_inputs),
-                "generated_tokens": generated_ids.shape[0],
-                "input_tokens": prompt_length,
+                "generation_time": total_generation_time,  # Total batch time (not divided)
+                "generated_tokens": actual_generated_tokens,  # Correct count
+                "input_tokens": input_lengths[i].item(),  # Original unpadded length
                 "ut_steps": ut_steps,
                 "is_degenerate": is_degenerate,
                 "test_input": user_inputs[i],
             }
             results.append(result)
 
-        return results[0] if is_single else results
-        
+        return results[0] if is_single else results        
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
         """Extract final answer with improved parsing, aligned with prompt templates"""
         pred = "0"
