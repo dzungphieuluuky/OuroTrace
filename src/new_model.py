@@ -882,9 +882,9 @@ class SafeOuroThinkingExperiment:
     def _get_optimal_generation_config(self, task_type: str) -> Dict:
         """Get optimized generation parameters for task type"""
         task_token_limits = {
-            "n_ary": 16,
-            "p_hop": 16,
-            "igsm": 16,
+            "n_ary": 256,
+            "p_hop": 256,
+            "igsm": 512,
         }
         
         return {
