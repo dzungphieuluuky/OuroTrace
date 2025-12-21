@@ -308,6 +308,7 @@ class SafeOuroThinkingExperiment:
                     "(continue for intermediate steps)\n"
                     "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
                     "[FINAL] {final_sum} [END]\n\n"
+                    "STOP\n\n"
 
                     "CRITICAL RULES:\n"
                     "• Each input number appears in EXACTLY ONE step\n"
@@ -325,7 +326,6 @@ class SafeOuroThinkingExperiment:
                     "❌ NO continuing after all input numbers are used\n"
                     "❌ NO generating steps beyond the input count\n"
                     "❌ NO explanations or commentary\n"
-                    "❌ NO generated tokens after [FINAL]\n"
                 ),
                 "force_start": "[FINAL]",
             },
