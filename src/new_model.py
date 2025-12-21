@@ -294,99 +294,122 @@ class SafeOuroThinkingExperiment:
                     "1. Parse EACH NUMBER AS A WHOLE (don't split digits)\n"
                     "2. HIDE your addition steps (internal reasoning)\n"
                     "3. Mark the final answer with [FINAL]\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
+                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL] {final_sum} [END]**\n\n"
 
                     "INSTRUCTIONS:\n"
                     "1. Count the numbers in the input (call this {N})\n"
                     "2. Perform exactly {N} addition steps\n"
-                    "3. Stop after {N} steps and ONLY OUTPUT [FINAL]\n\n"
+                    "3. After step {N}, output ONLY '[FINAL] {final_sum} [END]' and NOTHING ELSE\n\n"
 
                     "FORMAT:\n"
                     "Step {1}: 0 + {first_number} = {sum_1}\n"
                     "Step {2}: {sum_1} + {second_number} = {sum_2}\n"
-                    "Step {3}: {sum_2} + {third_number} = {sum_3}\n"
                     "(continue for intermediate steps)\n"
                     "Step {N}: {sum_N-1} + {last_number} = {final_sum}\n"
                     "[FINAL] {final_sum} [END]\n\n"
-                    "STOP\n\n"
 
                     "CRITICAL RULES:\n"
                     "• Each input number appears in EXACTLY ONE step\n"
                     "• Number of steps = number of input numbers\n"
-                    "• After step {N}, immediately output [FINAL]\n"
-                    "• NO additional steps and NO code after all numbers are processed\n\n"
+                    "• After step {N}, immediately output '[FINAL] {final_sum} [END]' and STOP\n"
+                    "• NO additional steps, NO commentary, NO explanations, NO extra lines after [END]\n"
+                    "• DO NOT output '**Final Answer**', 'Answer:', or any other text after [END]\n\n"
 
                     "PATTERN EXPLANATION:\n"
-                    "Input '{A} + {B} =' has 2 numbers → Output 2 steps + [FINAL]\n"
-                    "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + [FINAL]\n"
-                    "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output 4 steps + [FINAL]\n\n"
+                    "Input '{A} + {B} =' has 2 numbers → Output 2 steps + '[FINAL] {final_sum} [END]'\n"
+                    "Input '{A} + {B} + {C} =' has 3 numbers → Output 3 steps + '[FINAL] {final_sum} [END]'\n"
+                    "Input '{A} + {B} + {C} + {D} =' has 4 numbers → Output 4 steps + '[FINAL] {final_sum} [END]'\n\n"
 
                     "FORBIDDEN:\n"
                     "❌ NO repeating the same number in multiple steps\n"
                     "❌ NO continuing after all input numbers are used\n"
                     "❌ NO generating steps beyond the input count\n"
-                    "❌ NO explanations or commentary\n"
+                    "❌ NO explanations, commentary, or extra lines after [END]\n"
+                    "❌ NO '**Final Answer**', 'Answer:', or similar phrases"
                 ),
                 "force_start": "[FINAL]",
             },
             "p_hop": {
                 "system": (
-                    "You are a sequence position tracker.\n\n"
+                    "You are a sequence position tracker performing hop induction.\n\n"
+                    "PROCESS:\n"
+                    "1. Identify the start token and the number of hops (N) from the input.\n"
+                    "2. Perform exactly N hop steps, each moving to the next linked token.\n"
+                    "3. Mark the final answer with [FINAL].\n"
+                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL] {final_token} [END]**\n\n"
+
                     "INSTRUCTIONS:\n"
-                    "1. Count the number of hops requested (call this N)\n"
-                    "2. Perform exactly N hop steps\n"
-                    "3. Stop after N hops and ONLY OUTPUT [FINAL]\n\n"
+                    "1. Count the number of hops requested (N).\n"
+                    "2. Perform exactly N hop steps, following the chain in the sequence.\n"
+                    "3. After hop N, output ONLY '[FINAL] {final_token} [END]' and NOTHING ELSE.\n\n"
+
                     "FORMAT:\n"
                     "Hop {1}: At {token_1} → Next is {token_2}\n"
                     "Hop {2}: At {token_2} → Next is {token_3}\n"
-                    "Hop {3}: At {token_3} → Next is {token_4}\n"
                     "(continue for intermediate steps)\n"
                     "Hop {N}: At {token_N} → Next is {final_token}\n"
                     "[FINAL] {final_token} [END]\n\n"
+
                     "CRITICAL RULES:\n"
-                    "• Perform exactly the requested number of hops\n"
-                    "• Follow the sequence order (if sequence repeats, wrap around)\n"
-                    "• After hop N, immediately output [FINAL]\n"
-                    "• Use only tokens from the input sequence\n\n"
+                    "• Perform exactly the requested number of hops (N)\n"
+                    "• Use only tokens from the input sequence\n"
+                    "• After hop N, immediately output '[FINAL] {final_token} [END]' and STOP\n"
+                    "• NO extra hops, NO commentary, NO explanations, NO extra lines after [END]\n"
+                    "• DO NOT output '**Final Answer**', 'Answer:', or any other text after [END]\n\n"
+
                     "PATTERN EXPLANATION:\n"
-                    "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
-                    "If input says 'Hop 5 times' → Output 5 hop lines + [FINAL]\n\n"
+                    "If input says 'Hop 3 times' → Output 3 hop lines + '[FINAL] {final_token} [END]'\n"
+                    "If input says 'Hop 5 times' → Output 5 hop lines + '[FINAL] {final_token} [END]'\n\n"
+
                     "FORBIDDEN:\n"
                     "❌ NO extra hops beyond the requested count\n"
                     "❌ NO inventing tokens not in the sequence\n"
-                    "❌ NO explanations or commentary"
+                    "❌ NO explanations, commentary, or extra lines after [END]\n"
+                    "❌ NO '**Final Answer**', 'Answer:', or similar phrases"
                 ),
                 "force_start": "Hop 1:",
             },
             "igsm": {
                 "system": (
-                    "You are a symbolic expression evaluator (modulo 7).\n\n"
+                    "You are a symbolic expression evaluator for grade-school math (modulo 7).\n\n"
+                    "PROCESS:\n"
+                    "1. Identify all assignments and dependencies from the input.\n"
+                    "2. Evaluate exactly N assignments, substituting values as needed.\n"
+                    "3. Mark the final answer with [FINAL].\n"
+                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL] {answer} [END]**\n\n"
+
                     "INSTRUCTIONS:\n"
-                    "1. Count the number of assignments (call this N)\n"
-                    "2. Evaluate exactly N assignments\n"
-                    "3. Stop after N steps and ONLY OUTPUT [FINAL]\n\n"
+                    "1. Count the number of assignments (N).\n"
+                    "2. Evaluate exactly N assignments, substituting variable values immediately.\n"
+                    "3. After evaluating the query variable, output ONLY '[FINAL] {answer} [END]' and NOTHING ELSE.\n\n"
+
                     "FORMAT:\n"
                     "Step {1}: {var_1} = {value_1} (mod 7) = {result_1}\n"
                     "Step {2}: {var_2} = {substituted_expr} = {computed} (mod 7) = {result_2}\n"
-                    "Step {3}: {var_3} = {substituted_expr} = {computed} (mod 7) = {result_3}\n"
                     "(continue for intermediate steps)\n"
                     "Step {N}: {query_var} = {value} (mod 7) = {answer}\n"
                     "[FINAL] {answer} [END]\n\n"
+
                     "CRITICAL RULES:\n"
                     "• Process each assignment exactly once\n"
                     "• Substitute variable values immediately\n"
                     "• Show computation before applying mod 7\n"
                     "• Final result must be in range [0, 6]\n"
-                    "• After evaluating the query, immediately output [FINAL]\n\n"
+                    "• After evaluating the query, immediately output '[FINAL] {answer} [END]' and STOP\n"
+                    "• NO skipping assignments, NO commentary, NO explanations, NO extra lines after [END]\n"
+                    "• DO NOT output '**Final Answer**', 'Answer:', or any other text after [END]\n\n"
+
                     "OPERATION PATTERNS:\n"
                     "Assignment: {A} := {5} means {A} = 5 (mod 7) = 5\n"
                     "Copy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n"
                     "Addition: {C} := {A} + {B} where A=5, B=4 means {C} = 5 + 4 = 9 (mod 7) = 2\n\n"
+
                     "FORBIDDEN:\n"
                     "❌ NO skipping assignments\n"
                     "❌ NO continuing after the query is answered\n"
                     "❌ NO results outside [0, 6]\n"
-                    "❌ NO explanations or commentary"
+                    "❌ NO explanations, commentary, or extra lines after [END]\n"
+                    "❌ NO '**Final Answer**', 'Answer:', or similar phrases"
                 ),
                 "force_start": "Step 1:",
             }
@@ -398,8 +421,8 @@ class SafeOuroThinkingExperiment:
                 "system": config["system"],
                 "force_start_text": config["force_start"],
             }
-        
-        print("[+] Task templates (placeholder-based, no concrete examples) pre-computed.")
+
+        print("[+] Task templates (strict, step-by-step, no commentary after [END]) pre-computed.")
 
     @torch.inference_mode()
     def predict(
