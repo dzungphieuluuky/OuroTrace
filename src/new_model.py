@@ -77,6 +77,7 @@ class SafeOptimizations:
                     max_new_tokens=32,
                     use_cache=True,
                     do_sample=False,
+                    tokenizer=tokenizer,
                 )
         
         torch.cuda.empty_cache()
@@ -488,6 +489,7 @@ class SafeOuroThinkingExperiment:
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
                 use_cache=True,
+                tokenizer=tokenizer,
                 return_dict_in_generate=True,
                 output_scores=False,
                 generation_config=GenerationConfig(**default_config),
