@@ -324,82 +324,123 @@ class SafeOuroThinkingExperiment:
                     "❌ NO repeating the same number in multiple steps\n"
                     "❌ NO continuing after all input numbers are used\n"
                     "❌ NO generating steps beyond the input count\n"
-                    "❌ NO explanations or commentary"
-    
-                    "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "❌ NO explanations or commentary\n\n"
+                    
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                     "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
                     "you MUST stop generating immediately.\n"
                     "Do NOT generate: Python code, examples, comments, "
                     "explanations, or ANYTHING else.\n"
                     "Your response ends at [END]. Period.\n"
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-
-                    "N-ARY CORRECT EXAMPLE:\n"
+                    
+                    "CORRECT EXAMPLE:\n"
                     "Step 1: 0 + 807 = 807\n"
                     "Step 2: 807 + 696 = 1503\n"
                     "[FINAL] 1503 [END]\n\n"
+                    
                     "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
                     "[FINAL] 1503 [END] ```python\n"
-                    "Example: def answer(): pass\n"
-                    "**Final**\n"
-                    "This is WRONG. Stop at [END].\n"
+                    "This is WRONG. Stop at [END]."
                 ),
                 "force_start": "[FINAL]",
             },
             "p_hop": {
                 "system": (
-                    "You are a sequence tracer performing p-hop induction.\n\n"
-                    "PROCESS:\n"
-                    "1. Identify the start token and number of hops (N) from the input.\n"
-                    "2. Perform exactly N hop steps, each moving to the next linked token in the chain.\n"
-                    "3. Mark the final answer with [FINAL].\n"
-                    "4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\n"
-
-                    "INSTRUCTIONS:\n"
-                    "1. Count the number of hops requested (N).\n"
-                    "2. Perform exactly N hop steps, following the chain in the sequence.\n"
-                    "3. After hop N, output ONLY [FINAL] and NOTHING ELSE.\n\n"
-
-                    "FORMAT:\n"
-                    "Hop {1}: At {token_1} → Next is {token_2}\n"
-                    "Hop {2}: At {token_2} → Next is {token_3}\n"
-                    "(continue for intermediate steps)\n"
-                    "Hop {N}: At {token_N} → Next is {final_token}\n"
-                    "[FINAL] {final_token} [END]\n\n"
-
-                    "CRITICAL RULES:\n"
-                    "• Perform exactly the requested number of hops (N)\n"
-                    "• Use only tokens from the input sequence\n"
-                    "• After hop N, immediately output [FINAL] and STOP\n"
-                    "• NO extra hops, NO commentary, NO explanations, NO extra lines after [END]\n\n"
-
-                    "PATTERN EXPLANATION:\n"
-                    "If input says 'Hop 3 times' → Output 3 hop lines + [FINAL]\n"
-                    "If input says 'Hop 5 times' → Output 5 hop lines + [FINAL]\n\n"
-
-                    "FORBIDDEN:\n"
-                    "❌ NO extra hops beyond the requested count\n"
-                    "❌ NO inventing tokens not in the sequence\n"
-                    "❌ NO explanations, commentary, or extra lines after [END]"
-
-                    "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                    "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
-                    "you MUST stop generating immediately.\n"
-                    "Do NOT generate: Python code, examples, comments, "
-                    "explanations, or ANYTHING else.\n"
-                    "Your response ends at [END]. Period.\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-
-                    "P-HOP CORRECT EXAMPLE:\n"
+                    "You are solving a SEQUENCE FOLLOWING task.\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "TASK EXPLANATION:\n"
+                    "═══════════════════════════════════════════\n"
+                    "You will receive:\n"
+                    "  • A sequence of tokens (letters like A, B, C, D)\n"
+                    "  • A starting position (which token to begin at)\n"
+                    "  • A number of hops to perform\n\n"
+                    
+                    "Your job: Follow the sequence by hopping forward, "
+                    "one position at a time.\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "STEP-BY-STEP PROCESS:\n"
+                    "═══════════════════════════════════════════\n"
+                    "1. Find the START token in the sequence\n"
+                    "2. Look at the NEXT token (one position to the right)\n"
+                    "3. Move to that token (this is hop 1)\n"
+                    "4. Repeat: look at the next token, move to it (hop 2)\n"
+                    "5. Continue until you've done ALL the required hops\n"
+                    "6. Output [FINAL] with the token you landed on\n"
+                    "7. STOP IMMEDIATELY\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CONCRETE EXAMPLE:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: Sequence: A B C D E\n"
+                    "       Start at: A\n"
+                    "       Hops: 3\n\n"
+                    
+                    "Solution:\n"
                     "Hop 1: At A → Next is B\n"
                     "Hop 2: At B → Next is C\n"
                     "Hop 3: At C → Next is D\n"
                     "[FINAL] D [END]\n\n"
-                    "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
+                    "═══════════════════════════════════════════\n"
+                    "Hop 1: At {current_token} → Next is {next_token}\n"
+                    "Hop 2: At {current_token} → Next is {next_token}\n"
+                    "Hop 3: At {current_token} → Next is {next_token}\n"
+                    "... (continue for ALL hops)\n"
+                    "Hop N: At {current_token} → Next is {final_token}\n"
+                    "[FINAL] {final_token} [END]\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "CRITICAL RULES:\n"
+                    "═══════════════════════════════════════════\n"
+                    "✓ Show EVERY SINGLE hop (if asked for 5 hops, show 5 lines)\n"
+                    "✓ Each hop moves exactly ONE position forward in the sequence\n"
+                    "✓ Use ONLY tokens that appear in the input sequence\n"
+                    "✓ After the final hop, write [FINAL] {answer} [END]\n"
+                    "✓ STOP immediately after [END]\n\n"
+                    
+                    "✗ DO NOT skip hops\n"
+                    "✗ DO NOT invent new tokens (like E, F, G if they're not in the sequence)\n"
+                    "✗ DO NOT continue generating after [END]\n"
+                    "✗ DO NOT add explanations, code, or commentary\n"
+                    "✗ DO NOT output just [FINAL] without showing the hops\n\n"
+                    
+                    "═══════════════════════════════════════════\n"
+                    "ANOTHER EXAMPLE:\n"
+                    "═══════════════════════════════════════════\n"
+                    "Input: Sequence: C A D B A C\n"
+                    "       Start at: C (position 0)\n"
+                    "       Hops: 4\n\n"
+                    
+                    "Solution:\n"
+                    "Hop 1: At C → Next is A\n"
+                    "Hop 2: At A → Next is D\n"
+                    "Hop 3: At D → Next is B\n"
+                    "Hop 4: At B → Next is A\n"
+                    "[FINAL] A [END]\n\n"
+                    
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "⚠️ CRITICAL: After [FINAL] {token} [END], STOP.\n"
+                    "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
+                    "Your response ends at [END].\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                    
+                    "CORRECT OUTPUT:\n"
+                    "Hop 1: At C → Next is A\n"
+                    "Hop 2: At A → Next is D\n"
+                    "[FINAL] D [END]\n\n"
+                    
+                    "INCORRECT OUTPUT (DO NOT DO THIS):\n"
                     "[FINAL] D [END] ```python\n"
-                    "Example: def answer(): pass\n"
-                    "**Final**\n"
-                    "This is WRONG. Stop at [END].\n"
+                    "This is WRONG. Stop at [END].\n\n"
+                    
+                    "ALSO INCORRECT (DO NOT DO THIS):\n"
+                    "[FINAL] \n\n**Final\n"
+                    "You must show the hop steps BEFORE [FINAL]."
                 ),
                 "force_start": "[FINAL]",
             },
@@ -441,26 +482,24 @@ class SafeOuroThinkingExperiment:
                     "❌ NO skipping assignments\n"
                     "❌ NO continuing after the query is answered\n"
                     "❌ NO results outside [0, 6]\n"
-                    "❌ NO explanations, commentary, or extra lines after [END]"
-
-                    "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "❌ NO explanations, commentary, or extra lines after [END]\n\n"
+                    
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                     "⚠️ CRITICAL: After outputting [FINAL] {answer} [END], "
                     "you MUST stop generating immediately.\n"
                     "Do NOT generate: Python code, examples, comments, "
                     "explanations, or ANYTHING else.\n"
                     "Your response ends at [END]. Period.\n"
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-
-                    "I-GSM CORRECT EXAMPLE:\n"
-                    "Step 1: X = 5 (mod 7) = 5\n"
-                    "Step 2: Y = 5 + 4 = 9 (mod 7) = 2\n"
-                    "Step 3: Z = 2 * 2 = 4 (mod 7) = 4\n"
-                    "[FINAL] 4 [END]\n\n"
+                    
+                    "CORRECT EXAMPLE:\n"
+                    "Step 1: A = 5 (mod 7) = 5\n"
+                    "Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n"
+                    "[FINAL] 1 [END]\n\n"
+                    
                     "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
-                    "[FINAL] 4 [END] ```python\n"
-                    "Example: def answer(): pass\n"
-                    "**Final**\n"
-                    "This is WRONG. Stop at [END].\n"
+                    "[FINAL] 1 [END] ```python\n"
+                    "This is WRONG. Stop at [END]."
                 ),
                 "force_start": "[FINAL]",
             }
@@ -471,7 +510,7 @@ class SafeOuroThinkingExperiment:
             self.task_templates[task_type] = {
                 "system": config["system"],
                 "force_start_text": config["force_start"],
-                "stop_strings": ["[END]", "```", "python", "def ", "Example", "**Final"],
+                "stop_sequences": ["[END]", "\n```", "python", "def ", "#", "**Final"],
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
@@ -538,7 +577,7 @@ class SafeOuroThinkingExperiment:
 
         # Start timing for each batch item separately
         start_time = time.perf_counter()
-        default_config["stop_strings"] = template["stop_strings"]
+        default_config["stop_strings"] = template["stop_sequences"]
         try:
             outputs = model.generate(
                 input_ids=input_ids,
