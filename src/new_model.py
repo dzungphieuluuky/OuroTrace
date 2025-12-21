@@ -669,7 +669,7 @@ class SafeOuroThinkingExperiment:
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
-
+        
     @torch.inference_mode()
     def predict(
         self,
