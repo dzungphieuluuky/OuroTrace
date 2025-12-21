@@ -332,7 +332,17 @@ class SafeOuroThinkingExperiment:
                     "Do NOT generate: Python code, examples, comments, "
                     "explanations, or ANYTHING else.\n"
                     "Your response ends at [END]. Period.\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+                    "N-ARY CORRECT EXAMPLE:\n"
+                    "Step 1: 0 + 807 = 807\n"
+                    "Step 2: 807 + 696 = 1503\n"
+                    "[FINAL] 1503 [END]\n\n"
+                    "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
+                    "[FINAL] 1503 [END] ```python\n"
+                    "Example: def answer(): pass\n"
+                    "**Final**\n"
+                    "This is WRONG. Stop at [END].\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -378,7 +388,18 @@ class SafeOuroThinkingExperiment:
                     "Do NOT generate: Python code, examples, comments, "
                     "explanations, or ANYTHING else.\n"
                     "Your response ends at [END]. Period.\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+                    "P-HOP CORRECT EXAMPLE:\n"
+                    "Hop 1: At A → Next is B\n"
+                    "Hop 2: At B → Next is C\n"
+                    "Hop 3: At C → Next is D\n"
+                    "[FINAL] D [END]\n\n"
+                    "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
+                    "[FINAL] D [END] ```python\n"
+                    "Example: def answer(): pass\n"
+                    "**Final**\n"
+                    "This is WRONG. Stop at [END].\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -428,7 +449,18 @@ class SafeOuroThinkingExperiment:
                     "Do NOT generate: Python code, examples, comments, "
                     "explanations, or ANYTHING else.\n"
                     "Your response ends at [END]. Period.\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+                    "I-GSM CORRECT EXAMPLE:\n"
+                    "Step 1: X = 5 (mod 7) = 5\n"
+                    "Step 2: Y = 5 + 4 = 9 (mod 7) = 2\n"
+                    "Step 3: Z = 2 * 2 = 4 (mod 7) = 4\n"
+                    "[FINAL] 4 [END]\n\n"
+                    "INCORRECT EXAMPLE (DO NOT DO THIS):\n"
+                    "[FINAL] 4 [END] ```python\n"
+                    "Example: def answer(): pass\n"
+                    "**Final**\n"
+                    "This is WRONG. Stop at [END].\n"
                 ),
                 "force_start": "[FINAL]",
             }
