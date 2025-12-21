@@ -292,7 +292,7 @@ class SafeOuroThinkingExperiment:
                     "..."
                     "[FINAL] {final_sum}"
                 ),
-                "force_start": "\nStep 1:",
+                "force_start": "[FINAL]",
             },
             "p_hop": {
                 # Data format: "Sequence: A B C D A B. Start: A. Hop 1 times."
@@ -309,7 +309,7 @@ class SafeOuroThinkingExperiment:
                     "Hop {N}: At {token_N} → Next is {token_final}\n"
                     "[FINAL] {token_final}"
                 ),
-                "force_start": "\nHop 1:",
+                "force_start": "[FINAL]",
             },
             "igsm": {
                 # Data format: "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?"
@@ -326,7 +326,7 @@ class SafeOuroThinkingExperiment:
                     "..."
                     "[FINAL] {final_value}"
                 ),
-                "force_start": "\nStep 1:",
+                "force_start": "[FINAL]",
             }
         }
 
