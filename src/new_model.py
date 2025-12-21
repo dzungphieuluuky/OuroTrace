@@ -280,100 +280,129 @@ class SafeOuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates for UT models that output ONLY the final answer.
-        The model does reasoning internally through UT steps, outputs only [FINAL] {answer}.
+        Pre-compute prompt templates that enforce exact output format.
+        Forces model to show ALL steps before [FINAL] and stop immediately.
         """
         self.tokenizer = tokenizer
 
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You are a calculator. Add the numbers and output ONLY the final answer.\n\n"
-                    "INSTRUCTIONS:\n"
-                    "1. Add ALL the numbers together\n"
-                    "2. Output ONLY: [FINAL] {sum}\n"
-                    "3. Do NOT show any steps or calculations\n"
-                    "4. Do NOT output anything else\n\n"
+                    "You are a calculator that MUST follow this exact format:\n\n"
+                    "Step 1: 0 + {first} = {sum1}\n"
+                    "Step 2: {sum1} + {second} = {sum2}\n"
+                    "(continue for all numbers)\n"
+                    "[FINAL] {final_sum}\n"
+                    "\n"
                     "EXAMPLES:\n"
                     "Example 1:\n"
-                    "Input: 5 + 3 =\n"
-                    "[FINAL] 8\n\n"
-                    "Example 2:\n"
-                    "Input: 10 + 20 + 30 =\n"
-                    "[FINAL] 60\n\n"
-                    "Example 3:\n"
                     "Input: 553 + 553 =\n"
-                    "[FINAL] 1106\n\n"
-                    "Example 4:\n"
+                    "Step 1: 0 + 553 = 553\n"
+                    "Step 2: 553 + 553 = 1106\n"
+                    "[FINAL] 1106\n"
+                    "\n"
+                    "Example 2:\n"
                     "Input: 242 + 774 =\n"
-                    "[FINAL] 1016\n\n"
-                    "REMEMBER:\n"
-                    "- Output format: [FINAL] {number}\n"
-                    "- Do not show steps\n"
-                    "- Do not add explanations\n"
-                    "- Only one line: [FINAL] X\n\n"
-                    "Now solve:\n"
+                    "Step 1: 0 + 242 = 242\n"
+                    "Step 2: 242 + 774 = 1016\n"
+                    "[FINAL] 1016\n"
+                    "\n"
+                    "Example 3:\n"
+                    "Input: 5 + 3 + 2 =\n"
+                    "Step 1: 0 + 5 = 5\n"
+                    "Step 2: 5 + 3 = 8\n"
+                    "Step 3: 8 + 2 = 10\n"
+                    "[FINAL] 10\n"
+                    "\n"
+                    "RULES:\n"
+                    "1. Show ALL steps (Step 1, Step 2, etc.)\n"
+                    "2. After last step, output ONLY '[FINAL] X' where X is the final sum\n"
+                    "3. STOP generating after '[FINAL] X'\n"
+                    "4. Do NOT add any other text\n"
+                    "\n"
+                    "Now solve this:\n"
                 ),
-                "force_start": "[FINAL]",
-                "stop_strings": ["[FINAL]", "\n", "\n\n"],
+                "force_start": "Step 1:",
+                "stop_strings": ["[FINAL]", "\n\n", "\nStep", "\nExample", "Input:", "Example:"],
             },
             "p_hop": {
                 "system": (
-                    "You are a sequence tracker. Follow the hops and output ONLY the final position.\n\n"
-                    "INSTRUCTIONS:\n"
-                    "1. Start at the given position\n"
-                    "2. Perform exactly the requested number of hops\n"
-                    "3. Output ONLY: [FINAL] {token}\n"
-                    "4. Do NOT show any steps or hops\n"
-                    "5. Do NOT output anything else\n\n"
+                    "You are a sequence tracer that MUST follow this exact format:\n\n"
+                    "Hop 1: At {start} → Next is {token2}\n"
+                    "Hop 2: At {token2} → Next is {token3}\n"
+                    "(continue for all hops)\n"
+                    "[FINAL] {final_token}\n"
+                    "\n"
                     "EXAMPLES:\n"
                     "Example 1:\n"
-                    "Input: Sequence: A B C. Start: A. Hop 2 times.\n"
-                    "[FINAL] C\n\n"
+                    "Input: Sequence: A B C D. Start: B. Hop 2 times.\n"
+                    "Hop 1: At B → Next is C\n"
+                    "Hop 2: At C → Next is D\n"
+                    "[FINAL] D\n"
+                    "\n"
                     "Example 2:\n"
                     "Input: Sequence: X Y Z. Start: X. Hop 1 time.\n"
-                    "[FINAL] Y\n\n"
+                    "Hop 1: At X → Next is Y\n"
+                    "[FINAL] Y\n"
+                    "\n"
                     "Example 3:\n"
                     "Input: Sequence: 1 2 3 4 5. Start: 3. Hop 3 times.\n"
-                    "[FINAL] 1\n\n"
-                    "REMEMBER:\n"
-                    "- Output format: [FINAL] {token}\n"
-                    "- Do not show hops\n"
-                    "- Do not add explanations\n"
-                    "- Only one line: [FINAL] X\n\n"
-                    "Now solve:\n"
+                    "Hop 1: At 3 → Next is 4\n"
+                    "Hop 2: At 4 → Next is 5\n"
+                    "Hop 3: At 5 → Next is 1\n"
+                    "[FINAL] 1\n"
+                    "\n"
+                    "RULES:\n"
+                    "1. Show ALL hops (Hop 1, Hop 2, etc.)\n"
+                    "2. After last hop, output ONLY '[FINAL] X' where X is the final token\n"
+                    "3. STOP generating after '[FINAL] X'\n"
+                    "4. Do NOT add any other text\n"
+                    "\n"
+                    "Now solve this:\n"
                 ),
-                "force_start": "[FINAL]",
-                "stop_strings": ["[FINAL]", "\n", "\n\n"],
+                "force_start": "Hop 1:",
+                "stop_strings": ["[FINAL]", "\n\n", "\nHop", "\nExample", "Input:", "Example:"],
             },
             "igsm": {
                 "system": (
-                    "You are a modulo 7 calculator. Evaluate and output ONLY the final answer.\n\n"
-                    "INSTRUCTIONS:\n"
-                    "1. Process all assignments\n"
-                    "2. Apply modulo 7 (result must be 0-6)\n"
-                    "3. Output ONLY: [FINAL] {answer}\n"
-                    "4. Do NOT show any steps or calculations\n"
-                    "5. Do NOT output anything else\n\n"
+                    "You are a modulo 7 calculator that MUST follow this exact format:\n\n"
+                    "Step 1: {var1} = {val1} (mod 7) = {res1}\n"
+                    "Step 2: {var2} = {expr} = {computed} (mod 7) = {res2}\n"
+                    "(continue for all variables)\n"
+                    "[FINAL] {answer}\n"
+                    "\n"
                     "EXAMPLES:\n"
                     "Example 1:\n"
                     "Input: A := 5. B := 3. C := A + B. C?\n"
-                    "[FINAL] 1\n\n"
+                    "Step 1: A = 5 (mod 7) = 5\n"
+                    "Step 2: B = 3 (mod 7) = 3\n"
+                    "Step 3: C = A + B = 5 + 3 = 8 (mod 7) = 1\n"
+                    "[FINAL] 1\n"
+                    "\n"
                     "Example 2:\n"
                     "Input: X := 6. Y := 4. Z := X * Y. Z?\n"
-                    "[FINAL] 3\n\n"
+                    "Step 1: X = 6 (mod 7) = 6\n"
+                    "Step 2: Y = 4 (mod 7) = 4\n"
+                    "Step 3: Z = X * Y = 6 * 4 = 24 (mod 7) = 3\n"
+                    "[FINAL] 3\n"
+                    "\n"
                     "Example 3:\n"
                     "Input: P := 10. Q := 8. R := P - Q. R?\n"
-                    "[FINAL] 2\n\n"
-                    "REMEMBER:\n"
-                    "- Output format: [FINAL] {0-6}\n"
-                    "- Do not show steps\n"
-                    "- Do not add explanations\n"
-                    "- Only one line: [FINAL] X\n\n"
-                    "Now solve:\n"
+                    "Step 1: P = 10 (mod 7) = 3\n"
+                    "Step 2: Q = 8 (mod 7) = 1\n"
+                    "Step 3: R = P - Q = 3 - 1 = 2 (mod 7) = 2\n"
+                    "[FINAL] 2\n"
+                    "\n"
+                    "RULES:\n"
+                    "1. Show ALL steps (Step 1, Step 2, etc.)\n"
+                    "2. After last step, output ONLY '[FINAL] X' where X is 0-6\n"
+                    "3. STOP generating after '[FINAL] X'\n"
+                    "4. Do NOT add any other text\n"
+                    "\n"
+                    "Now solve this:\n"
                 ),
-                "force_start": "[FINAL]",
-                "stop_strings": ["[FINAL]", "\n", "\n\n"],
+                "force_start": "Step 1:",
+                "stop_strings": ["[FINAL]", "\n\n", "\nStep", "\nExample", "Input:", "Example:"],
             }
         }
 
@@ -385,7 +414,7 @@ class SafeOuroThinkingExperiment:
                 "stop_strings": config["stop_strings"],
             }
 
-        print("[+] UT task templates (output-only mode) pre-computed.")
+        print("[+] Task templates with strict format enforcement pre-computed.")
     @torch.inference_mode()
     def predict(
         self,
@@ -602,9 +631,9 @@ class SafeOuroThinkingExperiment:
     def _get_optimal_generation_config(self, task_type: str) -> Dict:
         """Get optimized generation parameters for task type"""
         task_token_limits = {
-            "n_ary": 32,
-            "p_hop": 32,
-            "igsm": 32,
+            "n_ary": 256,
+            "p_hop": 256,
+            "igsm": 512,
         }
         
         return {
