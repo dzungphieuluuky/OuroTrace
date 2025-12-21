@@ -324,7 +324,8 @@ class SafeOuroThinkingExperiment:
                     "❌ NO repeating the same number in multiple steps\n"
                     "❌ NO continuing after all input numbers are used\n"
                     "❌ NO generating steps beyond the input count\n"
-                    "❌ NO explanations or commentary"
+                    "❌ NO explanations or commentary\n"
+                    "❌ NO generated tokens after [FINAL]\n"
                 ),
                 "force_start": "[FINAL]",
             },
