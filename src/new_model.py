@@ -665,7 +665,7 @@ class SafeOuroThinkingExperiment:
             self.task_templates[task_type] = {
                 "system": config["system"],
                 "force_start_text": config["force_start"],
-                "stop_sequences": ["[END]", "\n```", "```python", "def ", "#", "**Final", "Example usage"],
+                "stop_sequences": ["[END]", "SAMPLE", "\n```", "```python", "def ", "#", "**Final", "Example usage"],
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
@@ -887,9 +887,9 @@ class SafeOuroThinkingExperiment:
     def _get_optimal_generation_config(self, task_type: str) -> Dict:
         """Get optimized generation parameters for task type"""
         task_token_limits = {
-            "n_ary": 256,
-            "p_hop": 256,
-            "igsm": 512,
+            "n_ary": 16,
+            "p_hop": 16,
+            "igsm": 16,
         }
         
         return {
