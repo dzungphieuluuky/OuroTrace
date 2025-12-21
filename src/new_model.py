@@ -311,7 +311,7 @@ class SafeOuroThinkingExperiment:
                     "═══════════════════════════════════════════\n"
                     "CONCRETE EXAMPLE 1:\n"
                     "═══════════════════════════════════════════\n"
-                    "Input: 100 + 200 + 300 =\n\n"
+                    "Input: Add these 3 numbers: 100 + 200 + 300\n\n"
                     
                     "Solution:\n"
                     "Step 1: 0 + 100 = 100\n"
@@ -322,7 +322,7 @@ class SafeOuroThinkingExperiment:
                     "═══════════════════════════════════════════\n"
                     "CONCRETE EXAMPLE 2:\n"
                     "═══════════════════════════════════════════\n"
-                    "Input: 807 + 696 =\n\n"
+                    "Input: Add these 2 numbers: 807 + 696\n\n"
                     
                     "Solution:\n"
                     "Step 1: 0 + 807 = 807\n"
@@ -332,7 +332,7 @@ class SafeOuroThinkingExperiment:
                     "═══════════════════════════════════════════\n"
                     "CONCRETE EXAMPLE 3:\n"
                     "═══════════════════════════════════════════\n"
-                    "Input: 50 + 25 + 10 + 5 =\n\n"
+                    "Input: Add these 4 numbers: 50 + 25 + 10 + 5\n\n"
                     
                     "Solution:\n"
                     "Step 1: 0 + 50 = 50\n"
@@ -354,14 +354,17 @@ class SafeOuroThinkingExperiment:
                     "═══════════════════════════════════════════\n"
                     "CRITICAL RULES:\n"
                     "═══════════════════════════════════════════\n"
-                    "✓ Count how many numbers are in the input\n"
-                    "✓ Show EXACTLY that many steps (2 numbers = 2 steps, 5 numbers = 5 steps)\n"
+                    "✓ READ the input to find HOW MANY numbers to add\n"
+                    "✓ The input will say \"Add these N numbers:\" - that's your count\n"
+                    "✓ Show EXACTLY N steps (no more, no less)\n"
                     "✓ Each number from the input appears in EXACTLY ONE step\n"
                     "✓ Always start with 0 in Step 1\n"
                     "✓ Each step adds ONE new number to the running total\n"
                     "✓ After all steps, write [FINAL] {answer} [END]\n"
                     "✓ STOP immediately after [END]\n\n"
                     
+                    "✗ DO NOT add numbers that aren't in the input\n"
+                    "✗ DO NOT invent additional numbers or patterns\n"
                     "✗ DO NOT skip any numbers from the input\n"
                     "✗ DO NOT add the same number twice\n"
                     "✗ DO NOT create extra steps after all numbers are used\n"
@@ -384,6 +387,7 @@ class SafeOuroThinkingExperiment:
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                     
                     "CORRECT OUTPUT:\n"
+                    "Input: Add these 2 numbers: 179 + 366\n"
                     "Step 1: 0 + 179 = 179\n"
                     "Step 2: 179 + 366 = 545\n"
                     "[FINAL] 545 [END]\n\n"
@@ -396,7 +400,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL] 545 **Final Answer**\n"
                     "You must end with [END], not **Final Answer**."
                 ),
-                "force_start": "Step 1:",
+                "force_start": "[FINAL]",
             },
             "p_hop": {
                 "system": (
@@ -514,7 +518,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL] D\n\n**Final\n"
                     "You must show the hop steps BEFORE [FINAL]."
                 ),
-                "force_start": "Hop 1:",
+                "force_start": "[FINAL]",
             },
             "igsm": {
                 "system": (
@@ -652,7 +656,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL] 8 [END]\n"
                     "8 is NOT valid. Must apply mod 7 to get a result between 0-6."
                 ),
-                "force_start": "Step 1:",
+                "force_start": "[FINAL]",
             }
         }
 
@@ -665,6 +669,7 @@ class SafeOuroThinkingExperiment:
             }
 
         print("[+] Task templates with strict format enforcement pre-computed.")
+
     @torch.inference_mode()
     def predict(
         self,
