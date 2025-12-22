@@ -8,7 +8,7 @@ import pandas as pd
 from typing import List, Dict
 
 def save_results(
-    all_results: List[Dict],
+    stats_results: List[Dict],
     perplexity_results: List[Dict],
     holistic_results: List[Dict],
     output_dir: str,
@@ -24,10 +24,10 @@ def save_results(
             os.remove(fname)
         pd.DataFrame(data).to_csv(fname, index=False)
 
-    if all_results:
-        all_file = os.path.join(output_dir, "all_latest.csv")
-        save_csv(all_results, all_file)
-        print(f"✅ Periodic save: all results to {all_file}")
+    if stats_results:
+        stats_file = os.path.join(output_dir, "all_latest.csv")
+        save_csv(stats_results, stats_file)
+        print(f"✅ Periodic save: all results to {stats_file}")
 
     if perplexity_results:
         ppl_file = os.path.join(output_dir, "perplexity_latest.csv")
@@ -38,6 +38,45 @@ def save_results(
         holistic_file = os.path.join(output_dir, "holistic_latest.csv")
         save_csv(holistic_results, holistic_file)
         print(f"✅ Periodic save: holistic results to {holistic_file}")
+
+def save_stats_results(
+    stats_results: List[Dict],
+    output_dir: str,
+    overwrite: bool = True
+) -> None:
+    """Save only stats_results to CSV file."""
+    os.makedirs(output_dir, exist_ok=True)
+    stats_file = os.path.join(output_dir, "all_latest.csv")
+    if overwrite and os.path.exists(stats_file):
+        os.remove(stats_file)
+    pd.DataFrame(stats_results).to_csv(stats_file, index=False)
+    print(f"✅ Saved all results to {stats_file}")
+
+def save_perplexity_results(
+    perplexity_results: List[Dict],
+    output_dir: str,
+    overwrite: bool = True
+) -> None:
+    """Save only perplexity_results to CSV file."""
+    os.makedirs(output_dir, exist_ok=True)
+    ppl_file = os.path.join(output_dir, "perplexity_latest.csv")
+    if overwrite and os.path.exists(ppl_file):
+        os.remove(ppl_file)
+    pd.DataFrame(perplexity_results).to_csv(ppl_file, index=False)
+    print(f"✅ Saved perplexity results to {ppl_file}")
+
+def save_holistic_results(
+    holistic_results: List[Dict],
+    output_dir: str,
+    overwrite: bool = True
+) -> None:
+    """Save only holistic_results to CSV file."""
+    os.makedirs(output_dir, exist_ok=True)
+    holistic_file = os.path.join(output_dir, "holistic_latest.csv")
+    if overwrite and os.path.exists(holistic_file):
+        os.remove(holistic_file)
+    pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)
+    print(f"✅ Saved holistic results to {holistic_file}")
 
 import json
 

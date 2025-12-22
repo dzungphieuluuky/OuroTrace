@@ -482,17 +482,17 @@ def analyze_experiment_results(
             print(f"❌ File not found: {results}")
             return {}
         df = pd.read_csv(results)
-        all_results = df.to_dict(orient="records")
+        stats_results = df.to_dict(orient="records")
     elif isinstance(results, list):
         print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (In-memory results)")
-        all_results = results
+        stats_results = results
     else:
         print("❌ Invalid input: must be a list of dicts or CSV file path.")
         return {}
     print(f"{'='*70}\n")
 
     metrics = OuroMetrics()
-    metrics.add_results(all_results)
+    metrics.add_results(stats_results)
 
     analysis_results = {}
 

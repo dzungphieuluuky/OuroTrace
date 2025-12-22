@@ -141,7 +141,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         perplexity_data = ["\n\n".join(raw_ppl_data)]
         print(f"✅ Prepared {eval_settings['ppl_num_samples']} samples for PPL\n")
 
-    all_results = []
+    stats_results = []
     holistic_results = []
 
     # 6. Main Experiment Loop (over different UT steps)
@@ -279,7 +279,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 output, item, task_type, ut_steps
                             )
                             task_results.append(result_entry)
-                            all_results.append(result_entry)
+                            stats_results.append(result_entry)
                             print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                             experiment.monitor_and_maybe_abort(result_entry, task_type)
                     
@@ -299,7 +299,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                     output, item, task_type, ut_steps
                                 )
                                 task_results.append(result_entry)
-                                all_results.append(result_entry)
+                                stats_results.append(result_entry)
                                 print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
                             except Exception as e2:
@@ -316,7 +316,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                     error_result, item, task_type, ut_steps
                                 )
                                 task_results.append(result_entry)
-                                all_results.append(result_entry)
+                                stats_results.append(result_entry)
                                 print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
             else:
@@ -338,7 +338,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             output, item, task_type, ut_steps
                         )
                         task_results.append(result_entry)
-                        all_results.append(result_entry)
+                        stats_results.append(result_entry)
                         print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                         experiment.monitor_and_maybe_abort(result_entry, task_type)
                     except Exception as e:
@@ -355,7 +355,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             error_result, item, task_type, ut_steps
                         )
                         task_results.append(result_entry)
-                        all_results.append(result_entry)
+                        stats_results.append(result_entry)
                         print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
                         experiment.monitor_and_maybe_abort(result_entry, task_type)
             
@@ -395,8 +395,8 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"📊 FINAL EXPERIMENT SUMMARY")
     print(f"{'='*70}\n")
     
-    if all_results:
-        df_all = pd.DataFrame(all_results)
+    if stats_results:
+        df_all = pd.DataFrame(stats_results)
         
         # Check for garbage outputs
         if 'is_degenerate' in df_all.columns:
@@ -444,7 +444,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # 8. Paper-Aligned Metrics Analysis
-    if all_results:
+    if stats_results:
         print(f"\n{'='*70}")
         print(f"📊 PAPER-ALIGNED ANALYSIS")
         print(f"{'='*70}\n")
@@ -469,7 +469,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         # Run analysis
         try:
             paper_metrics = analyze_experiment_results(
-                all_results,
+                stats_results,
                 model_name=model_name,
                 model_size_b=model_size_b,
                 save_plots=True
@@ -493,12 +493,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
     # Save results to csv files 
-    save_results(all_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+    save_results(stats_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
 
     # Save config file into yaml file
     save_config(config, output_dir=f"./results_{timestamp}", timestamp=timestamp)
 
-    return all_results, perplexity_results, holistic_results
+    return stats_results, perplexity_results, holistic_results
 
 
 def _create_result_entry(
@@ -629,7 +629,7 @@ def _display_sample_results(results: List[Dict[str, Any]], task_type: str, num_s
 
 # Optional: Save results function
 def save_results(
-    all_results: List[Dict],
+    stats_results: List[Dict],
     perplexity_results: List[Dict],
     holistic_results: List[Dict],
     timestamp: Optional[str] = None,
@@ -643,10 +643,10 @@ def save_results(
     if timestamp is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    if all_results:
-        all_file = os.path.join(output_dir, f"all_{timestamp}.csv")
-        pd.DataFrame(all_results).to_csv(all_file, index=False)
-        print(f"✅ Saved all results to {all_file}")
+    if stats_results:
+        stats_file = os.path.join(output_dir, f"all_{timestamp}.csv")
+        pd.DataFrame(stats_results).to_csv(stats_file, index=False)
+        print(f"✅ Saved all results to {stats_file}")
     
     if perplexity_results:
         ppl_file = os.path.join(output_dir, f"perplexity_{timestamp}.csv")
