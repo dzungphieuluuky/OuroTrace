@@ -386,6 +386,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL]",
                     "SAMPLE",
                     "\n```",
+                    "\n\n",
                     "```python",
                     "def ",
                     "#",
