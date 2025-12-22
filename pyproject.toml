@@ -49,6 +49,7 @@ dependencies = [
     "multiprocess==0.70.18",
     "networkx==3.6.1",
     "numpy<2.0.0",
+    "optimum>=2.1.0",
     "packaging==25.0",
     "pandas==2.3.3",
     "parso==0.8.5",
