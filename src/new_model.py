@@ -153,6 +153,9 @@ class SafeOuroThinkingExperiment:
         if self.use_4bit_quant:
             print("→ Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
+        # elif self.use_8bit_quant:
+        #     print("→ Applying 8-bit quantization")
+        #     quantization_config = BitsAndBytesConfig(load_in_8bit=True)
 
         # Auto-enable torch.compile only for ut_steps=1
         auto_compile = self.use_torch_compile
