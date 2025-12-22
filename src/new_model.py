@@ -306,18 +306,18 @@ class SafeOuroThinkingExperiment:
                     
                     "CONCRETE EXAMPLES:\n"
                     "EXAMPLE 1: (DO NOT COPY)\n"
-                    "Input: Add 2 numbers: 807 + 696\n"
-                    "Step 1: 0 + 807 = 807\n"
-                    "Step 2: 807 + 696 = 1503\n"
-                    "[FINAL] 1503 [END]\n\n"
+                    "Input: Add 2 numbers: {number_1} + {number_2}\n"
+                    "Step 1: 0 + {number_1} = {number_1}\n"
+                    "Step 2: {number_1} + {number_2} = {final_sum}\n"
+                    "[FINAL] {final_sum} [END]\n\n"
                     
                     "EXAMPLE 2: (DO NOT COPY)\n"
-                    "Input: Add 4 numbers: 50 + 25 + 10 + 5\n"
-                    "Step 1: 0 + 50 = 50\n"
-                    "Step 2: 50 + 25 = 75\n"
-                    "Step 3: 75 + 10 = 85\n"
-                    "Step 4: 85 + 5 = 90\n"
-                    "[FINAL] 90 [END]\n\n"
+                    "Input: Add 4 numbers: {number_1} + {number_2} + {number_3} + {number_4}\n"
+                    "Step 1: 0 + {number_1} = {number_1}\n"
+                    "Step 2: {number_1} + {number_2} = {step_2_sum}\n"
+                    "Step 3: {step_2_sum} + {number_3} = {step_3_sum}\n"
+                    "Step 4: {step_3_sum} + {number_4} = {final_sum}\n"
+                    "[FINAL] {final_sum} [END]\n\n"
                     
                     "RULES:\n"
                     "✓ Count input numbers → Show EXACTLY that many steps\n"
@@ -657,7 +657,7 @@ class SafeOuroThinkingExperiment:
             "do_sample": False,
             "num_beams": 1,
             "repetition_penalty": 1.0,
-            "temperature": 0.0,
+            "temperature": 0.7,
         }
     
     def _create_error_result(self, user_input: str, ut_steps: int, error_msg: str = "Model config error") -> Dict[str, Any]:
