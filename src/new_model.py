@@ -327,7 +327,7 @@ class SafeOuroThinkingExperiment:
                     "✗ NO inventing numbers or patterns\n"
                     "✗ NO code/explanations after [END]\n"
                 ),
-                "force_start": None,
+                "force_start": "[FINAL]",
             },
             "p_hop": {
                 "system": (
@@ -366,7 +366,7 @@ class SafeOuroThinkingExperiment:
                     "✗ NO jumping to [FINAL] without showing hops\n"
                     "✗ NO code/explanations after [END]\n"
                 ),
-                "force_start": None,
+                "force_start": "[FINAL]",
             },
             "igsm": {
                 "system": (
@@ -410,7 +410,7 @@ class SafeOuroThinkingExperiment:
                     "✗ NO continuing after query found\n"
                     "✗ NO code/explanations after [END]\n"
                 ),
-                "force_start": None,
+                "force_start": "[FINAL]",
             }
         }
 
