@@ -180,8 +180,15 @@ def load_and_preprocess_data(file_path: str) -> Dict[str, List[Dict]]:
 
 def create_reasoning_primitives_data(config: dict) -> Dict[str, List[Dict]]:
     """
-    Generates 'Reasoning Primitives' datasets as described.
-    Now includes formats matching model templates.
+    Generates 'Reasoning Primitives' datasets for depth-k variable assignment.
+    
+    Based on Saunshi et al. (2024):
+    - depth-0: Direct assignments only (a=1, b=2, c=6, b=?)
+    - depth-1: One-level indirection (a=1, b=2, c=a, d=b, d=?)
+    
+    Returns:
+        Dict[str, List[Dict]]: Task name -> list of samples
+        Each sample has: {prompt, expected_answer, difficulty, task_type, variant, depth}
     """
     if "reasoning_primitives" not in config:
         return {}
@@ -190,13 +197,29 @@ def create_reasoning_primitives_data(config: dict) -> Dict[str, List[Dict]]:
     cfg = config["reasoning_primitives"]
     num_samples = cfg.get("num_samples", 50)
     
-    # Different prompt formats for testing generalization
+    # Three variants as per paper: code, math, equation (i-GSM style)
     formats = {
-        "code": {"assign": "{var} = {val}", "query": "print({var})", "sep": "\n"},
-        "math": {"assign": "Let {var} = {val}.", "query": "What is {var}?", "sep": " "},
-        "equation": {"assign": "{var} := {val}", "query": "{var}?", "sep": ". "},  # Matches i-GSM style
+        "code": {
+            "assign_direct": "{var} = {val}",
+            "assign_indirect": "{var} = {ref}",
+            "query": "{var} = ?",
+            "sep": ", "
+        },
+        "math": {
+            "assign_direct": "Let {var} = {val}",
+            "assign_indirect": "Let {var} = {ref}",
+            "query": "{var} = ?",
+            "sep": ", "
+        },
+        "equation": {
+            "assign_direct": "{var} := {val}",
+            "assign_indirect": "{var} := {ref}",
+            "query": "{var} = ?",
+            "sep": ", "
+        },
     }
     
+    # Use single letters as variables (matches paper examples)
     chars = list("abcdefghijklmnopqrstuvwxyz")
     
     for depth in [0, 1]:
@@ -206,53 +229,59 @@ def create_reasoning_primitives_data(config: dict) -> Dict[str, List[Dict]]:
             fmt = formats[variant]
             
             for _ in range(num_samples):
-                num_vars = random.randint(5, 8)
-                vars_subset = random.sample(chars, num_vars)
-                values = {v: random.randint(0, 99) for v in vars_subset}
-                statements = []
+                # Number of variables (reasonable for context)
+                num_vars = random.randint(4, 7)
+                vars_used = random.sample(chars, num_vars)
+                
+                assignments = []
+                values = {}  # Track actual values for verification
                 
                 if depth == 0:
-                    # Direct assignments only
-                    for v in vars_subset:
-                        stmt = fmt["assign"].format(var=v, val=values[v])
-                        statements.append(stmt)
-                    target_var = random.choice(vars_subset)
-                    expected = str(values[target_var])
+                    # Depth-0: Only direct assignments (a=1, b=2, c=6)
+                    for var in vars_used:
+                        val = random.randint(0, 99)
+                        values[var] = val
+                        stmt = fmt["assign_direct"].format(var=var, val=val)
+                        assignments.append(stmt)
                     
+                    # Query a random variable
+                    target_var = random.choice(vars_used)
+                    expected = str(values[target_var])
+                
                 elif depth == 1:
-                    # Two-level hierarchy
-                    roots = vars_subset[:num_vars // 2]
-                    pointers = vars_subset[num_vars // 2:]
+                    # Depth-1: Mix of direct assignments and single-level references
+                    # Example: a=1, b=2, c=a, d=b, d=?
                     
-                    # Root assignments
-                    for v in roots:
-                        stmt = fmt["assign"].format(var=v, val=values[v])
-                        statements.append(stmt)
+                    # Split vars into roots (get direct values) and pointers (reference roots)
+                    num_roots = max(2, num_vars // 2)
+                    roots = vars_used[:num_roots]
+                    pointers = vars_used[num_roots:]
                     
-                    # Pointer assignments (reference roots)
-                    for v in pointers:
-                        src = random.choice(roots)
-                        stmt = fmt["assign"].format(var=v, val=src)
-                        statements.append(stmt)
-                        values[v] = values[src]  # Track derived value
+                    # Direct assignments for roots
+                    for var in roots:
+                        val = random.randint(0, 99)
+                        values[var] = val
+                        stmt = fmt["assign_direct"].format(var=var, val=val)
+                        assignments.append(stmt)
                     
-                    target_var = random.choice(pointers)
+                    # Indirect assignments for pointers (reference a root)
+                    for var in pointers:
+                        ref_var = random.choice(roots)
+                        values[var] = values[ref_var]  # Inherit value
+                        stmt = fmt["assign_indirect"].format(var=var, ref=ref_var)
+                        assignments.append(stmt)
+                    
+                    # Query should be one of the pointers (tests indirection)
+                    target_var = random.choice(pointers) if pointers else random.choice(roots)
                     expected = str(values[target_var])
-
-                # Shuffle statements (model must handle arbitrary order)
-                random.shuffle(statements)
                 
-                # Build prompt
-                context = fmt["sep"].join(statements)
+                # Shuffle assignments to test model's ability to handle arbitrary order
+                random.shuffle(assignments)
+                
+                # Build full prompt
+                context = fmt["sep"].join(assignments)
                 query = fmt["query"].format(var=target_var)
-                
-                # Handle different separators for query
-                if variant == "code":
-                    full_prompt = f"{context}\n{query}"
-                elif variant == "math":
-                    full_prompt = f"{context} {query}"
-                else:  # equation
-                    full_prompt = f"{context}. {query}"
+                full_prompt = f"{context}{fmt['sep']}{query}"
                 
                 samples.append({
                     "prompt": full_prompt,
@@ -270,17 +299,27 @@ def create_reasoning_primitives_data(config: dict) -> Dict[str, List[Dict]]:
 def format_5_shot_prompt(task_samples: List[Dict], current_sample: Dict, 
                          template_format: str = "plain") -> str:
     """
-    Helper to prepend 5 random examples for few-shot evaluation.
-    Supports different formatting styles.
+    Creates a 5-shot prompt by prepending 5 random examples from the task.
+    
+    Args:
+        task_samples: All samples from the current task
+        current_sample: The test sample to evaluate
+        template_format: "plain", "chat", or "instruction"
+    
+    Returns:
+        str: Full prompt with 5-shot examples + test query
     """
+    # Sample 5 different examples (exclude current)
     pool = [s for s in task_samples if s["prompt"] != current_sample["prompt"]]
+    
     if len(pool) < 5:
-        shots = pool
+        shots = pool  # Use all available if less than 5
     else:
         shots = random.sample(pool, 5)
     
+    # Format based on template style
     if template_format == "chat":
-        # Format for chat models
+        # Chat format (e.g., for ChatGPT-style models)
         demos = []
         for shot in shots:
             demos.append(f"User: {shot['prompt']}")
@@ -290,15 +329,23 @@ def format_5_shot_prompt(task_samples: List[Dict], current_sample: Dict,
         final_prompt = f"{few_shot_context}\nUser: {current_sample['prompt']}\nAssistant:"
     
     elif template_format == "instruction":
-        # Instruction-response format
+        # Instruction-following format (e.g., Alpaca-style)
         demos = []
         for shot in shots:
-            demos.append(f"### Instruction:\n{shot['prompt']}\n\n### Response:\n{shot['expected_answer']}")
+            demos.append(
+                f"### Instruction:\n{shot['prompt']}\n\n"
+                f"### Response:\n{shot['expected_answer']}"
+            )
         
         few_shot_context = "\n\n".join(demos)
-        final_prompt = f"{few_shot_context}\n\n### Instruction:\n{current_sample['prompt']}\n\n### Response:"
+        final_prompt = (
+            f"{few_shot_context}\n\n"
+            f"### Instruction:\n{current_sample['prompt']}\n\n"
+            f"### Response:"
+        )
     
-    else:  # plain format (default)
+    else:  # plain format (most common for base models)
+        # Simple question-answer format
         demos = []
         for shot in shots:
             demos.append(f"{shot['prompt']}\nAnswer: {shot['expected_answer']}")
