@@ -6,31 +6,6 @@ from tqdm.auto import tqdm
 from typing import List, Dict
 from .data_generator import create_reasoning_primitives_data, format_5_shot_prompt
 
-def analyze_experiment_results(accuracy_results: list, perplexity_results: list = None):
-    """Generate summary statistics dataframe"""
-    if not accuracy_results:
-        return pd.DataFrame()
-
-    df = pd.DataFrame(accuracy_results)
-
-    # Group by UT steps and task
-    summary = (
-        df.groupby(["ut_steps", "task_type"])
-        .agg(
-            {
-                "is_correct": ["mean", "count", "std"],
-                "generation_time": ["mean", "min", "max"],
-                "generated_tokens": ["mean"],
-            }
-        )
-        .round(3)
-    )
-
-    # Flatten columns
-    summary.columns = ["_".join(col).strip() for col in summary.columns.values]
-    return summary
-
-
 def load_and_process_results(file_path: str):
     """Load results CSV and add derived features"""
     try:
