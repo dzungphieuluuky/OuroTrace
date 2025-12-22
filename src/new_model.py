@@ -296,6 +296,9 @@ class SafeOuroThinkingExperiment:
         """
         self.tokenizer = tokenizer
 
+        "Use task prompts version 7 from claude (much shorter tha previous ones)"
+        "Version 5 takes around 75-85s to process a batch of nary"
+        "Version 7 takes just 18s to process a batch of nary (same quality)"
         task_configs = {
             "n_ary": {
                 "system": (
