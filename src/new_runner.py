@@ -165,12 +165,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             # AUTO-OPTIMIZATION: Determine if batching should be enabled
             enable_batch = optimization_config.get("enable_batch", True)
             
-            print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
-            print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-            print(f"   Torch Compile: {'✅ ENABLED' if model_config.get('use_torch_compile', True) else '❌ DISABLED'}")
-            print(f"   NOTE: torch.compile is not the culprit, batching with generate(), not with generate_batch() function.")
-            print()
-
             # Load model with specific UT steps configuration
             try:
                 model, tokenizer, model_config, config_dict = experiment.load_model_with_ut_steps(ut_steps)
@@ -518,7 +512,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 
                 for metric_name, df in paper_metrics.items():
                     if not df.empty:
-                        filename = f"./results_{timestamp}/{metric_name}_{timestamp}.csv"
+                        filename = os.path.join(output_dir, f"{metric_name}_{timestamp}.csv")
                         df.to_csv(filename, index=False)
                         print(f"✅ Saved {metric_name} to {filename}")
             

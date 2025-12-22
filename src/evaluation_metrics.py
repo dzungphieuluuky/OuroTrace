@@ -465,51 +465,65 @@ class PaperComplianceChecker:
 # ==============================================================================
 
 def analyze_experiment_results(
-    all_results: List[Dict],
+    results: Any,
     model_name: str = "Ouro-1.4B",
     model_size_b: float = 1.4,
     save_plots: bool = True
 ) -> Dict[str, pd.DataFrame]:
     """
-    Complete analysis function to add to your runner.py
+    Unified analysis function.
+    Accepts either a list of dicts (in-memory results) or a CSV file path.
+    Returns: Dict[str, pd.DataFrame] with all metrics and summary tables.
     """
     print(f"\n{'='*70}")
-    print(f"📊 PAPER-ALIGNED METRICS ANALYSIS")
+    if isinstance(results, str):
+        print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (CSV: {results})")
+        if not os.path.exists(results):
+            print(f"❌ File not found: {results}")
+            return {}
+        df = pd.read_csv(results)
+        all_results = df.to_dict(orient="records")
+    elif isinstance(results, list):
+        print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (In-memory results)")
+        all_results = results
+    else:
+        print("❌ Invalid input: must be a list of dicts or CSV file path.")
+        return {}
     print(f"{'='*70}\n")
-    
+
     metrics = OuroMetrics()
     metrics.add_results(all_results)
-    
+
     analysis_results = {}
-    
+
     # Metric 1: Accuracy vs UT Steps
     print("📈 Computing Accuracy vs UT Steps...")
     acc_by_ut = metrics.compute_accuracy_by_ut_steps()
     analysis_results['accuracy_by_ut'] = acc_by_ut
     print(acc_by_ut.to_string(index=False))
     print()
-    
+
     # Metric 2: Depth Efficiency
     print("📈 Computing Depth Efficiency...")
     depth_eff = metrics.compute_depth_efficiency()
     analysis_results['depth_efficiency'] = depth_eff
     print(depth_eff.to_string(index=False))
     print()
-    
+
     # Metric 3: Parameter Efficiency
     print("📈 Computing Parameter Efficiency...")
     param_eff = metrics.compute_parameter_efficiency(model_size_b=model_size_b)
     analysis_results['param_efficiency'] = param_eff
     print(param_eff.to_string(index=False))
     print()
-    
+
     # Metric 4: Throughput Efficiency
     print("📈 Computing Throughput Efficiency...")
     throughput = metrics.compute_throughput_efficiency()
     analysis_results['throughput'] = throughput
     print(throughput.to_string(index=False))
     print()
-    
+
     # Metric 7: Reasoning Trace Quality
     print("📈 Computing Reasoning Trace Quality...")
     trace_quality = metrics.compute_reasoning_trace_quality()
@@ -517,21 +531,21 @@ def analyze_experiment_results(
         analysis_results['trace_quality'] = trace_quality
         print(trace_quality.to_string(index=False))
         print()
-    
+
     # Generate summary table
     print("📋 Generating Paper-Style Summary Table...")
     summary_table = metrics.generate_paper_style_table(model_name=model_name)
     analysis_results['summary_table'] = summary_table
     print(summary_table.to_string(index=False))
     print()
-    
+
     # Generate plots
     if save_plots:
         print("📊 Generating plots...")
         metrics.generate_paper_style_plots()
         print("✅ Plots saved to ./plots/")
         print()
-    
+
     print(f"{'='*70}\n")
-    
+
     return analysis_results
