@@ -210,12 +210,12 @@ class SafeOuroThinkingExperiment:
             quantization_config=quantization_config,
         )
 
-        try:
-            from optimum.bettertransformer import BetterTransformer
-            model = BetterTransformer.transform(model, keep_original_model=True) 
-            print("✓ BetterTransformer enabled")
-        except Exception as e:
-            print(f"✗ BetterTransformer not available: {e}")
+        # try:
+        #     from optimum.bettertransformer import BetterTransformer
+        #     model = BetterTransformer.transform(model, keep_original_model=True) 
+        #     print("✓ BetterTransformer enabled")
+        # except Exception as e:
+        #     print(f"✗ BetterTransformer not available: {e}")
 
         # Apply torch.compile only for UT=1
         if auto_compile:
@@ -434,7 +434,7 @@ class SafeOuroThinkingExperiment:
             }
     
         print("[+] Task templates with strict format enforcement pre‑computed.")
-                
+
     @torch.inference_mode()
     def predict(
         self,
