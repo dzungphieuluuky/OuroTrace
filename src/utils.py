@@ -39,18 +39,18 @@ def save_results(
         save_csv(holistic_results, holistic_file)
         print(f"✅ Periodic save: holistic results to {holistic_file}")
 
-import yaml
+import json
 
 def save_config(
     config: dict,
     output_dir: str = "./default_config",
     experiment=None
 ) -> None:
-    """Save experiment configuration and task templates to YAML files."""
+    """Save experiment configuration and task templates to JSON files."""
     import os
     os.makedirs(output_dir, exist_ok=True)
-    config_path = os.path.join(output_dir, "config.yaml")
-    templates_path = os.path.join(output_dir, "task_templates.yaml")
+    config_path = os.path.join(output_dir, "config.json")
+    templates_path = os.path.join(output_dir, "task_templates.json")
 
     def sanitize_config(cfg):
         clean = {}
@@ -65,12 +65,11 @@ def save_config(
 
     # Save config
     with open(config_path, 'w', encoding='utf-8') as f:
-        yaml.dump(
+        json.dump(
             sanitize_config(config),
             f,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=False
+            indent=2,
+            ensure_ascii=False
         )
     print(f"✅ Configuration saved to {config_path}")
 
@@ -89,22 +88,15 @@ def save_config(
 
         templates_to_save = sanitize_templates(experiment.task_templates)
 
-        # Custom representer for block style multiline strings
-        def str_presenter(dumper, data):
-            if '\n' in data:
-                return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
-            return dumper.represent_scalar('tag:yaml.org,2002:str', data)
-        yaml.add_representer(str, str_presenter)
-
         with open(templates_path, 'w', encoding='utf-8') as f:
-            yaml.dump(
+            json.dump(
                 templates_to_save,
                 f,
-                default_flow_style=False,
-                allow_unicode=True,
-                sort_keys=False
+                indent=2,
+                ensure_ascii=False
             )
         print(f"✅ Task templates saved to {templates_path}")
+
 def configure_environment_paths():
     """Detect environment and configure paths"""
     try:
