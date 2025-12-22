@@ -303,30 +303,20 @@ class SafeOuroThinkingExperiment:
             "n_ary": {
                 "system": (
                     "You solve ADDITION by adding numbers one at a time.\n\n"
-                    "CONCRETE EXAMPLES:\n"
-                    # Example 1 – two numbers
-                    "EXAMPLE 1: (DO NOT COPY)\n"
-                    "Input: Add {num_count} numbers: {num_1} + {num_2}\n"
-                    "Step 1: 0 + {num_1} = {num_1}\n"
-                    "Step 2: {num_1} + {num_2} = {final_sum}\n"
-                    "[FINAL] {final_sum} [END]\n\n"
-                    # Example 2 – four numbers
-                    "EXAMPLE 2: (DO NOT COPY)\n"
-                    "Input: Add {num_count} numbers: {num_1} + {num_2} + {num_3} + {num_4}\n"
-                    "Step 1: 0 + {num_1} = {num_1}\n"
-                    "Step 2: {num_1} + {num_2} = {step_2_sum}\n"
-                    "Step 3: {step_2_sum} + {num_3} = {step_3_sum}\n"
-                    "Step 4: {step_3_sum} + {num_4} = {final_sum}\n"
-                    "[FINAL] {final_sum} [END]\n\n"
+                    "EXAMPLES:\n"
+                    "Input: Add 2 numbers: 234 + 567\n"
+                    "[FINAL] 801 [END]\n\n"
+                    "Input: Add 4 numbers: 120 + 88 + 45 + 37\n"
+                    "[FINAL] 290 [END]\n\n"
                     "RULES:\n"
-                    "✓ Count input numbers → Show EXACTLY that many steps\n"
-                    "✓ Start with 0, add one number per step\n"
-                    "✓ Use ONLY numbers from input (no inventing)\n"
+                    "✓ Show ONLY the final answer, no intermediate steps.\n"
+                    "✓ Start with 0, add one number per step (but steps are hidden).\n"
+                    "✓ Use ONLY numbers from input (no inventing).\n"
                     "✓ After final step: [FINAL] {answer} [END]\n"
                     "✓ STOP at [END]\n\n"
-                    "✗ NO extra steps after all input numbers used\n"
-                    "✗ NO inventing numbers or patterns\n"
-                    "✗ NO code/explanations after [END]\n"
+                    "✗ NO extra steps after all input numbers used.\n"
+                    "✗ NO inventing numbers or patterns.\n"
+                    "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -334,37 +324,23 @@ class SafeOuroThinkingExperiment:
             "p_hop": {
                 "system": (
                     "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\n"
-                    "CONCRETE EXAMPLES:\n"
-                    # Example 1
-                    "EXAMPLE 1: (DO NOT COPY)\n"
-                    "Input: Sequence: {seq_tokens} | Start: {start_token} | Hops: {hop_count}\n"
-                    "Hop 1: At {start_token} → Next is {hop1_next}\n"
-                    "Hop 2: At {hop1_next} → Next is {hop2_next}\n"
-                    "Hop 3: At {hop2_next} → Next is {hop3_next}\n"
-                    "[FINAL] {final_token} [END]\n\n"
-                    # Example 2
-                    "EXAMPLE 2: (DO NOT COPY)\n"
-                    "Input: Sequence: {seq_tokens} | Start: {start_token} | Hops: {hop_count}\n"
-                    "Hop 1: At {start_token} → Next is {hop1_next}\n"
-                    "Hop 2: At {hop1_next} → Next is {hop2_next}\n"
-                    "Hop 3: At {hop2_next} → Next is {hop3_next}\n"
-                    "Hop 4: At {hop3_next} → Next is {hop4_next}\n"
-                    "[FINAL] {final_token} [END]\n\n"
-                    # Example 3 – shorter sequence
-                    "Input: Sequence: {seq_tokens} | Start: {start_token} | Hops: {hop_count}\n"
-                    "Hop 1: At {start_token} → Next is {hop1_next}\n"
-                    "Hop 2: At {hop1_next} → Next is {hop2_next}\n"
-                    "[FINAL] {final_token} [END]\n\n"
+                    "EXAMPLES:\n"
+                    "Input: Sequence: A B C D E | Start: A | Hops: 3\n"
+                    "[FINAL] D [END]\n\n"
+                    "Input: Sequence: C A D B A C | Start: C | Hops: 4\n"
+                    "[FINAL] A [END]\n\n"
+                    "Input: Sequence: D D A B C | Start: D | Hops: 2\n"
+                    "[FINAL] A [END]\n\n"
                     "RULES:\n"
-                    "✓ HIDE EVERY hop (N hops = N lines)\n"
-                    "✓ ONLY show the final token after all hops\n"
-                    "✓ Each hop moves one position forward\n"
-                    "✓ Use ONLY tokens from input sequence\n"
-                    "✓ After final hop: [FINAL] {final_token} [END]\n"
+                    "✓ Show ONLY the final token, no hop details.\n"
+                    "✓ Each hop moves one position forward (but hops are hidden).\n"
+                    "✓ Use ONLY tokens from input sequence.\n"
+                    "✓ After final hop: [FINAL] {token} [END]\n"
                     "✓ STOP at [END]\n\n"
-                    "✗ NO skipping hops\n"
-                    "✗ NO inventing tokens\n"
-                    "✗ NO code/explanations after [END]\n"
+                    "✗ NO skipping hops.\n"
+                    "✗ NO inventing tokens.\n"
+                    "✗ NO jumping to [FINAL] without showing hops.\n"
+                    "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -372,42 +348,26 @@ class SafeOuroThinkingExperiment:
             "igsm": {
                 "system": (
                     "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\n"
-                    "Valid results: 0-6 only.\n\n"
+                    "Valid results: 0‑6 only.\n\n"
                     "MOD 7 QUICK REFERENCE:\n"
                     "5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\n"
-                    "CONCRETE EXAMPLES:\n"
-                    # Example 1
-                    "EXAMPLE 1: (DO NOT COPY)\n"
-                    "Input: {var_a} := {val_a} | {var_b} := {var_a} + {val_b} | Query: {var_b}\n"
-                    "Step 1: {var_a} = {val_a} (mod 7) = {mod_a}\n"
-                    "Step 2: {var_b} = {var_a} + {val_b} = {val_a} + {val_b} = {sum_b} (mod 7) = {mod_b}\n"
-                    "[FINAL] {mod_b} [END]\n\n"
-                    # Example 2
-                    "EXAMPLE 2: (DO NOT COPY)\n"
-                    "Input: {var_x} := {val_x} | {var_y} := {val_y} | {var_z} := {var_x} + {var_y} | Query: {var_z}\n"
-                    "Step 1: {var_x} = {val_x} (mod 7) = {mod_x}\n"
-                    "Step 2: {var_y} = {val_y} (mod 7) = {mod_y}\n"
-                    "Step 3: {var_z} = {var_x} + {var_y} = {val_x} + {val_y} = {sum_z} (mod 7) = {mod_z}\n"
-                    "[FINAL] {mod_z} [END]\n\n"
-                    # Example 3
-                    "EXAMPLE 3: (DO NOT COPY)\n"
-                    "Input: {var_p} := {val_p} | {var_q} := {var_p} | {var_r} := {var_q} + {var_p} | Query: {var_r}\n"
-                    "Step 1: {var_p} = {val_p} (mod 7) = {mod_p}\n"
-                    "Step 2: {var_q} = {var_p} = {val_p} (mod 7) = {mod_q}\n"
-                    "Step 3: {var_r} = {var_q} + {var_p} = {val_p} + {val_p} = {sum_r} (mod 7) = {mod_r}\n"
-                    "[FINAL] {mod_r} [END]\n\n"
+                    "EXAMPLES:\n"
+                    "Input: A := 5 | B := A + 3 | Query: B\n"
+                    "[FINAL] 1 [END]\n\n"
+                    "Input: X := 10 | Y := 4 | Z := X + Y | Query: Z\n"
+                    "[FINAL] 0 [END]\n\n"
+                    "Input: P := 8 | Q := P | R := Q + P | Query: R\n"
+                    "[FINAL] 2 [END]\n\n"
                     "RULES:\n"
-                    "✓ Process every assignment in order\n"
-                    "✓ Substitute variable values immediately\n"
-                    "✓ Perform calculation before applying mod 7\n"
-                    "✓ Final answer must be 0-6\n"
-                    "✓ Just show the final answer\n"
+                    "✓ Process every assignment in order (but calculations are hidden).\n"
+                    "✓ Show ONLY the final answer, no intermediate calculations.\n"
+                    "✓ Final answer must be 0‑6.\n"
                     "✓ After query variable: [FINAL] {answer} [END]\n"
                     "✓ STOP at [END]\n\n"
-                    "✗ NO skipping assignments\n"
-                    "✗ NO results outside 0-6\n"
-                    "✗ NO continuing after query found\n"
-                    "✗ NO code/explanations after [END]\n"
+                    "✗ NO skipping assignments.\n"
+                    "✗ NO results outside 0‑6.\n"
+                    "✗ NO continuing after query found.\n"
+                    "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
             },
@@ -489,7 +449,7 @@ class SafeOuroThinkingExperiment:
                 print("   ✓ Prompt follows chat format")
             else:
                 print("   ⚠️ Prompt does NOT follow chat format!")
-                
+
             prompts.append(prompt)
 
         # Tokenize with padding
