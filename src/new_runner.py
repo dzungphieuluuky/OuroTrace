@@ -143,7 +143,9 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     # 6. Setup output directory and periodic saving
     from datetime import datetime
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir = f"./results_{timestamp}"
+
+    # use .. to save results outside OuroTrace directory for easy downloading on kaggle/colab
+    output_dir = f"../results_{timestamp}"
     os.makedirs(output_dir, exist_ok=True)
 
     # Save config ONCE at the start
