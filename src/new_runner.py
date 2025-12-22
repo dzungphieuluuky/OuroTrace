@@ -405,8 +405,9 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 
                 try:
                     holistic_eval = run_holistic_evaluation(model, tokenizer, config)
-                    holistic_eval['ut_steps'] = ut_steps
-                    holistic_results.append(holistic_eval)
+                    for result in holistic_eval:
+                        result['ut_steps'] = ut_steps
+                        holistic_results.append(result)
                     print(f"✅ Holistic evaluation completed\n")
                 except Exception as e:
                     print(f"⚠️ Holistic evaluation failed: {e}\n")
