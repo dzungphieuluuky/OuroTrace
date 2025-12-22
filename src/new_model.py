@@ -291,8 +291,8 @@ class SafeOuroThinkingExperiment:
 
     def _build_task_templates(self, tokenizer):
         """
-        Pre-compute prompt templates AND pre-tokenize system prompts + force_start.
-        This eliminates redundant tokenization during inference.
+        Pre-compute ALL tokenization components including user message wrapper.
+        This eliminates ALL redundant tokenization during inference.
         """
         self.tokenizer = tokenizer
 
@@ -317,7 +317,6 @@ class SafeOuroThinkingExperiment:
                 ),
                 "force_start": "[FINAL]",
             },
-
             "p_hop": {
                 "system": (
                     "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\n"
@@ -341,7 +340,6 @@ class SafeOuroThinkingExperiment:
                 ),
                 "force_start": "[FINAL]",
             },
-
             "igsm": {
                 "system": (
                     "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\n"
@@ -370,58 +368,98 @@ class SafeOuroThinkingExperiment:
             },        
         }
 
+        # Pre-compute generation configs (move outside predict loop)
+        task_generation_configs = {
+            "n_ary": GenerationConfig(
+                max_new_tokens=16,
+                min_new_tokens=2,
+                do_sample=False,
+                num_beams=1,
+                repetition_penalty=1.0,
+                temperature=0.7,
+            ),
+            "p_hop": GenerationConfig(
+                max_new_tokens=16,
+                min_new_tokens=2,
+                do_sample=False,
+                num_beams=1,
+                repetition_penalty=1.0,
+                temperature=0.7,
+            ),
+            "igsm": GenerationConfig(
+                max_new_tokens=16,
+                min_new_tokens=2,
+                do_sample=False,
+                num_beams=1,
+                repetition_penalty=1.0,
+                temperature=0.7,
+            ),
+        }
+
         # Build templates with pre-tokenized components
         self.task_templates = {}
         
         for task_type, config in task_configs.items():
-            # Step 1: Apply chat template to system prompt (without generation prompt)
-            system_messages = [
-                {"role": "system", "content": config["system"]}
-            ]
+            # Step 1: Pre-tokenize system prompt
+            system_messages = [{"role": "system", "content": config["system"]}]
             system_text = tokenizer.apply_chat_template(
                 system_messages,
                 tokenize=False,
-                add_generation_prompt=False,  # Don't add generation prompt yet
+                add_generation_prompt=False,
             )
+            system_tokens = tokenizer.encode(system_text, add_special_tokens=False)
             
-            # Step 2: Tokenize system prompt (without EOS)
-            system_tokens = tokenizer.encode(
-                system_text,
-                add_special_tokens=False,  # System already has special tokens from template
-            )
-            
-            # Step 3: Tokenize force_start (without special tokens)
+            # Step 2: Pre-tokenize force_start
             force_start_tokens = tokenizer.encode(
                 config["force_start"],
                 add_special_tokens=False,
             )
+            
+            # Step 3: Pre-compute user message wrapper tokens
+            # Get the template structure WITHOUT actual content
+            dummy_user_msg = [{"role": "user", "content": "PLACEHOLDER"}]
+            user_template_text = tokenizer.apply_chat_template(
+                dummy_user_msg,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+            
+            # Split into prefix and suffix around PLACEHOLDER
+            # This allows us to only tokenize the actual user content
+            if "PLACEHOLDER" in user_template_text:
+                prefix, suffix = user_template_text.split("PLACEHOLDER", 1)
+                user_prefix_tokens = tokenizer.encode(prefix, add_special_tokens=False)
+                user_suffix_tokens = tokenizer.encode(suffix, add_special_tokens=False)
+            else:
+                # Fallback: tokenize whole template
+                user_prefix_tokens = []
+                user_suffix_tokens = tokenizer.encode(user_template_text, add_special_tokens=False)
             
             self.task_templates[task_type] = {
                 # Original strings (for debugging)
                 "system": config["system"],
                 "force_start_text": config["force_start"],
                 
-                # Pre-tokenized components (for fast inference)
+                # Pre-tokenized components
                 "system_tokens": system_tokens,
+                "user_prefix_tokens": user_prefix_tokens,  # NEW: "<|im_start|>user\n"
+                "user_suffix_tokens": user_suffix_tokens,  # NEW: "\n<|im_end|>\n<|im_start|>assistant\n"
                 "force_start_tokens": force_start_tokens,
+                
+                # Pre-computed generation config
+                "generation_config": task_generation_configs[task_type],
                 
                 # Stop sequences
                 "stop_sequences": [
-                    "[END]",
-                    "[FINAL]",
-                    "SAMPLE",
-                    "\n```",
-                    "\n\n",
-                    "```python",
-                    "def ",
-                    "#",
-                    "**Final",
-                    "Example usage",
+                    "[END]", "[FINAL]", "SAMPLE", "\n```", "\n\n",
+                    "```python", "def ", "#", "**Final", "Example usage",
                 ],
             }
         
         print("[+] Task templates with pre-tokenized components computed.")
         print(f"    System tokens: {len(self.task_templates['n_ary']['system_tokens'])} tokens")
+        print(f"    User prefix tokens: {len(self.task_templates['n_ary']['user_prefix_tokens'])} tokens")
+        print(f"    User suffix tokens: {len(self.task_templates['n_ary']['user_suffix_tokens'])} tokens")
         print(f"    Force start tokens: {len(self.task_templates['n_ary']['force_start_tokens'])} tokens")
 
 
@@ -437,8 +475,8 @@ class SafeOuroThinkingExperiment:
         enable_batch: bool = True,
     ) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
         """
-        Optimized prediction with pre-tokenized system prompts.
-        Speed improvement: 10-30% faster preprocessing.
+        Ultra-optimized prediction with minimal per-sample overhead.
+        All templates and configs are pre-computed.
         """
         is_single = isinstance(user_inputs, str)
         if is_single:
@@ -455,85 +493,71 @@ class SafeOuroThinkingExperiment:
         template = self.task_templates[task_type]
         device = model.device
 
-        # Pre-tokenized components (constant across all samples)
+        # Pre-computed constant components (no computation here!)
         system_tokens = torch.tensor(template["system_tokens"], dtype=torch.long)
+        user_prefix_tokens = torch.tensor(template["user_prefix_tokens"], dtype=torch.long)
+        user_suffix_tokens = torch.tensor(template["user_suffix_tokens"], dtype=torch.long)
         force_start_tokens = torch.tensor(template["force_start_tokens"], dtype=torch.long)
 
-        # Tokenize user inputs only (the variable part)
-        user_input_ids_list = []
-        for user_input in user_inputs:
-            # Apply chat template to user message with generation prompt
-            user_messages = [
-                {"role": "user", "content": user_input}
-            ]
-            user_text = tokenizer.apply_chat_template(
-                user_messages,
-                tokenize=False,
-                add_generation_prompt=True,  # Add generation prompt for user
-            )
-            
-            # Tokenize user input
-            user_tokens = tokenizer.encode(
-                user_text,
-                add_special_tokens=False,
-            )
-            user_input_ids_list.append(torch.tensor(user_tokens, dtype=torch.long))
+        # OPTIMIZATION: Batch tokenize all user inputs at once
+        # This is faster than tokenizing one by one
+        user_contents_only = tokenizer(
+            user_inputs,
+            add_special_tokens=False,
+            padding=False,  # We'll pad manually later
+            truncation=False,
+        )["input_ids"]
 
-        # Concatenate: [system_tokens] + [user_tokens] + [force_start_tokens]
+        # Build full sequences: [system] + [user_prefix] + [content] + [user_suffix] + [force_start]
         concatenated_input_ids = []
-        for user_ids in user_input_ids_list:
+        for content_tokens in user_contents_only:
+            content_tensor = torch.tensor(content_tokens, dtype=torch.long)
             full_sequence = torch.cat([
                 system_tokens,
-                user_ids,
+                user_prefix_tokens,
+                content_tensor,        # ONLY this varies per input
+                user_suffix_tokens,
                 force_start_tokens,
             ])
             concatenated_input_ids.append(full_sequence)
 
-        # Pad sequences to same length
+        # Efficient padding with pre-allocation
         max_len = max(seq.size(0) for seq in concatenated_input_ids)
+        batch_size = len(concatenated_input_ids)
         
-        input_ids_padded = []
-        attention_masks = []
-        input_lengths = []
+        # Pre-allocate tensors (faster than appending to list)
+        input_ids_padded = torch.full(
+            (batch_size, max_len), 
+            tokenizer.pad_token_id, 
+            dtype=torch.long
+        )
+        attention_masks = torch.zeros((batch_size, max_len), dtype=torch.long)
+        input_lengths = torch.zeros(batch_size, dtype=torch.long)
         
-        for seq in concatenated_input_ids:
+        for i, seq in enumerate(concatenated_input_ids):
             seq_len = seq.size(0)
-            input_lengths.append(seq_len)
+            input_lengths[i] = seq_len
             
-            # Pad on the left (common for decoder-only models)
+            # Left padding for decoder-only models
             pad_len = max_len - seq_len
-            if pad_len > 0:
-                padding = torch.full((pad_len,), tokenizer.pad_token_id, dtype=torch.long)
-                padded_seq = torch.cat([padding, seq])
-                attention_mask = torch.cat([
-                    torch.zeros(pad_len, dtype=torch.long),
-                    torch.ones(seq_len, dtype=torch.long)
-                ])
-            else:
-                padded_seq = seq
-                attention_mask = torch.ones(seq_len, dtype=torch.long)
-            
-            input_ids_padded.append(padded_seq)
-            attention_masks.append(attention_mask)
+            input_ids_padded[i, pad_len:] = seq
+            attention_masks[i, pad_len:] = 1
 
-        # Stack into batch tensors
-        input_ids = torch.stack(input_ids_padded).to(device)
-        attention_mask = torch.stack(attention_masks).to(device)
-        input_lengths = torch.tensor(input_lengths, dtype=torch.long)
+        # Move to device once
+        input_ids = input_ids_padded.to(device)
+        attention_mask = attention_masks.to(device)
 
-        # Optional: Debug first sample
-        if len(user_inputs) > 0:
-            debug_text = tokenizer.decode(input_ids[0], skip_special_tokens=False)
-            print(f"\n[DEBUG] Reconstructed prompt for first sample:\n{debug_text}\n")
-
-        # Generation config
-        default_config = self._get_optimal_generation_config(task_type)
+        # Use pre-computed generation config
+        gen_config = template["generation_config"]
         if generation_config:
-            default_config.update(generation_config)
+            # Create new config to avoid modifying cached one
+            gen_config = GenerationConfig(**{**gen_config.to_dict(), **generation_config})
+        
+        # Add stop sequences
+        gen_config.stop_strings = template["stop_sequences"]
 
         # Generate
         start_time = time.perf_counter()
-        default_config["stop_strings"] = template["stop_sequences"]
         
         try:
             outputs = model.generate(
@@ -545,7 +569,7 @@ class SafeOuroThinkingExperiment:
                 tokenizer=tokenizer,
                 return_dict_in_generate=True,
                 output_scores=False,
-                generation_config=GenerationConfig(**default_config),
+                generation_config=gen_config,
             )
         except Exception as e:
             print(f"❌ Generation failed: {e}")
@@ -554,13 +578,12 @@ class SafeOuroThinkingExperiment:
 
         total_generation_time = time.perf_counter() - start_time
         
-        # Process results
+        # Process results (this part is still per-sample)
         results = []
         for i in range(len(user_inputs)):
-            # Get generated tokens (exclude input)
             generated_ids = outputs.sequences[i, input_ids.shape[1]:]
             
-            # Remove padding from generated tokens
+            # Remove padding
             pad_token_id = tokenizer.pad_token_id
             if pad_token_id is not None:
                 non_pad_mask = generated_ids != pad_token_id
@@ -572,16 +595,13 @@ class SafeOuroThinkingExperiment:
             generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
             full_response = template["force_start_text"] + " " + generated_text
             
-            # Count actual tokens
             actual_generated_tokens = len(generated_ids)
             
-            # Check for issues
+            # Quality checks
             self.check_repeated_outputs_and_abort(full_response)
             is_degenerate = self._detect_degenerate_output(full_response)
 
             if is_degenerate:
-                print(f"⚠️ GARBAGE OUTPUT detected for {task_type} (batch item {i})")
-                print(f"   Response preview: {full_response[:200]}...")
                 pred = "DEGENERATE"
             else:
                 pred = self._extract_final_answer(full_response, task_type)
