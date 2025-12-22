@@ -94,7 +94,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
                 holistic_results.append({
                     "task_category": "Reasoning Primitive",
                     "task_name": task_name,
-                    "prompt": prompt[-100:] + "...",  # Log last 100 chars for debugging
+                    "prompt": prompt,  # Log last 100 chars for debugging
                     "prediction": generated,
                     "target": item["expected_answer"],
                     "is_correct": is_correct,
