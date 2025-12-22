@@ -1,0 +1,4884 @@
+task_type,difficulty,test_input,expected_answer,is_correct,test_id,ut_steps,full_response,prediction,generation_time,generated_tokens,input_tokens,prompt_idx
+n_ary,4_ops,881 + 208 + 092 + 234 =,1415,False,47418885,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 881: 0 + 881 = 881
+[STEP 3] Current: 881
+[STEP 4] Addd 208: 881 + 208 = 1099
+[STEP 5] Current: 1099
+[STEP 6] Addd 092: 1099 & 092 = 1191
+[STEP 7] Current: 1191
+[STEP 8] Add 234: 1191 & 234 = 1425
+[FI] 1425",0,9.224215419750003,158,195,0
+n_ary,4_ops,840 + 541 + 637 + 168 =,2186,False,e913d909,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 840: 0 + 840 = 840
+[STEP 3] Current: 840
+[STEP 4] Addd 541: 840 + 541 = 1381
+[STEP 5] Current: 1381
+[STEP 6] Addd 637: 1381 + 637 = 7918
+[STEP 7] Current: 7918
+[STEP 8] Addd 168: 7918 + 168 = 9586
+[FINAL] 9586",9586,9.224215419750003,160,195,1
+n_ary,4_ops,099 + 727 + 389 + 929 =,2144,False,75bbceca,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 099: 0 + 099 = 099
+[STEP 3] Current: 099
+[STEP 4] Addd 727: 099 + 727 = 727
+[STEP 5] Current: 099
+[STEP 6] Add  0999 + 0999 = 0999
+[FI] 0999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",0,9.224215419750003,512,195,2
+n_ary,4_ops,602 + 334 + 762 + 232 =,1930,False,4945a58b,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 20: 0 + 20 = 20
+[STEP 3] Current: 20
+[STEP 4] Add 334: 20 + 334 = 354
+[STEP 5] Current: 354
+[STEP 6] Add 762: 354 + 762 = 1116
+[STEP 7] Current: 1116
+[STEP 8] Add 232: 1116 + 232 = 1348
+[FINAL] 1348",1348,9.224215419750003,148,195,3
+n_ary,4_ops,822 + 337 + 234 + 794 =,2187,True,c25d028f,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 822: 0 + 822 = 822
+[STEP 3] Current: 822
+[STEP 4] Addd 337: 822 + 337 = 1159
+[STEP 5] Current: 1159
+[STEP 6] Addd 234: 1159 + 234 = 1393
+[STEP 7] Current: 1393
+[STEP 8] Addd 794: 1393 + 794 = 2187
+[FINAL] 2187",2187,9.224215419750003,160,195,4
+n_ary,4_ops,505 + 615 + 034 + 468 =,1622,True,7354a30e,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 505: 0 + 505 = 505
+[STEP 3] Current: 505
+[STEP 4] Addd 615: 505 + 615 = 1120
+[STEP 5] Current: 1120
+[STEP 6] Addd 034: 1120 + 034 = 1154
+[STEP 7] Current: 1154
+[STEP 8] Addd 468: 1154 + 468 = 1622
+[FINAL] 1622",1622,9.224215419750003,160,195,5
+n_ary,4_ops,317 + 671 + 212 + 191 =,1391,False,f3901896,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 1o: 0 + 31o = 317
+[STEP 3] Current:: 317
+[STEP 4] Add  677: 31x + 67x = 92x
+[STEP 5] Currenta:/ 92x
+[STEP 6] Add  212: 92x + 212 = 1132
+[FINAL] 1132",1132,9.224215419750003,116,195,6
+n_ary,4_ops,652 + 297 + 589 + 235 =,1773,False,8ea40a59,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 652: 0 + 652 = 652
+[STEP 3] Current: 652
+[STEP 4] Addd 297: 652 + 297 = 949
+[STEP 5] Current: 949
+[STEP 6] Addd 589: 949 + 589 = 1538
+[FI] 1538",0,9.224215419750003,114,195,7
+n_ary,8_ops,932 + 991 + 481 + 396 + 050 + 076 + 950 + 708 =,4584,False,91a1312d,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 932: 0 + 932 = 932
+[STEP 3] Current: 932
+[STEP 4] Addd 991: 932 + 991 = 1923
+[STEP 5] Current: 1923
+[STEP 6] Addd 481? 1923 + 481 = 2403
+[STEP 7] Current? 2403
+[STEP 8] Addd 396? 2403 + 396= 2803
+[STEP 9] Current? 2803
+[STEP 10) Eld 050? 2803 + 050= 2853
+[STEP 11] Current? 2853
+[STEP 12) Eld 950 ? 2853 + 950= 3803
+[STEP 13) Current? 3803
+[STEP 14) Eld 708 ? 3803 + 708= 4511
+[FI] 4511",0,9.605845107375004,290,215,0
+n_ary,8_ops,669 + 609 + 867 + 493 + 544 + 632 + 455 + 728 =,4997,False,4677689a,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 6 669: 0 + 669 = 669
+[STEP 3] Current: 669
+[STEP 4] Add 6 6 609: 669 + 609 = 1278
+[STEP 5] Current/ 1278
+[STEP 6] Add  x 6667: 1278 + 6667 = 1945
+[STEP 7] Current/ 1945
+[STEP 8] Add  x 6493?:: 1945 + 6493 = 8438
+[STEP 9] Current/ 8438
+[STEP 10] El  x 6544?:: 8438 + 6544 = 14992
+[STEP 11] Current/ 14992
+[STEP 12] El  x 632 Cu?us?:: 14992 + 632 = 15624
+[STEP 13] Current/ 15624
+[STEP 14] El  x 6455 Cu?us?:: 15624 + 6455 = 22079
+[STEP 15] Current/ 22079
+[STEP 16] El  x 679 Cu?us Cu?us?us?us ?us ?us ?us ?us ?us ?us ?us ?us ?us ?us ?us ?us ?s ?s ?s ?s ?s ?s ?s ?s ?s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ? s ?",0,9.605845107375004,512,215,1
+n_ary,8_ops,283 + 021 + 926 + 831 + 270 + 598 + 138 + 814 =,3881,False,1b230e24,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 283: 0 + 283 = 283
+[STEP 3] Current: 283
+[STEP 4] Add 021: 283 + 021 = 304
+[STEP 5] Current? 304
+[STEP 6] Add 926? 304 + 926 = 1230
+[STEP 7] Current? 1230
+[STEP 8] Add 831? 1230 + 831 = 2061
+[STEP 9] Current? 2061
+[STEP 10] Add 270 ? 2061 + 270 = 2061
+[STEP 11] Current? 2061
+[STEP 12] Add 598 ? 2061 + 598 = 2659
+[STEP 13] Current? 2659
+[STEP 14] Add 138 ? 2659 + 138 = 2797
+[STEP 15] Current? 2797
+[STEP 16] El 814 ? 2797 + 814 = 3611
+[FINAL] 36111",36111,9.605845107375004,325,215,2
+n_ary,8_ops,746 + 484 + 065 + 477 + 019 + 128 + 913 + 883 =,3715,False,aab7609f,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 710: 710: 746: 710: 710: 7E: 746: 710: 7E/ 710: 7E/ 7E/ 7E/ 7E/ 7E/ 7E/  x7E/  xxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  sxE/  s xE/  sxE/  sxe/  sxe/  sxE/  sxe/  sxE/  sxe/  sxE/  sxe/  sxE/  sxe/  sxE/  sxe/  sxE/  sxe/  s xE/  sxe/  sxE/  sxe/  s xE/  sxe/  sxE/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/  sxe/",0,9.605845107375004,512,215,3
+n_ary,8_ops,720 + 219 + 537 + 110 + 149 + 596 + 604 + 473 =,3408,False,6728ef35,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 7 7 10: 0 + 10= 10
+[STEP 3] Addd 20: 10 & 20= 20
+[STEP 4] Current: 30
+[STEP 5] Current: 30
+[STEP 6] Addd 30: 30 & 30= 30
+[STEP 7] Current: 60
+[STEP 8] Current: 60
+[STEP 9] Addd 109: 60 & 109= 109
+[STEP    c o r r i n g] 60",0,9.605845107375004,160,215,4
+n_ary,8_ops,213 + 658 + 496 + 770 + 708 + 368 + 532 + 775 =,4520,False,b525ffdb,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 213: 0 + 213 = 213
+[STEP 3] Current: 213
+[STEP 4] Add 658: 213 + 658 = 213
+[STEP 5] Current?:: 213
+[STEP 6] Add 77o?:?:?:?:? = 213
+[STEP 7] Current: 213
+[STEP 8] Add 7o? = 213
+[STEP 9] Current??? = 213
+[STEP 10] Current? = 213
+[STEP 11] Current?= 213
+[STEP 12] Current?= 213
+[STEP 13] Current?= 213
+[STEP 14] Current?= 213
+[STEP 15] Current?= 213
+[STEP 16] Current?= 213
+[STEP 17] Current?= 213
+[STEP 18] Current?= 213
+[STEP 19] Current?= 213
+[STEP 20] Current?= 213
+[STEP 21] Current?= 213
+[STEP 22] Current?= 213
+[STEP 23] Current?= 213
+[STEP 24] Current?= 213
+[STEP 25] Current?= 213
+[STEP 26] Current?= 213
+[STEP 27] Current?= 213
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+",213,9.605845107375004,471,215,5
+n_ary,8_ops,640 + 783 + 360 + 888 + 811 + 078 + 411 + 549 =,4520,False,ff2409a5,4,"
+[STEP 1] Current: 0
+[STEP 2] Addd 6 0: 0
+[STEP 3] Addd 640: 640: 640
+[STEP 4] Addd 76: 7c: 7c: 7c: 7c: 7c: 7c: 7c: 7c: 7c: 7c: 7c: 7c: 6c: 640: 640
+[STEP 5] Add 640: 640
+[STEP 6] Add 640: 640
+[STEP 7] El 640: 640
+[STEP 8] El 640: 640
+[STEP 9] El 640: 640
+[STEP 10] El 640: 640
+[STEP 11] El 640: 640
+[STEP 12] El 640: 640
+[STEP 13] El 640: 640
+[STEP 14] El 640: 640
+[STEP 15] El 640: 640
+[STEP 16] El 640: 640
+[STEP 17] El 640: 640
+[STEP 18] El 640: 640
+[STEP 19] El 640: 640
+[STEP 20) El 640: 640
+[STEP 20) El 640: 640
+[STEP 21) El 640: 640
+[STEP 22) El 640: 640
+[STEP 23) El 640: 640
+[STEP 24) El 640: 640
+[STEP 25) El 640: 640
+[STEP 26) El 640: 640
+[STEP 27) El 640: 64",0,9.605845107375004,512,215,6
+n_ary,8_ops,388 + 083 + 853 + 547 + 071 + 827 + 039 + 904 =,3712,False,1f0b052d,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 388: 0 + 388 = 388
+[STEP 3] Current: 388
+[STEP 4] Add 083: 388 + 083 = 478
+[STEP 5] Current: 478
+[STEP 6] Add 853: 478 + 853 = 134
+[STEP 7] Current? 134
+[STEP 8] Add 547? 134 + 547 = 134
+[STEP 9] Current? 134
+[STEP 10] Add 071? 134 + 071 = 134
+[FINAL] 134",134,9.605845107375004,187,215,7
+n_ary,16_ops,849 + 091 + 258 + 898 + 751 + 262 + 912 + 358 + 341 + 906 + 218 + 108 + 546 + 180 + 786 + 323 =,7787,False,66d8e6e2,4,"
+[STEP 1] Current: 0
+[]
+= 102184:
+[]
+= 10218",10218,9.699127612499993,25,255,0
+n_ary,16_ops,125 + 096 + 493 + 024 + 457 + 370 + 144 + 071 + 013 + 048 + 297 + 417 + 194 + 735 + 972 + 141 =,4597,False,b8a51ff6,4,"
+[STEP 1] Current: 0
+[]",0,9.699127612499993,4,255,1
+n_ary,16_ops,669 + 483 + 693 + 563 + 102 + 696 + 801 + 024 + 460 + 044 + 274 + 804 + 253 + 350 + 899 + 061 =,7176,False,fe4b11a4,4,"
+[STEP 1] Current: 0
+[]
+60
+[]
+64
+[]
+65
+[)
+66
+[)
+67
+[)
+68
+[)
+69
+[)
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+7:
+X:
+X:
+7:
+X:
+X:
+7:
+X:
+7:
+X:
+P:
+7:
+P?::
+P?::
+7:
+Q?::
+Q?::
+7:
+R?::
+R?::
+7:
+S?::
+S?::
+7:
+T?::
+T?::
+7:
+U?::
+Utics:
+7:
+C?::
+7:
+7:
+7:
+7:
+C:
+C:
+C:
+C?::
+C?::
+C:
+C?::
+C?::
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+C?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?
+T?",0,9.699127612499993,512,255,2
+n_ary,16_ops,026 + 530 + 113 + 320 + 917 + 565 + 963 + 126 + 714 + 166 + 361 + 435 + 319 + 572 + 983 + 294 =,7404,False,2aa49e12,4,"
+[STEP 1] Current: 0
+[]
+[STEP 2] Add 26: 0 + 26 = 26
+[STEP 3] Add 530: 26 + 530= 556
+[STEP 4] Add 113? 556 + 113= 669
+[STEP 5] Add 320? 669 + 320= 989
+[STEP 6] Add 917? 989 + 917= 1906
+[STEP 7] Ad 565? 1906 + 565= 2471
+[STEP 8] Ad 963? 2471 + 963= 3434
+[STEP 9] Ad 126? 3434 + 126= 3560
+[STEP 10] Ad 714? 3560 + 714= 4274
+[STEP 11] Ad 166? 4274 + 166= 4440
+[STEP 12] Ad 361? 4440 + 361= 4801
+[STEP 13] Ad 435? 4801 + 435= 5236
+[STEP_14] Ad 319? 5236 + 319= 5555
+[STEP_15] Ad 572? 5555 + 572= 5607
+[STEP_16] Ad 983 ? 5607 + 983= 6590
+[STEP_17] Ad 294 ? 6590 + 2%4= 6609
+[FI] 6609",0,9.699127612499993,454,255,3
+n_ary,16_ops,693 + 946 + 347 + 457 + 287 + 338 + 752 + 417 + 222 + 540 + 458 + 706 + 392 + 075 + 795 + 026 =,7451,False,e5f9c389,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 693: 0 + 693 = 693
+[STEP 3] Current: 693
+[STEP 4] Add 946: 693 + 946 = 1639
+[STEP 5] Current: 1639
+[STEP 6] Add 347: 1639 + 347 = 1984
+[STEP 7] Current?: 1984
+[STEP 8] Add 457: 1984 + 457 = 2441
+[STEP 9] Currentus 2441
+[STEP 10] Add 287: 2441 + 287 = 2728
+[STEP 11] Currentus 2728
+[STEP 12] Add 338?: 2728 + 338 = 3064
+[STEP 13] Currentus c3064
+[STEP 14] Add 752: 3064 + 752 = 3716
+[STEP 15] Currentus c3716
+[STEP 16] Add 417: 3716 + 417 = 4133
+[STEP 17] Currentus c4133
+[STEP 18] Add 222?: c4133 + 222 = 4355
+[STEP 19] Currentus c4355
+[STEP 20] Add 540: 4355 + 540 = 4895
+[STEP 21] Currentus c4895
+[STEP 22] Add 458? 4895 + 458 = 5353
+[STEP 23] Currentus c5353
+[STEP 24] El 706? 5353 + 706 = 6059
+[STEP 25] Currentus c6059
+[FI] 6059",0,9.699127612499993,512,255,4
+n_ary,16_ops,078 + 754 + 895 + 528 + 979 + 111 + 716 + 305 + 165 + 722 + 581 + 603 + 765 + 500 + 921 + 107 =,8730,False,29a283ca,4,"
+[STEP 1] Current: 0
+[STEP 2] Add 078: 0 + 078 = 78
+[STEP 3] Add 720720720720X54: 078 + 020 + 020 + 020 + 020 + 20 = 020
+[STEP 4] Add 0x20X54? 020 + 020 + 20 + 20 + 20 + c20 = 020
+[STEP 5] Current: 020
+[STEP 6] Add 0x20X54? c020 + 020 + c20 + c20 + c20 + c20 = c020
+[STEP 7] Current: c020
+[STEP 8] Add 0x20S54? c020 + 020 + c20 + c20 + c20 + c20 = c020
+[STEP 9] Current? c020
+[STEP 10] El 0x20S54? c020 + 020 + c20 + c20 + c20 + c20 = c020
+[STEP 11] Current? c020
+[STEP 12] El 0x20 S54? c020 + 020 + c20 + c20 + c20 + c20 = c020
+[STEP 13] Current? c020
+[STEP 14] El 0x20 S54? c020 + 020 + c20 + c20 + c20 + c20 = c020
+[STEP 15] Current? c020
+[STEP 16] El 0x20 S54? c020 + 020 + c20 + c20 + c20 + c20 = c020
+[STEP 17] Current? c020
+[STEP 18] El 0x20 S54 ? c",0,9.699127612499993,512,255,5
+n_ary,16_ops,510 + 026 + 593 + 459 + 176 + 889 + 909 + 511 + 611 + 171 + 057 + 481 + 733 + 992 + 236 + 805 =,8159,False,6e0c74fc,4,"
+[STEP 1] Current: 0
+[]",0,9.699127612499993,4,255,6
+n_ary,16_ops,521 + 439 + 308 + 074 + 416 + 825 + 929 + 672 + 844 + 360 + 088 + 388 + 737 + 100 + 426 + 777 =,7904,False,1ef5f4c6,4,"
+[STEP 1] Current: 0
+[]",0,9.699127612499993,4,255,7
+p_hop,2_hops,Sequence: BABDCDABBCBBDAABACCDAADADCACCDDDDDBDADDCBACCADCADBBDDCBDCDABDBDACDDDDCDABCCBACBBCBABDCADAABBDAABABDCACDADBCDBCBCBCDCABCBDDDABBCDDDCABDBDAADBCCACACAAAABAABCCAADDDBDBABBADBCDABABBCDCCBCBCCCBBCCBBCCCAABDBBDCBCBCCBCCDBABCBDADACDABBBAACCCABBDDBAABABBCCADABAADCD. Start: C. Hop 2 times.,D,False,bc83dc8f,4,"
+[TRACE] Start at C. Found 'C' in sequence. Next token is B.
+[]
+[]function.call(
+[)function.call(
+[)function.call(
+[)function.call(
+as)function.call(
+as)function.call(
+as)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.call(
+a)function.",B,18.837936900250014,512,260,0
+p_hop,2_hops,Sequence: DBCCCCDCDDBACBBBABCBCBAADBBCBABCCCDCCCDDDABDDBBDDACBAADCBBCABCCDCDDADBADBCCADADCCCCABBDDCBDDACACDDDDBAAADCBCDBBBCDDDCBDBBDDDBCCCDBBBDDDBBDDABCABDDADAACACDDDDDBBCCCBCADDBDCABDCABDCBABDBACBDBBBACDACCCDCACCBACABAADAAAACCCABBDBACDBABDDACADDCCABCCDADAADBDCCBAAA. Start: C. Hop 2 times.,A,False,8ba1f831,4,"
+[TRACE] Start at C. Found 'C' in sequence. Next token is D.
+[FInal] d",D,18.837936900250014,21,260,1
+p_hop,2_hops,Sequence: BCDDBBAACBCDBBBCCCDBCADBADBBDDACCCDBDCDADCADCBBBCACAABDCCBCBDBDBBBCBAABBDCDBBDCAABADCAACBAADAADCBCACDCDDCCCCCBCABDDCDBABCCCCBCCDDCACDBAABCBCCBACADDBDAAADDBCBACADADDCBACDDCADDCCDBACCBADAABBCCADDDBDCADAAACCBAACADABCCADCCCDCDCCDCCADADBCADBBBDBCCAABADBCACBCBAD. Start: C. Hop 2 times.,C,False,77c55e26,4,"
+[TRACE] Start at C. Found 'H' in sequence. Next token is D.
+[FInal] d",D,18.837936900250014,21,258,2
+p_hop,2_hops,Sequence: CBBADBBBCAADCBAABDBBCBCDBCACCCCADACAADCBDDCAADCCBAAAAABADBCCBBDDAAACBBBBAACBAADCABBCBCABABCDAACADDBABBDDCCDCCAABACBCDBADDAABABCDCADCDDCCDDDDDDABBCDBDACADBDDAAACBBBDCDBDBAACABDCBBBBACCCBDDBCBDDCBBDCAAAACABBADDABADDDCCDCCDDDBADDADAAABBCCCBCCABACBDDBAABABBCBC. Start: A. Hop 2 times.,C,False,5e6720dd,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is B.
+[FInally]
+[FInally]
+[FIn]
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+",B,18.837936900250014,512,260,3
+p_hop,2_hops,Sequence: DDDDCBAACDBCBAADCADACDBCDBBAACBCDBDCBBABABBCDDCBDBBBABDDDCDADBBBCBDABCDDBDDCADADBABDCBDDABDCBACCBBDDAACBACCACABADBBDDACDAADDBBADDDBBBCBCDCDDDBBCDDCDAAABABCDDBCBADDDBAACBCADCCADCCDBCDBBBACBDADCBCACADCBCABCAACDCDDDCABBDCDBACBCDBCCDDDCADDAABBCBDABACBCDBDACCBB. Start: D. Hop 2 times.,D,False,afc0108a,4,"
+[TRACE] Start at D. Found 'D' in sequence. Next token is 'd'.
+[FI]",Error,18.893708015249985,20,263,0
+p_hop,2_hops,Sequence: CAADDCABADDDDDCDCBACBABCCADABADDCBDCBCBABDBCDACBDDDABACCCBACCDADABBCBDACDCCCDBDCACDCACBBACACCACBDBDDBDCDABCCBBDBDADAACCADABCDCACABAABBCADABBABBBCBCCADADBACAAACABBBCCAACADBCACDCCCACCBDDCBDADAADCBBCBCCDCDBAAAABCADCCCCDCBCCBBDDABADCBABDAABBABAAAADDDDACBBBBAAB. Start: B. Hop 2 times.,A,True,85e2c2f1,4,"
+[TRACE] Start at B. Found 'B' in sequence. Next token is A.
+[ Next token is A. Found 'A' in sequence. Next token is D.
+[ Next token is D. Found 'd' insequence. Next token is A.
+[ Next token is A. Found 'a' insequence. Next token is B.
+[ Next token is B. Found 'h' insequence. Next token is B.
+[ Next token is H. Found 'h' insequence. Next token is H.
+[ Next token is W. Found 'w' insequence. Next token is W.
+[ Next token is W. Found 'w' insequence. Next token is W.
+[ Next token is W. Found 'w' insequence. Next token is W.
+[ Next token is W. Found 'w' insequence. Next token is W.
+[ Next token is W. Found 'w' insequence. Next token is W.
+[ Next token is W. Found 'w' insequence. Next token is W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'w' insequence. Next token i W.
+[ Next token i W. Found 'h' insequence. Next token i w.
+[ Next token i w. Found 'h' insequence. Next token i w.
+[ Next token i w. Found 'h' insequence. Next token i w.
+[ Next token i w. Found 'h' insequence. Next token i w.
+[ Next token i w. Found 'h' insequence. Next token i w.
+[ Next token",A,18.893708015249985,512,261,1
+p_hop,2_hops,Sequence: ABCDABBCBBDBDBDADDCABCCCBCACBDDBADABDDBDDADCCDACDBDCBCBCACAAACBCBDBAADBACDBBCBCDCACADCCCAADAACACBCDABAACDCDCBADDCDDDDDBACADDDAADBDBCDBBDBAADCCADCBCACCCCCDACACABBADDDABBABCCAACDAACADCCCABBBCDDDACADDBDCABDCBBAABBBBBCACDBBBBACACCACCDCABCBADCABDDBAADBBDBDDCCAC. Start: C. Hop 2 times.,B,True,028112e2,4,"
+[TRACE] Start at C. Found 'C' in sequence. Next token is B.
+[FI]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[",B,18.893708015249985,111,256,2
+p_hop,2_hops,Sequence: AADCDDBBDBCCACBDDCACBCACAABBACCDABADBCDAAABCDAADDDCCADBDABDBBBDDDCBBBDCCCDCCBCACCBCBADABAACDCDBABCABACBACADDBBDCDCBACCCBCCBBCCCAADAABDBDCCCDBBDAABBABDDBBCABCCADDAACBBCCBDBDAAACCCCADDADCACABBCCAAABDADDDBBADBABAACCCADCCBCDBBACAACADADBBBDABDCCBDBABCAAABABABCD. Start: B. Hop 2 times.,B,False,fbc35dd1,4,"
+[TRACE] Start at B. Found 'B' in sequence. Next token is A.
+[FIn] Next token is D.
+[FIn] Next token is B.
+[FIn] Next token is B.
+[FIn] Next token is A.
+[Fi rn] Next token is D.
+[Fi rn] Next token is H.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D.
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D.
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D.
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D.
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D.
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi rn] Next token is D
+[Fi rn] Next token is O.
+[Fi rn] Next token is A.
+[Fi r",A,18.893708015249985,512,257,3
+p_hop,4_hops,Sequence: ACCAAACACCDACDDBCCBADCDDBADCDCDAACABBACBABBABBCBDDAAACDBCACDBDBDADADBCCBAADCBADACBCBBCBDAACDDAACDACBDABBBACACDDACABACCABBDABADDADCCBADDBBADDDCCACDCDABAACADDCBBACACDBCABDCDBAACCDBDAABCABACADBDCACAACCADDDBDCCDBCAADBABBBBDBCCAAADAACDCDDBBAADBBADADADDDBCCBCDBB. Start: C. Hop 4 times.,D,False,452866de,4,"
+[TRACE] Start at C. Found 'C' in sequence. Next token is A.
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[
+[:
+[:
+[:
+[:
+[:
+[
+[:
+[
+[
+[
+[:
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+.
+[
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+
+
+
+)
+
+
+
+
+
+)
+
+)
+
+)
+
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+",A,18.958590622999992,512,260,0
+p_hop,4_hops,Sequence: DAAACCABADBCBABDCCDAACABBADDADDBDAAACAAACCCADCACBCDCBBBDBBCDACCCACBBBABBAAACBADACDCCCCADBBDBACCCBCBDDCABBCDCCBBAACADCACDBBDBBAACAADCABDCDBCDCACDACCCABBDDCCDDBDACCABDDABCDABADBDDAADBCBDBCDADADADBBCABDCBCBBACBCBBDCCDBDDDCABBADDCBCDCBDDDDDCACBDABDADCCBABDACBC. Start: A. Hop 4 times.,B,False,18eb6004,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is A.
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[
+[:
+[
+[
+[:
+[
+[:
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+)
+
+
+
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)
+)",A,18.958590622999992,512,265,1
+p_hop,4_hops,Sequence: CCDBCCCDBAABDAAADDDCDAAADDBCCDDCBDDBBABDBCBBCDDACBABDBCBAACACCDABBAAAACABCCABCBAACBDABCBADABAACCDBCCDDADABDACADACADBBCCCCBABDDCADABBDABCCACDAADABBDDADDBDCDDCCDACABDCAABAADADBCDDADABDCCBBDADCDAABBDDDBBCBBBADBBAACCBDCADCBDCBCACBBDCCCAABAABABABCBCCDCDCDAADDCB. Start: B. Hop 4 times.,A,False,515b0899,4,"
+[TRACE] Start at B. Found 'B' in sequence. Next token is C.
+[]
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+",C,18.958590622999992,512,260,2
+p_hop,4_hops,Sequence: ADDDABCADABBADADABCCCCCBCCADBABACBCCCCDABBDBDCDBBADADCAACDBBADDCCDACADAABCAAAACADACCBAACCABABBDCBCCCBDBABBBCABBAAABABCAAADBAABCCAACCBABBCBADAAACCBDDBCCAACCDDBBCBBCCDAABCBBDBCDCDDCDCADAAACCCDDBADBCACCCBCBBDBADBACCBBBAACCCCACACCBDAABCABBBBBABDADDABBDBBAABCAA. Start: C. Hop 4 times.,B,False,426513d7,4,"
+[TRACE] Start at C. Found 'T' in sequence. Next token is 'A'.
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[
+[:
+[:
+[
+[:
+[
+[
+[:
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+.
+[
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+
+.)
+",Error,18.958590622999992,499,254,3
+p_hop,4_hops,Sequence: AACACDDCCADCBCCAACDCADADBABDAADAABACDAABADDBADADDACCABADBAAAADDBDDBADCBCDAADBCCDABABCBCCABAADACBDABBDBADBDAACBCBAACABAABBCCBCCDBDDDBAACDABDACBDADADBABCADCCBAADCDCADCACDBDDCABCDDDCBBBACABAADACABDDDBBCBDBCCCCDDCCDDDDBDBBBCBDDACCCCCDCBABCDABBCDDCADBBBABADBACB. Start: C. Hop 4 times.,B,False,b951cc0f,4,"
+[TRACE] Start at C. Found 'T' in sequence. Next token is 'A'.
+[:
+[:
+[:
+[:
+[:
+[:
+[:
+[
+[:
+[:
+[
+[:
+[
+[
+[:
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+
+
+)
+
+)
+
+
+
+)
+
+)
+
+
+)
+
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+
+)
+",Error,19.012881654750004,512,259,0
+p_hop,4_hops,Sequence: DCABBDDBCADDBDCCDDDDADCABDCBCDDCCCDCBDCDCDDDDDDCCDBADAAADDDAACABBDCCABCCCBABDDDACBBBDDCACAAACDBDDBCCABBCACCDBBAABCBACCCAABBDDCDBCBDCBCABDCACCCACDDABAACAADADADDBDCAADADBCABDCDCCCCDDBADAAACDDDBCADBCDBDDADCCCBCBDABDADDDBDBDAAAADCAAADAADABBDAABABBBCBADABDCACAA. Start: B. Hop 4 times.,D,False,5ed2b9a1,4,"
+[TRACE] Start at B. Found 'B' in sequence. Next token is C.
+[ Next token is A.
+[ Next token is B.
+[ Next token is D.
+[ Next token is B.
+[ Next token is A.
+[ Next token is B.
+[ Next token is B.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[ Next token) is H.
+[",C,19.012881654750004,512,257,1
+p_hop,4_hops,Sequence: BDADBADDDBDDDCDACDCADDDBBBDCADCCBDABACDABBCCCBCDADACBDBBADBDBCABBBCDDCDABCCCCABBCACBCACABAAADCABBAADDCAABACBADACCABADABBDABBCBCBBCDBBDCDAACCBDBACCDDCCCABCDBABBDCBAAACBDCBDCDBDACABCCDBBACADCAACAADACDCADABAADBABCAACACABBBBDDADACACBABDBBCCCAACAABBDDADBBBABBBC. Start: A. Hop 4 times.,C,False,f95b98cd,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is B.
+[]
+
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[
+[]
+
+[]
+
+[]
+
+[]
+
+[
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[]
+
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+[
+
+",B,19.012881654750004,512,257,2
+p_hop,4_hops,Sequence: DAABABADAADAADCDBDDBCDABBBCCACCDCDCCBADBDAADCDABDDCACDBAADBADDBABBCBAAADCBABDACBBCBCADCBBDCDAACBDABCDCCBDCADADBAADCAADDABDCBBBDCAACDAABDCCDDADBDBCDBDCDBABCBBDBCACCCAABBCBBBABADADBDACABADCCACDDCAACDBCDDCBCBBCCDDBACBDCDBBADAACDCDBCDBDDCBADBBDCBDBDDDDADCBDCAB. Start: A. Hop 4 times.,C,False,e7e5df96,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is B.
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+",B,19.012881654750004,512,261,3
+p_hop,8_hops,Sequence: DCDCCCBCADABBAADCABBBADBBDCBCBABCDADDDAACABCACAADAACCDCDCBDCBBDDBDBDADADBABAACBBAADACADCDCBADBDABDCDACABDDDADBBAADDDBAAADDACBDBBBDABBAACABDACDDADABBBCCBBBBBCDBBDBBBCBDDADCBADCBDABABCDACBABAACDBDCCBBCDBBCBDBDDAACBCBAABCDAACDDBDCCDADAACDBDACDBDDABABDCABBBDBC. Start: D. Hop 8 times.,C,True,e5463e0c,4,"
+[TRACE] Start at D. Found 'D' in sequence. Next token is c.
+[]
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+",c,18.88849565900003,512,256,0
+p_hop,8_hops,Sequence: ACBCCCDACCCCABBCADDBCBCAAABACABCADAABABDBABBDADAADDBDCCDDDCCCBDBCCCADDABCBBBACBDABAACCCDCABBBDDDCDACAACABADBDADACCBDDCBBCABDCCBCBAAABBDDACCBCABBACCCDBBAADBCCCCCBACDDBAAADBCDDCDADACCAAABBCCCBADCDBACDBCAADDDABBABACCBDDCDADDCABCDDDBDDDBDDDDDDACCCABCDAAABCBDCA. Start: A. Hop 8 times.,A,False,8d8abf07,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is 'b'.
+[FI]
+[FI]
+[FI]
+[FI]
+[FI]
+[FI]
+[FI]
+[FI]
+[FI]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[For]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+[ó]
+",Error,18.88849565900003,512,253,1
+p_hop,8_hops,Sequence: BCDDDAACADACDDDBBCDCDADCDBDADADACDCCDADCCAADBCBBBCDBCCBDDDAADADBAACAADBACACBCCABDABCBADCBBAABACBAAACDDDDBACCDBDCBCACADABDCBDADDABCBBDCBCDAADCADDBCACDCCBBDDADBBDBDDBACBBBBAACBDDADAACDDBADDCADDBCBBADCCDBCDDCBDCDCBABCABABCCBADABABBBCCBADABABDCADCBBBACCDBCAADB. Start: D. Hop 8 times.,B,False,cc8d5e0d,4,"
+[TRACE] Start at D. Found 'D' in sequence. Next token is 'd'.
+[FInal] t",Error,18.88849565900003,22,263,2
+p_hop,8_hops,Sequence: BAADADCDAAADBAAADCCBBCCBCBCCACDDCACACDCABCABCBCCDAADBBCCDBCCDAAACCCCCADABDDBAADCACCCBADBDACDCDCADADBBACDACBADBADDDCCBADABBBDCBCACCBCBACCCDADBABABACDAABCBBDDCDBCBACADACBBDDDCDBCACDDABCADBDDCBBABBCCABDBBAAACDDCBBDCCACCBDBBBBBBDBBCDBDCBDCCCCDAAACABBADCCBDCAAC. Start: A. Hop 8 times.,A,False,aaa89110,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is B.
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[
+[]
+[]
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[]
+[)
+[]
+[)
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+",B,18.88849565900003,512,263,3
+p_hop,8_hops,Sequence: BDACDDDAADDBBCBBCADAACCBCDDBCBDBAADADAABDAABDDBACACBBCBBCCABAACBBABCBCADBDDCACCBBCBACCDDABBCBDBBCABAACBADCADDBACACAABDBCACCACDDABAAADBDDDDCACBACDBABCDAAAACDBBBAAADDBDCBCBACDCDDDAADDBDBBDBABCABBBBBADDCDCBDDCDABCBCBDADBDBABBCCAAABABBBDCADADABDACDABBCDDACCADB. Start: A. Hop 8 times.,D,False,d1559953,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is B.
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]",B,18.992444246499986,512,253,0
+p_hop,8_hops,Sequence: BDBAAABDBCCDCDCACDCDCDABCDACABBDCDAAABABCCBDBCBCBDDBCDCCCDDDBBADAADADACCDBDDAADCABBCACBAADBADBDBABCCBABDABCDCDADBAAABCAACBACCCBBBAABAABDBDAADCDADCBBABCCADABBBDBADCDBBAADACBCACDACCCDACDAAAABABADCBDCBCBDAAABACCAABBBCBDDAABBDCBAAAAADCDBAABDACBCAACBDBADCABACDA. Start: C. Hop 8 times.,B,True,fc3db624,4,"
+[TRACE] Start at C. Found 'C' in sequence. Next token is B.
+[FI]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[)
+[]
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+source
+[)
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source",B,18.992444246499986,512,262,1
+p_hop,8_hops,Sequence: CABADCCDAACBAAACABDDADCBBBBBDBCADACCDBACCDACCDCABABDBBBBCBCBDABDBBADDBCBACDCDBADBACADDDCDBDCDACDBBADBCDBACABCDABACACDACADABCDBDACABBDBCDDBABDAABABBACDBBBBDDBDCADACADDCDCDAACBBBDDCCDBCAABBAADDBBBDCAADCCCBCCCACABDCBDBDDDACBDCCCDDBCDACDDDCBDABCABACDAACCCABDAD. Start: A. Hop 8 times.,D,False,0a36f927,4,"
+[TRACE] Start at A. Found 'A' in sequence. Next token is B.
+[FI]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+[)
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+source
+",B,18.992444246499986,512,258,2
+p_hop,8_hops,Sequence: CADCCAABBBDBDDDAADADDCABABABADBADCAABBADCBADBCADBBBACAACCAADDCACDACCACDCBBDCACDCCCCDBCACDBBACCAADDBBBABCDABACDAAACCCCBACADABBAACBCDDDABDCDCACCCCBDAAAACCAAABCAABCDADDBDBDDCAADDCCDDAACCDCACCBACAACACADBDDBBDDCBABBDDDBBBDADAABADCABCBBDAADCCDBDDBCDBDBBAADDCDDBC. Start: C. Hop 8 times.,B,False,8b31905a,4,"
+[TRACE] Start at C. Found 'C' in sequence. Next token is A.
+[FI:
+[FI:
+[FI:
+[FI:
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+[
+)
+[
+]
+[
+)
+[
+)
+[
+)
+[
+)
+[
+)
+[
+)
+[
+)
+[
+)
+[",A,18.992444246499986,512,256,3
+igsm,depth_4_hierarchical_mod_7,Question. F#B := 2. A#A := J#C * J#C. P#D := J#C. I#K := 4. N#J := O#K. J#M := G#H. J#C := I#K - I#K. G#H := O#K. E#P := P#D. E#N := 1. K#E := N#J. O#K := J#C - P#L. A#I := 1. G#E := E#P. L#E := N#J. P#L := A#I - I#K. L#E?,3,False,336a899b,4,"
+[EQ 1] F#B/R/2/7/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/2/",0,37.59815973549996,512,353,0
+igsm,depth_4_hierarchical_mod_7,Question. H#M := O#I. H#J := O#P. G#D := 5. P#D := O#A. O#M := H#M. O#I := M#F. B#A := M#L. O#A := O#I - O#I. J#P := M#F. B#B := H#K * H#N. M#F := H#N. H#D := O#I. H#K := 6. H#N := 6. O#P := G#D. M#L := O#I - J#P. K#H := 1. B#A?,0,True,7c2304fb,4,"
+[EQ 1] H#M =O=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=
+=",0,37.59815973549996,512,357,1
+igsm,depth_4_hierarchical_mod_7,Question. G#O := O#D * N#J. L#O := 2. I#N := L#H - L#H. F#G := O#N + F#I. P#B := O#D. L#H := G#L - P#B. N#C := F#I * L#H. G#C := 0. D#J := 3. G#L := N#J. O#N := G#L + P#B. N#J := L#O. F#I := G#O. O#D := D#J. P#M := 6. L#N := L#H * O#N. L#N?,2,False,4b8286e7,4,"
+[EQ 1] G#Gurugani: G#Gurugani:G#Gurugani:G#Gurgani:G#Gurgani/Gurgani:Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/Guraman I/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/G/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/GuramanI/",0,37.61051611000005,512,365,0
+igsm,depth_4_hierarchical_mod_7,Question. C#G := D#E. P#E := C#B + C#G. E#G := 2. J#A := P#E. E#J := P#J. M#C := 3. P#J := C#B * D#I. D#I := D#E. A#C := 6. C#B := D#E. D#E := A#C. H#F := M#C + A#C. F#G := 1. E#J?,1,False,03c573b6,4,"
+[EQ 1] C#G =C#K#Golang](=C#K#Golang](=C#K/Golang](=C#K/Golang"")=C#K/Golang"")=C#K/Golang"")=C#K/Golang"")=C#K/Golang"")=C#K/Golang"")=C#K/Golang"")=C#M/Golang')=C#K/Golang"")=C#M/Golang')=C#K/Golang"")=C#M/Golang')=C#K/Golang"")=C#M/Golang')=C#K/Golang')=C#M/Golang')=C#K/Golang')=C#M/Golang')=C#K/Golang')=C#M/Golang')=C#K/Golang')=C#M/Golang')=C#K/Golang')=C#M/Golang')=C#K/Golang')=C#M/Gol""']=C#K/Golang')=C#M/Gol""']=C#K/Gol""')=C#M/Gol""']=C#K/Gol""')=C#M/Gol""'=C#K/Gol""'=C#M/Gol""'=C#K/Gol""'=C#M/Gol""'=C#K/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/Gol""'=C#P/",0,37.61051611000005,512,325,1
+igsm,depth_4_hierarchical_mod_7,Question. A#J := E#M. J#P := 6. N#N := B#D. J#A := 2. D#M := J#N. O#I := P#C - E#M. L#O := 4. P#C := C#D - D#M. I#E := P#C. E#B := J#A. E#M := D#M. C#D := E#B * J#N. B#D := C#D. J#N := J#A. P#E := 6. N#N?,4,False,2a952ea2,4,"
+[EQ 1] A#I =C#P=C/p/2fmV/awA/A/AfiCwQB/A8JGIQB/A8JfQB/A8JfQB/A8JfQB/A8JfQO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8JfqO/A8Jf/A/A8/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1",0,37.54608806149997,512,341,0
+igsm,depth_4_hierarchical_mod_7,Question. M#B := P#J + E#P. M#N := F#G * L#G. E#P := K#D. F#G := 6. P#J := K#D. D#F := E#P * P#J. N#H := M#N. O#B := H#B - P#P. K#D := M#N * C#C. P#P := C#C - C#C. N#O := E#P + E#P. P#M := P#J - O#B. N#P := 5. L#L := 3. L#G := 4. C#C := L#G. H#B := M#N + M#N. M#B?,3,False,3bf53906,4,"
+[EQ 1] M#B = M#B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=B?
+=P?
+=B?
+=B?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?
+=P?
+=B?",0,37.54608806149997,512,381,1
+igsm,depth_4_hierarchical_mod_7,Question. B#D := A#I. H#M := M#L. H#G := 4. L#C := H#G. A#B := D#K + D#K. C#A := P#J. D#N := P#J. D#K := H#K. K#F := P#J - P#J. E#O := P#A. P#A := C#P - C#P. E#E := H#M. P#J := E#O - E#E. H#K := P#A. A#I := 2. M#L := 6. C#P := 5. C#A?,1,False,455c684e,4,"
+[EQ 1] B#D# document/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/data/",0,37.44237826350002,512,361,0
+igsm,depth_4_hierarchical_mod_7,Question. M#E := D#H + M#J. C#I := E#A. N#I := M#E. B#K := 2. B#H := C#D - M#J. A#N := 6. D#H := M#N - C#I. H#I := J#P. M#N := B#K. C#N := G#P + B#H. H#L := E#A + A#N. J#P := 1. J#D := M#E + G#P. M#J := M#N. N#A := G#P. C#D := M#N. E#A := 4. G#P := D#H. N#I?,0,True,d9cf2bf8,4,"
+[EQ 1] M#M#Item M#M.Item M#M.Item M#M.Item M#M.Item M#M.Item C#D.Item C#K/Code/FileE/M/M/M.Item C/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/M.ItemC/K/Code/FileE/M/P/",0,37.44237826350002,512,377,1

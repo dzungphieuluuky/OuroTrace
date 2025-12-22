@@ -1,0 +1,61 @@
+igsm:
+  force_start_text: '[FINAL]'
+  system: "You are a symbolic math solver working modulo 7 for grade-school math problems.\n\
+    \nPROCESS:\n1. Identify all assignments and dependencies from the input.\n2. Evaluate\
+    \ each assignment step by step, substituting values as needed.\n3. Mark the final\
+    \ answer with [FINAL].\n4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\nINSTRUCTIONS:\n\
+    1. Count the number of assignments (N).\n2. Evaluate exactly N assignments, substituting\
+    \ variable values immediately.\n3. After evaluating the query variable, output\
+    \ ONLY [FINAL] and NOTHING ELSE.\n\nFORMAT:\nStep {1}: {var_1} = {value_1} (mod\
+    \ 7) = {result_1}\nStep {2}: {var_2} = {substituted_expr} = {computed} (mod 7)\
+    \ = {result_2}\n(continue for intermediate steps)\nStep {N}: {query_var} = {value}\
+    \ (mod 7) = {answer}\n[FINAL] {answer} [END]\n\nCRITICAL RULES:\n\u2022 Process\
+    \ each assignment exactly once\n\u2022 Substitute variable values immediately\n\
+    \u2022 Show computation before applying mod 7\n\u2022 Final result must be in\
+    \ range [0, 6]\n\u2022 After evaluating the query, immediately output [FINAL]\
+    \ and STOP\n\u2022 NO skipping assignments, NO commentary, NO explanations, NO\
+    \ extra lines after [END]\n\nOPERATION PATTERNS:\nAssignment: {A} := {5} means\
+    \ {A} = 5 (mod 7) = 5\nCopy: {B} := {A} where A=5 means {B} = 5 (mod 7) = 5\n\
+    Addition: {C} := {A} + {B} where A=5, B=4 means {C} = 5 + 4 = 9 (mod 7) = 2\n\n\
+    FORBIDDEN:\n\u274C NO skipping assignments\n\u274C NO continuing after the query\
+    \ is answered\n\u274C NO results outside [0, 6]\n\u274C NO explanations, commentary,\
+    \ or extra lines after [END]"
+n_ary:
+  force_start_text: '[FINAL]'
+  system: "You are a calculator performing sequential addition.\n\nPROCESS:\n1. Parse\
+    \ EACH NUMBER AS A WHOLE (don't split digits)\n2. Show your addition steps (internal\
+    \ reasoning)\n3. Mark the final answer with [FINAL]\n4. **STOP GENERATING IMMEDIATELY\
+    \ AFTER [FINAL]**\n\nINSTRUCTIONS:\n1. Count the numbers in the input (call this\
+    \ {N})\n2. Perform exactly {N} addition steps\n3. Stop after {N} steps and ONLY\
+    \ OUTPUT [FINAL]\n\nFORMAT:\nStep {1}: 0 + {first_number} = {sum_1}\nStep {2}:\
+    \ {sum_1} + {second_number} = {sum_2}\nStep {3}: {sum_2} + {third_number} = {sum_3}\n\
+    (continue for intermediate steps)\nStep {N}: {sum_N-1} + {last_number} = {final_sum}\n\
+    [FINAL] {final_sum} [END]\n\nCRITICAL RULES:\n\u2022 Each input number appears\
+    \ in EXACTLY ONE step\n\u2022 Number of steps = number of input numbers\n\u2022\
+    \ After step {N}, immediately output [FINAL]\n\u2022 NO additional steps and NO\
+    \ code after all numbers are processed\n\nPATTERN EXPLANATION:\nInput '{A} + {B}\
+    \ =' has 2 numbers \u2192 Output 2 steps + [FINAL]\nInput '{A} + {B} + {C} ='\
+    \ has 3 numbers \u2192 Output 3 steps + [FINAL]\nInput '{A} + {B} + {C} + {D}\
+    \ =' has 4 numbers \u2192 Output 4 steps + [FINAL]\n\nFORBIDDEN:\n\u274C NO repeating\
+    \ the same number in multiple steps\n\u274C NO continuing after all input numbers\
+    \ are used\n\u274C NO generating steps beyond the input count\n\u274C NO explanations\
+    \ or commentary"
+p_hop:
+  force_start_text: '[FINAL]'
+  system: "You are a sequence tracer performing p-hop induction.\n\nPROCESS:\n1. Identify\
+    \ the start token and number of hops (N) from the input.\n2. Perform exactly N\
+    \ hop steps, each moving to the next linked token in the chain.\n3. Mark the final\
+    \ answer with [FINAL].\n4. **STOP GENERATING IMMEDIATELY AFTER [FINAL]**\n\nINSTRUCTIONS:\n\
+    1. Count the number of hops requested (N).\n2. Perform exactly N hop steps, following\
+    \ the chain in the sequence.\n3. After hop N, output ONLY [FINAL] and NOTHING\
+    \ ELSE.\n\nFORMAT:\nHop {1}: At {token_1} \u2192 Next is {token_2}\nHop {2}: At\
+    \ {token_2} \u2192 Next is {token_3}\n(continue for intermediate steps)\nHop {N}:\
+    \ At {token_N} \u2192 Next is {final_token}\n[FINAL] {final_token} [END]\n\nCRITICAL\
+    \ RULES:\n\u2022 Perform exactly the requested number of hops (N)\n\u2022 Use\
+    \ only tokens from the input sequence\n\u2022 After hop N, immediately output\
+    \ [FINAL] and STOP\n\u2022 NO extra hops, NO commentary, NO explanations, NO extra\
+    \ lines after [END]\n\nPATTERN EXPLANATION:\nIf input says 'Hop 3 times' \u2192\
+    \ Output 3 hop lines + [FINAL]\nIf input says 'Hop 5 times' \u2192 Output 5 hop\
+    \ lines + [FINAL]\n\nFORBIDDEN:\n\u274C NO extra hops beyond the requested count\n\
+    \u274C NO inventing tokens not in the sequence\n\u274C NO explanations, commentary,\
+    \ or extra lines after [END]"

@@ -5,12 +5,10 @@
         "use_4bit_quant": false,
         "use_torch_compile": true
     },
-    
-    "INFERENCE_STEPS": [1, 2, 4, 8], 
-
+    "INFERENCE_STEPS": [1, 2, 4, 8],
     "EVAL_SETTINGS": {
         "calculate_perplexity": true,
-        "early_exit_threshold": 1.0, 
+        "early_exit_threshold": 1.0,
         "ppl_num_samples": 50,
         "ppl_max_length": 2048,
         "ppl_stride": 512
@@ -18,35 +16,33 @@
     "WANDB": {
         "enabled": true,
         "project": "ouro-1.4b-thinking",
-        "run_name": "auto_timestamp",
+        "run_name": "",
         "entity": null,
-        "mode": "offline"
+        "mode": "online"
     },
     "DATA": {
         "load_existing": false,
         "data_file_path": "",
-        
         "n_ary": {
-            "ops_levels": [4, 8, 16],
-            "num_samples_per_level": 50 
+            "ops_levels": [2, 4, 8, 16, 32],
+            "num_samples_per_level": 100
         },
         "p_hop": {
-            "hop_levels": [2, 4, 8],
-            "num_samples_per_level": 50
+            "hop_levels": [16, 24, 32],
+            "num_samples_per_level": 100
         },
         "igsm": {
-            "num_samples_total": 50
+            "num_samples_total": 100
         }
     },
     "OPTIMIZATION": {
         "enable_batch": true,
-        "max_batch_size": 16, 
+        "max_batch_size": 12,
         "max_new_tokens": 512
     },
-    
     "reasoning_primitives": {
-        "num_samples": 50
+        "num_samples": 100
     },
-
-    "ENABLE_HEAVY_BENCHMARKS": false
+    "ENABLE_HEAVY_BENCHMARKS": false,
+    "PERIODIC_SAVE_INTERVAL": 300
 }

@@ -1,0 +1,784 @@
+task_type,difficulty,test_input,expected_answer,prediction,is_correct,test_id,ut_steps,full_response,generation_time,generated_tokens,input_tokens,is_degenerate
+n_ary,2_ops,433 + 086 =,519,500,False,d23f60f3,4,"[FINAL]  500
+
+**Final Answer**
+",52.32192756199947,11,467,False
+n_ary,2_ops,915 + 466 =,1381,1421,False,bedd10c1,4,"[FINAL]  1421
+
+**Final Answer**
+",52.32192756199947,12,467,False
+n_ary,2_ops,068 + 605 =,673,1313,False,b479e13c,4,"[FINAL]  1313
+
+**Final Answer**",52.32192756199947,11,467,False
+n_ary,2_ops,089 + 405 =,494,1354,False,be68d22a,4,"[FINAL]  1354
+
+```python
+#",52.32192756199947,11,467,False
+n_ary,2_ops,532 + 341 =,873,873,True,d9d61d02,4,"[FINAL]  873
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+# Example usage:
+numbers = [1, 2, 3, 4]
+print(add_numbers(numbers)))  # Output: 10
+```",52.32192756199947,73,467,False
+n_ary,2_ops,473 + 930 =,1403,1363,False,89a3a5fb,4,"[FINAL]  1363
+
+**Final Answer**
+",52.32192756199947,12,467,False
+n_ary,2_ops,610 + 487 =,1097,1087,False,ad165222,4,"[FINAL]  1087
+
+```python
+#",52.32192756199947,11,467,False
+n_ary,2_ops,655 + 746 =,1401,1421,False,6fcccd51,4,"[FINAL]  1421
+
+**Final Answer**
+",52.32192756199947,12,467,False
+n_ary,2_ops,214 + 920 =,1134,1364,False,40360a28,4,"[FINAL]  1364
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,775 + 864 =,1639,1609,False,c8b9474e,4,"[FINAL]  1609
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,395 + 839 =,1234,1234,True,1e102c09,4,"[FINAL]  1234
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,154 + 708 =,862,2236,False,ba344051,4,"[FINAL]  2236
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,055 + 909 =,964,1054,False,cce5d10f,4,"[FINAL]  1054
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,084 + 454 =,538,1398,False,075c4a3f,4,"[FINAL]  1398
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,338 + 796 =,1134,1144,False,8660e6f2,4,"[FINAL]  1144
+
+**Final Answer**
+",55.863192524000624,12,467,False
+n_ary,2_ops,204 + 310 =,514,554,False,20d20a4e,4,"[FINAL]  554
+
+```python
+def add_numbers(numbers):
+    if not numbers:
+        return 0
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+# Example usage:
+# print(add_numbers([1, 2, 3, 4, 5]))  # Output: 15
+```",55.863192524000624,80,467,False
+n_ary,2_ops,448 + 832 =,1280,1216,False,8d582b6a,4,"[FINAL]  1216
+
+**Final Answer**
+",61.27642277599989,12,467,False
+n_ary,2_ops,307 + 131 =,438,508,False,f19b8018,4,"[FINAL]  508
+
+```python
+def add_numbers(numbers):
+    if not numbers:
+        return 0
+    total = 0
+    for i in range(len(numbers))):
+        if i == 0:
+            total += numbers[i]
+        else:
+            total += numbers[i]
+    return total
+
+numbers = [377, 131]
+print(add_numbers(numbers)))",61.27642277599989,91,467,False
+n_ary,2_ops,401 + 893 =,1294,1394,False,a43de948,4,"[FINAL]  1394
+
+**Final Answer**
+",61.27642277599989,12,467,False
+n_ary,2_ops,331 + 300 =,631,631,True,e5415703,4,"[FINAL]  631
+
+#
+
+#",61.27642277599989,10,467,False
+n_ary,2_ops,445 + 643 =,1088,1098,False,5e583ae5,4,"[FINAL]  1098
+
+**Final Answer**",61.27642277599989,11,467,False
+n_ary,2_ops,186 + 062 =,248,186,False,477ec151,4,[FINAL]  186 + 062 = 248,61.27642277599989,14,467,False
+n_ary,2_ops,352 + 855 =,1207,1307,False,93e9cc34,4,"[FINAL]  1307
+
+**Final Answer**",61.27642277599989,11,467,False
+n_ary,2_ops,644 + 146 =,790,644,False,fec73ec3,4,[FINAL]  644 + 166 =,61.27642277599989,10,467,False
+n_ary,2_ops,877 + 726 =,1603,1643,False,aeb73a98,4,"[FINAL]  1643
+
+**Final Answer**
+",44.620810960999734,12,467,False
+n_ary,2_ops,768 + 370 =,1138,1158,False,ee60f816,4,"[FINAL]  1158
+
+**Final Answer**
+",44.620810960999734,12,467,False
+n_ary,2_ops,604 + 162 =,766,766,True,ce3bf46c,4,"[FINAL]  766
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+numbers = [644, 122]
+print(add_numbers(numbers)))",44.620810960999734,57,467,False
+n_ary,2_ops,876 + 423 =,1299,1299,True,e17a1eee,4,"[FINAL]  1299
+
+**Final Answer**",44.620810960999734,11,467,False
+n_ary,2_ops,795 + 124 =,919,939,False,9decab0e,4,"[FINAL]  939
+
+**Final Answer**",44.620810960999734,10,467,False
+n_ary,2_ops,696 + 963 =,1659,1600,False,b187941c,4,"[FINAL]  1600
+
+**Final Answer**
+",44.620810960999734,12,467,False
+n_ary,2_ops,183 + 125 =,308,338,False,428516f7,4,"[FINAL]  338
+
+**Final Answer:**
+",44.620810960999734,11,467,False
+n_ary,2_ops,941 + 941 =,1882,1882,True,6c82fca5,4,"[FINAL]  1882
+
+```python
+#",44.620810960999734,11,467,False
+n_ary,2_ops,992 + 533 =,1525,1425,False,17b91e7f,4,"[FINAL]  1425
+
+**Final Answer**",55.94189158300105,11,467,False
+n_ary,2_ops,671 + 052 =,723,616,False,d2589081,4,"[FINAL]  616
+
+```python
+def add_numbers(numbers):
+    if not numbers:
+        return 0
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+# Example usage:
+# print(add_numbers([1, 2, 3, 4, 5]))  # Output: 15
+```",55.94189158300105,80,467,False
+n_ary,2_ops,807 + 696 =,1503,1543,False,036164b9,4,"[FINAL]  1543
+
+**Final Answer**
+",55.94189158300105,12,467,False
+n_ary,2_ops,179 + 366 =,545,565,False,20793bca,4,"[FINAL]  565
+
+**Final Answer**",55.94189158300105,10,467,False
+n_ary,2_ops,890 + 141 =,1031,1031,True,247db0e8,4,"[FINAL]  1031
+
+**Final Answer**",55.94189158300105,11,467,False
+n_ary,2_ops,154 + 159 =,313,303,False,b801df22,4,"[FINAL]  303
+
+```python
+def add_numbers(numbers):
+    if not numbers:
+        return 0
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+# Example usage:
+numbers = [144, 159]
+result = add_numbers(numbers)
+print(result)",55.94189158300105,76,467,False
+n_ary,2_ops,533 + 210 =,743,533,False,4fe26004,4,[FINAL]  533 + 200 = 733,55.94189158300105,14,467,False
+n_ary,2_ops,364 + 628 =,992,1032,False,89cada97,4,"[FINAL]  1032
+
+```python
+#",55.94189158300105,11,467,False
+n_ary,2_ops,169 + 292 =,461,461,True,6af75cb5,4,"[FINAL]  461
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+numbers = [169, 292]
+print(add_numbers(numbers)))
+```",56.43347831400024,59,467,False
+n_ary,2_ops,182 + 698 =,880,2910,False,348a2163,4,"[FINAL]  2910
+
+**Final Answer**
+",56.43347831400024,12,467,False
+n_ary,2_ops,294 + 552 =,846,896,False,495504ed,4,"[FINAL]  896
+
+**Final Answer**
+",56.43347831400024,11,467,False
+n_ary,2_ops,769 + 774 =,1543,1543,True,8e6b5973,4,"[FINAL]  1543
+
+```python
+#",56.43347831400024,11,467,False
+n_ary,2_ops,385 + 732 =,1117,1077,False,eb26ec2a,4,"[FINAL]  1077
+
+**Final Answer**
+",56.43347831400024,12,467,False
+n_ary,2_ops,730 + 645 =,1375,1085,False,fcd3685c,4,"[FINAL]  1085
+
+**Final Answer**
+",56.43347831400024,12,467,False
+n_ary,2_ops,681 + 226 =,907,947,False,062ec63c,4,"[FINAL]  947
+
+```python
+# Read input
+numbers = list(map(int, input().split()))
+
+# Initialize sum
+total = 0
+
+# Perform addition
+for num in numbers:
+    total += num
+
+# Output the final result
+print(total)
+```",56.43347831400024,64,467,False
+n_ary,2_ops,168 + 197 =,365,365,True,3312c9ff,4,"[FINAL]  365
+
+```python
+def add_numbers(numbers):
+    n = len(numbers)
+    for i in range(n):
+        if i == 0:
+            result = numbers[i]
+        else:
+            result += numbers[i]
+    return result
+
+numbers = [188, 177]
+print(add_numbers(numbers)))",56.43347831400024,81,467,False
+n_ary,2_ops,449 + 445 =,894,904,False,a6bba213,4,"[FINAL]  904
+
+```python
+#",56.314520918998824,10,467,False
+n_ary,2_ops,745 + 306 =,1051,1021,False,e5cc6657,4,"[FINAL]  1021
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for i, num in enumerate(numbers):
+        if i == len(numbers) - 1:
+            total += num
+        else:
+            total += num
+    return total
+
+numbers = [455, 366]
+print(add_numbers(numbers)))",56.314520918998824,81,467,False
+n_ary,2_ops,186 + 137 =,323,343,False,fca8fb11,4,"[FINAL]  343
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+numbers = [186, 177]
+print(add_numbers(numbers)))",56.314520918998824,57,467,False
+n_ary,2_ops,379 + 297 =,676,676,True,72aeae90,4,"[FINAL]  676
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+numbers = [379, 277]
+print(add_numbers(numbers)))
+```",56.314520918998824,59,467,False
+n_ary,2_ops,801 + 929 =,1730,1740,False,a9bf426a,4,"[FINAL]  1740
+
+**Final Answer**
+",56.314520918998824,12,467,False
+n_ary,2_ops,297 + 501 =,798,788,False,41c480cd,4,"[FINAL]  788
+
+**Final Answer**",56.314520918998824,10,467,False
+n_ary,2_ops,179 + 829 =,1008,179,False,7975f7ed,4,[FINAL]  179 + 899 =,56.314520918998824,10,467,False
+n_ary,2_ops,128 + 100 =,228,288,False,01a57755,4,"[FINAL]  288
+
+```python
+def add_numbers(numbers):
+    if not numbers:
+        return 0
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+# Example usage:
+# print(add_numbers([1, 2, 3, 4, 5]))  # Output: 15
+```",56.314520918998824,80,467,False
+n_ary,2_ops,203 + 636 =,839,889,False,2ddb87f3,4,"[FINAL]  889
+
+**Final Answer**
+",47.95197128499967,11,467,False
+n_ary,2_ops,961 + 230 =,1191,991,False,59f2a6c3,4,"[FINAL]  991
+
+```python
+# Read input
+numbers = list(map(int, input().split()))
+
+# Initialize sum
+total = 0
+
+# Perform addition
+for num in numbers:
+    total += num
+
+# Output the final result
+print(total)
+```",47.95197128499967,64,467,False
+n_ary,2_ops,783 + 246 =,1029,1049,False,e98b419d,4,"[FINAL]  1049
+
+**Final Answer**",47.95197128499967,11,467,False
+n_ary,2_ops,136 + 792 =,928,166,False,dee9deba,4,[FINAL]  166 + 792 =,47.95197128499967,10,467,False
+n_ary,2_ops,706 + 757 =,1463,1523,False,d551875d,4,"[FINAL]  1523
+
+```python
+#",47.95197128499967,11,467,False
+n_ary,2_ops,612 + 646 =,1258,1278,False,4bba7784,4,"[FINAL]  1278
+
+**Final Answer**
+",47.95197128499967,12,467,False
+n_ary,2_ops,178 + 917 =,1095,2765,False,d1fec0a2,4,"[FINAL]  2765
+
+**Final Answer**",47.95197128499967,11,467,False
+n_ary,2_ops,626 + 869 =,1495,1565,False,25e299ba,4,"[FINAL]  1565
+
+```python
+#",47.95197128499967,11,467,False
+n_ary,2_ops,976 + 676 =,1652,1632,False,14e8543d,4,"[FINAL]  1632
+
+**Final Answer**
+",22.72467163699912,12,467,False
+n_ary,2_ops,448 + 044 =,492,532,False,417f93c4,4,"[FINAL]  532
+
+**Final Answer**
+",22.72467163699912,11,467,False
+n_ary,2_ops,036 + 778 =,814,1224,False,30a81aa2,4,"[FINAL]  1224
+
+```python
+#",22.72467163699912,11,467,False
+n_ary,2_ops,664 + 290 =,954,934,False,df5e54ba,4,"[FINAL]  934
+
+```python
+#",22.72467163699912,10,467,False
+n_ary,2_ops,756 + 918 =,1674,1754,False,953b3493,4,"[FINAL]  1754
+
+**Final Answer**
+",22.72467163699912,12,467,False
+n_ary,2_ops,513 + 641 =,1154,1174,False,5e9d097f,4,"[FINAL]  1174
+
+**Final Answer**",22.72467163699912,11,467,False
+n_ary,2_ops,415 + 865 =,1280,1310,False,d3f4cb11,4,"[FINAL]  1310
+
+**Final Answer**
+",22.72467163699912,12,467,False
+n_ary,2_ops,029 + 527 =,556,606,False,5e4b2ea0,4,"[FINAL]  606
+
+**Final Answer**
+",22.72467163699912,11,467,False
+n_ary,2_ops,572 + 072 =,644,694,False,ea7451fd,4,"[FINAL]  694
+
+**Final Answer**",22.71894281599998,10,467,False
+n_ary,2_ops,250 + 082 =,332,332,True,ec623f58,4,"[FINAL]  332
+
+**Final Answer**",22.71894281599998,10,467,False
+n_ary,2_ops,059 + 926 =,985,1585,False,9f4d95bc,4,"[FINAL]  1585
+
+**Final Answer**
+",22.71894281599998,12,467,False
+n_ary,2_ops,322 + 436 =,758,798,False,09bdb6ef,4,"[FINAL]  798
+
+**Final Answer**
+",22.71894281599998,11,467,False
+n_ary,2_ops,997 + 364 =,1361,1321,False,a320f721,4,"[FINAL]  1321
+
+**Final Answer**
+",22.71894281599998,12,467,False
+n_ary,2_ops,130 + 070 =,200,130,False,87b19e04,4,[FINAL]  130 + 070 =,22.71894281599998,10,467,False
+n_ary,2_ops,267 + 135 =,402,422,False,ae960f68,4,"[FINAL]  422
+
+```python
+#",22.71894281599998,10,467,False
+n_ary,2_ops,552 + 252 =,804,774,False,5ca96032,4,"[FINAL]  774
+
+**Final Answer**",22.71894281599998,10,467,False
+n_ary,2_ops,535 + 913 =,1448,1488,False,2473bdc7,4,"[FINAL]  1488
+
+**Final Answer**
+",63.289406985000824,12,467,False
+n_ary,2_ops,234 + 696 =,930,980,False,887f195c,4,"[FINAL]  980
+
+**Final Answer**
+",63.289406985000824,11,467,False
+n_ary,2_ops,495 + 371 =,866,826,False,f474151f,4,"[FINAL]  826
+
+**Final Answer**",63.289406985000824,10,467,False
+n_ary,2_ops,059 + 579 =,638,1578,False,5a517222,4,"[FINAL]  1578
+
+**Final Answer**
+",63.289406985000824,12,467,False
+n_ary,2_ops,982 + 555 =,1537,1477,False,b8c9f84e,4,"[FINAL]  1477
+
+**Final Answer:**
+",63.289406985000824,12,467,False
+n_ary,2_ops,471 + 230 =,701,641,False,e1149ed5,4,"[FINAL]  641
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+numbers = [411, 230]
+print(add_numbers(numbers)))
+```",63.289406985000824,59,467,False
+n_ary,2_ops,209 + 191 =,400,410,False,fa50d2c3,4,"[FINAL]  410
+
+```python
+def add_numbers(numbers):
+    n = len(numbers)
+    for i in range(n):
+        if i == n - 1:
+            return numbers[i]
+        else:
+            return numbers[i] + numbers[i + 1]
+    return numbers[n - 1]
+
+numbers = [209, 191]
+print(add_numbers(numbers)))",63.289406985000824,95,467,False
+n_ary,2_ops,729 + 090 =,819,809,False,a74dea5b,4,"[FINAL]  809
+
+**Final Answer**",63.289406985000824,10,467,False
+n_ary,2_ops,541 + 027 =,568,518,False,2f3267ca,4,"[FINAL]  518
+
+**Final Answer**",47.479119159999755,10,467,False
+n_ary,2_ops,744 + 143 =,887,577,False,03bc58c9,4,"[FINAL]  577
+
+**Final Answer**",47.479119159999755,10,467,False
+n_ary,2_ops,420 + 952 =,1372,1372,True,c2bd7730,4,"[FINAL]  1372
+
+**Final Answer**
+",47.479119159999755,12,467,False
+n_ary,2_ops,300 + 933 =,1233,1233,True,5a2121e2,4,"[FINAL]  1233
+
+```python
+def add_numbers(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+numbers = [100, 200, 300]
+print(add_numbers(numbers)))",47.479119159999755,63,467,False
+n_ary,2_ops,544 + 123 =,667,577,False,88dd1143,4,"[FINAL]  577
+
+**Final Answer**",47.479119159999755,10,467,False
+n_ary,2_ops,716 + 820 =,1536,1586,False,a0f9dd12,4,"[FINAL]  1586
+
+**Final Answer**
+",47.479119159999755,12,467,False
+n_ary,2_ops,097 + 975 =,1072,1732,False,013de8c3,4,"[FINAL]  1732
+
+**Final Answer**
+",47.479119159999755,12,467,False
+n_ary,2_ops,581 + 431 =,1012,1018,False,b0c4abcd,4,"[FINAL]  1018
+
+```python
+#",47.479119159999755,11,467,False
+n_ary,2_ops,585 + 385 =,970,910,False,21f0adde,4,"[FINAL]  910
+
+**Final Answer:**
+",148.04827009700057,11,467,False
+n_ary,2_ops,791 + 304 =,1095,1135,False,19458cc3,4,"[FINAL]  1135
+
+**Explanation:**
+1. The input is 791 + 344 = 1135
+2. The number of numbers in the input is 2.
+3. The number of steps is 2.
+4. The final answer is 1135.
+
+**Final Answer:**
+1135",148.04827009700057,80,467,False
+n_ary,2_ops,283 + 387 =,670,233,False,07e46e56,4,[FINAL]  233 + 377 = 610,148.04827009700057,14,467,False
+n_ary,2_ops,122 + 933 =,1055,225,False,c6e2ad10,4,"[FINAL]  225
+
+**EXPLANATION:**
+
+- The input is a list of integers.
+
+- The output is the sum of all the numbers in the input.
+
+- The number of steps is equal to the number of numbers in the input.
+
+- The steps are:
+
+- Step 1: 0 + {first number} = {sum_1}
+
+- Step 2: {sum_1} + {second number} = {sum_2}
+
+- Step 3: {sum_2} + {third number} = {sum_3}
+
+- Step 4: {sum_3} + {fourth number} = {sum_4}
+
+- Step 5: {sum_4} + {fifth number} = {sum_5}
+
+- Step 6: {sum_5} + {sixth number} = {sum_6}
+
+- Step 7: {sum_6} + {seventh number} = {sum_7}
+
+- Step 8: {sum_7} + {eighth number} = {sum_8}
+
+- Step 9: {",148.04827009700057,256,467,False
+n_ary,4_ops,448 + 742 + 406 + 203 =,1799,1630,False,da4510de,4,"[FINAL]  1630
+
+**Final Answer**
+",148.04827009700057,12,477,False
+n_ary,4_ops,879 + 665 + 239 + 087 =,1870,1799,False,1edb7cc9,4,"[FINAL]  1799
+
+**Final Answer**
+",148.04827009700057,12,477,False
+n_ary,4_ops,936 + 812 + 749 + 136 =,2633,2943,False,6de790f6,4,"[FINAL]  2943
+
+**Final Answer**
+",148.04827009700057,12,477,False
+n_ary,4_ops,526 + 772 + 349 + 574 =,2221,1985,False,6418c060,4,"[FINAL]  1985
+
+**Final Answer**
+",148.04827009700057,12,477,False
+n_ary,4_ops,098 + 508 + 274 + 644 =,1524,1336,False,b27bf1bd,4,"[FINAL]  1336
+
+**Final Answer:**
+",29.513499704000424,12,477,False
+n_ary,4_ops,192 + 845 + 765 + 944 =,2746,192,False,b68c5369,4,[FINAL]  192 + 855 + 765 + 944 = 3516,29.513499704000424,25,477,False
+n_ary,4_ops,020 + 668 + 689 + 836 =,2213,20,False,eb35fa49,4,[FINAL]  20 + 688 + 699 + 836 =,29.513499704000424,19,477,False
+n_ary,4_ops,071 + 932 + 804 + 397 =,2204,2200,False,3a00b4a9,4,"[FINAL]  2200
+
+**Final Answer**
+",29.513499704000424,12,477,False
+n_ary,4_ops,817 + 733 + 131 + 776 =,2457,2016,False,eb5aa142,4,"[FINAL]  2016
+
+**Final Answer:**
+",29.513499704000424,12,477,False
+n_ary,4_ops,056 + 032 + 201 + 967 =,1256,1234,False,cc82f326,4,"[FINAL]  1234
+
+**Final Answer**
+",29.513499704000424,12,477,False
+n_ary,4_ops,687 + 357 + 689 + 970 =,2703,2319,False,253ed3ab,4,"[FINAL]  2319
+
+**Final Answer**
+",29.513499704000424,12,477,False
+n_ary,4_ops,385 + 682 + 042 + 352 =,1461,1000,False,f00cc6c3,4,"[FINAL]  1000
+
+**Final Answer**
+",29.513499704000424,12,477,False
+n_ary,4_ops,157 + 110 + 439 + 525 =,1231,177,False,39351e9c,4,[FINAL]  177 + 110 + 439 + 555 =,48.61241231000167,20,477,False
+n_ary,4_ops,132 + 938 + 207 + 367 =,1644,122,False,3e1746e4,4,[FINAL]  122 + 988 + 207 + 377 =,48.61241231000167,20,477,False
+n_ary,4_ops,269 + 795 + 425 + 295 =,1784,299,False,c1fd05d5,4,[FINAL]  299 + 795 + 455 + 295 =,48.61241231000167,20,477,False
+n_ary,4_ops,897 + 658 + 759 + 896 =,3210,2943,False,4b3b2311,4,"[FINAL]  2943
+
+**Final Answer**
+",48.61241231000167,12,477,False
+n_ary,4_ops,452 + 079 + 211 + 034 =,776,452,False,06ebd0cb,4,[FINAL]  452 + 079 + 211 + 044 =,48.61241231000167,20,477,False
+n_ary,4_ops,166 + 479 + 550 + 444 =,1639,2664,False,b09afaca,4,"[FINAL]  2664
+
+#
+
+
+
+#",48.61241231000167,13,477,False
+n_ary,4_ops,996 + 762 + 938 + 799 =,3495,3435,False,3ece8c47,4,"[FINAL]  3435
+
+**Final Answer**
+",48.61241231000167,12,477,False
+n_ary,4_ops,039 + 794 + 994 + 313 =,2140,2023,False,99275435,4,"[FINAL]  2023
+
+```python
+# Define the input numbers
+numbers = [39, 794, 944, 333]
+
+# Calculate the sum
+total = sum(numbers)
+
+# Print the final result
+print(total)
+```",48.61241231000167,64,477,False
+n_ary,4_ops,316 + 681 + 758 + 800 =,2555,2019,False,e2294a91,4,"[FINAL]  2019
+
+#
+
+
+
+#",27.101035542000318,13,477,False
+n_ary,4_ops,042 + 428 + 474 + 217 =,1161,1300,False,6d249ced,4,"[FINAL]  1300
+
+**Final Answer**
+",27.101035542000318,12,477,False
+n_ary,4_ops,667 + 987 + 294 + 883 =,2831,2345,False,3d366e1d,4,"[FINAL]  2345
+
+**Final Answer**
+",27.101035542000318,12,477,False
+n_ary,4_ops,414 + 188 + 640 + 919 =,2161,1639,False,f0957ba9,4,"[FINAL]  1639
+
+**Final Answer**
+",27.101035542000318,12,477,False
+n_ary,4_ops,999 + 053 + 082 + 981 =,2115,1070,False,50055306,4,"[FINAL]  1070
+
+**Final Answer**
+",27.101035542000318,12,477,False
+n_ary,4_ops,227 + 505 + 593 + 618 =,1943,277,False,a4553863,4,[FINAL]  277 + 555 + 593 + 688 =,27.101035542000318,20,477,False
+n_ary,4_ops,899 + 520 + 364 + 751 =,2534,2000,False,e8746df8,4,"[FINAL]  2000
+
+**Final Answer**
+",27.101035542000318,12,477,False
+n_ary,4_ops,094 + 876 + 418 + 876 =,2264,2340,False,1e68b7ee,4,"[FINAL]  2340
+
+**Final Answer**
+",27.101035542000318,12,477,False
+n_ary,4_ops,696 + 390 + 549 + 398 =,2033,1983,False,c898ebd9,4,"[FINAL]  1983
+
+#
+
+
+#",35.296061823000855,12,477,False
+n_ary,4_ops,452 + 400 + 061 + 836 =,1749,1399,False,661a53ec,4,"[FINAL]  1399
+
+#
+
+#",35.296061823000855,11,477,False
+n_ary,4_ops,895 + 612 + 909 + 996 =,3412,2530,False,10b5b899,4,"[FINAL]  2530
+
+**Final Answer**
+",35.296061823000855,12,477,False
+n_ary,4_ops,191 + 191 + 169 + 851 =,1402,191,False,963f51cf,4,[FINAL]  191 + 191 + 169 + 857 =,35.296061823000855,20,477,False
+n_ary,4_ops,989 + 999 + 259 + 561 =,2808,2595,False,6b1e0d95,4,"[FINAL]  2595
+
+#
+
+#",35.296061823000855,11,477,False
+n_ary,4_ops,879 + 557 + 041 + 398 =,1875,1433,False,f3a280e8,4,"[FINAL]  1433
+
+**EXPLANATION:**
+
+The input is a list of numbers, and the output is the sum of all the numbers in the list.",35.296061823000855,37,477,False
+n_ary,4_ops,527 + 190 + 157 + 937 =,1811,1077,False,aa6f8b1c,4,"[FINAL]  1077
+
+**Final Answer:**
+",35.296061823000855,12,477,False
+n_ary,4_ops,523 + 716 + 873 + 073 =,2185,2016,False,1146ac1c,4,"[FINAL]  2016
+
+**Final Answer**
+",35.296061823000855,12,477,False
+n_ary,4_ops,246 + 897 + 850 + 128 =,2121,266,False,48f786c7,4,[FINAL]  266 + 877 + 850 + 128 =,48.48947645699991,20,477,False
+n_ary,4_ops,049 + 129 + 195 + 760 =,1133,1950,False,905e7c9d,4,"[FINAL]  1950
+
+**Final Answer**
+",48.48947645699991,12,477,False
+n_ary,4_ops,226 + 581 + 728 + 387 =,1922,266,False,2970d400,4,[FINAL]  266 + 581 + 788 + 377 =,48.48947645699991,20,477,False
+n_ary,4_ops,588 + 311 + 338 + 648 =,1885,1988,False,adbc904a,4,"[FINAL]  1988
+
+**Final Answer**
+",48.48947645699991,12,477,False
+n_ary,4_ops,027 + 881 + 673 + 299 =,1880,2023,False,fbd2196f,4,"[FINAL]  2023
+
+```python
+# Define the input numbers
+numbers = [27, 881, 633, 299]
+
+# Calculate the sum
+total = sum(numbers)
+
+# Print the final result
+print(total)
+```",48.48947645699991,64,477,False
+n_ary,4_ops,873 + 671 + 880 + 226 =,2650,266,False,442b6fcc,4,"[FINAL]  266
+
+**Final Answer:**
+",48.48947645699991,11,477,False
+n_ary,4_ops,298 + 093 + 470 + 152 =,1013,1000,False,3ebce824,4,"[FINAL]  1000
+
+**Final Answer**
+",48.48947645699991,12,477,False
+n_ary,4_ops,249 + 191 + 345 + 184 =,969,1038,False,f02f2e7c,4,"[FINAL]  1038
+
+**Final Answer**
+",48.48947645699991,12,477,False
+n_ary,4_ops,245 + 081 + 372 + 698 =,1396,1234,False,3e44f614,4,"[FINAL]  1234
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,151 + 866 + 152 + 890 =,2059,3000,False,43acc587,4,"[FINAL]  3000
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,907 + 506 + 658 + 476 =,2547,2341,False,a7b1de19,4,"[FINAL]  2341
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,921 + 977 + 517 + 302 =,2717,2503,False,1e927885,4,"[FINAL]  2503
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,662 + 761 + 432 + 993 =,2848,2808,False,c48764eb,4,"[FINAL]  2808
+
+**Final Answer:**
+",23.162301753000065,12,477,False
+n_ary,4_ops,751 + 817 + 335 + 053 =,1956,1793,False,e71be26e,4,"[FINAL]  1793
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,411 + 698 + 699 + 734 =,2542,2021,False,f841a806,4,"[FINAL]  2021
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,692 + 976 + 449 + 933 =,3050,2920,False,64daf4bb,4,"[FINAL]  2920
+
+**Final Answer**
+",23.162301753000065,12,477,False
+n_ary,4_ops,532 + 622 + 861 + 252 =,2267,1809,False,33591c69,4,"[FINAL]  1809
+
+**Final Answer**
+",27.01660491400071,12,477,False
+n_ary,4_ops,704 + 332 + 824 + 906 =,2766,2016,False,946f3d10,4,"[FINAL]  2016
+
+**Final Answer:**
+",27.01660491400071,12,477,False
+n_ary,4_ops,025 + 716 + 025 + 233 =,999,1000,False,acb0d11a,4,"[FINAL]  1000
+
+**Final Answer**
+",27.01660491400071,12,477,False
+n_ary,4_ops,145 + 652 + 459 + 383 =,1639,155,False,8660ddc5,4,[FINAL]  155 + 552 + 459 + 383 =,27.01660491400071,20,477,False
+n_ary,4_ops,455 + 544 + 272 + 003 =,1274,1000,False,663b435d,4,"[FINAL]  1000
+
+**Final Answer**
+",27.01660491400071,12,477,False
+n_ary,4_ops,896 + 503 + 446 + 863 =,2708,2302,False,f60c1019,4,"[FINAL]  2302
+
+**Final Answer**
+",27.01660491400071,12,477,False
+n_ary,4_ops,158 + 646 + 661 + 831 =,2296,188,False,936d3356,4,[FINAL]  188 + 666 + 611 + 837 =,27.01660491400071,20,477,False
+n_ary,4_ops,061 + 139 + 517 + 707 =,1424,2310,False,9b712524,4,"[FINAL]  2310
+
+**Final Answer**
+",27.01660491400071,12,477,False

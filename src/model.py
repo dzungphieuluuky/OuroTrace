@@ -1,7 +1,7 @@
 import torch
 import time
 import re
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from transformers import (
     AutoConfig,
     AutoTokenizer,
@@ -17,10 +17,11 @@ class OuroThinkingExperiment:
     def __init__(
         self,
         model_path: str,
-        dtype=torch.float16,
+        dtype=torch.bfloat16,
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
     ):
+        # Clear CUDA cache before loading new model
         torch.cuda.empty_cache()
         self.model_path = model_path
         self.dtype = dtype
@@ -29,26 +30,39 @@ class OuroThinkingExperiment:
         self.tokenizer = None
         self.task_templates = {}
 
-    def load_model_with_ut_steps(
-        self, total_ut_steps: int, early_exit_threshold: float = 1.0
-    ):
-        """Load model with specific UT steps configuration - COMPLETE FIX"""
+    def load_model_with_ut_steps(self, total_ut_steps: int):
+        """Load model with specific UT steps configuration"""
         quantization_config = None
         if self.use_4bit_quant:
             print("→ Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
-        print(f"Loading model: UT steps={total_ut_steps}, Early exit={early_exit_threshold}")
+        # Auto-enable torch.compile and batching only for ut_steps=1
+        auto_compile = (total_ut_steps == 1) and self.use_torch_compile
+        
+        print(f"\n{'='*60}")
+        print(f"⚙️  LOADING MODEL CONFIGURATION")
+        print(f"{'='*60}")
+        print(f"Model Path: {self.model_path}")
+        print(f"Requested UT Steps: {total_ut_steps}")
+        print(f"Data Type: {self.dtype}")
+        print(f"4-bit Quantization: {self.use_4bit_quant}")
+        print(f"Torch Compile: {auto_compile} (auto={'ON' if total_ut_steps==1 else 'OFF'})")
 
-        # CRITICAL: Load the base config first
+        # Load base config
         base_config = AutoConfig.from_pretrained(
             self.model_path, 
             trust_remote_code=True
         )
+        print(f"\n→ Base config loaded")
+        print(f"   Original UT steps: {getattr(base_config, 'total_ut_steps', 'N/A')}")
+        print(f"   Original early exit: {getattr(base_config, 'early_exit_threshold', 'N/A')}")
         
-        # Apply the UT step configuration BEFORE loading the model
+        # Apply UT step configuration (keep default early_exit_threshold)
         base_config.total_ut_steps = total_ut_steps
-        base_config.early_exit_threshold = early_exit_threshold
+        print(f"\n→ Modified config:")
+        print(f"   New UT steps: {base_config.total_ut_steps}")
+        print(f"   Early exit threshold: {base_config.early_exit_threshold} (from default)")
                 
         tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, 
@@ -58,8 +72,14 @@ class OuroThinkingExperiment:
         
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
+        
+        print(f"\n→ Tokenizer loaded")
+        print(f"   Vocab size: {tokenizer.vocab_size}")
+        print(f"   PAD token: {tokenizer.pad_token}")
+        print(f"   EOS token: {tokenizer.eos_token}")
 
-        # Load model with the COMPLETE modified config
+        # Load model with modified config
+        print(f"\n→ Loading model weights...")
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
             config=base_config,
@@ -70,144 +90,192 @@ class OuroThinkingExperiment:
             quantization_config=quantization_config,
         )
 
-        if self.use_torch_compile:
+        if auto_compile:
             print("→ Applying torch.compile()")
             model = torch.compile(model)
 
         model.eval()
-        print(f"✅ Model loaded on {model.device}")
         
-        # VERIFICATION: Check the config was applied
-        print(f"✅ VERIFIED: Model configured with total_ut_steps = {model.config.total_ut_steps}")
+        # Final verification
+        print(f"\n{'='*60}")
+        print(f"✅ MODEL LOADED SUCCESSFULLY")
+        print(f"{'='*60}")
+        print(f"Device: {model.device}")
+        print(f"Model dtype: {model.dtype}")
+        print(f"VERIFIED UT steps: {model.config.total_ut_steps}")
+        print(f"VERIFIED early exit: {model.config.early_exit_threshold}")
+        
+        if model.config.total_ut_steps != total_ut_steps:
+            print(f"\n⚠️  WARNING: UT STEPS MISMATCH!")
+            print(f"   Requested: {total_ut_steps}")
+            print(f"   Actual: {model.config.total_ut_steps}")
+        
+        print(f"{'='*60}\n")
         
         return model, tokenizer, base_config, {
             "total_ut_steps": total_ut_steps,
-            "early_exit_threshold": early_exit_threshold,
+            "early_exit_threshold": base_config.early_exit_threshold,
         }
 
     def _build_task_templates(self, tokenizer):
-        """
-        Based on Version A (The working version).
-        Pre-compute prompt templates for faster inference.
-        """
-        self.tokenizer = tokenizer
-        
-        task_configs = {
-            # 1. N-ARY ADDITION
-            "n_ary": {
-                "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
-                "example_user": "10 + 20 + 30 =",
-                "example_asst": "[STEP 1] Current: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Current: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Current: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
-                "force_start": "\n[STEP 1] Current: 0", 
-                "input_prefix": "" 
-            },
+            """
+            Pre-compute prompt templates for faster inference.
+            UPDATED: Refined Few-Shot examples to prevent babbling (added Step Prefixes and Guardrails).
+            """
+            self.tokenizer = tokenizer
             
-            # 2. P-HOP INDUCTION
-            "p_hop": {
-                "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
-                "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
-                "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
-                "force_start": "\n[TRACE] Start at", 
-                "input_prefix": "" 
-            },
-            
-            # 3. SYMBOLIC i-GSM
-            "igsm": {
-                "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
-                "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
-                "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
-                "force_start": "\n[EQ 1]", 
-                "input_prefix": "" 
+            task_configs = {
+                # 1. N-ARY ADDITION (TÍCH HỢP STEP PREFIX VÀ GUARDRAILS)
+                "n_ary": {
+                    # Thêm từ khóa kiểm soát: MUST, DO NOT
+                    "system": "You are a mechanical calculation engine. Your output MUST be strictly sequential. DO NOT output introductions, explanations, or any text outside of the required calculation steps.",
+                    "example_user": "10 + 20 + 30 =",
+                    # Thêm [STEP X] và [FINAL]
+                    "example_asst": "[STEP 1] Sum: 0\n[STEP 2] Add 10: 0 + 10 = 10\n[STEP 3] Sum: 10\n[STEP 4] Add 20: 10 + 20 = 30\n[STEP 5] Sum: 30\n[STEP 6] Add 30: 30 + 30 = 60\n[FINAL] 60",
+                    # Bắt đầu bằng ngắt dòng và ký hiệu bước đầu tiên
+                    "force_start": "\n[STEP 1]", 
+                    "input_prefix": "" 
+                },
+                
+                # 2. P-HOP INDUCTION (Rút gọn và Thêm Guardrail)
+                "p_hop": {
+                    # Thêm từ khóa kiểm soát và yêu cầu kết thúc chỉ với token
+                    "system": "You are an induction head mechanism. Strictly trace the sequence occurrences step-by-step. Do not provide any commentary or auxiliary information. End your response ONLY with the final traced token.",
+                    "example_user": "Sequence: A B C D A B. Start: A. Hop 1 times.",
+                    # Rút gọn ví dụ: dùng [TRACE]
+                    "example_asst": "\n[TRACE] Start at A. Found 'A' in sequence. Next token is B.\n[FINAL] B",
+                    "force_start": "\n[TRACE] Start at", 
+                    "input_prefix": "" 
+                },
+                
+                # 3. SYMBOLIC i-GSM (Thêm Step Prefix và Guardrail)
+                "igsm": {
+                    # Tăng cường Guardrail
+                    "system": "You are a symbolic math solver. You must solve the DAG modulo 7. Your reasoning MUST be concise, equation-based, and step-by-step. DO NOT generate preambles or verbose explanations.",
+                    "example_user": "Question. E#I := 4. E#J := E#I. F#K := E#J. H#J := E#J + F#K. H#J?",
+                    # Thêm [EQ X] cho từng bước và [FINAL]
+                    "example_asst": "\n[EQ 1] E#I = 4. [EQ 2] E#J = E#I. ==> E#J = 4. [EQ 3] F#K = E#J. ==> F#K = 4. [EQ 4] H#J = E#J + F#K. ==> H#J = 1.\n[FINAL] 1",
+                    "force_start": "\n[EQ 1]", 
+                    "input_prefix": "" 
+                }
             }
-        }
-        
-        self.task_templates = {}
-        
-        for task_type, config in task_configs.items():
-            # 1. Build static context
-            static_messages = [
-                {"role": "system", "content": config["system"]},
-                {"role": "user", "content": config["example_user"]},
-                {"role": "assistant", "content": config["example_asst"]}
-            ]
             
-            static_prompt_text = tokenizer.apply_chat_template(
-                static_messages, tokenize=False, add_generation_prompt=True
-            )
-            static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+            for task_type, config in task_configs.items():
+                # 1. Build static context (Unchanged logic)
+                static_messages = [
+                    {"role": "system", "content": config["system"]},
+                    {"role": "user", "content": config["example_user"]},
+                    {"role": "assistant", "content": config["example_asst"]}
+                ]
+                
+                static_prompt_text = tokenizer.apply_chat_template(
+                    static_messages, tokenize=False, add_generation_prompt=True
+                )
+                static_inputs = tokenizer(static_prompt_text, return_tensors="pt")
+                
+                # 2. Tokenize Force Start (Unchanged logic)
+                force_start_tokens = tokenizer(
+                    config["force_start"], 
+                    return_tensors="pt", 
+                    add_special_tokens=False
+                )
+                
+                self.task_templates[task_type] = {
+                    "static_input_ids": static_inputs.input_ids,
+                    "static_attention_mask": static_inputs.attention_mask,
+                    "force_start_ids": force_start_tokens.input_ids,
+                    "input_prefix": config["input_prefix"],
+                    "force_start_text": config["force_start"]
+                }
             
-            # 2. Tokenize Force Start
-            force_start_tokens = tokenizer(
-                config["force_start"], 
-                return_tensors="pt", 
-                add_special_tokens=False
-            )
-            
-            self.task_templates[task_type] = {
-                "static_input_ids": static_inputs.input_ids,
-                "static_attention_mask": static_inputs.attention_mask,
-                "force_start_ids": force_start_tokens.input_ids,
-                "input_prefix": config["input_prefix"],
-                "force_start_text": config["force_start"]
-            }
-        
-        print("[+] Task templates pre-computed")
+            print("[+] Task templates pre-computed (Corrected with Step Prefixes and Guardrails)")
 
     def _extract_final_answer(self, full_response: str, task_type: str) -> str:
-        """
-        Based on Version A. Uses robust Regex finding the LAST match.
-        """
+        """Extract final answer with improved parsing"""
         pred = "0"
         
         try:
-            # 1. Logic for P-HOP (Letters)
+            full_response = full_response.strip()
+            
             if task_type == "p_hop":
                 patterns = [
-                    r"Final\s*:\s*(\w+)",
-                    r"\[FINAL\]\s*(\w+)",
-                    r"Next token is\s*(\w+)",
-                    r"Answer\s*:\s*(\w+)",
+                    r'Answer:\s*([A-Z])\b',
+                    r'\[FINAL\]\s*([A-Z])\b',
+                    r'Final:\s*([A-Z])\b',
+                    r'\b([A-Z])\s*$',
                 ]
-                # Search specifically for the FINAL tag first
+                
                 for pattern in patterns:
                     matches = re.findall(pattern, full_response, re.IGNORECASE)
                     if matches:
-                        pred = matches[-1].strip() # Take the last one found
+                        pred = matches[-1].upper()
                         break
                 else:
-                    pred = "Error"
-
-            # 2. Logic for Math (Numbers)
+                    pred = "ERROR"
+            
             else:
+                # N-ARY & i-GSM: Extract numbers
                 patterns = [
-                    r"\[FINAL\]\s*([-+]?\d*\.?\d+)", # [FINAL] 60
-                    r"Final\s*:\s*([-+]?\d*\.?\d+)", # Final: 60
-                    r"=\s*([-+]?\d*\.?\d+)"          # ... = 60
+                    r'Answer:\s*(-?\d+)',
+                    r'\[FINAL\]\s*(-?\d+)',
+                    r'Final:\s*(-?\d+)',
+                    r'⇒\s*(-?\d+)\s*\.',  # Compact CoT format
+                    r'=\s*(-?\d+)\s*$',
+                    r'\b(-?\d+)\s*$',
                 ]
-                all_matches = []
-                for pattern in patterns:
-                    matches = re.findall(pattern, full_response, re.IGNORECASE)
-                    all_matches.extend(matches)
                 
-                if all_matches:
-                    # Robustness: Take the very last number found in the text
-                    # This handles cases where the model calculates intermediate steps.
-                    pred = all_matches[-1]
+                for pattern in patterns:
+                    matches = re.findall(pattern, full_response)
+                    if matches:
+                        pred = matches[-1]
+                        break
                 else:
-                    # Fallback: look for any number at the very end of string
-                    end_match = re.search(r'([-+]?\d+)\s*$', full_response.strip())
-                    if end_match:
-                        pred = end_match.group(1)
+                    lines = [l.strip() for l in full_response.split('\n') if l.strip()]
+                    if lines:
+                        last_line = lines[-1]
+                        numbers = re.findall(r'-?\d+', last_line)
+                        if numbers:
+                            pred = numbers[-1]
+                        else:
+                            pred = "ERROR"
                     else:
-                        pred = "Error"
-
+                        pred = "ERROR"
+        
         except Exception as e:
             print(f"[!] Parsing error: {e}")
             pred = "ParseError"
         
         return pred
 
-    @torch.no_grad()
+    def _detect_degenerate_output(self, text: str) -> bool:
+        """Detect if output is degenerate/garbage"""
+        if not text or len(text.strip()) < 5:
+            return True
+        
+        if text.count('\n\n\n') > 3:
+            return True
+        
+        bracket_ratio = (text.count('[') + text.count(']')) / max(len(text), 1)
+        if bracket_ratio > 0.3:
+            return True
+        
+        if len(text) > 100:
+            unique_chars = len(set(text))
+            if unique_chars < 10:
+                return True
+        
+        whitespace_ratio = (text.count(' ') + text.count('\n')) / max(len(text), 1)
+        if whitespace_ratio > 0.7:
+            return True
+        
+        if len(text) > 50:
+            for char in ['[', ']', '\n', ' ', '.']:
+                if text.count(char) > len(text) * 0.4:
+                    return True
+        
+        return False
+
+    @torch.inference_mode()
     def predict_with_metrics_optimized(
         self,
         user_input: str,
@@ -216,48 +284,78 @@ class OuroThinkingExperiment:
         tokenizer,
         ut_steps: int,
         generation_config: dict = None,
-    ):
-            # VERIFY model has the right config
+    ) -> Dict[str, Any]:
+        """Optimized prediction with improved generation control"""
+        
         if not hasattr(model.config, 'total_ut_steps'):
             print("❌ ERROR: Model missing total_ut_steps config!")
-            return {"error": "Bad model config", "prediction": "0"}
+            return {
+                "error": "Bad model config", 
+                "prediction": "ERROR",
+                "full_response": "",
+                "generation_time": 0,
+                "generated_tokens": 0,
+                "input_tokens": 0,
+                "ut_steps": ut_steps,
+                "is_degenerate": False,
+            }
 
-        """Optimized prediction with repetition penalty to prevent loops"""
         if not hasattr(self, "task_templates") or task_type not in self.task_templates:
             self._build_task_templates(tokenizer)
 
         template = self.task_templates[task_type]
         device = model.device
 
-        input_ids = template["static_input_ids"].to(device)
-        user_query = template["input_prefix"] + user_input
+        static_ids = template["static_input_ids"].to(device)
+        
         user_tokens = tokenizer(
-            user_query, return_tensors="pt", add_special_tokens=False
+            user_input, 
+            return_tensors="pt", 
+            add_special_tokens=False
         ).input_ids.to(device)
+        
         force_start_ids = template["force_start_ids"].to(device)
 
-        input_ids = torch.cat([input_ids, user_tokens, force_start_ids], dim=1)
+        input_ids = torch.cat([static_ids, user_tokens, force_start_ids], dim=1)
         attention_mask = torch.ones_like(input_ids, device=device)
 
         start_time = time.perf_counter()
 
-        gen_config = generation_config or {
-            "max_new_tokens": 1024,
+        # Adjusted generation config for concise outputs
+        default_config = {
+            "max_new_tokens": 256,  # Reduced from 512
+            "min_new_tokens": 3,
             "do_sample": False,
             "num_beams": 1,
-            "min_length": 5,
-            "repetition_penalty": 1.2
+            "repetition_penalty": 1.0,
         }
+        
+        if generation_config:
+            default_config.update(generation_config)
 
-        outputs = model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            pad_token_id=tokenizer.eos_token_id,
-            use_cache=True,
-            return_dict_in_generate=True,
-            output_scores=False,
-            **gen_config,
-        )
+        try:
+            outputs = model.generate(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                pad_token_id=tokenizer.eos_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+                use_cache=True,
+                return_dict_in_generate=True,
+                output_scores=False,
+                **default_config,
+            )
+        except Exception as e:
+            print(f"❌ Generation failed: {e}")
+            return {
+                "error": str(e),
+                "prediction": "ERROR",
+                "full_response": "",
+                "generation_time": 0,
+                "generated_tokens": 0,
+                "input_tokens": input_ids.shape[1],
+                "ut_steps": ut_steps,
+                "is_degenerate": False,
+            }
 
         generation_time = time.perf_counter() - start_time
 
@@ -265,8 +363,16 @@ class OuroThinkingExperiment:
         generated_ids = outputs.sequences[0, prompt_length:]
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
-        full_response = template["force_start_text"] + generated_text
-        pred = self._extract_final_answer(full_response, task_type)
+        full_response = template["force_start_text"] + " " + generated_text
+        
+        is_degenerate = self._detect_degenerate_output(full_response)
+        
+        if is_degenerate:
+            print(f"⚠️ GARBAGE OUTPUT detected for {task_type}")
+            print(f"   Response preview: {full_response[:200]}...")
+            pred = "DEGENERATE"
+        else:
+            pred = self._extract_final_answer(full_response, task_type)
 
         return {
             "full_response": full_response,
@@ -275,9 +381,10 @@ class OuroThinkingExperiment:
             "generated_tokens": generated_ids.shape[0],
             "input_tokens": input_ids.shape[1],
             "ut_steps": ut_steps,
+            "is_degenerate": is_degenerate,
         }
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def calculate_perplexity(
         self,
         model,
@@ -296,7 +403,10 @@ class OuroThinkingExperiment:
 
         text_concat = text_data[0]
         encodings = tokenizer(
-            text_concat, return_tensors="pt", max_length=max_length * 2, truncation=True
+            text_concat, 
+            return_tensors="pt", 
+            max_length=max_length * 2, 
+            truncation=True
         )
         input_ids = encodings.input_ids.to(device)
         attention_mask = encodings.attention_mask.to(device)
@@ -308,7 +418,8 @@ class OuroThinkingExperiment:
         total_tokens = 0
 
         for i in tqdm(
-            range(0, input_ids.size(1), stride), desc=f"Calculating PPL (UT={ut_steps})"
+            range(0, input_ids.size(1), stride), 
+            desc=f"Calculating PPL (UT={ut_steps})"
         ):
             end_loc = min(i + max_length, input_ids.size(1))
             input_slice = input_ids[:, i:end_loc]
@@ -350,25 +461,30 @@ class OuroBatchExperiment(OuroThinkingExperiment):
     def __init__(
         self,
         model_path: str,
-        dtype=torch.float16,
+        dtype=torch.bfloat16,
         use_4bit_quant: bool = False,
         use_torch_compile: bool = False,
         max_batch_size: int = 4,
-        max_new_tokens: int = 1024,
+        max_new_tokens: int = 256,  # Reduced default
     ):
         super().__init__(model_path, dtype, use_4bit_quant, use_torch_compile)
         self.max_batch_size = max_batch_size
         self.max_new_tokens = max_new_tokens
 
-    def prepare_batch_inputs(self, prompts: List[str], task_type: str) -> List[List[int]]:
+    def prepare_batch_inputs(
+        self, prompts: List[str], task_type: str
+    ) -> List[List[int]]:
         """Prepare inputs for batch generation"""
         if task_type not in self.task_templates:
             raise ValueError("Templates not built. Call _build_task_templates first.")
         
         template = self.task_templates[task_type]
         
-        batch_texts = [template["input_prefix"] + p for p in prompts]
-        user_encodings = self.tokenizer(batch_texts, add_special_tokens=False)
+        user_encodings = self.tokenizer(
+            prompts, 
+            add_special_tokens=False,
+            padding=False
+        )
         
         static_ids = template["static_input_ids"].squeeze(0).tolist()
         force_ids = template["force_start_ids"].squeeze(0).tolist()
@@ -380,21 +496,28 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         
         return input_id_lists
 
-    @torch.no_grad()
-    def batch_predict_with_metrics(self, prompts: List[str], task_type: str,
-                                   model, tokenizer, ut_steps: int,
-                                   generation_config: Optional[GenerationConfig] = None):
+    @torch.inference_mode()
+    def batch_predict_with_metrics(
+        self, 
+        prompts: List[str], 
+        task_type: str,
+        model, 
+        tokenizer, 
+        ut_steps: int,
+        generation_config: Optional[GenerationConfig] = None
+    ):
         """Batch prediction with metrics"""
         if not prompts:
             return []
         
-        simple_batch_inputs = self.prepare_batch_inputs(prompts, task_type)
-        input_lengths = [len(ids) for ids in simple_batch_inputs]
-        
         if not hasattr(model, 'generate_batch'):
             print("⚠️ Model doesn't support generate_batch(). Using sequential.")
-            return self._sequential_fallback(prompts, task_type, model, 
-                                            tokenizer, ut_steps, generation_config)
+            return self._sequential_fallback(
+                prompts, task_type, model, tokenizer, ut_steps, generation_config
+            )
+        
+        simple_batch_inputs = self.prepare_batch_inputs(prompts, task_type)
+        input_lengths = [len(ids) for ids in simple_batch_inputs]
         
         if generation_config is None:
             generation_config = GenerationConfig(
@@ -403,6 +526,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                 eos_token_id=tokenizer.eos_token_id,
                 pad_token_id=tokenizer.pad_token_id,
                 do_sample=False,
+                repetition_penalty=1.0,
                 max_batch_tokens=self.max_batch_size * self.max_new_tokens,
             )
         
@@ -414,9 +538,10 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                 generation_config=generation_config,
             )
         except Exception as e:
-            print(f"⚠️ generate_batch failed: {e}. Falling back.")
-            return self._sequential_fallback(prompts, task_type, model, 
-                                            tokenizer, ut_steps, generation_config)
+            print(f"⚠️ generate_batch failed: {e}. Falling back to sequential.")
+            return self._sequential_fallback(
+                prompts, task_type, model, tokenizer, ut_steps, generation_config
+            )
         
         batch_time = time.perf_counter() - start_time
         
@@ -424,18 +549,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         results = [None] * len(prompts)
         request_ids = list(batch_outputs.keys())
         
-        # Map outputs to prompts
-        # if all(isinstance(rid, int) for rid in request_ids):
-        #     for request_id in request_ids:
-        #         if 0 <= request_id < len(prompts):
-        #             output = batch_outputs[request_id]
-        #             results[request_id] = self._process_single_output(
-        #                 output, request_id, input_lengths[request_id],
-        #                 template, tokenizer, task_type, ut_steps,
-        #                 batch_time / len(prompts)
-        #             )
         if all(isinstance(rid, str) for rid in request_ids):
-            # String/UUID request IDs
             input_to_index = {
                 " ".join(map(str, inp)): idx 
                 for idx, inp in enumerate(simple_batch_inputs)
@@ -454,7 +568,6 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                             batch_time / len(prompts)
                         )
         
-        # Fill missing results
         for i in range(len(prompts)):
             if results[i] is None:
                 results[i] = {
@@ -463,7 +576,8 @@ class OuroBatchExperiment(OuroThinkingExperiment):
                     'generation_time': batch_time / len(prompts),
                     'generated_tokens': 0,
                     'input_tokens': input_lengths[i],
-                    'ut_steps': ut_steps
+                    'ut_steps': ut_steps,
+                    'is_degenerate': False,
                 }
         
         return results
@@ -479,7 +593,7 @@ class OuroBatchExperiment(OuroThinkingExperiment):
         ut_steps: int,
         sample_time: float,
     ):
-        """Process single batch output"""
+        """Process single batch output with garbage detection"""
         if hasattr(output, "generated_tokens"):
             generated_ids = output.generated_tokens
         elif hasattr(output, "sequences") and len(output.sequences) > 0:
@@ -488,9 +602,15 @@ class OuroBatchExperiment(OuroThinkingExperiment):
             generated_ids = []
 
         generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
-        full_response = template["force_start_text"] + generated_text
+        full_response = template["force_start_text"] + " " + generated_text
 
-        pred = self._extract_final_answer(full_response, task_type)
+        is_degenerate = self._detect_degenerate_output(full_response)
+        
+        if is_degenerate:
+            print(f"⚠️ GARBAGE OUTPUT detected in batch for {task_type} (idx={prompt_idx})")
+            pred = "DEGENERATE"
+        else:
+            pred = self._extract_final_answer(full_response, task_type)
 
         return {
             "full_response": full_response,
@@ -500,14 +620,21 @@ class OuroBatchExperiment(OuroThinkingExperiment):
             "input_tokens": input_length,
             "ut_steps": ut_steps,
             "prompt_idx": prompt_idx,
+            "is_degenerate": is_degenerate,
         }
 
     def _sequential_fallback(
-        self, prompts, task_type, model, tokenizer, ut_steps, generation_config
+        self, 
+        prompts, 
+        task_type, 
+        model, 
+        tokenizer, 
+        ut_steps, 
+        generation_config
     ):
         """Fallback to sequential processing"""
         results = []
-        for prompt in tqdm(prompts, desc=f"Sequential fallback ({task_type})"):
+        for prompt in tqdm(prompts, desc=f"Sequential ({task_type})"):
             result = self.predict_with_metrics_optimized(
                 user_input=prompt,
                 task_type=task_type,
