@@ -480,6 +480,16 @@ class SafeOuroThinkingExperiment:
                 add_generation_prompt=True,
             )
             prompt += template["force_start_text"]
+            
+            # Log the full prompt for debugging
+            print(f"\n[DEBUG] Full prompt for input:\n{prompt}\n")
+
+            # Check if the prompt follow chat format
+            if self.check_chat_format(prompt):
+                print("   ✓ Prompt follows chat format")
+            else:
+                print("   ⚠️ Prompt does NOT follow chat format!")
+                
             prompts.append(prompt)
 
         # Tokenize with padding
