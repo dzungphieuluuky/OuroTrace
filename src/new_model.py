@@ -294,59 +294,46 @@ class SafeOuroThinkingExperiment:
         """
         Pre-compute ALL tokenization components including user message wrapper.
         This eliminates ALL redundant tokenization during inference.
-
-        Args:
-            tokenizer: HuggingFace tokenizer
         """
         self.tokenizer = tokenizer
 
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You solve ADDITION by adding numbers one at a time.\n"
-                    "\n"
+                    "You solve ADDITION by adding numbers one at a time.\n\n"
                     "EXAMPLES:\n"
                     "Input: Add 2 numbers: 234 + 567\n"
-                    "[FINAL] 801 [END]\n"
-                    "\n"
+                    "[FINAL] 801 [END]\n\n"
                     "Input: Add 4 numbers: 120 + 88 + 45 + 37\n"
-                    "[FINAL] 290 [END]\n"
-                    "\n"
+                    "[FINAL] 290 [END]\n\n"
                     "RULES:\n"
                     "✓ Show ONLY the final answer, no intermediate steps.\n"
                     "✓ Start with 0, add one number per step (but steps are hidden).\n"
                     "✓ Use ONLY numbers from input (no inventing).\n"
                     "✓ After final step: [FINAL] {answer} [END]\n"
-                    "✓ STOP at [END]\n"
-                    "\n"
+                    "✓ STOP at [END]\n\n"
                     "✗ NO extra steps after all input numbers used.\n"
                     "✗ NO inventing numbers or patterns.\n"
                     "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
             },
-
             "p_hop": {
                 "system": (
-                    "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n"
-                    "\n"
+                    "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\n"
                     "EXAMPLES:\n"
                     "Input: Sequence: A B C D E | Start: A | Hops: 3\n"
-                    "[FINAL] D [END]\n"
-                    "\n"
+                    "[FINAL] D [END]\n\n"
                     "Input: Sequence: C A D B A C | Start: C | Hops: 4\n"
-                    "[FINAL] A [END]\n"
-                    "\n"
+                    "[FINAL] A [END]\n\n"
                     "Input: Sequence: D D A B C | Start: D | Hops: 2\n"
-                    "[FINAL] A [END]\n"
-                    "\n"
+                    "[FINAL] A [END]\n\n"
                     "RULES:\n"
                     "✓ Show ONLY the final token, no hop details.\n"
                     "✓ Each hop moves one position forward (but hops are hidden).\n"
                     "✓ Use ONLY tokens from input sequence.\n"
                     "✓ After final hop: [FINAL] {token} [END]\n"
-                    "✓ STOP at [END]\n"
-                    "\n"
+                    "✓ STOP at [END]\n\n"
                     "✗ NO skipping hops.\n"
                     "✗ NO inventing tokens.\n"
                     "✗ NO jumping to [FINAL] without showing hops.\n"
@@ -354,32 +341,25 @@ class SafeOuroThinkingExperiment:
                 ),
                 "force_start": "[FINAL]",
             },
-
             "igsm": {
                 "system": (
                     "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\n"
-                    "Valid results: 0‑6 only.\n"
-                    "\n"
+                    "Valid results: 0‑6 only.\n\n"
                     "MOD 7 QUICK REFERENCE:\n"
-                    "5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n"
-                    "\n"
+                    "5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\n"
                     "EXAMPLES:\n"
                     "Input: A := 5 | B := A + 3 | Query: B\n"
-                    "[FINAL] 1 [END]\n"
-                    "\n"
+                    "[FINAL] 1 [END]\n\n"
                     "Input: X := 10 | Y := 4 | Z := X + Y | Query: Z\n"
-                    "[FINAL] 0 [END]\n"
-                    "\n"
+                    "[FINAL] 0 [END]\n\n"
                     "Input: P := 8 | Q := P | R := Q + P | Query: R\n"
-                    "[FINAL] 2 [END]\n"
-                    "\n"
+                    "[FINAL] 2 [END]\n\n"
                     "RULES:\n"
                     "✓ Process every assignment in order (but calculations are hidden).\n"
                     "✓ Show ONLY the final answer, no intermediate calculations.\n"
                     "✓ Final answer must be 0‑6.\n"
                     "✓ After query variable: [FINAL] {answer} [END]\n"
-                    "✓ STOP at [END]\n"
-                    "\n"
+                    "✓ STOP at [END]\n\n"
                     "✗ NO skipping assignments.\n"
                     "✗ NO results outside 0‑6.\n"
                     "✗ NO continuing after query found.\n"
@@ -388,11 +368,12 @@ class SafeOuroThinkingExperiment:
                 "force_start": "[FINAL]",
             },        
         }
-        # --- STEP 4: Pre-compute generation configs (unchanged) ---
+
+        # Pre-compute generation configs (move outside predict loop)
         task_generation_configs = {
             "n_ary": GenerationConfig(
                 max_new_tokens=16,
-                min_new_tokens=2,
+                min_new_tokens=10,
                 do_sample=False,
                 num_beams=1,
                 repetition_penalty=1.0,
@@ -400,7 +381,7 @@ class SafeOuroThinkingExperiment:
             ),
             "p_hop": GenerationConfig(
                 max_new_tokens=16,
-                min_new_tokens=2,
+                min_new_tokens=10,
                 do_sample=False,
                 num_beams=1,
                 repetition_penalty=1.0,
@@ -408,7 +389,7 @@ class SafeOuroThinkingExperiment:
             ),
             "igsm": GenerationConfig(
                 max_new_tokens=16,
-                min_new_tokens=2,
+                min_new_tokens=10,
                 do_sample=False,
                 num_beams=1,
                 repetition_penalty=1.0,
@@ -416,11 +397,10 @@ class SafeOuroThinkingExperiment:
             ),
         }
 
-        # --- STEP 5: Pre-tokenize everything (unchanged logic) ---
+        # Build templates with pre-tokenized components
         self.task_templates = {}
         
         for task_type, config in task_configs.items():
-            # Pre-tokenize system prompt
             # Step 1: Pre-tokenize system prompt
             system_messages = [{"role": "system", "content": config["system"]}]
             system_text = tokenizer.apply_chat_template(
@@ -428,15 +408,16 @@ class SafeOuroThinkingExperiment:
                 tokenize=False,
                 add_generation_prompt=False,
             )
-
-            system_tokens = tokenizer.encode(system_text, add_special_tokens=False)            
-            # Pre-tokenize force_start
+            system_tokens = tokenizer.encode(system_text, add_special_tokens=False)
+            
+            # Step 2: Pre-tokenize force_start
             force_start_tokens = tokenizer.encode(
                 config["force_start"],
                 add_special_tokens=False,
             )
             
-            # Pre-compute user message wrapper tokens
+            # Step 3: Pre-compute user message wrapper tokens
+            # Get the template structure WITHOUT actual content
             dummy_user_msg = [{"role": "user", "content": "PLACEHOLDER"}]
             user_template_text = tokenizer.apply_chat_template(
                 dummy_user_msg,
@@ -444,11 +425,14 @@ class SafeOuroThinkingExperiment:
                 add_generation_prompt=True,
             )
             
+            # Split into prefix and suffix around PLACEHOLDER
+            # This allows us to only tokenize the actual user content
             if "PLACEHOLDER" in user_template_text:
                 prefix, suffix = user_template_text.split("PLACEHOLDER", 1)
                 user_prefix_tokens = tokenizer.encode(prefix, add_special_tokens=False)
                 user_suffix_tokens = tokenizer.encode(suffix, add_special_tokens=False)
             else:
+                # Fallback: tokenize whole template
                 user_prefix_tokens = []
                 user_suffix_tokens = tokenizer.encode(user_template_text, add_special_tokens=False)
             
@@ -460,7 +444,7 @@ class SafeOuroThinkingExperiment:
                 # Pre-tokenized components
                 "system_tokens": system_tokens,
                 "user_prefix_tokens": user_prefix_tokens,  # NEW: "<|im_start|>user\n"
-                "user_suffix_tokens": user_suffix_tokens,  # NEW: "\n<|im_end|>\n<|im_start|>assistant\n"                
+                "user_suffix_tokens": user_suffix_tokens,  # NEW: "\n<|im_end|>\n<|im_start|>assistant\n"
                 "force_start_tokens": force_start_tokens,
                 
                 # Pre-computed generation config
@@ -474,7 +458,10 @@ class SafeOuroThinkingExperiment:
             }
         
         print("[+] Task templates with pre-tokenized components computed.")
-        print(f"    System tokens: {len(self.task_templates['n_ary']['system_tokens'])} tokens")
+        print(f"    System prompt N_ary tokens: {len(self.task_templates['n_ary']['system_tokens'])} tokens")
+        print(f"    System prompt P_hop tokens: {len(self.task_templates['p_hop']['system_tokens'])} tokens")
+        print(f"    System prompt IGSM tokens: {len(self.task_templates['igsm']['system_tokens'])} tokens")
+        
         print(f"    User prefix tokens: {len(self.task_templates['n_ary']['user_prefix_tokens'])} tokens")
         print(f"    User suffix tokens: {len(self.task_templates['n_ary']['user_suffix_tokens'])} tokens")
         print(f"    Force start tokens: {len(self.task_templates['n_ary']['force_start_tokens'])} tokens")
