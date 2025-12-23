@@ -322,6 +322,7 @@ class SafeOuroThinkingExperiment:
 
         # N-ARY ADDITION
         if "n_ary" in task_data and task_data["n_ary"]:
+            shots = ""
             shots = sample_shots(task_data["n_ary"])
             examples_text = ""
             for ex in shots:
@@ -348,6 +349,7 @@ class SafeOuroThinkingExperiment:
 
         # P-HOP INDUCTION
         if "p_hop" in task_data and task_data["p_hop"]:
+            shots = ""
             shots = sample_shots(task_data["p_hop"])
             examples_text = ""
             for ex in shots:
@@ -387,6 +389,7 @@ class SafeOuroThinkingExperiment:
 
         # IGSM (Symbolic Modular Arithmetic)
         if "igsm" in task_data and task_data["igsm"]:
+            shots = ""
             shots = sample_shots(task_data["igsm"])
             examples_text = ""
             for ex in shots:
