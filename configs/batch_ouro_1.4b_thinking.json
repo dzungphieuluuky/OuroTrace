@@ -41,12 +41,12 @@
     },
     "OPTIMIZATION": {
         "enable_batch": true,
-        "max_batch_size": 12,
-        "max_new_tokens": 512,
+        "max_batch_size": 8,
+        "max_new_tokens": 16,
         "task_batch_size": {
-            "n_ary": 12,
-            "p_hop": 8,
-            "igsm": 4
+            "n_ary": 8,
+            "p_hop": 4,
+            "igsm": 2
         }
     },
     "ENABLE_HEAVY_BENCHMARKS": false,

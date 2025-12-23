@@ -12,7 +12,8 @@ from .utils import (
     save_results,
     save_simple_reasoning_results,
     save_perplexity_results,
-    save_simple_reasoning_results,
+    save_reasoning_primitives_results,
+    save_heavy_benchmark_results,
     save_config,
     generate_test_id,
 )
@@ -118,8 +119,13 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
 
             accuracy = correct / len(samples) if samples else 0.0
             print(f"    ✅ Accuracy: {accuracy:.2%} ({correct}/{len(samples)})")
+    
+    return reasoning_primitives_results
 
+def run_standard_benchmarks(model, tokenizer, config: dict):
+    """
     # --- PART 2: STANDARD BENCHMARKS (lm-eval) ---
+    """
     print("\n" + "=" * 60)
     print("📚 Running Standard Benchmarks (lm-evaluation-harness)")
     print("=" * 60)
@@ -183,8 +189,8 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
     except ImportError:
         print("⚠️ 'lm-evaluation-harness' not installed. Skipping Standard Benchmarks.")
         print("ℹ️  Install with: pip install lm-eval")
-
-    return reasoning_primitives_results
+    
+    return standard_benchmark_results
 
 
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
