@@ -400,7 +400,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL] 545 **Final Answer**\n"
                     "You must end with [END], not **Final Answer**."
                 ),
-                "force_start": None,
+                "force_start": "[FINAL]",
             },
             "p_hop": {
                 "system": (
@@ -500,7 +500,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL] D\n\n**Final\n"
                     "You must show the hop steps BEFORE [FINAL]."
                 ),
-                "force_start": None,
+                "force_start": "[FINAL]",
             },
             "igsm": {
                 "system": (
@@ -618,7 +618,7 @@ class SafeOuroThinkingExperiment:
                     "[FINAL] 8 [END]\n"
                     "8 is NOT valid. Must apply mod 7 to get a result between 0-6."
                 ),
-                "force_start": None,
+                "force_start": "[FINAL]",
             }
         }
 
