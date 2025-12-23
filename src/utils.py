@@ -42,15 +42,19 @@ def save_results(
 def save_stats_results(
     stats_results: List[Dict],
     output_dir: str,
+    file_name : str = "all_latest.csv",
     overwrite: bool = True
 ) -> None:
     """Save only stats_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
-    stats_file = os.path.join(output_dir, "all_latest.csv")
+    if not file_name.endswith(".csv"):
+        file_name += ".csv"
+    stats_file = os.path.join(output_dir, file_name)
     if overwrite and os.path.exists(stats_file):
         os.remove(stats_file)
     pd.DataFrame(stats_results).to_csv(stats_file, index=False)
     print(f"✅ Saved all results to {stats_file}")
+
 
 def save_perplexity_results(
     perplexity_results: List[Dict],

@@ -7,21 +7,36 @@ import pandas as pd
 from tqdm.auto import tqdm
 from typing import Dict, List, Any, Optional, Tuple
 
-from .utils import save_results, save_config, generate_test_id
+from .utils import (
+    save_results,
+    save_holistic_results,
+    save_perplexity_results,
+    save_stats_results,
+    save_config,
+)
 from .evaluation_metrics import (
     OuroMetrics,
     analyze_experiment_results,
     PaperComplianceChecker
 )
 # Import utilities (adjust paths as needed)
-from .output_monitor import OutputQualityMonitor, ExperimentFailureException
+from .output_monitor import (
+    OutputQualityMonitor,
+    ExperimentFailureException
+)
 from .data_generator import (
     create_test_datasets, 
     create_perplexity_data, 
     load_and_preprocess_data
 )
-from .new_model import SafeOuroThinkingExperiment
-from .evaluation import run_holistic_evaluation
+from .new_model import (
+    SafeOuroThinkingExperiment,
+    SafeOptimizations,
+)
+from .evaluation import (
+    run_holistic_evaluation,
+    load_and_process_results
+)
 
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
     """Run batch experiment based on the provided configuration.
@@ -145,7 +160,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # use .. to save results outside OuroTrace directory for easy downloading on kaggle/colab
-    output_dir = f"../results_{timestamp}"
+    output_dir = f"../results_{timestamp}_utsteps_{'-'.join(map(str, ut_steps_list))}"
     os.makedirs(output_dir, exist_ok=True)
 
     # Save config ONCE at the start
