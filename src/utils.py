@@ -123,7 +123,11 @@ def save_config(
             for k, v in templates.items():
                 clean[k] = {}
                 for subk, subv in v.items():
-                    if isinstance(subv, (str, list, dict, int, float, bool, type(None))):
+                    # Store system prompt as list of lines (one sentence per line)
+                    if subk == "system" and isinstance(subv, str):
+                        # Split on \n, remove empty lines, strip whitespace
+                        clean[k][subk] = [line.strip() for line in subv.split('\n') if line.strip()]
+                    elif isinstance(subv, (str, list, dict, int, float, bool, type(None))):
                         clean[k][subk] = subv
                     else:
                         clean[k][subk] = str(subv)
