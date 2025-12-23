@@ -8,7 +8,7 @@ import pandas as pd
 from typing import List, Dict
 
 def save_results(
-    stats_results: List[Dict],
+    simple_reasoning_results: List[Dict],
     perplexity_results: List[Dict],
     holistic_results: List[Dict],
     output_dir: str,
@@ -24,9 +24,9 @@ def save_results(
             os.remove(fname)
         pd.DataFrame(data).to_csv(fname, index=False)
 
-    if stats_results:
+    if simple_reasoning_results:
         stats_file = os.path.join(output_dir, "all_latest.csv")
-        save_csv(stats_results, stats_file)
+        save_csv(simple_reasoning_results, stats_file)
         print(f"✅ Periodic save: all results to {stats_file}")
 
     if perplexity_results:
@@ -39,20 +39,20 @@ def save_results(
         save_csv(holistic_results, holistic_file)
         print(f"✅ Periodic save: holistic results to {holistic_file}")
 
-def save_stats_results(
-    stats_results: List[Dict],
+def save_simple_reasoning_results(
+    simple_reasoning_results: List[Dict],
     output_dir: str,
     file_name : str = "all_latest.csv",
     overwrite: bool = True
 ) -> None:
-    """Save only stats_results to CSV file."""
+    """Save only simple_reasoning_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
     if not file_name.endswith(".csv"):
         file_name += ".csv"
     stats_file = os.path.join(output_dir, file_name)
     if overwrite and os.path.exists(stats_file):
         os.remove(stats_file)
-    pd.DataFrame(stats_results).to_csv(stats_file, index=False)
+    pd.DataFrame(simple_reasoning_results).to_csv(stats_file, index=False)
     print(f"✅ Saved all results to {stats_file}")
 
 

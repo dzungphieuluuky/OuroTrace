@@ -15,7 +15,7 @@ from .utils import (
     save_results,
     save_holistic_results,
     save_perplexity_results,
-    save_stats_results,
+    save_simple_reasoning_results,
     save_config,
     generate_test_id
 )
@@ -294,7 +294,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         perplexity_data = ["\n\n".join(raw_ppl_data)]
         print(f"✅ Prepared {eval_settings['ppl_num_samples']} samples for PPL\n")
 
-    stats_results = []
+    simple_reasoning_results = []
     holistic_results = []
 
     # 6. Setup output directory and periodic saving
@@ -377,7 +377,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
-                        stats_results, perplexity_results, holistic_results,
+                        simple_reasoning_results, perplexity_results, holistic_results,
                         output_dir=output_dir, overwrite=True
                     )
                     last_save_time = now
@@ -451,7 +451,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                     output, item, task_type, ut_steps
                                 )
                                 task_results.append(result_entry)
-                                stats_results.append(result_entry)
+                                simple_reasoning_results.append(result_entry)
                                 print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
                         
@@ -471,7 +471,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                         output, item, task_type, ut_steps
                                     )
                                     task_results.append(result_entry)
-                                    stats_results.append(result_entry)
+                                    simple_reasoning_results.append(result_entry)
                                     print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                     experiment.monitor_and_maybe_abort(result_entry, task_type)
                                 except Exception as e2:
@@ -488,13 +488,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                         error_result, item, task_type, ut_steps
                                     )
                                     task_results.append(result_entry)
-                                    stats_results.append(result_entry)
+                                    simple_reasoning_results.append(result_entry)
                                     print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                     experiment.monitor_and_maybe_abort(result_entry, task_type)
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
                             save_results(
-                                stats_results, perplexity_results, holistic_results,
+                                simple_reasoning_results, perplexity_results, holistic_results,
                                 output_dir=output_dir, overwrite=True
                             )
                             last_save_time = now
@@ -518,7 +518,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 output, item, task_type, ut_steps
                             )
                             task_results.append(result_entry)
-                            stats_results.append(result_entry)
+                            simple_reasoning_results.append(result_entry)
                             print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                             experiment.monitor_and_maybe_abort(result_entry, task_type)
                         except Exception as e:
@@ -535,13 +535,13 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                                 error_result, item, task_type, ut_steps
                             )
                             task_results.append(result_entry)
-                            stats_results.append(result_entry)
+                            simple_reasoning_results.append(result_entry)
                             print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                             experiment.monitor_and_maybe_abort(result_entry, task_type)
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
                             save_results(
-                                stats_results, perplexity_results, holistic_results,
+                                simple_reasoning_results, perplexity_results, holistic_results,
                                 output_dir=output_dir, overwrite=True
                             )
                             last_save_time = now
@@ -571,7 +571,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
-                        stats_results, perplexity_results, holistic_results,
+                        simple_reasoning_results, perplexity_results, holistic_results,
                         output_dir=output_dir, overwrite=True
                     )
                     last_save_time = now
@@ -590,8 +590,8 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"📊 FINAL EXPERIMENT SUMMARY")
         print(f"{'='*70}\n")
 
-        if stats_results:
-            df_all = pd.DataFrame(stats_results)
+        if simple_reasoning_results:
+            df_all = pd.DataFrame(simple_reasoning_results)
             
             # Check for garbage outputs
             if 'is_degenerate' in df_all.columns:
@@ -663,12 +663,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
     # Save results to csv files 
-    save_results(stats_results, perplexity_results, holistic_results, output_dir=output_dir, overwrite=True)
+    save_results(simple_reasoning_results, perplexity_results, holistic_results, output_dir=output_dir, overwrite=True)
 
     # Save config file into yaml file
     save_config(config, output_dir=output_dir, experiment=experiment)
 
-    return stats_results, perplexity_results, holistic_results
+    return simple_reasoning_results, perplexity_results, holistic_results
 
 
 def _create_result_entry(

@@ -1,17 +1,6 @@
 """
-Metrics Module Aligned with Ouroboros Paper (arXiv:2502.17416)
-
-Key metrics from the paper that you can measure:
-1. Accuracy vs UT Steps (scaling curve)
-2. Depth Efficiency (accuracy per effective depth)
-3. Parameter Efficiency (accuracy per billion parameters)
-4. Token Efficiency (tokens/sec throughput)
-5. Step-wise Accuracy (accuracy by problem difficulty)
-6. Iso-Param Comparison (1.4B vs 2.6B at different depths)
-7. Reasoning Trace Quality (step correctness)
-8. Early Exit Analysis (when model stops thinking)
-
-Place this in: evaluation.py or metrics.py
+Enhanced Metrics Module with Holistic Evaluation Analysis
+Includes reasoning primitives (depth-k variable assignment) analysis
 """
 
 import os
@@ -27,49 +16,209 @@ from dataclasses import dataclass
 class ModelConfig:
     """Model configuration for comparison"""
     name: str
-    size_b: float  # Size in billions
-    base_layers: int  # Base number of layers (k)
-    ut_steps: int  # Loop count (L)
-    effective_depth: int  # k * L
+    size_b: float
+    base_layers: int
+    ut_steps: int
+    effective_depth: int
     
     @property
     def flops_ratio(self) -> float:
-        """Approximate FLOPs ratio compared to non-looped model"""
         return self.effective_depth
     
     @property
     def param_ratio(self) -> float:
-        """Parameter ratio (constant across UT steps for same base model)"""
         return 1.0
 
 
-class OuroMetrics:
+class EnhancedOuroMetrics:
     """
-    Compute metrics aligned with Ouroboros paper.
-    
-    Main comparisons from paper:
-    - (k ⊗ L): k-layer model looped L times (your setup)
-    - (k ⊗ 1): k-layer model, no looping (baseline)
-    - (kL ⊗ 1): kL-layer model (iso-FLOP baseline)
+    Extended metrics including holistic evaluation (reasoning primitives).
     """
     
     def __init__(self):
         self.results_cache = []
+        self.holistic_cache = []
     
     def add_results(self, results: List[Dict[str, Any]]) -> None:
-        """Add experiment results to cache"""
+        """Add main experiment results"""
         self.results_cache.extend(results)
+    
+    def add_holistic_results(self, holistic_results: List[Dict[str, Any]]) -> None:
+        """Add holistic evaluation results"""
+        self.holistic_cache.extend(holistic_results)
+    
+    # =========================================================================
+    # HOLISTIC EVALUATION METRICS
+    # =========================================================================
+    
+    def compute_reasoning_primitive_accuracy(
+        self,
+        holistic_results: Optional[List[Dict]] = None
+    ) -> pd.DataFrame:
+        """
+        Analyze accuracy on reasoning primitives (depth-k variable assignment).
+        
+        Returns breakdown by:
+        - Depth level (0, 1)
+        - Variant (code, math, equation)
+        - UT steps
+        """
+        if holistic_results is None:
+            holistic_results = self.holistic_cache
+        
+        if not holistic_results:
+            return pd.DataFrame()
+        
+        df = pd.DataFrame(holistic_results)
+        
+        # Filter to reasoning primitives only
+        df_primitives = df[df['task_category'] == 'Reasoning Primitive'].copy()
+        
+        if df_primitives.empty:
+            return pd.DataFrame()
+        
+        # Extract depth and variant from task_name
+        # Format: "var_assign_depth_{depth}_{variant}"
+        df_primitives['depth'] = df_primitives['task_name'].str.extract(r'depth_(\d+)')[0].astype(int)
+        df_primitives['variant'] = df_primitives['task_name'].str.extract(r'depth_\d+_(\w+)')[0]
+        
+        # Compute accuracy by depth, variant, and UT steps
+        accuracy_breakdown = df_primitives.groupby(['depth', 'variant', 'ut_steps']).agg({
+            'is_correct': ['mean', 'std', 'count']
+        }).reset_index()
+        
+        accuracy_breakdown.columns = ['depth', 'variant', 'ut_steps', 'accuracy', 'std', 'n_samples']
+        accuracy_breakdown['accuracy_pct'] = accuracy_breakdown['accuracy'] * 100
+        
+        return accuracy_breakdown
+    
+    def compute_depth_generalization(
+        self,
+        holistic_results: Optional[List[Dict]] = None
+    ) -> pd.DataFrame:
+        """
+        Analyze how accuracy changes from depth-0 to depth-1.
+        
+        Key metric: Does the model generalize to one-level indirection?
+        """
+        if holistic_results is None:
+            holistic_results = self.holistic_cache
+        
+        if not holistic_results:
+            return pd.DataFrame()
+        
+        df = pd.DataFrame(holistic_results)
+        df_primitives = df[df['task_category'] == 'Reasoning Primitive'].copy()
+        
+        if df_primitives.empty:
+            return pd.DataFrame()
+        
+        df_primitives['depth'] = df_primitives['task_name'].str.extract(r'depth_(\d+)')[0].astype(int)
+        df_primitives['variant'] = df_primitives['task_name'].str.extract(r'depth_\d+_(\w+)')[0]
+        
+        # Compare depth-0 vs depth-1 accuracy
+        depth_comparison = df_primitives.groupby(['variant', 'depth', 'ut_steps']).agg({
+            'is_correct': 'mean'
+        }).reset_index()
+        
+        depth_comparison['accuracy_pct'] = depth_comparison['is_correct'] * 100
+        
+        # Pivot to show depth-0 vs depth-1 side by side
+        pivot = depth_comparison.pivot_table(
+            values='accuracy_pct',
+            index=['variant', 'ut_steps'],
+            columns='depth'
+        ).reset_index()
+        
+        if 0 in pivot.columns and 1 in pivot.columns:
+            pivot.columns.name = None
+            pivot.rename(columns={0: 'depth_0_acc', 1: 'depth_1_acc'}, inplace=True)
+            pivot['generalization_gap'] = pivot['depth_0_acc'] - pivot['depth_1_acc']
+        
+        return pivot
+    
+    def compute_variant_comparison(
+        self,
+        holistic_results: Optional[List[Dict]] = None
+    ) -> pd.DataFrame:
+        """
+        Compare accuracy across different prompt variants (code, math, equation).
+        
+        Shows format robustness.
+        """
+        if holistic_results is None:
+            holistic_results = self.holistic_cache
+        
+        if not holistic_results:
+            return pd.DataFrame()
+        
+        df = pd.DataFrame(holistic_results)
+        df_primitives = df[df['task_category'] == 'Reasoning Primitive'].copy()
+        
+        if df_primitives.empty:
+            return pd.DataFrame()
+        
+        df_primitives['variant'] = df_primitives['task_name'].str.extract(r'depth_\d+_(\w+)')[0]
+        
+        variant_acc = df_primitives.groupby(['variant', 'ut_steps']).agg({
+            'is_correct': ['mean', 'std', 'count']
+        }).reset_index()
+        
+        variant_acc.columns = ['variant', 'ut_steps', 'accuracy', 'std', 'n_samples']
+        variant_acc['accuracy_pct'] = variant_acc['accuracy'] * 100
+        
+        return variant_acc
+    
+    def compute_holistic_vs_main_comparison(
+        self,
+        main_results: Optional[List[Dict]] = None,
+        holistic_results: Optional[List[Dict]] = None
+    ) -> pd.DataFrame:
+        """
+        Compare accuracy on main tasks vs reasoning primitives.
+        
+        Shows whether model performs differently on standard tasks vs primitives.
+        """
+        if main_results is None:
+            main_results = self.results_cache
+        if holistic_results is None:
+            holistic_results = self.holistic_cache
+        
+        if not main_results or not holistic_results:
+            return pd.DataFrame()
+        
+        df_main = pd.DataFrame(main_results)
+        df_holistic = pd.DataFrame(holistic_results)
+        
+        # Main tasks accuracy
+        main_acc = df_main.groupby('ut_steps')['is_correct'].mean().reset_index()
+        main_acc.columns = ['ut_steps', 'main_accuracy']
+        
+        # Reasoning primitives accuracy
+        df_primitives = df_holistic[df_holistic['task_category'] == 'Reasoning Primitive']
+        if not df_primitives.empty:
+            holistic_acc = df_primitives.groupby('ut_steps')['is_correct'].mean().reset_index()
+            holistic_acc.columns = ['ut_steps', 'holistic_accuracy']
+            
+            # Merge
+            comparison = main_acc.merge(holistic_acc, on='ut_steps', how='outer')
+            comparison['main_accuracy_pct'] = comparison['main_accuracy'] * 100
+            comparison['holistic_accuracy_pct'] = comparison['holistic_accuracy'] * 100
+            comparison['gap'] = comparison['main_accuracy_pct'] - comparison['holistic_accuracy_pct']
+            
+            return comparison
+        
+        return pd.DataFrame()
+    
+    # =========================================================================
+    # MAIN EXPERIMENT METRICS (keeping all original methods)
+    # =========================================================================
     
     def compute_accuracy_by_ut_steps(
         self, 
         results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
-        """
-        Metric 1: Accuracy vs UT Steps (Paper Figure 2, 3)
-        
-        Shows how accuracy scales with thinking depth.
-        Key finding: Should show improvement with more UT steps.
-        """
+        """Accuracy vs UT Steps (Paper Figure 2, 3)"""
         if results is None:
             results = self.results_cache
         
@@ -89,32 +238,24 @@ class OuroMetrics:
         results: Optional[List[Dict]] = None,
         model_configs: Optional[Dict[str, ModelConfig]] = None
     ) -> pd.DataFrame:
-        """
-        Metric 2: Depth Efficiency (Paper Claim 1)
-        
-        Accuracy per unit of effective depth.
-        Shows whether looping is efficient compared to just adding layers.
-        """
+        """Depth Efficiency (Paper Claim 1)"""
         if results is None:
             results = self.results_cache
         
         df = pd.DataFrame(results)
         
-        # Group by model and UT steps
         depth_eff = df.groupby(['ut_steps']).agg({
             'is_correct': 'mean',
             'generation_time': 'mean'
         }).reset_index()
         
-        # If model configs provided, add depth info
         if model_configs:
             depth_eff['effective_depth'] = depth_eff['ut_steps'].map(
                 lambda x: model_configs.get(f'ut_{x}', ModelConfig('', 1.4, 24, x, 24*x)).effective_depth
             )
             depth_eff['depth_efficiency'] = depth_eff['is_correct'] / depth_eff['effective_depth']
         else:
-            # Use UT steps as proxy for depth
-            depth_eff['effective_depth'] = depth_eff['ut_steps'] * 24  # Assume 24 base layers
+            depth_eff['effective_depth'] = depth_eff['ut_steps'] * 24
             depth_eff['depth_efficiency'] = depth_eff['is_correct'] / depth_eff['effective_depth']
         
         depth_eff['accuracy_pct'] = depth_eff['is_correct'] * 100
@@ -126,12 +267,7 @@ class OuroMetrics:
         results: Optional[List[Dict]] = None,
         model_size_b: float = 1.4
     ) -> pd.DataFrame:
-        """
-        Metric 3: Parameter Efficiency (Paper Table 1)
-        
-        Accuracy per billion parameters.
-        Key: Same parameters, different depths should show different accuracy.
-        """
+        """Parameter Efficiency (Paper Table 1)"""
         if results is None:
             results = self.results_cache
         
@@ -151,12 +287,7 @@ class OuroMetrics:
         self,
         results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
-        """
-        Metric 4: Token Efficiency
-        
-        Tokens generated per second vs accuracy.
-        Shows inference cost vs quality tradeoff.
-        """
+        """Token Efficiency"""
         if results is None:
             results = self.results_cache
         
@@ -178,12 +309,7 @@ class OuroMetrics:
         self,
         results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
-        """
-        Metric 5: Step-wise Accuracy (Paper experiments on n-ary, p-hop)
-        
-        Accuracy by problem difficulty level.
-        Shows if looping helps more on harder problems.
-        """
+        """Step-wise Accuracy by difficulty"""
         if results is None:
             results = self.results_cache
         
@@ -201,189 +327,353 @@ class OuroMetrics:
         
         return difficulty_acc
     
-    def compute_iso_param_comparison(
-        self,
-        results_1_4b: List[Dict],
-        results_2_6b: List[Dict]
-    ) -> pd.DataFrame:
-        """
-        Metric 6: Iso-Param Comparison (Paper Figure 1 concept)
-        
-        Compare 1.4B vs 2.6B at same UT steps.
-        Shows parameter count vs depth tradeoff.
-        """
-        df_1_4 = pd.DataFrame(results_1_4b)
-        df_1_4['model_size'] = '1.4B'
-        
-        df_2_6 = pd.DataFrame(results_2_6b)
-        df_2_6['model_size'] = '2.6B'
-        
-        df_combined = pd.concat([df_1_4, df_2_6])
-        
-        comparison = df_combined.groupby(['model_size', 'task_type', 'ut_steps']).agg({
-            'is_correct': 'mean',
-            'generation_time': 'mean'
-        }).reset_index()
-        
-        comparison['accuracy_pct'] = comparison['is_correct'] * 100
-        
-        return comparison
+    # =========================================================================
+    # ENHANCED PLOTTING WITH HOLISTIC RESULTS
+    # =========================================================================
     
-    def compute_reasoning_trace_quality(
+    def generate_enhanced_plots(
         self,
-        results: Optional[List[Dict]] = None
-    ) -> pd.DataFrame:
-        """
-        Metric 7: Reasoning Trace Quality (Paper Section on latent thoughts)
-        
-        Analyze step-by-step correctness in generated responses.
-        Only works if you extract intermediate steps.
-        """
-        if results is None:
-            results = self.results_cache
-        
-        df = pd.DataFrame(results)
-        
-        if 'full_response' not in df.columns:
-            return pd.DataFrame()
-        
-        trace_quality = []
-        
-        for _, row in df.iterrows():
-            response = row.get('full_response', '')
-            
-            # Count steps in response
-            step_count = response.count('[STEP')
-            has_final = '[FINAL]' in response
-            
-            trace_quality.append({
-                'task_type': row['task_type'],
-                'ut_steps': row['ut_steps'],
-                'is_correct': row['is_correct'],
-                'step_count': step_count,
-                'has_final': has_final,
-                'response_length': len(response),
-            })
-        
-        trace_df = pd.DataFrame(trace_quality)
-        
-        trace_summary = trace_df.groupby(['task_type', 'ut_steps']).agg({
-            'is_correct': 'mean',
-            'step_count': 'mean',
-            'has_final': 'mean',
-            'response_length': 'mean'
-        }).reset_index()
-        
-        trace_summary['accuracy_pct'] = trace_summary['is_correct'] * 100
-        
-        return trace_summary
-    
-    def compute_early_exit_analysis(
-        self,
-        results: Optional[List[Dict]] = None
-    ) -> pd.DataFrame:
-        """
-        Metric 8: Early Exit Analysis (Paper mentions early stopping)
-        
-        Requires model to output actual loops used vs max loops.
-        Only works if your model logs this.
-        """
-        if results is None:
-            results = self.results_cache
-        
-        df = pd.DataFrame(results)
-        
-        # Check if early exit data is available
-        if 'actual_ut_steps' not in df.columns:
-            print("⚠️ Early exit data not available. Requires model instrumentation.")
-            return pd.DataFrame()
-        
-        exit_analysis = df.groupby('ut_steps').agg({
-            'actual_ut_steps': 'mean',
-            'is_correct': 'mean'
-        }).reset_index()
-        
-        exit_analysis['exit_efficiency'] = exit_analysis['actual_ut_steps'] / exit_analysis['ut_steps']
-        exit_analysis['accuracy_pct'] = exit_analysis['is_correct'] * 100
-        
-        return exit_analysis
-    
-    def generate_paper_style_plots(
-        self,
-        results: Optional[List[Dict]] = None,
+        main_results: Optional[List[Dict]] = None,
+        holistic_results: Optional[List[Dict]] = None,
         save_dir: str = "./plots"
     ) -> None:
         """
-        Generate plots similar to paper figures.
+        Generate comprehensive plots including holistic evaluation.
         """
-        import os
         os.makedirs(save_dir, exist_ok=True)
         
-        if results is None:
-            results = self.results_cache
+        if main_results is None:
+            main_results = self.results_cache
+        if holistic_results is None:
+            holistic_results = self.holistic_cache
         
-        # Plot 1: Accuracy vs UT Steps by Task
-        acc_by_ut = self.compute_accuracy_by_ut_steps(results)
+        # Plot 1: Main Tasks Accuracy
+        if main_results:
+            acc_by_ut = self.compute_accuracy_by_ut_steps(main_results)
+            
+            plt.figure(figsize=(10, 6))
+            for task in acc_by_ut['task_type'].unique():
+                task_data = acc_by_ut[acc_by_ut['task_type'] == task]
+                plt.plot(task_data['ut_steps'], task_data['accuracy_pct'], 
+                        marker='o', label=task, linewidth=2)
+            
+            plt.xlabel('UT Steps', fontsize=12)
+            plt.ylabel('Accuracy (%)', fontsize=12)
+            plt.title('Main Tasks: Accuracy vs UT Steps', fontsize=14)
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.savefig(f'{save_dir}/main_accuracy_vs_ut.png', dpi=300, bbox_inches='tight')
+            plt.close()
         
-        plt.figure(figsize=(10, 6))
-        for task in acc_by_ut['task_type'].unique():
-            task_data = acc_by_ut[acc_by_ut['task_type'] == task]
-            plt.plot(task_data['ut_steps'], task_data['accuracy_pct'], 
-                    marker='o', label=task, linewidth=2)
+        # Plot 2: Reasoning Primitives by Depth
+        if holistic_results:
+            primitive_acc = self.compute_reasoning_primitive_accuracy(holistic_results)
+            
+            if not primitive_acc.empty:
+                plt.figure(figsize=(12, 6))
+                
+                for (depth, variant), group in primitive_acc.groupby(['depth', 'variant']):
+                    plt.plot(group['ut_steps'], group['accuracy_pct'], 
+                            marker='o', label=f'Depth-{depth} ({variant})', linewidth=2)
+                
+                plt.xlabel('UT Steps', fontsize=12)
+                plt.ylabel('Accuracy (%)', fontsize=12)
+                plt.title('Reasoning Primitives: Accuracy by Depth & Variant', fontsize=14)
+                plt.legend()
+                plt.grid(True, alpha=0.3)
+                plt.savefig(f'{save_dir}/primitives_by_depth.png', dpi=300, bbox_inches='tight')
+                plt.close()
         
-        plt.xlabel('UT Steps (Thinking Depth)', fontsize=12)
-        plt.ylabel('Accuracy (%)', fontsize=12)
-        plt.title('Accuracy vs Thinking Depth (Paper Figure 2 style)', fontsize=14)
-        plt.legend()
-        plt.grid(True, alpha=0.3)
-        plt.savefig(f'{save_dir}/accuracy_vs_ut_steps.png', dpi=300, bbox_inches='tight')
-        plt.close()
+        # Plot 3: Depth Generalization Gap
+        if holistic_results:
+            depth_gen = self.compute_depth_generalization(holistic_results)
+            
+            if not depth_gen.empty and 'generalization_gap' in depth_gen.columns:
+                plt.figure(figsize=(10, 6))
+                
+                for variant in depth_gen['variant'].unique():
+                    var_data = depth_gen[depth_gen['variant'] == variant]
+                    plt.plot(var_data['ut_steps'], var_data['generalization_gap'], 
+                            marker='s', label=variant, linewidth=2)
+                
+                plt.axhline(y=0, color='red', linestyle='--', alpha=0.5)
+                plt.xlabel('UT Steps', fontsize=12)
+                plt.ylabel('Depth-0 Acc - Depth-1 Acc (%)', fontsize=12)
+                plt.title('Generalization Gap (Depth-0 vs Depth-1)', fontsize=14)
+                plt.legend()
+                plt.grid(True, alpha=0.3)
+                plt.savefig(f'{save_dir}/generalization_gap.png', dpi=300, bbox_inches='tight')
+                plt.close()
         
-        # Plot 2: Depth Efficiency
-        depth_eff = self.compute_depth_efficiency(results)
+        # Plot 4: Main vs Holistic Comparison
+        if main_results and holistic_results:
+            comparison = self.compute_holistic_vs_main_comparison(main_results, holistic_results)
+            
+            if not comparison.empty:
+                plt.figure(figsize=(10, 6))
+                plt.plot(comparison['ut_steps'], comparison['main_accuracy_pct'], 
+                        marker='o', label='Main Tasks', linewidth=2)
+                plt.plot(comparison['ut_steps'], comparison['holistic_accuracy_pct'], 
+                        marker='s', label='Reasoning Primitives', linewidth=2)
+                
+                plt.xlabel('UT Steps', fontsize=12)
+                plt.ylabel('Accuracy (%)', fontsize=12)
+                plt.title('Main Tasks vs Reasoning Primitives', fontsize=14)
+                plt.legend()
+                plt.grid(True, alpha=0.3)
+                plt.savefig(f'{save_dir}/main_vs_holistic.png', dpi=300, bbox_inches='tight')
+                plt.close()
         
-        plt.figure(figsize=(10, 6))
-        plt.plot(depth_eff['effective_depth'], depth_eff['accuracy_pct'], 
-                marker='s', linewidth=2, color='purple')
-        plt.xlabel('Effective Depth', fontsize=12)
-        plt.ylabel('Accuracy (%)', fontsize=12)
-        plt.title('Depth Efficiency (Paper Claim 1)', fontsize=14)
-        plt.grid(True, alpha=0.3)
-        plt.savefig(f'{save_dir}/depth_efficiency.png', dpi=300, bbox_inches='tight')
-        plt.close()
-        
-        print(f"✅ Plots saved to {save_dir}/")
+        print(f"✅ Enhanced plots saved to {save_dir}/")
     
-    def generate_paper_style_table(
+    def generate_comprehensive_summary(
         self,
-        results: Optional[List[Dict]] = None,
+        main_results: Optional[List[Dict]] = None,
+        holistic_results: Optional[List[Dict]] = None,
         model_name: str = "Ouro"
-    ) -> pd.DataFrame:
+    ) -> Dict[str, pd.DataFrame]:
         """
-        Generate summary table similar to paper tables.
+        Generate comprehensive summary including holistic results.
         """
-        if results is None:
-            results = self.results_cache
+        if main_results is None:
+            main_results = self.results_cache
+        if holistic_results is None:
+            holistic_results = self.holistic_cache
         
-        df = pd.DataFrame(results)
+        summary = {}
         
-        # Create summary table
-        summary = df.groupby(['task_type', 'ut_steps']).agg({
-            'is_correct': 'mean',
-            'generation_time': 'mean',
-            'generated_tokens': 'mean'
-        }).reset_index()
+        # Main tasks summary
+        if main_results:
+            df_main = pd.DataFrame(main_results)
+            main_summary = df_main.groupby(['task_type', 'ut_steps']).agg({
+                'is_correct': 'mean',
+                'generation_time': 'mean',
+                'generated_tokens': 'mean'
+            }).reset_index()
+            
+            main_summary.columns = ['Task', 'UT Steps', 'Accuracy', 'Time (s)', 'Tokens']
+            main_summary['Accuracy'] = (main_summary['Accuracy'] * 100).round(2)
+            main_summary['Time (s)'] = main_summary['Time (s)'].round(3)
+            main_summary['Tokens'] = main_summary['Tokens'].round(1)
+            main_summary['Model'] = model_name
+            main_summary['Category'] = 'Main Tasks'
+            
+            summary['main_tasks'] = main_summary
         
-        summary.columns = ['Task', 'UT Steps', 'Accuracy', 'Time (s)', 'Tokens']
-        summary['Accuracy'] = (summary['Accuracy'] * 100).round(2)
-        summary['Time (s)'] = summary['Time (s)'].round(3)
-        summary['Tokens'] = summary['Tokens'].round(1)
-        summary['Model'] = model_name
+        # Holistic summary
+        if holistic_results:
+            df_holistic = pd.DataFrame(holistic_results)
+            df_primitives = df_holistic[df_holistic['task_category'] == 'Reasoning Primitive']
+            
+            if not df_primitives.empty:
+                holistic_summary = df_primitives.groupby(['task_name', 'ut_steps']).agg({
+                    'is_correct': 'mean'
+                }).reset_index()
+                
+                holistic_summary.columns = ['Task', 'UT Steps', 'Accuracy']
+                holistic_summary['Accuracy'] = (holistic_summary['Accuracy'] * 100).round(2)
+                holistic_summary['Model'] = model_name
+                holistic_summary['Category'] = 'Reasoning Primitives'
+                
+                summary['reasoning_primitives'] = holistic_summary
         
-        # Reorder columns
-        summary = summary[['Model', 'Task', 'UT Steps', 'Accuracy', 'Time (s)', 'Tokens']]
+        # Combined summary
+        if 'main_tasks' in summary and 'reasoning_primitives' in summary:
+            # Simplified combined view
+            combined = pd.concat([
+                summary['main_tasks'][['Model', 'Category', 'Task', 'UT Steps', 'Accuracy']],
+                summary['reasoning_primitives'][['Model', 'Category', 'Task', 'UT Steps', 'Accuracy']]
+            ])
+            summary['combined'] = combined
         
         return summary
+
+
+# ==============================================================================
+# ENHANCED ANALYSIS FUNCTION
+# ==============================================================================
+
+def analyze_experiment_results(
+    results_folder: str,
+    save_plots: bool = True,
+    save_dir: str = "./plots"
+) -> Dict[str, pd.DataFrame]:
+    """
+    Comprehensive analysis including holistic evaluation.
+    
+    Args:
+        results: Main experiment results (n_ary, p_hop, igsm)
+        holistic_results: Holistic evaluation results (reasoning primitives)
+        model_name: Model name for labeling
+        model_size_b: Model size in billions
+        save_plots: Whether to generate plots
+        save_dir: Directory to save plots
+    
+    Returns:
+        Dict of all computed metrics
+    """
+    print(f"\n{'='*70}")
+    print(f"📊 COMPREHENSIVE METRICS ANALYSIS")
+    print(f"{'='*70}\n")
+    
+    metrics = EnhancedOuroMetrics()
+
+        # --- Load results CSV ---
+    all_latest_path = os.path.join(results_folder, "all_latest.csv")
+    if not os.path.exists(all_latest_path):
+        print(f"❌ all_latest.csv not found in {results_folder}")
+        return {}
+    holistic_path = os.path.join(results_folder, "holistic_latest.csv")
+    if not os.path.exists(holistic_path):
+        print(f"⚠️ holistic_latest.csv not found in {results_folder}, proceeding without holistic results")
+        return {}
+    
+    all_result_df = pd.read_csv(all_latest_path)
+    simple_reasoning_results = all_result_df.to_dict(orient="records")
+    holistic_result_df = pd.read_csv(holistic_path)
+    holistic_results = holistic_result_df.to_dict(orient="records")
+
+    # --- Load config.json ---
+    config_path = os.path.join(results_folder, "config.json")
+    if not os.path.exists(config_path):
+        print(f"❌ config.json not found in {results_folder}")
+        model_name = "Ouro"
+        model_size_b = 1.4
+    else:
+        import json
+        with open(config_path, "r") as f:
+            config = json.load(f)
+        # Try to extract model name and size
+        model_config = config.get("MODEL", {})
+        model_hf_path = model_config.get("path", None)
+        model_name = model_hf_path.split("/")[-1] if model_hf_path else None
+
+        if not model_name:
+            model_name = model_config.get("path", "Ouro")
+
+        if "1.4" in model_name:
+            model_size_b = 1.4
+        elif "2.6" in model_name:
+            model_size_b = 2.6
+        else:
+            print("⚠️ Unable to determine model size from config, defaulting to 1.4B")
+            model_size_b = model_config.get("size_b", 1.4)
+
+    metrics.add_results(simple_reasoning_results)
+    
+    if holistic_results:
+        metrics.add_holistic_results(holistic_results)
+    
+    analysis_results = {}
+    
+    # =========================================================================
+    # MAIN TASK METRICS
+    # =========================================================================
+    print("="*70)
+    print("MAIN TASK ANALYSIS")
+    print("="*70 + "\n")
+    
+    # Metric 1: Accuracy vs UT Steps
+    print("📈 Accuracy vs UT Steps:")
+    acc_by_ut = metrics.compute_accuracy_by_ut_steps()
+    analysis_results['accuracy_by_ut'] = acc_by_ut
+    print(acc_by_ut.to_string(index=False))
+    print()
+    
+    # Metric 2: Depth Efficiency
+    print("📈 Depth Efficiency:")
+    depth_eff = metrics.compute_depth_efficiency()
+    analysis_results['depth_efficiency'] = depth_eff
+    print(depth_eff.to_string(index=False))
+    print()
+    
+    # Metric 3: Parameter Efficiency
+    print("📈 Parameter Efficiency:")
+    param_eff = metrics.compute_parameter_efficiency(model_size_b=model_size_b)
+    analysis_results['param_efficiency'] = param_eff
+    print(param_eff.to_string(index=False))
+    print()
+    
+    # Metric 4: Throughput
+    print("📈 Throughput Efficiency:")
+    throughput = metrics.compute_throughput_efficiency()
+    analysis_results['throughput'] = throughput
+    print(throughput.to_string(index=False))
+    print()
+    
+    # =========================================================================
+    # HOLISTIC EVALUATION METRICS
+    # =========================================================================
+    if holistic_results:
+        print("="*70)
+        print("REASONING PRIMITIVES ANALYSIS")
+        print("="*70 + "\n")
+        
+        # Metric 5: Reasoning Primitive Accuracy
+        print("📈 Reasoning Primitives by Depth & Variant:")
+        primitive_acc = metrics.compute_reasoning_primitive_accuracy()
+        if not primitive_acc.empty:
+            analysis_results['primitive_accuracy'] = primitive_acc
+            print(primitive_acc.to_string(index=False))
+            print()
+        
+        # Metric 6: Depth Generalization
+        print("📈 Depth Generalization (Depth-0 vs Depth-1):")
+        depth_gen = metrics.compute_depth_generalization()
+        if not depth_gen.empty:
+            analysis_results['depth_generalization'] = depth_gen
+            print(depth_gen.to_string(index=False))
+            print()
+        
+        # Metric 7: Variant Comparison
+        print("📈 Accuracy by Variant:")
+        variant_comp = metrics.compute_variant_comparison()
+        if not variant_comp.empty:
+            analysis_results['variant_comparison'] = variant_comp
+            print(variant_comp.to_string(index=False))
+            print()
+        
+        # Metric 8: Main vs Holistic
+        print("📈 Main Tasks vs Reasoning Primitives:")
+        comparison = metrics.compute_holistic_vs_main_comparison()
+        if not comparison.empty:
+            analysis_results['main_vs_holistic'] = comparison
+            print(comparison.to_string(index=False))
+            print()
+    
+    # =========================================================================
+    # SUMMARY TABLE
+    # =========================================================================
+    print("="*70)
+    print("COMPREHENSIVE SUMMARY")
+    print("="*70 + "\n")
+    
+    summary_tables = metrics.generate_comprehensive_summary(
+        main_results=simple_reasoning_results,
+        holistic_results=holistic_results,
+        model_name=model_name
+    )
+    
+    for table_name, table_df in summary_tables.items():
+        print(f"📋 {table_name.replace('_', ' ').title()}:")
+        print(table_df.to_string(index=False))
+        print()
+        analysis_results[f'summary_{table_name}'] = table_df
+    
+    # =========================================================================
+    # GENERATE PLOTS
+    # =========================================================================
+    if save_plots:
+        print("📊 Generating plots...")
+        metrics.generate_enhanced_plots(
+            main_results=simple_reasoning_results,
+            holistic_results=holistic_results,
+            save_dir=save_dir
+        )
+    
+    print(f"{'='*70}\n")
+    
+    return analysis_results
 
 
 class PaperComplianceChecker:
@@ -463,114 +753,6 @@ class PaperComplianceChecker:
 # ==============================================================================
 # USAGE EXAMPLE
 # ==============================================================================
-
-def analyze_experiment_results(
-    results_folder: str,
-    save_plots: bool = True
-) -> Dict[str, pd.DataFrame]:
-    """
-    Unified analysis function.
-    Accepts a results folder path, automatically loads all_latest.csv and config.json.
-    Returns: Dict[str, pd.DataFrame] with all metrics and summary tables.
-    """
-    print(f"\n{'='*70}")
-    print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (Folder: {results_folder})")
-    print(f"{'='*70}\n")
-
-    # --- Load results CSV ---
-    all_latest_path = os.path.join(results_folder, "all_latest.csv")
-    if not os.path.exists(all_latest_path):
-        print(f"❌ all_latest.csv not found in {results_folder}")
-        return {}
-
-    df = pd.read_csv(all_latest_path)
-    stats_results = df.to_dict(orient="records")
-
-    # --- Load config.json ---
-    config_path = os.path.join(results_folder, "config.json")
-    if not os.path.exists(config_path):
-        print(f"❌ config.json not found in {results_folder}")
-        model_name = "Ouro"
-        model_size_b = 1.4
-    else:
-        import json
-        with open(config_path, "r") as f:
-            config = json.load(f)
-        # Try to extract model name and size
-        model_config = config.get("MODEL", {})
-        model_hf_path = model_config.get("path", None)
-        model_name = model_hf_path.split("/")[-1] if model_hf_path else None
-
-        if not model_name:
-            model_name = model_config.get("path", "Ouro")
-
-        if "1.4" in model_name:
-            model_size_b = 1.4
-        elif "2.6" in model_name:
-            model_size_b = 2.6
-        else:
-            print("⚠️ Unable to determine model size from config, defaulting to 1.4B")
-            model_size_b = model_config.get("size_b", 1.4)
-
-    metrics = OuroMetrics()
-    metrics.add_results(stats_results)
-
-    analysis_results = {}
-
-    # Metric 1: Accuracy vs UT Steps
-    print("📈 Computing Accuracy vs UT Steps...")
-    acc_by_ut = metrics.compute_accuracy_by_ut_steps()
-    analysis_results['accuracy_by_ut'] = acc_by_ut
-    print(acc_by_ut.to_string(index=False))
-    print()
-
-    # Metric 2: Depth Efficiency
-    print("📈 Computing Depth Efficiency...")
-    depth_eff = metrics.compute_depth_efficiency()
-    analysis_results['depth_efficiency'] = depth_eff
-    print(depth_eff.to_string(index=False))
-    print()
-
-    # Metric 3: Parameter Efficiency
-    print("📈 Computing Parameter Efficiency...")
-    param_eff = metrics.compute_parameter_efficiency(model_size_b=model_size_b)
-    analysis_results['param_efficiency'] = param_eff
-    print(param_eff.to_string(index=False))
-    print()
-
-    # Metric 4: Throughput Efficiency
-    print("📈 Computing Throughput Efficiency...")
-    throughput = metrics.compute_throughput_efficiency()
-    analysis_results['throughput'] = throughput
-    print(throughput.to_string(index=False))
-    print()
-
-    # Metric 7: Reasoning Trace Quality
-    print("📈 Computing Reasoning Trace Quality...")
-    trace_quality = metrics.compute_reasoning_trace_quality()
-    if not trace_quality.empty:
-        analysis_results['trace_quality'] = trace_quality
-        print(trace_quality.to_string(index=False))
-        print()
-
-    # Generate summary table
-    print("📋 Generating Paper-Style Summary Table...")
-    summary_table = metrics.generate_paper_style_table(model_name=model_name)
-    analysis_results['summary_table'] = summary_table
-    print(summary_table.to_string(index=False))
-    print()
-
-    # Generate plots
-    if save_plots:
-        print("📊 Generating plots...")
-        metrics.generate_paper_style_plots(save_dir=os.path.join(results_folder, "plots"))
-        print(f"✅ Plots saved to {os.path.join(results_folder, 'plots')}/")
-        print()
-
-    print(f"{'='*70}\n")
-
-    return analysis_results
-
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Analyze experiment results with paper-aligned metrics.")
