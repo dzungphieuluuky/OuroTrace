@@ -85,6 +85,7 @@ def save_reasoning_primitives_results(
     )
     print(f"✅ Saved reasoning primitives results to {reasoning_primitives_file}")
 
+
 def save_heavy_benchmark_results(
     heavy_benchmark_results: List[Dict], output_dir: str, overwrite: bool = True
 ) -> None:
@@ -93,10 +94,9 @@ def save_heavy_benchmark_results(
     heavy_benchmark_file = os.path.join(output_dir, "heavy_benchmarks.csv")
     if overwrite and os.path.exists(heavy_benchmark_file):
         os.remove(heavy_benchmark_file)
-    pd.DataFrame(heavy_benchmark_results).to_csv(
-        heavy_benchmark_file, index=False
-    )
+    pd.DataFrame(heavy_benchmark_results).to_csv(heavy_benchmark_file, index=False)
     print(f"✅ Saved heavy benchmark results to {heavy_benchmark_file}")
+
 
 import json
 

@@ -504,12 +504,10 @@ class SafeOuroThinkingExperiment:
                     "Input: E#E := 4. O#L := K#C. C#M := E#O. K#L := J#M * G#M. I#J := C#E + C#E. E#O := 3. P#L := G#M. N#F := G#M. N#E := E#O * K#C. N#M := N#E - C#E. K#C := 1. G#M := I#J. F#J := N#E. J#M := I#J. C#E := E#E + K#C. L#M := 4. G#K := J#M. K#L? \n\n"
                     "Solution:\n"
                     "[FINAL] 2 [END]\n\n"
-
                     "CONCRETE EXAMPLE 2:\n"
                     "Input: M#J := F#J. A#K := J#P - J#P. B#P := I#O. J#P := F#B. F#J := 5. C#P := 6. A#P := 0. F#B := M#J. E#M := A#P. I#O := M#J. M#E := M#J. K#I := I#O. M#A := M#J + M#J. L#I := I#O. A#I := 0. O#G := K#I * K#I. A#O := L#I * K#I. J#A := B#P. A#K? \n\n"
                     "Solution:\n"
                     "[FINAL] 0 [END]\n\n"
-
                     "CONCRETE EXAMPLE 3:\n"
                     "Input: M#M := K#A. L#D := C#O. K#P := 4. P#D := B#K. D#H := G#B. J#A := 0. B#K := K#A. G#B := 1. P#E := 2. E#P := P#D. C#O := M#M + L#B. L#G := D#H. L#B := D#H - D#H. G#A := P#D. L#A := C#O. K#A := P#E. L#A? \n\n"
                     "Solution:\n"
