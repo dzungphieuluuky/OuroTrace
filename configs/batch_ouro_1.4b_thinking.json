@@ -46,7 +46,7 @@
         "task_batch_size": {
             "n_ary": 8,
             "p_hop": 4,
-            "igsm": 2
+            "igsm": 1
         }
     },
     "ENABLE_HEAVY_BENCHMARKS": false,
