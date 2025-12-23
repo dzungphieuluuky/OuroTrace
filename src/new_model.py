@@ -301,72 +301,111 @@ class SafeOuroThinkingExperiment:
             "n_ary": {
                 "system": (
                     "You solve ADDITION by adding numbers one at a time.\n\n"
+                    
                     "EXAMPLES:\n"
                     "Input: Add 2 numbers: 234 + 567\n"
+                    "Step 1: 0 + 234 = 234\n"
+                    "Step 2: 234 + 567 = 801\n"
                     "[FINAL] 801 [END]\n\n"
-                    "Input: Add 4 numbers: 120 + 88 + 45 + 37\n"
-                    "[FINAL] 290 [END]\n\n"
+                    
+                    "Input: Add 4 numbers: 50 + 25 + 10 + 5\n"
+                    "Step 1: 0 + 50 = 50\n"
+                    "Step 2: 50 + 25 = 75\n"
+                    "Step 3: 75 + 10 = 85\n"
+                    "Step 4: 85 + 5 = 90\n"
+                    "[FINAL] 90 [END]\n\n"
+                    
                     "RULES:\n"
-                    "✓ Show ONLY the final answer, no intermediate steps.\n"
-                    "✓ Start with 0, add one number per step (but steps are hidden).\n"
-                    "✓ Use ONLY numbers from input (no inventing).\n"
+                    "✓ Count input numbers → Show EXACTLY that many steps\n"
+                    "✓ Start with 0, add one number per step\n"
+                    "✓ Use ONLY numbers from input (no inventing)\n"
                     "✓ After final step: [FINAL] {answer} [END]\n"
                     "✓ STOP at [END]\n\n"
-                    "✗ NO extra steps after all input numbers used.\n"
-                    "✗ NO inventing numbers or patterns.\n"
-                    "✗ NO code/explanations after [END].\n"
+                    
+                    "✗ NO extra steps after all input numbers used\n"
+                    "✗ NO inventing numbers or patterns\n"
+                    "✗ NO code/explanations after [END]\n"
                 ),
-                "force_start": "[FINAL]",
+                "force_start": None,
             },
             "p_hop": {
                 "system": (
                     "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\n"
+                    
                     "EXAMPLES:\n"
                     "Input: Sequence: A B C D E | Start: A | Hops: 3\n"
+                    "Hop 1: At A → Next is B\n"
+                    "Hop 2: At B → Next is C\n"
+                    "Hop 3: At C → Next is D\n"
                     "[FINAL] D [END]\n\n"
+                    
                     "Input: Sequence: C A D B A C | Start: C | Hops: 4\n"
+                    "Hop 1: At C → Next is A\n"
+                    "Hop 2: At A → Next is D\n"
+                    "Hop 3: At D → Next is B\n"
+                    "Hop 4: At B → Next is A\n"
                     "[FINAL] A [END]\n\n"
+                    
                     "Input: Sequence: D D A B C | Start: D | Hops: 2\n"
+                    "Hop 1: At D → Next is D\n"
+                    "Hop 2: At D → Next is A\n"
                     "[FINAL] A [END]\n\n"
+                    
                     "RULES:\n"
-                    "✓ Show ONLY the final token, no hop details.\n"
-                    "✓ Each hop moves one position forward (but hops are hidden).\n"
-                    "✓ Use ONLY tokens from input sequence.\n"
+                    "✓ Show EVERY hop (N hops = N lines)\n"
+                    "✓ Each hop moves one position forward\n"
+                    "✓ Use ONLY tokens from input sequence\n"
                     "✓ After final hop: [FINAL] {token} [END]\n"
                     "✓ STOP at [END]\n\n"
-                    "✗ NO skipping hops.\n"
-                    "✗ NO inventing tokens.\n"
-                    "✗ NO jumping to [FINAL] without showing hops.\n"
-                    "✗ NO code/explanations after [END].\n"
+                    
+                    "✗ NO skipping hops\n"
+                    "✗ NO inventing tokens\n"
+                    "✗ NO jumping to [FINAL] without showing hops\n"
+                    "✗ NO code/explanations after [END]\n"
                 ),
-                "force_start": "[FINAL]",
+                "force_start": None,
             },
             "igsm": {
                 "system": (
                     "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\n"
-                    "Valid results: 0‑6 only.\n\n"
+                    "Valid results: 0-6 only.\n\n"
+                    
                     "MOD 7 QUICK REFERENCE:\n"
                     "5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\n"
+                    
                     "EXAMPLES:\n"
                     "Input: A := 5 | B := A + 3 | Query: B\n"
+                    "Step 1: A = 5 (mod 7) = 5\n"
+                    "Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n"
                     "[FINAL] 1 [END]\n\n"
+                    
                     "Input: X := 10 | Y := 4 | Z := X + Y | Query: Z\n"
+                    "Step 1: X = 10 (mod 7) = 3\n"
+                    "Step 2: Y = 4 (mod 7) = 4\n"
+                    "Step 3: Z = X + Y = 3 + 4 = 7 (mod 7) = 0\n"
                     "[FINAL] 0 [END]\n\n"
+                    
                     "Input: P := 8 | Q := P | R := Q + P | Query: R\n"
+                    "Step 1: P = 8 (mod 7) = 1\n"
+                    "Step 2: Q = P = 1 (mod 7) = 1\n"
+                    "Step 3: R = Q + P = 1 + 1 = 2 (mod 7) = 2\n"
                     "[FINAL] 2 [END]\n\n"
+                    
                     "RULES:\n"
-                    "✓ Process every assignment in order (but calculations are hidden).\n"
-                    "✓ Show ONLY the final answer, no intermediate calculations.\n"
-                    "✓ Final answer must be 0‑6.\n"
+                    "✓ Process every assignment in order\n"
+                    "✓ Substitute variable values immediately\n"
+                    "✓ Show calculation before applying mod 7\n"
+                    "✓ Final answer must be 0-6\n"
                     "✓ After query variable: [FINAL] {answer} [END]\n"
                     "✓ STOP at [END]\n\n"
-                    "✗ NO skipping assignments.\n"
-                    "✗ NO results outside 0‑6.\n"
-                    "✗ NO continuing after query found.\n"
-                    "✗ NO code/explanations after [END].\n"
+                    
+                    "✗ NO skipping assignments\n"
+                    "✗ NO results outside 0-6\n"
+                    "✗ NO continuing after query found\n"
+                    "✗ NO code/explanations after [END]\n"
                 ),
-                "force_start": "[FINAL]",
-            },        
+                "force_start": None,
+            }
         }
 
         # Pre-compute generation configs (move outside predict loop)
@@ -461,7 +500,7 @@ class SafeOuroThinkingExperiment:
         print(f"    System prompt N_ary tokens: {len(self.task_templates['n_ary']['system_tokens'])} tokens")
         print(f"    System prompt P_hop tokens: {len(self.task_templates['p_hop']['system_tokens'])} tokens")
         print(f"    System prompt IGSM tokens: {len(self.task_templates['igsm']['system_tokens'])} tokens")
-        
+
         print(f"    User prefix tokens: {len(self.task_templates['n_ary']['user_prefix_tokens'])} tokens")
         print(f"    User suffix tokens: {len(self.task_templates['n_ary']['user_suffix_tokens'])} tokens")
         print(f"    Force start tokens: {len(self.task_templates['n_ary']['force_start_tokens'])} tokens")
