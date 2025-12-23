@@ -403,11 +403,11 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 # Determine optimal batch size for this task (only if batch enabled)
                 batch_size = 1
                 if enable_batch:
-                    task_batch_limits = {
+                    task_batch_limits = optimization_config.get("task_batch_size", {
                         "n_ary": 8,
                         "p_hop": 4,
                         "igsm": 2
-                    }
+                    })
                     batch_size = min(
                         task_batch_limits.get(task_type, 1),
                         experiment.max_batch_size
@@ -555,7 +555,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 _display_sample_results(task_results, task_type)
 
             # C. REASONING PRIMITIVES EVALUATION (if enabled)
-            if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
+            if config["DATA"].get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
                 print(f"\n{'='*70}")
                 print(f"🎯 REASONING PRIMITIVES EVALUATION")
                 print(f"{'='*70}\n")

@@ -65,7 +65,7 @@ def create_test_datasets(config: dict) -> Dict[str, List[Dict]]:
     # 3. SYMBOLIC i-GSM
     if 'igsm' in config:
         igsm_data = []
-        num_total = config['igsm'].get('num_samples_total', 50)
+        num_total = config['igsm'].get('num_samples', 50)
         chars = "ABCDEFGHIJKLMNOP"
         def get_var_name():
             return f"{random.choice(chars)}#{random.choice(chars)}"
@@ -190,11 +190,11 @@ def create_reasoning_primitives_data(config: dict) -> Dict[str, List[Dict]]:
         Dict[str, List[Dict]]: Task name -> list of samples
         Each sample has: {prompt, expected_answer, difficulty, task_type, variant, depth}
     """
-    if "reasoning_primitives" not in config:
+    if "reasoning_primitives" not in config["DATA"]:
         return {}
 
     primitives_data = {}
-    cfg = config["reasoning_primitives"]
+    cfg = config["DATA"]["reasoning_primitives"]
     num_samples = cfg.get("num_samples", 50)
     
     # Three variants as per paper: code, math, equation (i-GSM style)

@@ -555,7 +555,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 _display_sample_results(task_results, task_type)
 
             # C. HOLISTIC EVALUATION (if enabled)
-            if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
+            if config["DATA"].get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
                 print(f"\n{'='*70}")
                 print(f"🎯 HOLISTIC EVALUATION")
                 print(f"{'='*70}\n")
