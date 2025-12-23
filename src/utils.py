@@ -7,12 +7,13 @@ from IPython import get_ipython
 import pandas as pd
 from typing import List, Dict
 
+
 def save_results(
     simple_reasoning_results: List[Dict],
     perplexity_results: List[Dict],
     reasoning_primitives_results: List[Dict],
     output_dir: str,
-    overwrite: bool = True
+    overwrite: bool = True,
 ) -> None:
     """Save experiment results to CSV files. Overwrites if overwrite=True."""
     import os
@@ -37,13 +38,16 @@ def save_results(
     if reasoning_primitives_results:
         reasoning_primitives_file = os.path.join(output_dir, "reasoning_primitives.csv")
         save_csv(reasoning_primitives_results, reasoning_primitives_file)
-        print(f"✅ Periodic save: reasoning primitives results to {reasoning_primitives_file}")
+        print(
+            f"✅ Periodic save: reasoning primitives results to {reasoning_primitives_file}"
+        )
+
 
 def save_simple_reasoning_results(
     simple_reasoning_results: List[Dict],
     output_dir: str,
-    file_name : str = "simple_reasoning.csv",
-    overwrite: bool = True
+    file_name: str = "simple_reasoning.csv",
+    overwrite: bool = True,
 ) -> None:
     """Save only simple_reasoning_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
@@ -57,9 +61,7 @@ def save_simple_reasoning_results(
 
 
 def save_perplexity_results(
-    perplexity_results: List[Dict],
-    output_dir: str,
-    overwrite: bool = True
+    perplexity_results: List[Dict], output_dir: str, overwrite: bool = True
 ) -> None:
     """Save only perplexity_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
@@ -69,28 +71,30 @@ def save_perplexity_results(
     pd.DataFrame(perplexity_results).to_csv(ppl_file, index=False)
     print(f"✅ Saved perplexity results to {ppl_file}")
 
+
 def save_reasoning_primitives_results(
-    reasoning_primitives_results: List[Dict],
-    output_dir: str,
-    overwrite: bool = True
+    reasoning_primitives_results: List[Dict], output_dir: str, overwrite: bool = True
 ) -> None:
     """Save only reasoning_primitives_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
     reasoning_primitives_file = os.path.join(output_dir, "reasoning_primitives.csv")
     if overwrite and os.path.exists(reasoning_primitives_file):
         os.remove(reasoning_primitives_file)
-    pd.DataFrame(reasoning_primitives_results).to_csv(reasoning_primitives_file, index=False)
+    pd.DataFrame(reasoning_primitives_results).to_csv(
+        reasoning_primitives_file, index=False
+    )
     print(f"✅ Saved reasoning primitives results to {reasoning_primitives_file}")
+
 
 import json
 
+
 def save_config(
-    config: dict,
-    output_dir: str = "./default_config",
-    experiment=None
+    config: dict, output_dir: str = "./default_config", experiment=None
 ) -> None:
     """Save experiment configuration and task templates to JSON files."""
     import os
+
     os.makedirs(output_dir, exist_ok=True)
     config_path = os.path.join(output_dir, "config.json")
     templates_path = os.path.join(output_dir, "task_templates.json")
@@ -100,24 +104,20 @@ def save_config(
         for k, v in cfg.items():
             if isinstance(v, dict):
                 clean[k] = sanitize_config(v)
-            elif str(type(v)).find('torch.') != -1:
+            elif str(type(v)).find("torch.") != -1:
                 clean[k] = str(v)
             else:
                 clean[k] = v
         return clean
 
     # Save config
-    with open(config_path, 'w', encoding='utf-8') as f:
-        json.dump(
-            sanitize_config(config),
-            f,
-            indent=2,
-            ensure_ascii=False
-        )
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump(sanitize_config(config), f, indent=2, ensure_ascii=False)
     print(f"✅ Configuration saved to {config_path}")
 
     # Save task templates if experiment is provided and has task_templates
     if experiment is not None and hasattr(experiment, "task_templates"):
+
         def sanitize_templates(templates):
             clean = {}
             for k, v in templates.items():
@@ -126,8 +126,12 @@ def save_config(
                     # Store system prompt as list of lines (one sentence per line)
                     if subk == "system" and isinstance(subv, str):
                         # Split on \n, remove empty lines, strip whitespace
-                        clean[k][subk] = [line.strip() for line in subv.split('\n') if line.strip()]
-                    elif isinstance(subv, (str, list, dict, int, float, bool, type(None))):
+                        clean[k][subk] = [
+                            line.strip() for line in subv.split("\n") if line.strip()
+                        ]
+                    elif isinstance(
+                        subv, (str, list, dict, int, float, bool, type(None))
+                    ):
                         clean[k][subk] = subv
                     else:
                         clean[k][subk] = str(subv)
@@ -135,14 +139,10 @@ def save_config(
 
         templates_to_save = sanitize_templates(experiment.task_templates)
 
-        with open(templates_path, 'w', encoding='utf-8') as f:
-            json.dump(
-                templates_to_save,
-                f,
-                indent=2,
-                ensure_ascii=False
-            )
+        with open(templates_path, "w", encoding="utf-8") as f:
+            json.dump(templates_to_save, f, indent=2, ensure_ascii=False)
         print(f"✅ Task templates saved to {templates_path}")
+
 
 def configure_environment_paths():
     """Detect environment and configure paths"""
@@ -174,6 +174,7 @@ def configure_environment_paths():
 
     return base_data_path, base_output_path, environment_name
 
+
 def auto_unzip_colab_content(target_dir="/content/", zip_extension="*.zip"):
     """Auto-extract zip files in Colab environment"""
     try:
@@ -200,6 +201,7 @@ def auto_unzip_colab_content(target_dir="/content/", zip_extension="*.zip"):
                 zip_ref.extractall(target_dir)
         except Exception as e:
             print(f"❌ Error: {e}")
+
 
 def generate_test_id(task_type: str, difficulty: str, prompt: str) -> str:
     """Generate unique test ID"""

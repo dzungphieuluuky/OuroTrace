@@ -1,6 +1,7 @@
 """
 This is example file for batch generation taken from https://huggingface.co/docs/transformers/main/en/continuous_batching
 """
+
 import datasets
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -14,7 +15,9 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="cuda",
     dtype=torch.bfloat16,
 )
-tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-4B-Instruct-2507", padding_side="left")
+tokenizer = AutoTokenizer.from_pretrained(
+    "Qwen/Qwen3-4B-Instruct-2507", padding_side="left"
+)
 
 dataset = datasets.load_dataset("openai/gsm8k", "socratic", split="test")
 dataset = dataset.select(range(SAMPLE_SIZE))

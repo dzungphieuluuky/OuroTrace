@@ -3,6 +3,7 @@ import torch
 from datetime import datetime
 from typing import Dict, Any
 
+
 def load_config_from_json(filepath: str) -> Dict[str, Any]:
     """Load configuration from a JSON file.
 
@@ -13,7 +14,7 @@ def load_config_from_json(filepath: str) -> Dict[str, Any]:
         Dict[str, Any]: Configuration dictionary (values are strings, not objects).
     """
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             config = json.load(f)
         return config
     except FileNotFoundError:
@@ -22,6 +23,7 @@ def load_config_from_json(filepath: str) -> Dict[str, Any]:
     except json.JSONDecodeError as e:
         print(f"Lỗi khi giải mã JSON trong {filepath}: {e}")
         return {}
+
 
 def post_process_config(config: Dict[str, Any]) -> Dict[str, Any]:
     """Post process for configs file because they can't store torch.float16 or torch.bloat16 as an object.
@@ -33,15 +35,15 @@ def post_process_config(config: Dict[str, Any]) -> Dict[str, Any]:
         Dict[str, Any]: processed config dictionary.
     """
     # Xử lý kiểu dữ liệu Torch
-    if config.get('MODEL', {}).get('dtype') == "torch.float16":
-        config['MODEL']['dtype'] = torch.float16
-    elif config.get('MODEL', {}).get('dtype') == "torch.float32":
-        config['MODEL']['dtype'] = torch.float32
-    elif config.get('MODEL', {}).get('dtype') == "torch.bfloat16":
-        config['MODEL']['dtype'] = torch.bfloat16
+    if config.get("MODEL", {}).get("dtype") == "torch.float16":
+        config["MODEL"]["dtype"] = torch.float16
+    elif config.get("MODEL", {}).get("dtype") == "torch.float32":
+        config["MODEL"]["dtype"] = torch.float32
+    elif config.get("MODEL", {}).get("dtype") == "torch.bfloat16":
+        config["MODEL"]["dtype"] = torch.bfloat16
 
     # Xử lý timestamp tự động cho WANDB
-    if config.get('WANDB', {}).get('run_name') == "auto_timestamp":
-        config['WANDB']['run_name'] = f"run_{datetime.now().strftime('%Y%m%d_%H%M')}"
-        
+    if config.get("WANDB", {}).get("run_name") == "auto_timestamp":
+        config["WANDB"]["run_name"] = f"run_{datetime.now().strftime('%Y%m%d_%H%M')}"
+
     return config

@@ -4,6 +4,7 @@ from IPython import get_ipython
 import glob
 import zipfile
 
+
 def configure_environment_paths():
     """Detect environment and configure paths"""
     try:
