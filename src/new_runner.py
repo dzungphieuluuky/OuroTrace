@@ -13,7 +13,7 @@ from .data_generator import (
 )
 from .utils import (
     save_results,
-    save_holistic_results,
+    save_simple_reasoning_results,
     save_perplexity_results,
     save_simple_reasoning_results,
     save_config,
@@ -39,7 +39,7 @@ from .new_model import (
     SafeOptimizations,
 )
 
-def run_holistic_evaluation(model, tokenizer, config: dict):
+def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
     """
     Runs the full evaluation suite:
     1. Custom Reasoning Primitives (Depth-k Var Assign) - Running locally
@@ -48,7 +48,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
     Returns:
         List[Dict]: Results for each evaluation instance
     """
-    holistic_results = []
+    reasoning_primitives_results = []
 
     # --- PART 1: CUSTOM REASONING PRIMITIVES ---
     print("\n" + "=" * 60)
@@ -105,7 +105,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
                 if is_correct:
                     correct += 1
                 
-                holistic_results.append({
+                reasoning_primitives_results.append({
                     "task_category": "Reasoning Primitive",
                     "task_name": task_name,
                     "prompt": prompt,  # Log last 100 chars for debugging
@@ -144,7 +144,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
 
         print(f"📝 Configured tasks: {', '.join(standard_tasks)}")
         print("⚠️ Note: This may take significant time and download large datasets.")
-
+        standard_benchmark_results = []
         # Only run if explicitly enabled (to avoid long eval times)
         if config.get("ENABLE_HEAVY_BENCHMARKS", False):
             print("\n🚀 Starting benchmark evaluation...")
@@ -164,7 +164,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
                 acc = res.get("acc,none") or res.get("acc") or res.get("exact_match")
                 if acc is not None:
                     print(f"  • {task}: {acc:.2%}")
-                    holistic_results.append({
+                    standard_benchmark_results.append({
                         "task_category": "Standard Benchmark",
                         "task_name": task,
                         "is_correct": acc,  # Store accuracy directly
@@ -178,7 +178,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
         print("⚠️ 'lm-evaluation-harness' not installed. Skipping Standard Benchmarks.")
         print("ℹ️  Install with: pip install lm-eval")
 
-    return holistic_results
+    return reasoning_primitives_results
 
 def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
     """Run batch experiment based on the provided configuration.
@@ -187,7 +187,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         config (dict): Experiment configuration dictionary.
 
     Returns:
-        Tuple[List[Dict], List[Dict], List[Dict]]: All results, perplexity results, holistic results.
+        Tuple[List[Dict], List[Dict], List[Dict]]: Simple reasoning results, perplexity results, reasoning primitives results.
     """
     # 1. Initialize W&B
     use_wandb = config.get("WANDB", {}).get("enabled", False)
@@ -295,7 +295,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"✅ Prepared {eval_settings['ppl_num_samples']} samples for PPL\n")
 
     simple_reasoning_results = []
-    holistic_results = []
+    reasoning_primitives_results = []
 
     # 6. Setup output directory and periodic saving
     from datetime import datetime
@@ -377,7 +377,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
-                        simple_reasoning_results, perplexity_results, holistic_results,
+                        simple_reasoning_results, perplexity_results, reasoning_primitives_results,
                         output_dir=output_dir, overwrite=True
                     )
                     last_save_time = now
@@ -494,7 +494,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
                             save_results(
-                                simple_reasoning_results, perplexity_results, holistic_results,
+                                simple_reasoning_results, perplexity_results, reasoning_primitives_results,
                                 output_dir=output_dir, overwrite=True
                             )
                             last_save_time = now
@@ -541,7 +541,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
                             save_results(
-                                simple_reasoning_results, perplexity_results, holistic_results,
+                                simple_reasoning_results, perplexity_results, reasoning_primitives_results,
                                 output_dir=output_dir, overwrite=True
                             )
                             last_save_time = now
@@ -554,24 +554,24 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 # Display sample results (first 5)
                 _display_sample_results(task_results, task_type)
 
-            # C. HOLISTIC EVALUATION (if enabled)
+            # C. REASONING PRIMITIVES EVALUATION (if enabled)
             if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
                 print(f"\n{'='*70}")
-                print(f"🎯 HOLISTIC EVALUATION")
+                print(f"🎯 REASONING PRIMITIVES EVALUATION")
                 print(f"{'='*70}\n")
                 
                 try:
-                    holistic_eval = run_holistic_evaluation(model, tokenizer, config)
-                    for result in holistic_eval:
+                    reasoning_primitives_results = run_reasoning_primitives_evaluation(model, tokenizer, config)
+                    for result in reasoning_primitives_results:
                         result['ut_steps'] = ut_steps
-                        holistic_results.append(result)
-                    print(f"✅ Holistic evaluation completed\n")
+                        reasoning_primitives_results.append(result)
+                    print(f"✅ Reasoning primitives evaluation completed\n")
                 except Exception as e:
-                    print(f"⚠️ Holistic evaluation failed: {e}\n")
+                    print(f"⚠️ Reasoning primitives evaluation failed: {e}\n")
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
-                        simple_reasoning_results, perplexity_results, holistic_results,
+                        simple_reasoning_results, perplexity_results, reasoning_primitives_results,
                         output_dir=output_dir, overwrite=True
                     )
                     last_save_time = now
@@ -663,12 +663,12 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"{'='*70}\n")
 
     # Save results to csv files 
-    save_results(simple_reasoning_results, perplexity_results, holistic_results, output_dir=output_dir, overwrite=True)
+    save_results(simple_reasoning_results, perplexity_results, reasoning_primitives_results, output_dir=output_dir, overwrite=True)
 
     # Save config file into yaml file
     save_config(config, output_dir=output_dir, experiment=experiment)
 
-    return simple_reasoning_results, perplexity_results, holistic_results
+    return simple_reasoning_results, perplexity_results, reasoning_primitives_results
 
 
 def _create_result_entry(
