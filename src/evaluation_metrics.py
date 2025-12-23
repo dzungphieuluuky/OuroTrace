@@ -465,32 +465,53 @@ class PaperComplianceChecker:
 # ==============================================================================
 
 def analyze_experiment_results(
-    results: Any,
-    model_name: str = "Ouro-1.4B",
-    model_size_b: float = 1.4,
+    results_folder: str,
     save_plots: bool = True
 ) -> Dict[str, pd.DataFrame]:
     """
     Unified analysis function.
-    Accepts either a list of dicts (in-memory results) or a CSV file path.
+    Accepts a results folder path, automatically loads all_latest.csv and config.json.
     Returns: Dict[str, pd.DataFrame] with all metrics and summary tables.
     """
     print(f"\n{'='*70}")
-    if isinstance(results, str):
-        print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (CSV: {results})")
-        if not os.path.exists(results):
-            print(f"❌ File not found: {results}")
-            return {}
-        df = pd.read_csv(results)
-        stats_results = df.to_dict(orient="records")
-    elif isinstance(results, list):
-        print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (In-memory results)")
-        stats_results = results
-    else:
-        print("❌ Invalid input: must be a list of dicts or CSV file path.")
-        return {}
+    print(f"📊 PAPER-ALIGNED METRICS ANALYSIS (Folder: {results_folder})")
     print(f"{'='*70}\n")
 
+    # --- Load results CSV ---
+    all_latest_path = os.path.join(results_folder, "all_latest.csv")
+    if not os.path.exists(all_latest_path):
+        print(f"❌ all_latest.csv not found in {results_folder}")
+        return {}
+
+    df = pd.read_csv(all_latest_path)
+    stats_results = df.to_dict(orient="records")
+
+    # --- Load config.json ---
+    config_path = os.path.join(results_folder, "config.json")
+    if not os.path.exists(config_path):
+        print(f"❌ config.json not found in {results_folder}")
+        model_name = "Ouro"
+        model_size_b = 1.4
+    else:
+        import json
+        with open(config_path, "r") as f:
+            config = json.load(f)
+        # Try to extract model name and size
+        model_config = config.get("MODEL", {})
+        model_hf_path = model_config.get("path", None)
+        model_name = model_hf_path.split("/")[-1] if model_hf_path else None
+
+        if not model_name:
+            model_name = model_config.get("path", "Ouro")
+
+        if "1.4" in model_name:
+            model_size_b = 1.4
+        elif "2.6" in model_name:
+            model_size_b = 2.6
+        else:
+            print("⚠️ Unable to determine model size from config, defaulting to 1.4B")
+            model_size_b = model_config.get("size_b", 1.4)
+            
     metrics = OuroMetrics()
     metrics.add_results(stats_results)
 
@@ -542,10 +563,15 @@ def analyze_experiment_results(
     # Generate plots
     if save_plots:
         print("📊 Generating plots...")
-        metrics.generate_paper_style_plots()
-        print("✅ Plots saved to ./plots/")
+        metrics.generate_paper_style_plots(save_dir=os.path.join(results_folder, "plots"))
+        print(f"✅ Plots saved to {os.path.join(results_folder, 'plots')}/")
         print()
 
     print(f"{'='*70}\n")
 
     return analysis_results
+
+if __name__ == "__main__":
+    results_path = "sample_experiment_results.csv"
+    
+    analyze_experiment_results(dummy_results, model_name="Ouro-Dummy", model_size_b=1.4)
