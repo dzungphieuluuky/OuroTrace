@@ -302,7 +302,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # use .. to save results outside OuroTrace directory for easy downloading on kaggle/colab
-    output_dir = f"../results_{timestamp}_utsteps_{'-'.join(map(str, ut_steps_list))}"
+    output_dir = f"../results_{timestamp}_UT_{'-'.join(map(str, ut_steps_list))}"
     os.makedirs(output_dir, exist_ok=True)
 
     # Save config ONCE at the start
@@ -634,48 +634,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
             df_ppl = pd.DataFrame(perplexity_results)
             print(df_ppl.to_string(index=False))
             print()
-
-
-        # 8. Paper-Aligned Metrics Analysis
-        if stats_results:
-            print(f"\n{'='*70}")
-            print(f"📊 PAPER-ALIGNED ANALYSIS")
-            print(f"{'='*70}\n")
-            
-            # Determine model size
-            model_path = config["MODEL"]["path"]
-            if "1.4" in model_path.lower():
-                model_size_b = 1.4
-                model_name = "Ouro-1.4B"
-                if "thinking" in model_path.lower():
-                    model_name = "Ouro-1.4B-Thinking"
-            elif "2.6" in model_path.lower():
-                model_size_b = 2.6
-                model_name = "Ouro-2.6B"
-                if "thinking" in model_path.lower():
-                    model_name = "Ouro-2.6B-Thinking"
-            else:
-                model_size_b = 1.4  # default
-                model_name = "Ouro"
-            
-            paper_metrics = {}
-            # Run analysis
-            try:
-                paper_metrics = analyze_experiment_results(
-                    stats_results,
-                    model_name=model_name,
-                    model_size_b=model_size_b,
-                    save_plots=True
-                )
-                
-                for metric_name, df in paper_metrics.items():
-                    if not df.empty:
-                        filename = os.path.join(output_dir, f"{metric_name}_{timestamp}.csv")
-                        df.to_csv(filename, index=False)
-                        print(f"✅ Saved {metric_name} to {filename}")
-            
-            except Exception as e:
-                print(f"⚠️ Paper metrics analysis failed: {e}")
 
         # 9. Close W&B
         if use_wandb and run:

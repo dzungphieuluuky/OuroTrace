@@ -511,7 +511,7 @@ def analyze_experiment_results(
         else:
             print("⚠️ Unable to determine model size from config, defaulting to 1.4B")
             model_size_b = model_config.get("size_b", 1.4)
-            
+
     metrics = OuroMetrics()
     metrics.add_results(stats_results)
 
@@ -572,6 +572,24 @@ def analyze_experiment_results(
     return analysis_results
 
 if __name__ == "__main__":
-    results_path = "sample_experiment_results.csv"
+    import argparse
+    parser = argparse.ArgumentParser(description="Analyze experiment results with paper-aligned metrics.")
+    parser.add_argument(
+        "--results_folder",
+        type=str,
+        required=True,
+        help="Path to the folder containing all_latest.csv and config.json"
+    )
+    args = parser.parse_args()
     
-    analyze_experiment_results(dummy_results, model_name="Ouro-Dummy", model_size_b=1.4)
+    try:
+        paper_metrics = analyze_experiment_results(args.results_folder)
+        for metric_name, df in paper_metrics.items():
+            if not df.empty:
+                filename = os.path.join(args.results_folder, f"{metric_name}.csv")
+                df.to_csv(filename, index=False)
+                print(f"✅ Saved {metric_name} to {filename}")
+
+    except Exception as e:
+        print(f"⚠️ Paper metrics analysis failed: {e}")
+    

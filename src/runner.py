@@ -1,39 +1,193 @@
+import os
 import time
 import wandb
 import gc
 import torch
 import pandas as pd
 from tqdm.auto import tqdm
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional, Tuple, Union
+
+from .data_generator import (
+    create_reasoning_primitives_data,
+    format_5_shot_prompt
+)
+from .utils import (
+    save_results,
+    save_holistic_results,
+    save_perplexity_results,
+    save_stats_results,
+    save_config,
+    generate_test_id
+)
 from .evaluation_metrics import (
     OuroMetrics,
     analyze_experiment_results,
     PaperComplianceChecker
 )
-
 # Import utilities (adjust paths as needed)
-from .utils import generate_test_id
+from .output_monitor import (
+    OutputQualityMonitor,
+    ExperimentFailureException
+)
 from .data_generator import (
     create_test_datasets, 
     create_perplexity_data, 
     load_and_preprocess_data
 )
-from .new_model import SafeOuroThinkingExperiment
-from .evaluation import run_holistic_evaluation
+from .new_model import (
+    SafeOuroThinkingExperiment,
+    SafeOptimizations,
+)
 
-def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
+def run_holistic_evaluation(model, tokenizer, config: dict):
     """
-    Run experiment with automatic batch/compile optimization based on UT steps.
-    
-    AUTO-OPTIMIZATION RULES:
-    - UT Steps = 1: Enable batching + torch.compile (fast path)
-    - UT Steps > 1: Disable batching + torch.compile (stability)
-    
-    Args:
-        config: Configuration dictionary with MODEL, DATA, EVAL_SETTINGS, etc.
+    Runs the full evaluation suite:
+    1. Custom Reasoning Primitives (Depth-k Var Assign) - Running locally
+    2. Standard Benchmarks (QA/Math) - via lm-evaluation-harness
     
     Returns:
-        Tuple of (accuracy_results, perplexity_results, holistic_results)
+        List[Dict]: Results for each evaluation instance
+    """
+    holistic_results = []
+
+    # --- PART 1: CUSTOM REASONING PRIMITIVES ---
+    print("\n" + "=" * 60)
+    print("🧠 Running Reasoning Primitives (5-shot)")
+    print("=" * 60)
+
+    # Generate data
+    primitives = create_reasoning_primitives_data(config)
+    
+    if not primitives:
+        print("⚠️ No reasoning primitives configured. Skipping.")
+    else:
+        # Determine template format from config
+        template_format = config.get("reasoning_primitives", {}).get("template_format", "plain")
+        
+        for task_name, samples in primitives.items():
+            print(f"\n📋 Task: {task_name} ({len(samples)} samples)")
+            correct = 0
+            
+            for item in tqdm(samples, desc=f"  {task_name}", leave=False):
+                # Apply 5-shot formatting
+                prompt = format_5_shot_prompt(samples, item, template_format=template_format)
+                
+                # Generate response (greedy decoding for consistency)
+                inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+                
+                with torch.inference_mode():
+                    outputs = model.generate(
+                        **inputs,
+                        max_new_tokens=10,  # Answer should be short (just a number)
+                        pad_token_id=tokenizer.eos_token_id,
+                        do_sample=False,  # Greedy for reproducibility
+                    )
+                
+                # Extract generated text
+                full_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+                
+                # Parse answer (look for last "Answer:" due to few-shot context)
+                if "Answer:" in full_text:
+                    generated = full_text.split("Answer:")[-1].strip()
+                elif "Response:" in full_text:
+                    generated = full_text.split("Response:")[-1].strip()
+                elif "Assistant:" in full_text:
+                    generated = full_text.split("Assistant:")[-1].strip()
+                else:
+                    # Fallback: take everything after the prompt
+                    generated = full_text[len(prompt):].strip()
+                
+                # Clean up generated answer (remove extra text)
+                generated = generated.split()[0] if generated.split() else generated
+                
+                # Check correctness
+                is_correct = generated == item["expected_answer"]
+                if is_correct:
+                    correct += 1
+                
+                holistic_results.append({
+                    "task_category": "Reasoning Primitive",
+                    "task_name": task_name,
+                    "prompt": prompt,  # Log last 100 chars for debugging
+                    "prediction": generated,
+                    "target": item["expected_answer"],
+                    "is_correct": is_correct,
+                })
+            
+            accuracy = correct / len(samples) if samples else 0.0
+            print(f"    ✅ Accuracy: {accuracy:.2%} ({correct}/{len(samples)})")
+
+    # --- PART 2: STANDARD BENCHMARKS (lm-eval) ---
+    print("\n" + "=" * 60)
+    print("📚 Running Standard Benchmarks (lm-evaluation-harness)")
+    print("=" * 60)
+
+    try:
+        import lm_eval
+        from lm_eval import evaluator
+
+        # Standard benchmark tasks
+        standard_tasks = [
+            # Closed Book QA
+            "triviaqa",
+            "nq_open",
+            "webqs",
+            # Open Book QA
+            "squadv2",
+            "drop",
+            "coqa",
+            # Math Word Problems
+            "gsm8k",
+            "svamp",
+            "asdiv",
+        ]
+
+        print(f"📝 Configured tasks: {', '.join(standard_tasks)}")
+        print("⚠️ Note: This may take significant time and download large datasets.")
+
+        # Only run if explicitly enabled (to avoid long eval times)
+        if config.get("ENABLE_HEAVY_BENCHMARKS", False):
+            print("\n🚀 Starting benchmark evaluation...")
+            
+            results = evaluator.simple_evaluate(
+                model="hf",
+                model_args=f"pretrained={model.name_or_path},dtype=float16",
+                tasks=standard_tasks,
+                num_fewshot=5,  # 5-shot evaluation
+                batch_size=config.get("eval_batch_size", 4),
+            )
+
+            # Log results
+            print("\n📊 Benchmark Results:")
+            for task, res in results["results"].items():
+                # Extract accuracy (different tasks use different metric keys)
+                acc = res.get("acc,none") or res.get("acc") or res.get("exact_match")
+                if acc is not None:
+                    print(f"  • {task}: {acc:.2%}")
+                    holistic_results.append({
+                        "task_category": "Standard Benchmark",
+                        "task_name": task,
+                        "is_correct": acc,  # Store accuracy directly
+                    })
+                else:
+                    print(f"  • {task}: No accuracy metric found")
+        else:
+            print("⏩ Skipping heavy benchmarks (set ENABLE_HEAVY_BENCHMARKS=True to run)")
+
+    except ImportError:
+        print("⚠️ 'lm-evaluation-harness' not installed. Skipping Standard Benchmarks.")
+        print("ℹ️  Install with: pip install lm-eval")
+
+    return holistic_results
+
+def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
+    """Run batch experiment based on the provided configuration.
+
+    Args:
+        config (dict): Experiment configuration dictionary.
+
+    Returns:
+        Tuple[List[Dict], List[Dict], List[Dict]]: All results, perplexity results, holistic results.
     """
     # 1. Initialize W&B
     use_wandb = config.get("WANDB", {}).get("enabled", False)
@@ -51,7 +205,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 config=config,
                 mode=wb_conf.get("mode", "online"),
                 settings=wandb.Settings(
-                    start_timeout=wb_conf.get("timeout", 30), 
                     _disable_stats=True
                 ),
             )
@@ -77,7 +230,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"Data Type: {model_config.get('dtype', torch.bfloat16)}")
     print(f"4-bit Quantization: {model_config.get('use_4bit_quant', True)}")
     print(f"Torch Compile: {model_config.get('use_torch_compile', True)}")
-    print(f"Max Batch Size: {optimization_config.get('max_batch_size', 4)}")
+    print(f"Max Batch Size: {optimization_config.get('max_batch_size', 8)}")
     print(f"Max New Tokens: {optimization_config.get('max_new_tokens', 256)}")
     print(f"Batching: {optimization_config.get('enable_batch', True)}")
     print(f"Calculate Perplexity: {eval_settings.get('calculate_perplexity', True)}")
@@ -91,7 +244,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
         use_torch_compile=config["MODEL"].get("use_torch_compile", True),
-        max_batch_size=optimization_config.get("max_batch_size", 4),
+        max_batch_size=optimization_config.get("max_batch_size", 8),
         max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
 
@@ -144,359 +297,376 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     stats_results = []
     holistic_results = []
 
-    # 6. Main Experiment Loop (over different UT steps)
-    for ut_step_idx, ut_steps in enumerate(ut_steps_list):
-        print(f"\n{'='*70}")
-        print(f"🧪 EXPERIMENT {ut_step_idx + 1}/{len(ut_steps_list)}: UT Steps = {ut_steps}")
-        print(f"{'='*70}\n")
+    # 6. Setup output directory and periodic saving
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        # AUTO-OPTIMIZATION: Determine if batching should be enabled
-        enable_batch = optimization_config.get("enable_batch", True)
-        
-        print(f"⚙️  AUTO-OPTIMIZATION SETTINGS:")
-        print(f"   Batch Processing: {'✅ ENABLED' if enable_batch else '❌ DISABLED'}")
-        print(f"   Torch Compile: {'✅ ENABLED' if model_config.get('use_torch_compile', True) else '❌ DISABLED'}")
-        print(f"   NOTE: torch.compile is not the culprit, batching with generate(), not with generate_batch() function.")
-        print()
+    # use .. to save results outside OuroTrace directory for easy downloading on kaggle/colab
+    output_dir = f"../results_{timestamp}_UT_{'-'.join(map(str, ut_steps_list))}"
+    os.makedirs(output_dir, exist_ok=True)
 
-        # Load model with specific UT steps configuration
-        try:
-            model, tokenizer, model_config, config_dict = experiment.load_model_with_ut_steps(ut_steps)
-        except Exception as e:
-            print(f"❌ Failed to load model with UT steps={ut_steps}: {e}")
-            continue
+    # Save config ONCE at the start
+    save_config(config, output_dir=output_dir, experiment=experiment)
 
-        # Build task templates (only once)
-        if not hasattr(experiment, "_templates_precomputed"):
-            print("🔧 Building task templates...")
-            experiment._build_task_templates(tokenizer)
-            experiment._templates_precomputed = True
-            print("✅ Task templates built\n")
-            print()
+    # save results periodically to prevent accidental collapse on long runs
+    periodic_save_interval = config.get("PERIODIC_SAVE_INTERVAL", 300)  # default 5 minutes
+    last_save_time = time.time()
 
-        # A. PERPLEXITY EVALUATION
-        if perplexity_data:
+    try: 
+        # 6. Main Experiment Loop (over different UT steps)
+        for ut_step_idx, ut_steps in enumerate(ut_steps_list):
+            print(f"\n{'='*70}")
+            print(f"🧪 EXPERIMENT {ut_step_idx + 1}/{len(ut_steps_list)}: UT Steps = {ut_steps}")
+            print(f"{'='*70}\n")
+
+            # AUTO-OPTIMIZATION: Determine if batching should be enabled
+            enable_batch = optimization_config.get("enable_batch", True)
+            
+            # Load model with specific UT steps configuration
+            try:
+                model, tokenizer, model_config, config_dict = experiment.load_model_with_ut_steps(ut_steps)
+            except Exception as e:
+                print(f"❌ Failed to load model with UT steps={ut_steps}: {e}")
+                continue
+
+            # Build task templates (only once)
+            if not hasattr(experiment, "_templates_precomputed"):
+                print("🔧 Building task templates...")
+                experiment._build_task_templates(tokenizer)
+                experiment._templates_precomputed = True
+                print("✅ Task templates built\n")
+                save_config(config, output_dir=output_dir, experiment=experiment)
+                print("✅ Experiment configuration saved with task templates\n")
+                print()
+
+            # A. PERPLEXITY EVALUATION
+            if perplexity_data:
+                print(f"{'='*70}")
+                print(f"📉 PERPLEXITY EVALUATION")
+                print(f"{'='*70}\n")
+                
+                try:
+                    ppl, avg_loss = experiment.calculate_perplexity(
+                        model,
+                        tokenizer,
+                        perplexity_data,
+                        ut_steps,
+                        max_length=eval_settings.get("ppl_max_length", 2048),
+                        stride=eval_settings.get("ppl_stride", 512),
+                    )
+                    
+                    perplexity_results.append({
+                        "ut_steps": ut_steps,
+                        "perplexity": ppl,
+                        "avg_loss": avg_loss
+                    })
+                    
+                    print(f"\n✅ Perplexity Results:")
+                    print(f"   Perplexity: {ppl:.4f}")
+                    print(f"   Avg Loss:   {avg_loss:.4f}\n")
+
+                    if use_wandb:
+                        wandb.log({
+                            "perplexity": ppl,
+                            "val_loss": avg_loss,
+                            "ut_steps": ut_steps
+                        })
+                
+                except Exception as e:
+                    print(f"⚠️ Perplexity calculation failed: {e}\n")
+                now = time.time()
+                if now - last_save_time >= periodic_save_interval:
+                    save_results(
+                        stats_results, perplexity_results, holistic_results,
+                        output_dir=output_dir, overwrite=True
+                    )
+                    last_save_time = now
+
+            # B. ACCURACY & PERFORMANCE EVALUATION
             print(f"{'='*70}")
-            print(f"📉 PERPLEXITY EVALUATION")
+            print(f"🎯 ACCURACY EVALUATION")
             print(f"{'='*70}\n")
             
-            try:
-                ppl, avg_loss = experiment.calculate_perplexity(
-                    model,
-                    tokenizer,
-                    perplexity_data,
-                    ut_steps,
-                    max_length=eval_settings.get("ppl_max_length", 2048),
-                    stride=eval_settings.get("ppl_stride", 512),
-                )
+            for task_type, items in test_datasets.items():
+                if not items:
+                    print(f"⚠️ Skipping {task_type} - no test items\n")
+                    continue
                 
-                perplexity_results.append({
-                    "ut_steps": ut_steps,
-                    "perplexity": ppl,
-                    "avg_loss": avg_loss
-                })
+                print(f"\n{'─'*70}")
+                print(f"📝 Task: {task_type.upper()}")
+                print(f"{'─'*70}")
+                print(f"Total Samples: {len(items)}")
                 
-                print(f"\n✅ Perplexity Results:")
-                print(f"   Perplexity: {ppl:.4f}")
-                print(f"   Avg Loss:   {avg_loss:.4f}\n")
+                task_results = []
+                task_start_time = time.time()
 
-                if use_wandb:
-                    wandb.log({
-                        "perplexity": ppl,
-                        "val_loss": avg_loss,
-                        "ut_steps": ut_steps
-                    })
-            
-            except Exception as e:
-                print(f"⚠️ Perplexity calculation failed: {e}\n")
-
-        # B. ACCURACY & PERFORMANCE EVALUATION
-        print(f"{'='*70}")
-        print(f"🎯 ACCURACY EVALUATION")
-        print(f"{'='*70}\n")
-        
-        for task_type, items in test_datasets.items():
-            if not items:
-                print(f"⚠️ Skipping {task_type} - no test items\n")
-                continue
-            
-            print(f"\n{'─'*70}")
-            print(f"📝 Task: {task_type.upper()}")
-            print(f"{'─'*70}")
-            print(f"Total Samples: {len(items)}")
-            
-            task_results = []
-            task_start_time = time.time()
-
-            # Determine optimal batch size for this task (only if batch enabled)
-            batch_size = 1
-            if enable_batch:
-                task_batch_limits = {
-                    "n_ary": 8,
-                    "p_hop": 4,
-                    "igsm": 2
-                }
-                batch_size = min(
-                    task_batch_limits.get(task_type, 1),
-                    experiment.max_batch_size
-                )
-                print(f"Batch Size: {batch_size}")
-                print(f"Strategy: Batched Processing")
-            else:
-                print(f"Batch Size: 1 (Sequential)")
-                print(f"Strategy: Sequential Processing")
-            
-            print()
-
-            # Process items in batches or sequentially using unified predict()
-            if batch_size > 1 and len(items) >= batch_size:
-                # BATCHED PROCESSING
-                num_batches = (len(items) + batch_size - 1) // batch_size if enable_batch else 1
-                print(f"Running {num_batches} batches...")
+                # Determine optimal batch size for this task (only if batch enabled)
+                batch_size = 1
+                if enable_batch:
+                    task_batch_limits = {
+                        "n_ary": 8,
+                        "p_hop": 4,
+                        "igsm": 2
+                    }
+                    batch_size = min(
+                        task_batch_limits.get(task_type, 1),
+                        experiment.max_batch_size
+                    )
+                    print(f"Batch Size: {batch_size}")
+                    print(f"Strategy: Batched Processing")
+                else:
+                    print(f"Batch Size: 1 (Sequential)")
+                    print(f"Strategy: Sequential Processing")
                 
-                for batch_idx in tqdm(
-                    range(0, len(items), batch_size),
-                    desc=f"   {task_type}",
-                    leave=False,
-                    total=num_batches
-                ):
-                    batch_items = items[batch_idx : batch_idx + batch_size]
-                    prompts = [item["prompt"] for item in batch_items]
+                print()
 
-                    try:
-                        # Use unified predict() with list of prompts
-                        batch_outputs = experiment.predict(
-                            user_inputs=prompts,
-                            task_type=task_type,
-                            model=model,
-                            tokenizer=tokenizer,
-                            ut_steps=ut_steps,
-                        )
-
-                        # Process each output
-                        for output, item in zip(batch_outputs, batch_items):
-                            result_entry = _create_result_entry(
-                                output, item, task_type, ut_steps
-                            )
-                            task_results.append(result_entry)
-                            stats_results.append(result_entry)
-                            print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-                            experiment.monitor_and_maybe_abort(result_entry, task_type)
+                # Process items in batches or sequentially using unified predict()
+                if batch_size > 1 and len(items) >= batch_size:
+                    # BATCHED PROCESSING
+                    num_batches = (len(items) + batch_size - 1) // batch_size if enable_batch else 1
+                    print(f"Running {num_batches} batches...")
                     
-                    except Exception as e:
-                        print(f"\n⚠️ Batch {batch_idx//batch_size + 1} failed: {e}")
-                        # Fallback to sequential for this batch
-                        for item in batch_items:
-                            try:
-                                output = experiment.predict(
-                                    user_inputs=item["prompt"],
-                                    task_type=task_type,
-                                    model=model,
-                                    tokenizer=tokenizer,
-                                    ut_steps=ut_steps,
-                                )
+                    for batch_idx in tqdm(
+                        range(0, len(items), batch_size),
+                        desc=f"   {task_type}",
+                        leave=False,
+                        total=num_batches
+                    ):
+                        batch_items = items[batch_idx : batch_idx + batch_size]
+                        prompts = [item["prompt"] for item in batch_items]
+
+                        try:
+                            # Use unified predict() with list of prompts
+                            batch_outputs = experiment.predict(
+                                user_inputs=prompts,
+                                task_type=task_type,
+                                model=model,
+                                tokenizer=tokenizer,
+                                ut_steps=ut_steps,
+                            )
+
+                            # Process each output
+                            for output, item in zip(batch_outputs, batch_items):
                                 result_entry = _create_result_entry(
                                     output, item, task_type, ut_steps
                                 )
                                 task_results.append(result_entry)
                                 stats_results.append(result_entry)
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
+                                print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
                                 experiment.monitor_and_maybe_abort(result_entry, task_type)
-                            except Exception as e2:
-                                print(f"⚠️ Item failed: {e2}")
-                                error_result = {
-                                    "prediction": "ERROR",
-                                    "full_response": str(e2),
-                                    "generation_time": 0,
-                                    "generated_tokens": 0,
-                                    "input_tokens": 0,
-                                    "is_degenerate": False,
-                                }
-                                result_entry = _create_result_entry(
-                                    error_result, item, task_type, ut_steps
-                                )
-                                task_results.append(result_entry)
-                                stats_results.append(result_entry)
-                                print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-                                experiment.monitor_and_maybe_abort(result_entry, task_type)
-            else:
-                # SEQUENTIAL PROCESSING
-                print(f"Batch size < 1 or not enough items, processing sequentially.")
-                print(f"Processing {len(items)} items sequentially...")
+                        
+                        except Exception as e:
+                            print(f"\n⚠️ Batch {batch_idx//batch_size + 1} failed: {e}")
+                            # Fallback to sequential for this batch
+                            for item in batch_items:
+                                try:
+                                    output = experiment.predict(
+                                        user_inputs=item["prompt"],
+                                        task_type=task_type,
+                                        model=model,
+                                        tokenizer=tokenizer,
+                                        ut_steps=ut_steps,
+                                    )
+                                    result_entry = _create_result_entry(
+                                        output, item, task_type, ut_steps
+                                    )
+                                    task_results.append(result_entry)
+                                    stats_results.append(result_entry)
+                                    print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
+                                    experiment.monitor_and_maybe_abort(result_entry, task_type)
+                                except Exception as e2:
+                                    print(f"⚠️ Item failed: {e2}")
+                                    error_result = {
+                                        "prediction": "ERROR",
+                                        "full_response": str(e2),
+                                        "generation_time": 0,
+                                        "generated_tokens": 0,
+                                        "input_tokens": 0,
+                                        "is_degenerate": False,
+                                    }
+                                    result_entry = _create_result_entry(
+                                        error_result, item, task_type, ut_steps
+                                    )
+                                    task_results.append(result_entry)
+                                    stats_results.append(result_entry)
+                                    print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
+                                    experiment.monitor_and_maybe_abort(result_entry, task_type)
+                        now = time.time()
+                        if now - last_save_time >= periodic_save_interval:
+                            save_results(
+                                stats_results, perplexity_results, holistic_results,
+                                output_dir=output_dir, overwrite=True
+                            )
+                            last_save_time = now
+
+                else:
+                    # SEQUENTIAL PROCESSING
+                    print(f"Batch size < 1 or not enough items, processing sequentially.")
+                    print(f"Processing {len(items)} items sequentially...")
+                    
+                    for item in tqdm(items, desc=f"   {task_type}", leave=False):
+                        try:
+                            # Use unified predict() with single prompt
+                            output = experiment.predict(
+                                user_inputs=item["prompt"],
+                                task_type=task_type,
+                                model=model,
+                                tokenizer=tokenizer,
+                                ut_steps=ut_steps,
+                            )
+                            result_entry = _create_result_entry(
+                                output, item, task_type, ut_steps
+                            )
+                            task_results.append(result_entry)
+                            stats_results.append(result_entry)
+                            print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
+                            experiment.monitor_and_maybe_abort(result_entry, task_type)
+                        except Exception as e:
+                            print(f"⚠️ Item failed: {e}")
+                            error_result = {
+                                "prediction": "ERROR",
+                                "full_response": str(e),
+                                "generation_time": 0,
+                                "generated_tokens": 0,
+                                "input_tokens": 0,
+                                "is_degenerate": False,
+                            }
+                            result_entry = _create_result_entry(
+                                error_result, item, task_type, ut_steps
+                            )
+                            task_results.append(result_entry)
+                            stats_results.append(result_entry)
+                            print(pd.DataFrame([result_entry])[['test_input', 'full_response', 'generated_tokens']])
+                            experiment.monitor_and_maybe_abort(result_entry, task_type)
+                        now = time.time()
+                        if now - last_save_time >= periodic_save_interval:
+                            save_results(
+                                stats_results, perplexity_results, holistic_results,
+                                output_dir=output_dir, overwrite=True
+                            )
+                            last_save_time = now
                 
-                for item in tqdm(items, desc=f"   {task_type}", leave=False):
-                    try:
-                        # Use unified predict() with single prompt
-                        output = experiment.predict(
-                            user_inputs=item["prompt"],
-                            task_type=task_type,
-                            model=model,
-                            tokenizer=tokenizer,
-                            ut_steps=ut_steps,
-                        )
-                        result_entry = _create_result_entry(
-                            output, item, task_type, ut_steps
-                        )
-                        task_results.append(result_entry)
-                        stats_results.append(result_entry)
-                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-                        experiment.monitor_and_maybe_abort(result_entry, task_type)
-                    except Exception as e:
-                        print(f"⚠️ Item failed: {e}")
-                        error_result = {
-                            "prediction": "ERROR",
-                            "full_response": str(e),
-                            "generation_time": 0,
-                            "generated_tokens": 0,
-                            "input_tokens": 0,
-                            "is_degenerate": False,
-                        }
-                        result_entry = _create_result_entry(
-                            error_result, item, task_type, ut_steps
-                        )
-                        task_results.append(result_entry)
-                        stats_results.append(result_entry)
-                        print(pd.DataFrame([result_entry])[['test_input', 'full_response']])
-                        experiment.monitor_and_maybe_abort(result_entry, task_type)
-            
-            # Log and display task summary
-            _log_task_summary(
-                task_results, task_type, ut_steps, task_start_time, use_wandb
-            )
+                # Log and display task summary
+                _log_task_summary(
+                    task_results, task_type, ut_steps, task_start_time, use_wandb
+                )
 
-            # Display sample results (first 5)
-            _display_sample_results(task_results, task_type)
+                # Display sample results (first 5)
+                _display_sample_results(task_results, task_type)
 
-        # C. HOLISTIC EVALUATION (if enabled)
-        if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
-            print(f"\n{'='*70}")
-            print(f"🎯 HOLISTIC EVALUATION")
+            # C. HOLISTIC EVALUATION (if enabled)
+            if config.get("reasoning_primitives") or config.get("ENABLE_HEAVY_BENCHMARKS"):
+                print(f"\n{'='*70}")
+                print(f"🎯 HOLISTIC EVALUATION")
+                print(f"{'='*70}\n")
+                
+                try:
+                    holistic_eval = run_holistic_evaluation(model, tokenizer, config)
+                    for result in holistic_eval:
+                        result['ut_steps'] = ut_steps
+                        holistic_results.append(result)
+                    print(f"✅ Holistic evaluation completed\n")
+                except Exception as e:
+                    print(f"⚠️ Holistic evaluation failed: {e}\n")
+                now = time.time()
+                if now - last_save_time >= periodic_save_interval:
+                    save_results(
+                        stats_results, perplexity_results, holistic_results,
+                        output_dir=output_dir, overwrite=True
+                    )
+                    last_save_time = now
+
+            # Cleanup GPU memory
+            print(f"{'='*70}")
+            print(f"🧹 Cleaning up GPU memory...")
+            del model, tokenizer
+            torch.cuda.empty_cache()
+            gc.collect()
+            print(f"✅ GPU memory freed")
             print(f"{'='*70}\n")
-            
-            try:
-                holistic_eval = run_holistic_evaluation(model, tokenizer, config)
-                holistic_eval['ut_steps'] = ut_steps
-                holistic_results.append(holistic_eval)
-                print(f"✅ Holistic evaluation completed\n")
-            except Exception as e:
-                print(f"⚠️ Holistic evaluation failed: {e}\n")
 
-        # Cleanup GPU memory
-        print(f"{'='*70}")
-        print(f"🧹 Cleaning up GPU memory...")
-        del model, tokenizer
-        torch.cuda.empty_cache()
-        gc.collect()
-        print(f"✅ GPU memory freed")
-        print(f"{'='*70}\n")
-
-    # 7. Final Summary
-    print(f"\n{'='*70}")
-    print(f"📊 FINAL EXPERIMENT SUMMARY")
-    print(f"{'='*70}\n")
-    
-    if stats_results:
-        df_all = pd.DataFrame(stats_results)
-        
-        # Check for garbage outputs
-        if 'is_degenerate' in df_all.columns:
-            num_garbage = df_all['is_degenerate'].sum()
-            if num_garbage > 0:
-                print(f"⚠️ WARNING: {num_garbage} garbage/degenerate outputs detected\n")
-        
-        print("📈 Overall Accuracy by Task Type:")
-        print(f"{'─'*70}")
-        accuracy_by_task = df_all.groupby('task_type')['is_correct'].agg(['mean', 'count'])
-        accuracy_by_task.columns = ['Accuracy', 'N']
-        accuracy_by_task['Accuracy'] = (accuracy_by_task['Accuracy'] * 100).round(2)
-        accuracy_by_task['Accuracy'] = accuracy_by_task['Accuracy'].apply(lambda x: f"{x:.2f}%")
-        print(accuracy_by_task)
-        print()
-        
-        print("📈 Accuracy by UT Steps:")
-        print(f"{'─'*70}")
-        accuracy_by_steps = df_all.groupby('ut_steps')['is_correct'].agg(['mean', 'count'])
-        accuracy_by_steps.columns = ['Accuracy', 'N']
-        accuracy_by_steps['Accuracy'] = (accuracy_by_steps['Accuracy'] * 100).round(2)
-        accuracy_by_steps['Accuracy'] = accuracy_by_steps['Accuracy'].apply(lambda x: f"{x:.2f}%")
-        print(accuracy_by_steps)
-        print()
-        
-        print("📈 Accuracy by Task Type and UT Steps:")
-        print(f"{'─'*70}")
-        accuracy_pivot = df_all.pivot_table(
-            values='is_correct',
-            index='task_type',
-            columns='ut_steps',
-            aggfunc='mean'
-        ) * 100
-        print(accuracy_pivot.round(2))
-        print()
-    
-    if perplexity_results:
-        print("📉 Perplexity by UT Steps:")
-        print(f"{'─'*70}")
-        df_ppl = pd.DataFrame(perplexity_results)
-        print(df_ppl.to_string(index=False))
-        print()
-
-    from datetime import datetime
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    # 8. Paper-Aligned Metrics Analysis
-    if stats_results:
+        # 7. Final Summary
         print(f"\n{'='*70}")
-        print(f"📊 PAPER-ALIGNED ANALYSIS")
+        print(f"📊 FINAL EXPERIMENT SUMMARY")
         print(f"{'='*70}\n")
-        
-        # Determine model size
-        model_path = config["MODEL"]["path"]
-        if "1.4" in model_path.lower():
-            model_size_b = 1.4
-            model_name = "Ouro-1.4B"
-            if "thinking" in model_path.lower():
-                model_name = "Ouro-1.4B-Thinking"
-        elif "2.6" in model_path.lower():
-            model_size_b = 2.6
-            model_name = "Ouro-2.6B"
-            if "thinking" in model_path.lower():
-                model_name = "Ouro-2.6B-Thinking"
-        else:
-            model_size_b = 1.4  # default
-            model_name = "Ouro"
-        
-        paper_metrics = {}
-        # Run analysis
-        try:
-            paper_metrics = analyze_experiment_results(
-                stats_results,
-                model_name=model_name,
-                model_size_b=model_size_b,
-                save_plots=True
-            )
-            
-            for metric_name, df in paper_metrics.items():
-                if not df.empty:
-                    filename = f"./results_{timestamp}/{metric_name}_{timestamp}.csv"
-                    df.to_csv(filename, index=False)
-                    print(f"✅ Saved {metric_name} to {filename}")
-        
-        except Exception as e:
-            print(f"⚠️ Paper metrics analysis failed: {e}")
 
-    # 9. Close W&B
-    if use_wandb and run:
+        if stats_results:
+            df_all = pd.DataFrame(stats_results)
+            
+            # Check for garbage outputs
+            if 'is_degenerate' in df_all.columns:
+                num_garbage = df_all['is_degenerate'].sum()
+                if num_garbage > 0:
+                    print(f"⚠️ WARNING: {num_garbage} garbage/degenerate outputs detected\n")
+            
+            print("📈 Overall Accuracy by Task Type:")
+            print(f"{'─'*70}")
+            accuracy_by_task = df_all.groupby('task_type')['is_correct'].agg(['mean', 'count'])
+            accuracy_by_task.columns = ['Accuracy', 'N']
+            accuracy_by_task['Accuracy'] = (accuracy_by_task['Accuracy'] * 100).round(2)
+            accuracy_by_task['Accuracy'] = accuracy_by_task['Accuracy'].apply(lambda x: f"{x:.2f}%")
+            print(accuracy_by_task)
+            print()
+            
+            print("📈 Accuracy by UT Steps:")
+            print(f"{'─'*70}")
+            accuracy_by_steps = df_all.groupby('ut_steps')['is_correct'].agg(['mean', 'count'])
+            accuracy_by_steps.columns = ['Accuracy', 'N']
+            accuracy_by_steps['Accuracy'] = (accuracy_by_steps['Accuracy'] * 100).round(2)
+            accuracy_by_steps['Accuracy'] = accuracy_by_steps['Accuracy'].apply(lambda x: f"{x:.2f}%")
+            print(accuracy_by_steps)
+            print()
+            
+            print("📈 Accuracy by Task Type and UT Steps:")
+            print(f"{'─'*70}")
+            accuracy_pivot = df_all.pivot_table(
+                values='is_correct',
+                index='task_type',
+                columns='ut_steps',
+                aggfunc='mean'
+            ) * 100
+            print(accuracy_pivot.round(2))
+            print()
+        
+        if perplexity_results:
+            print("📉 Perplexity by UT Steps:")
+            print(f"{'─'*70}")
+            df_ppl = pd.DataFrame(perplexity_results)
+            print(df_ppl.to_string(index=False))
+            print()
+
+        # 9. Close W&B
+        if use_wandb and run:
+            print(f"{'='*70}")
+            print("🔗 Finalizing W&B...")
+            wandb.finish()
+            print("✅ W&B session closed")
+            print(f"{'='*70}\n")
+    
+    except ExperimentFailureException as efe:
+        print(f"\n{'='*70}")
+        print(f"❌ EXPERIMENT ABORTED GRACEFULLY: {efe}")
         print(f"{'='*70}")
         print("🔗 Finalizing W&B...")
         wandb.finish()
         print("✅ W&B session closed")
         print(f"{'='*70}\n")
 
+
+    except KeyboardInterrupt:
+        print(f"\n{'='*70}")
+        print("❌ EXPERIMENT INTERRUPTED BY USER")
+        print(f"{'='*70}\n")
+        print("🔗 Finalizing W&B...")
+        wandb.finish()
+        print("✅ W&B session closed")
+        print(f"{'='*70}\n")
+
     # Save results to csv files 
-    save_results(stats_results, perplexity_results, holistic_results, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+    save_results(stats_results, perplexity_results, holistic_results, output_dir=output_dir, overwrite=True)
 
     # Save config file into yaml file
-    save_config(config, output_dir=f"./results_{timestamp}", timestamp=timestamp)
+    save_config(config, output_dir=output_dir, experiment=experiment)
 
     return stats_results, perplexity_results, holistic_results
 
@@ -625,62 +795,3 @@ def _display_sample_results(results: List[Dict[str, Any]], task_type: str, num_s
     
     print(df_sample[display_cols].to_string(index=False))
     print()
-
-
-# Optional: Save results function
-def save_results(
-    stats_results: List[Dict],
-    perplexity_results: List[Dict],
-    holistic_results: List[Dict],
-    timestamp: Optional[str] = None,
-    output_dir: str = "./results"
-) -> None:
-    """Save experiment results to CSV files."""
-    import os
-    from datetime import datetime
-    
-    os.makedirs(output_dir, exist_ok=True)
-    if timestamp is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    if stats_results:
-        stats_file = os.path.join(output_dir, f"all_{timestamp}.csv")
-        pd.DataFrame(stats_results).to_csv(stats_file, index=False)
-        print(f"✅ Saved all results to {stats_file}")
-    
-    if perplexity_results:
-        ppl_file = os.path.join(output_dir, f"perplexity_{timestamp}.csv")
-        pd.DataFrame(perplexity_results).to_csv(ppl_file, index=False)
-        print(f"✅ Saved perplexity results to {ppl_file}")
-    
-    if holistic_results:
-        holistic_file = os.path.join(output_dir, f"holistic_{timestamp}.csv")
-        pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)
-        print(f"✅ Saved holistic results to {holistic_file}")
-
-def save_config(
-    config: dict,
-    timestamp: Optional[str] = None,
-    output_dir: str = "./results"
-) -> None:
-    """Save experiment configuration to a YAML file."""
-    import os
-    import yaml
-    from datetime import datetime
-    
-    os.makedirs(output_dir, exist_ok=True)
-    if timestamp is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    # sanitize config before saving
-    clean = {}
-    for k, v in config.items():
-        if isinstance(v, dict):
-            clean[k] = {kk: str(vv) for kk, vv in v.items()}
-        else:
-            clean[k] = str(v)
-            
-    config_file = os.path.join(output_dir, f"config_{timestamp}.yaml")
-    with open(config_file, 'w') as f:
-        yaml.dump(clean, f)
-    print(f"✅ Saved config to {config_file}")
