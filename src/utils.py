@@ -25,24 +25,24 @@ def save_results(
         pd.DataFrame(data).to_csv(fname, index=False)
 
     if simple_reasoning_results:
-        stats_file = os.path.join(output_dir, "all_latest.csv")
+        stats_file = os.path.join(output_dir, "all.csv")
         save_csv(simple_reasoning_results, stats_file)
         print(f"✅ Periodic save: all results to {stats_file}")
 
     if perplexity_results:
-        ppl_file = os.path.join(output_dir, "perplexity_latest.csv")
+        ppl_file = os.path.join(output_dir, "perplexity.csv")
         save_csv(perplexity_results, ppl_file)
         print(f"✅ Periodic save: perplexity results to {ppl_file}")
 
     if holistic_results:
-        holistic_file = os.path.join(output_dir, "holistic_latest.csv")
+        holistic_file = os.path.join(output_dir, "holistic.csv")
         save_csv(holistic_results, holistic_file)
         print(f"✅ Periodic save: holistic results to {holistic_file}")
 
 def save_simple_reasoning_results(
     simple_reasoning_results: List[Dict],
     output_dir: str,
-    file_name : str = "all_latest.csv",
+    file_name : str = "all.csv",
     overwrite: bool = True
 ) -> None:
     """Save only simple_reasoning_results to CSV file."""
@@ -63,7 +63,7 @@ def save_perplexity_results(
 ) -> None:
     """Save only perplexity_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
-    ppl_file = os.path.join(output_dir, "perplexity_latest.csv")
+    ppl_file = os.path.join(output_dir, "perplexity.csv")
     if overwrite and os.path.exists(ppl_file):
         os.remove(ppl_file)
     pd.DataFrame(perplexity_results).to_csv(ppl_file, index=False)
@@ -76,7 +76,7 @@ def save_holistic_results(
 ) -> None:
     """Save only holistic_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
-    holistic_file = os.path.join(output_dir, "holistic_latest.csv")
+    holistic_file = os.path.join(output_dir, "holistic.csv")
     if overwrite and os.path.exists(holistic_file):
         os.remove(holistic_file)
     pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)

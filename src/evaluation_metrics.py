@@ -519,13 +519,13 @@ def analyze_experiment_results(
     metrics = EnhancedOuroMetrics()
 
         # --- Load results CSV ---
-    all_latest_path = os.path.join(results_folder, "all_latest.csv")
+    all_latest_path = os.path.join(results_folder, "all.csv")
     if not os.path.exists(all_latest_path):
-        print(f"❌ all_latest.csv not found in {results_folder}")
+        print(f"❌ all.csv not found in {results_folder}")
         return {}
-    holistic_path = os.path.join(results_folder, "holistic_latest.csv")
+    holistic_path = os.path.join(results_folder, "holistic.csv")
     if not os.path.exists(holistic_path):
-        print(f"⚠️ holistic_latest.csv not found in {results_folder}, proceeding without holistic results")
+        print(f"⚠️ holistic.csv not found in {results_folder}, proceeding without holistic results")
         return {}
     
     all_result_df = pd.read_csv(all_latest_path)
@@ -760,7 +760,7 @@ if __name__ == "__main__":
         "--results_folder",
         type=str,
         required=True,
-        help="Path to the folder containing all_latest.csv and config.json"
+        help="Path to the folder containing all.csv and config.json"
     )
     args = parser.parse_args()
     
