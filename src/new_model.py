@@ -290,49 +290,25 @@ class SafeOuroThinkingExperiment:
         return system_idx < user_idx < assistant_idx
         
 
-    def _build_task_templates(self, tokenizer, num_shots: int = 4):
+    def _build_task_templates(self, tokenizer):
         """
-        Build task templates using REAL few-shot examples from data_generator.py.
-        This ensures the system prompt matches actual test distribution.
-        
+        Pre-compute ALL tokenization components including user message wrapper.
+        This eliminates ALL redundant tokenization during inference.
+
         Args:
             tokenizer: HuggingFace tokenizer
-            num_shots: Number of few-shot examples per task (default: 4)
         """
         self.tokenizer = tokenizer
 
-        # --- STEP 1: Generate real samples from data_generator ---
-        print(f"[+] Generating {num_shots} real few-shot examples for each task...")
-        config = {
-            "n_ary": {"ops_levels": [2, 4], "num_samples_per_level": max(10, num_shots + 2)},
-            "p_hop": {"hop_levels": [4, 8], "num_samples_per_level": max(10, num_shots + 2)},
-            "igsm": {"num_samples_total": max(20, num_shots + 5)},
-        }
-        task_data = create_test_datasets(config)
-
-        # --- STEP 2: Sample few-shot examples ---
-        def sample_shots(samples, n=num_shots):
-            """Sample n diverse examples"""
-            if len(samples) < n:
-                return samples
-            return random.sample(samples, n)
-
-        # --- STEP 3: Build system prompts with real examples ---
-        task_configs = {}
-
-        # N-ARY ADDITION
-        if "n_ary" in task_data and task_data["n_ary"]:
-            shots = ""
-            shots = sample_shots(task_data["n_ary"])
-            examples_text = ""
-            for ex in shots:
-                # Format: "Input: 234 + 567 = \n[FINAL] 801 [END]\n\n"
-                examples_text += f"Input: {ex['prompt']}\n[FINAL] {ex['expected_answer']} [END]\n\n"
-            
-            task_configs["n_ary"] = {
+        task_configs = {
+            "n_ary": {
                 "system": (
                     "You solve ADDITION by adding numbers one at a time.\n\n"
-                    f"EXAMPLES:\n{examples_text}"
+                    "EXAMPLES:\n"
+                    "Input: Add 2 numbers: 234 + 567\n"
+                    "[FINAL] 801 [END]\n\n"
+                    "Input: Add 4 numbers: 120 + 88 + 45 + 37\n"
+                    "[FINAL] 290 [END]\n\n"
                     "RULES:\n"
                     "✓ Show ONLY the final answer, no intermediate steps.\n"
                     "✓ Start with 0, add one number per step (but steps are hidden).\n"
@@ -344,34 +320,18 @@ class SafeOuroThinkingExperiment:
                     "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
-                "few_shot_examples": shots,  # Store for debugging
-            }
+            },
 
-        # P-HOP INDUCTION
-        if "p_hop" in task_data and task_data["p_hop"]:
-            shots = ""
-            shots = sample_shots(task_data["p_hop"])
-            examples_text = ""
-            for ex in shots:
-                # Parse prompt to extract components
-                prompt = ex['prompt']
-                # "Sequence: A B C D E. Start: A. Hop 3 times."
-                if "Sequence:" in prompt and "Start:" in prompt and "Hop" in prompt:
-                    seq_part = prompt.split("Sequence: ")[1].split(". Start:")[0]
-                    start_part = prompt.split("Start: ")[1].split(". Hop")[0]
-                    hops_part = prompt.split("Hop ")[1].split(" times")[0]
-                    examples_text += (
-                        f"Input: Sequence: {seq_part} | Start: {start_part} | Hops: {hops_part}\n"
-                        f"[FINAL] {ex['expected_answer']} [END]\n\n"
-                    )
-                else:
-                    # Fallback: use raw prompt
-                    examples_text += f"Input: {ex['prompt']}\n[FINAL] {ex['expected_answer']} [END]\n\n"
-            
-            task_configs["p_hop"] = {
+            "p_hop": {
                 "system": (
                     "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\n"
-                    f"EXAMPLES:\n{examples_text}"
+                    "EXAMPLES:\n"
+                    "Input: Sequence: A B C D E | Start: A | Hops: 3\n"
+                    "[FINAL] D [END]\n\n"
+                    "Input: Sequence: C A D B A C | Start: C | Hops: 4\n"
+                    "[FINAL] A [END]\n\n"
+                    "Input: Sequence: D D A B C | Start: D | Hops: 2\n"
+                    "[FINAL] A [END]\n\n"
                     "RULES:\n"
                     "✓ Show ONLY the final token, no hop details.\n"
                     "✓ Each hop moves one position forward (but hops are hidden).\n"
@@ -384,39 +344,21 @@ class SafeOuroThinkingExperiment:
                     "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
-                "few_shot_examples": shots,
-            }
+            },
 
-        # IGSM (Symbolic Modular Arithmetic)
-        if "igsm" in task_data and task_data["igsm"]:
-            shots = ""
-            shots = sample_shots(task_data["igsm"])
-            examples_text = ""
-            for ex in shots:
-                # Parse prompt: "Question. A := 5. B := A + 3. B?"
-                prompt = ex['prompt']
-                if "Question." in prompt:
-                    eqs = prompt.replace("Question. ", "")
-                    # Split on last period to separate query
-                    if "?" in eqs:
-                        parts = eqs.rsplit(".", 1)
-                        if len(parts) == 2:
-                            assignments, query = parts
-                            examples_text += (
-                                f"Input: {assignments.strip()} | Query: {query.strip()}\n"
-                                f"[FINAL] {ex['expected_answer']} [END]\n\n"
-                            )
-                            continue
-                # Fallback
-                examples_text += f"Input: {ex['prompt']}\n[FINAL] {ex['expected_answer']} [END]\n\n"
-            
-            task_configs["igsm"] = {
+            "igsm": {
                 "system": (
                     "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\n"
                     "Valid results: 0‑6 only.\n\n"
                     "MOD 7 QUICK REFERENCE:\n"
                     "5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\n"
-                    f"EXAMPLES:\n{examples_text}"
+                    "EXAMPLES:\n"
+                    "Input: A := 5 | B := A + 3 | Query: B\n"
+                    "[FINAL] 1 [END]\n\n"
+                    "Input: X := 10 | Y := 4 | Z := X + Y | Query: Z\n"
+                    "[FINAL] 0 [END]\n\n"
+                    "Input: P := 8 | Q := P | R := Q + P | Query: R\n"
+                    "[FINAL] 2 [END]\n\n"
                     "RULES:\n"
                     "✓ Process every assignment in order (but calculations are hidden).\n"
                     "✓ Show ONLY the final answer, no intermediate calculations.\n"
@@ -429,9 +371,8 @@ class SafeOuroThinkingExperiment:
                     "✗ NO code/explanations after [END].\n"
                 ),
                 "force_start": "[FINAL]",
-                "few_shot_examples": shots,
-            }
-
+            },        
+        }
         # --- STEP 4: Pre-compute generation configs (unchanged) ---
         task_generation_configs = {
             "n_ary": GenerationConfig(
@@ -465,14 +406,15 @@ class SafeOuroThinkingExperiment:
         
         for task_type, config in task_configs.items():
             # Pre-tokenize system prompt
+            # Step 1: Pre-tokenize system prompt
             system_messages = [{"role": "system", "content": config["system"]}]
             system_text = tokenizer.apply_chat_template(
                 system_messages,
                 tokenize=False,
                 add_generation_prompt=False,
             )
-            system_tokens = tokenizer.encode(system_text, add_special_tokens=False)
-            
+
+            system_tokens = tokenizer.encode(system_text, add_special_tokens=False)            
             # Pre-tokenize force_start
             force_start_tokens = tokenizer.encode(
                 config["force_start"],
@@ -502,8 +444,8 @@ class SafeOuroThinkingExperiment:
                 
                 # Pre-tokenized components
                 "system_tokens": system_tokens,
-                "user_prefix_tokens": user_prefix_tokens,
-                "user_suffix_tokens": user_suffix_tokens,
+                "user_prefix_tokens": user_prefix_tokens,  # NEW: "<|im_start|>user\n"
+                "user_suffix_tokens": user_suffix_tokens,  # NEW: "\n<|im_end|>\n<|im_start|>assistant\n"                
                 "force_start_tokens": force_start_tokens,
                 
                 # Pre-computed generation config
@@ -514,17 +456,10 @@ class SafeOuroThinkingExperiment:
                     "[END]", "[FINAL]", "SAMPLE", "\n```", "\n\n",
                     "```python", "def ", "#", "**Final", "Example usage",
                 ],
-                
-                # Store few-shot examples for reference
-                "few_shot_examples": config.get("few_shot_examples", []),
             }
         
-        print("[+] Task templates built with REAL few-shot examples from data generator.")
-        print(f"    Few-shot examples per task: {num_shots}")
-        for task_type in self.task_templates:
-            n_examples = len(self.task_templates[task_type]["few_shot_examples"])
-            n_tokens = len(self.task_templates[task_type]["system_tokens"])
-            print(f"    • {task_type}: {n_examples} examples, {n_tokens} system tokens")
+        print("[+] Task templates with pre-tokenized components computed.")
+        print(f"    System tokens: {len(self.task_templates['n_ary']['system_tokens'])} tokens")
         print(f"    User prefix tokens: {len(self.task_templates['n_ary']['user_prefix_tokens'])} tokens")
         print(f"    User suffix tokens: {len(self.task_templates['n_ary']['user_suffix_tokens'])} tokens")
         print(f"    Force start tokens: {len(self.task_templates['n_ary']['force_start_tokens'])} tokens")
