@@ -517,7 +517,8 @@ def analyze_experiment_results(
     print(f"{'='*70}\n")
     
     metrics = EnhancedOuroMetrics()
-    save_dir = results_folder if save_plots else save_dir
+    save_dir = os.path.join(results_folder, "plots")
+
         # --- Load results CSV ---
     simple_reasoning_path = os.path.join(results_folder, "simple_reasoning.csv")
     if not os.path.exists(simple_reasoning_path):
