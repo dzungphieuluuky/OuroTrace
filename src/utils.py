@@ -27,7 +27,7 @@ def save_results(
     if simple_reasoning_results:
         stats_file = os.path.join(output_dir, "simple_reasoning.csv")
         save_csv(simple_reasoning_results, stats_file)
-        print(f"✅ Periodic save: all results to {stats_file}")
+        print(f"✅ Periodic save: simple reasoning results to {stats_file}")
 
     if perplexity_results:
         ppl_file = os.path.join(output_dir, "perplexity.csv")
@@ -53,7 +53,7 @@ def save_simple_reasoning_results(
     if overwrite and os.path.exists(stats_file):
         os.remove(stats_file)
     pd.DataFrame(simple_reasoning_results).to_csv(stats_file, index=False)
-    print(f"✅ Saved all results to {stats_file}")
+    print(f"✅ Saved simple reasoning results to {stats_file}")
 
 
 def save_perplexity_results(
