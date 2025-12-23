@@ -205,7 +205,7 @@ class SafeOuroThinkingExperiment:
             self.model_path,
             config=base_config,
             device_map="auto",
-            attn_implementation="sdpa_paged",
+            attn_implementation="sdpa",
             torch_dtype=self.dtype if not self.use_4bit_quant else None,
             trust_remote_code=True,
             quantization_config=quantization_config,
@@ -300,111 +300,325 @@ class SafeOuroThinkingExperiment:
         task_configs = {
             "n_ary": {
                 "system": (
-                    "You solve ADDITION by adding numbers one at a time.\n\n"
+                    "You are solving an ADDITION task.\n\n"
                     
-                    "EXAMPLES:\n"
-                    "Input: Add 2 numbers: 234 + 567\n"
-                    "Step 1: 0 + 234 = 234\n"
-                    "Step 2: 234 + 567 = 801\n"
-                    "[FINAL] 801 [END]\n\n"
+                    "TASK EXPLANATION:\n"
+                    "You will receive several numbers to add together.\n"
+                    "Your job: Add them one at a time, showing each step.\n\n"
                     
-                    "Input: Add 4 numbers: 50 + 25 + 10 + 5\n"
+                    "STEP-BY-STEP PROCESS:\n"
+                    "1. Look at the input and COUNT the numbers (separated by +)\n"
+                    "2. Write that count down (this is N)\n"
+                    "3. Start with 0\n"
+                    "4. Add the FIRST number to 0\n"
+                    "5. Add the SECOND number to that result\n"
+                    "6. Add the THIRD number to that result\n"
+                    "7. Continue ONLY until you've used all N numbers\n"
+                    "8. As soon as all numbers are used, output [FINAL]\n"
+                    "9. STOP IMMEDIATELY - do not add any more numbers\n\n"
+                    
+                    "⚠️ CRITICAL: The input contains ONLY the numbers shown.\n"
+                    "Do NOT invent additional numbers.\n"
+                    "Do NOT continue patterns.\n"
+                    "Do NOT add numbers that aren't explicitly in the input.\n\n"
+                    
+                    "CONCRETE EXAMPLE 1:\n"
+                    "Input: Add these 3 numbers: 100 + 200 + 300\n\n"
+                    
+                    "Solution:\n"
+                    "Step 1: 0 + 100 = 100\n"
+                    "Step 2: 100 + 200 = 300\n"
+                    "Step 3: 300 + 300 = 600\n"
+                    "[FINAL] 600 [END]\n\n"
+                    
+                    "CONCRETE EXAMPLE 2:\n"
+                    "Input: Add these 2 numbers: 807 + 696\n\n"
+                    
+                    "Solution:\n"
+                    "Step 1: 0 + 807 = 807\n"
+                    "Step 2: 807 + 696 = 1503\n"
+                    "[FINAL] 1503 [END]\n\n"
+                    
+                    "CONCRETE EXAMPLE 3:\n"
+                    "Input: Add these 4 numbers: 50 + 25 + 10 + 5\n\n"
+                    
+                    "Solution:\n"
                     "Step 1: 0 + 50 = 50\n"
                     "Step 2: 50 + 25 = 75\n"
                     "Step 3: 75 + 10 = 85\n"
                     "Step 4: 85 + 5 = 90\n"
                     "[FINAL] 90 [END]\n\n"
                     
-                    "RULES:\n"
-                    "✓ Count input numbers → Show EXACTLY that many steps\n"
-                    "✓ Start with 0, add one number per step\n"
-                    "✓ Use ONLY numbers from input (no inventing)\n"
-                    "✓ After final step: [FINAL] {answer} [END]\n"
-                    "✓ STOP at [END]\n\n"
+                    "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
+                    "Step 1: 0 + {first_number} = {result_1}\n"
+                    "Step 2: {result_1} + {second_number} = {result_2}\n"
+                    "Step 3: {result_2} + {third_number} = {result_3}\n"
+                    "... (continue for ALL numbers)\n"
+                    "Step N: {result_N-1} + {last_number} = {final_sum}\n"
+                    "[FINAL] {final_sum} [END]\n\n"
                     
-                    "✗ NO extra steps after all input numbers used\n"
-                    "✗ NO inventing numbers or patterns\n"
-                    "✗ NO code/explanations after [END]\n"
+                    "CRITICAL RULES:\n"
+                    "✓ READ the input to find HOW MANY numbers to add\n"
+                    "✓ The input will say \"Add these N numbers:\" - that's your count\n"
+                    "✓ Show EXACTLY N steps (no more, no less)\n"
+                    "✓ Each number from the input appears in EXACTLY ONE step\n"
+                    "✓ Always start with 0 in Step 1\n"
+                    "✓ Each step adds ONE new number to the running total\n"
+                    "✓ After all steps, write [FINAL] {answer} [END]\n"
+                    "✓ STOP immediately after [END]\n\n"
+                    
+                    "✗ DO NOT add numbers that aren't in the input\n"
+                    "✗ DO NOT invent additional numbers or patterns\n"
+                    "✗ DO NOT skip any numbers from the input\n"
+                    "✗ DO NOT add the same number twice\n"
+                    "✗ DO NOT create extra steps after all numbers are used\n"
+                    "✗ DO NOT split numbers into digits (treat 807 as one number, not 8+0+7)\n"
+                    "✗ DO NOT continue generating after [END]\n"
+                    "✗ DO NOT add code, explanations, or commentary\n\n"
+                    
+                    "PATTERN RECOGNITION:\n"
+                    "Input has 2 numbers → Show 2 steps + [FINAL]\n"
+                    "Input has 3 numbers → Show 3 steps + [FINAL]\n"
+                    "Input has 4 numbers → Show 4 steps + [FINAL]\n"
+                    "Input has 5 numbers → Show 5 steps + [FINAL]\n\n"
+                    
+                    "⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\n"
+                    "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
+                    "Your response ends at [END].\n\n"
+                    
+                    "CORRECT OUTPUT:\n"
+                    "Input: Add these 2 numbers: 179 + 366\n"
+                    "Step 1: 0 + 179 = 179\n"
+                    "Step 2: 179 + 366 = 545\n"
+                    "[FINAL] 545 [END]\n\n"
+                    
+                    "INCORRECT OUTPUT (DO NOT DO THIS):\n"
+                    "[FINAL] 545 [END] ```python\n"
+                    "This is WRONG. Stop at [END].\n\n"
+                    
+                    "ALSO INCORRECT (DO NOT DO THIS):\n"
+                    "[FINAL] 545 **Final Answer**\n"
+                    "You must end with [END], not **Final Answer**."
                 ),
-                "force_start": "[FINAL]",
+                "force_start": None,
             },
             "p_hop": {
                 "system": (
-                    "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\n"
+                    "You are solving a SEQUENCE FOLLOWING task.\n\n"
                     
-                    "EXAMPLES:\n"
-                    "Input: Sequence: A B C D E | Start: A | Hops: 3\n"
+                    "TASK EXPLANATION:\n"
+                    "You will receive:\n"
+                    "  • A sequence of tokens (letters like A, B, C, D)\n"
+                    "  • A starting position (which token to begin at)\n"
+                    "  • A number of hops to perform\n\n"
+                    
+                    "Your job: Follow the sequence by hopping forward, "
+                    "one position at a time.\n\n"
+                    
+                    "STEP-BY-STEP PROCESS:\n"
+                    "1. Find the START token in the sequence\n"
+                    "2. Look at the NEXT token (one position to the right)\n"
+                    "3. Move to that token (this is hop 1)\n"
+                    "4. Repeat: look at the next token, move to it (hop 2)\n"
+                    "5. Continue until you've done ALL the required hops\n"
+                    "6. Output [FINAL] with the token you landed on\n"
+                    "7. STOP IMMEDIATELY\n\n"
+                    
+                    "CONCRETE EXAMPLE 1:\n"
+                    "Input: Sequence: A B C D E\n"
+                    "       Start at: A\n"
+                    "       Hops: 3\n\n"
+                    
+                    "Solution:\n"
                     "Hop 1: At A → Next is B\n"
                     "Hop 2: At B → Next is C\n"
                     "Hop 3: At C → Next is D\n"
                     "[FINAL] D [END]\n\n"
                     
-                    "Input: Sequence: C A D B A C | Start: C | Hops: 4\n"
+                    "CONCRETE EXAMPLE 2:\n"
+                    "Input: Sequence: C A D B A C\n"
+                    "       Start at: C (position 0)\n"
+                    "       Hops: 4\n\n"
+                    
+                    "Solution:\n"
                     "Hop 1: At C → Next is A\n"
                     "Hop 2: At A → Next is D\n"
                     "Hop 3: At D → Next is B\n"
                     "Hop 4: At B → Next is A\n"
                     "[FINAL] A [END]\n\n"
                     
-                    "Input: Sequence: D D A B C | Start: D | Hops: 2\n"
+                    "CONCRETE EXAMPLE 3:\n"
+                    "Input: Sequence: D D A B C\n"
+                    "       Start at: D (position 0)\n"
+                    "       Hops: 2\n\n"
+                    
+                    "Solution:\n"
                     "Hop 1: At D → Next is D\n"
                     "Hop 2: At D → Next is A\n"
                     "[FINAL] A [END]\n\n"
                     
-                    "RULES:\n"
-                    "✓ Show EVERY hop (N hops = N lines)\n"
-                    "✓ Each hop moves one position forward\n"
-                    "✓ Use ONLY tokens from input sequence\n"
-                    "✓ After final hop: [FINAL] {token} [END]\n"
-                    "✓ STOP at [END]\n\n"
+                    "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
+                    "Hop 1: At {current_token} → Next is {next_token}\n"
+                    "Hop 2: At {current_token} → Next is {next_token}\n"
+                    "Hop 3: At {current_token} → Next is {next_token}\n"
+                    "... (continue for ALL hops)\n"
+                    "Hop N: At {current_token} → Next is {final_token}\n"
+                    "[FINAL] {final_token} [END]\n\n"
                     
-                    "✗ NO skipping hops\n"
-                    "✗ NO inventing tokens\n"
-                    "✗ NO jumping to [FINAL] without showing hops\n"
-                    "✗ NO code/explanations after [END]\n"
+                    "CRITICAL RULES:\n"
+                    "✓ Show EVERY SINGLE hop (if asked for 5 hops, show 5 lines)\n"
+                    "✓ Each hop moves exactly ONE position forward in the sequence\n"
+                    "✓ Use ONLY tokens that appear in the input sequence\n"
+                    "✓ After the final hop, write [FINAL] {answer} [END]\n"
+                    "✓ STOP immediately after [END]\n\n"
+                    
+                    "✗ DO NOT skip hops\n"
+                    "✗ DO NOT invent new tokens (like E, F, G if they're not in the sequence)\n"
+                    "✗ DO NOT continue generating after [END]\n"
+                    "✗ DO NOT add explanations, code, or commentary\n"
+                    "✗ DO NOT output just [FINAL] without showing the hops\n\n"
+                    
+                    "PATTERN RECOGNITION:\n"
+                    "Asked for 2 hops → Show 2 hop lines + [FINAL]\n"
+                    "Asked for 3 hops → Show 3 hop lines + [FINAL]\n"
+                    "Asked for 5 hops → Show 5 hop lines + [FINAL]\n\n"
+                    
+                    "⚠️ CRITICAL: After [FINAL] {token} [END], STOP.\n"
+                    "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
+                    "Your response ends at [END].\n\n"
+                    
+                    "CORRECT OUTPUT:\n"
+                    "Hop 1: At C → Next is A\n"
+                    "Hop 2: At A → Next is D\n"
+                    "[FINAL] D [END]\n\n"
+                    
+                    "INCORRECT OUTPUT (DO NOT DO THIS):\n"
+                    "[FINAL] D [END] ```python\n"
+                    "This is WRONG. Stop at [END].\n\n"
+                    
+                    "ALSO INCORRECT (DO NOT DO THIS):\n"
+                    "[FINAL] D\n\n**Final\n"
+                    "You must show the hop steps BEFORE [FINAL]."
                 ),
-                "force_start": "[FINAL]",
+                "force_start": None,
             },
             "igsm": {
                 "system": (
-                    "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\n"
-                    "Valid results: 0-6 only.\n\n"
+                    "You are solving a MODULAR ARITHMETIC task (mod 7).\n\n"
                     
-                    "MOD 7 QUICK REFERENCE:\n"
-                    "5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\n"
+                    "TASK EXPLANATION:\n"
+                    "You will receive:\n"
+                    "  • A series of variable assignments (like A := 5, B := A + 3)\n"
+                    "  • A query asking for the value of one variable\n\n"
                     
-                    "EXAMPLES:\n"
-                    "Input: A := 5 | B := A + 3 | Query: B\n"
+                    "Your job: Evaluate each assignment step by step, "
+                    "applying modulo 7 to each result.\n\n"
+                    
+                    "MODULO 7 QUICK REFERENCE:\n"
+                    "Modulo 7 means: divide by 7 and take the REMAINDER.\n"
+                    "Valid results: 0, 1, 2, 3, 4, 5, 6 (never 7 or higher)\n\n"
+                    
+                    "Examples:\n"
+                    "  5 mod 7 = 5 (5 ÷ 7 = 0 remainder 5)\n"
+                    "  8 mod 7 = 1 (8 ÷ 7 = 1 remainder 1)\n"
+                    "  14 mod 7 = 0 (14 ÷ 7 = 2 remainder 0)\n"
+                    "  20 mod 7 = 6 (20 ÷ 7 = 2 remainder 6)\n\n"
+                    
+                    "STEP-BY-STEP PROCESS:\n"
+                    "1. Read the first assignment\n"
+                    "2. Calculate the value\n"
+                    "3. Apply mod 7 to get a result between 0-6\n"
+                    "4. Move to the next assignment\n"
+                    "5. Substitute any variables with their known values\n"
+                    "6. Calculate and apply mod 7\n"
+                    "7. Continue until the queried variable is found\n"
+                    "8. Output [FINAL] with that variable's value\n"
+                    "9. STOP IMMEDIATELY\n\n"
+                    
+                    "CONCRETE EXAMPLE 1:\n"
+                    "Input: A := 5\n"
+                    "       B := A + 3\n"
+                    "       Query: B = ?\n\n"
+                    
+                    "Solution:\n"
                     "Step 1: A = 5 (mod 7) = 5\n"
                     "Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n"
                     "[FINAL] 1 [END]\n\n"
                     
-                    "Input: X := 10 | Y := 4 | Z := X + Y | Query: Z\n"
+                    "CONCRETE EXAMPLE 2:\n"
+                    "Input: X := 10\n"
+                    "       Y := 4\n"
+                    "       Z := X + Y\n"
+                    "       Query: Z = ?\n\n"
+                    
+                    "Solution:\n"
                     "Step 1: X = 10 (mod 7) = 3\n"
                     "Step 2: Y = 4 (mod 7) = 4\n"
                     "Step 3: Z = X + Y = 3 + 4 = 7 (mod 7) = 0\n"
                     "[FINAL] 0 [END]\n\n"
                     
-                    "Input: P := 8 | Q := P | R := Q + P | Query: R\n"
+                    "CONCRETE EXAMPLE 3:\n"
+                    "Input: P := 8\n"
+                    "       Q := P\n"
+                    "       R := Q + P\n"
+                    "       Query: R = ?\n\n"
+                    
+                    "Solution:\n"
                     "Step 1: P = 8 (mod 7) = 1\n"
                     "Step 2: Q = P = 1 (mod 7) = 1\n"
                     "Step 3: R = Q + P = 1 + 1 = 2 (mod 7) = 2\n"
                     "[FINAL] 2 [END]\n\n"
                     
-                    "RULES:\n"
-                    "✓ Process every assignment in order\n"
-                    "✓ Substitute variable values immediately\n"
-                    "✓ Show calculation before applying mod 7\n"
-                    "✓ Final answer must be 0-6\n"
-                    "✓ After query variable: [FINAL] {answer} [END]\n"
-                    "✓ STOP at [END]\n\n"
+                    "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
+                    "Step 1: {var} = {value} (mod 7) = {result}\n"
+                    "Step 2: {var} = {expression} = {computed} (mod 7) = {result}\n"
+                    "Step 3: {var} = {expression} = {computed} (mod 7) = {result}\n"
+                    "... (continue for ALL assignments)\n"
+                    "Step N: {query_var} = {value} (mod 7) = {answer}\n"
+                    "[FINAL] {answer} [END]\n\n"
                     
-                    "✗ NO skipping assignments\n"
-                    "✗ NO results outside 0-6\n"
-                    "✗ NO continuing after query found\n"
-                    "✗ NO code/explanations after [END]\n"
+                    "CRITICAL RULES:\n"
+                    "✓ Process EVERY assignment in order\n"
+                    "✓ Substitute variable values immediately when they appear\n"
+                    "✓ Show the arithmetic calculation BEFORE applying mod 7\n"
+                    "✓ Final answer must be between 0 and 6 (inclusive)\n"
+                    "✓ After finding the query variable, write [FINAL] {answer} [END]\n"
+                    "✓ STOP immediately after [END]\n\n"
+                    
+                    "✗ DO NOT skip any assignments\n"
+                    "✗ DO NOT forget to apply mod 7\n"
+                    "✗ DO NOT output results outside the range 0-6\n"
+                    "✗ DO NOT continue after finding the queried variable\n"
+                    "✗ DO NOT add code, explanations, or commentary\n\n"
+                    
+                    "OPERATION TYPES:\n"
+                    "Direct assignment: A := 5\n"
+                    "  → A = 5 (mod 7) = 5\n\n"
+                    
+                    "Variable copy: B := A (where A = 5)\n"
+                    "  → B = 5 (mod 7) = 5\n\n"
+                    
+                    "Addition: C := A + B (where A = 5, B = 4)\n"
+                    "  → C = 5 + 4 = 9 (mod 7) = 2\n\n"
+                    
+                    "⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\n"
+                    "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
+                    "Your response ends at [END].\n\n"
+                    
+                    "CORRECT OUTPUT:\n"
+                    "Step 1: A = 5 (mod 7) = 5\n"
+                    "Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n"
+                    "[FINAL] 1 [END]\n\n"
+                    
+                    "INCORRECT OUTPUT (DO NOT DO THIS):\n"
+                    "[FINAL] 1 [END] ```python\n"
+                    "This is WRONG. Stop at [END].\n\n"
+                    
+                    "ALSO INCORRECT (DO NOT DO THIS):\n"
+                    "[FINAL] 8 [END]\n"
+                    "8 is NOT valid. Must apply mod 7 to get a result between 0-6."
                 ),
-                "force_start": "[FINAL]",
+                "force_start": None,
             }
         }
 
