@@ -1,5 +1,5 @@
 """
-Enhanced Metrics Module with Holistic Evaluation Analysis
+Enhanced Metrics Module with Reasoning Primitives Evaluation Analysis
 Includes reasoning primitives (depth-k variable assignment) analysis
 """
 
@@ -32,28 +32,28 @@ class ModelConfig:
 
 class EnhancedOuroMetrics:
     """
-    Extended metrics including holistic evaluation (reasoning primitives).
+    Extended metrics including reasoning primitives evaluation.
     """
     
     def __init__(self):
         self.results_cache = []
-        self.holistic_cache = []
+        self.reasoning_primitives_cache = []
     
     def add_results(self, results: List[Dict[str, Any]]) -> None:
         """Add main experiment results"""
         self.results_cache.extend(results)
     
-    def add_holistic_results(self, holistic_results: List[Dict[str, Any]]) -> None:
-        """Add holistic evaluation results"""
-        self.holistic_cache.extend(holistic_results)
+    def add_reasoning_primitives_results(self, reasoning_primitives_results: List[Dict[str, Any]]) -> None:
+        """Add reasoning primitives evaluation results"""
+        self.reasoning_primitives_cache.extend(reasoning_primitives_results)
     
     # =========================================================================
-    # HOLISTIC EVALUATION METRICS
+    # REASONING PRIMITIVES EVALUATION METRICS
     # =========================================================================
     
     def compute_reasoning_primitive_accuracy(
         self,
-        holistic_results: Optional[List[Dict]] = None
+        reasoning_primitives_results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
         """
         Analyze accuracy on reasoning primitives (depth-k variable assignment).
@@ -63,13 +63,13 @@ class EnhancedOuroMetrics:
         - Variant (code, math, equation)
         - UT steps
         """
-        if holistic_results is None:
-            holistic_results = self.holistic_cache
+        if reasoning_primitives_results is None:
+            reasoning_primitives_results = self.reasoning_primitives_cache
         
-        if not holistic_results:
+        if not reasoning_primitives_results:
             return pd.DataFrame()
         
-        df = pd.DataFrame(holistic_results)
+        df = pd.DataFrame(reasoning_primitives_results)
         
         # Filter to reasoning primitives only
         df_primitives = df[df['task_category'] == 'Reasoning Primitive'].copy()
@@ -94,20 +94,20 @@ class EnhancedOuroMetrics:
     
     def compute_depth_generalization(
         self,
-        holistic_results: Optional[List[Dict]] = None
+        reasoning_primitives_results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
         """
         Analyze how accuracy changes from depth-0 to depth-1.
         
         Key metric: Does the model generalize to one-level indirection?
         """
-        if holistic_results is None:
-            holistic_results = self.holistic_cache
+        if reasoning_primitives_results is None:
+            reasoning_primitives_results = self.reasoning_primitives_cache
         
-        if not holistic_results:
+        if not reasoning_primitives_results:
             return pd.DataFrame()
         
-        df = pd.DataFrame(holistic_results)
+        df = pd.DataFrame(reasoning_primitives_results)
         df_primitives = df[df['task_category'] == 'Reasoning Primitive'].copy()
         
         if df_primitives.empty:
@@ -139,20 +139,20 @@ class EnhancedOuroMetrics:
     
     def compute_variant_comparison(
         self,
-        holistic_results: Optional[List[Dict]] = None
+        reasoning_primitives_results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
         """
         Compare accuracy across different prompt variants (code, math, equation).
         
         Shows format robustness.
         """
-        if holistic_results is None:
-            holistic_results = self.holistic_cache
+        if reasoning_primitives_results is None:
+            reasoning_primitives_results = self.reasoning_primitives_cache
         
-        if not holistic_results:
+        if not reasoning_primitives_results:
             return pd.DataFrame()
         
-        df = pd.DataFrame(holistic_results)
+        df = pd.DataFrame(reasoning_primitives_results)
         df_primitives = df[df['task_category'] == 'Reasoning Primitive'].copy()
         
         if df_primitives.empty:
@@ -169,10 +169,10 @@ class EnhancedOuroMetrics:
         
         return variant_acc
     
-    def compute_holistic_vs_main_comparison(
+    def compute_reasoning_primitives_vs_main_comparison(
         self,
         main_results: Optional[List[Dict]] = None,
-        holistic_results: Optional[List[Dict]] = None
+        reasoning_primitives_results: Optional[List[Dict]] = None
     ) -> pd.DataFrame:
         """
         Compare accuracy on main tasks vs reasoning primitives.
@@ -181,30 +181,30 @@ class EnhancedOuroMetrics:
         """
         if main_results is None:
             main_results = self.results_cache
-        if holistic_results is None:
-            holistic_results = self.holistic_cache
+        if reasoning_primitives_results is None:
+            reasoning_primitives_results = self.reasoning_primitives_cache
         
-        if not main_results or not holistic_results:
+        if not main_results or not reasoning_primitives_results:
             return pd.DataFrame()
         
         df_main = pd.DataFrame(main_results)
-        df_holistic = pd.DataFrame(holistic_results)
+        df_primitives = pd.DataFrame(reasoning_primitives_results)
         
         # Main tasks accuracy
         main_acc = df_main.groupby('ut_steps')['is_correct'].mean().reset_index()
         main_acc.columns = ['ut_steps', 'main_accuracy']
         
         # Reasoning primitives accuracy
-        df_primitives = df_holistic[df_holistic['task_category'] == 'Reasoning Primitive']
+        df_primitives = df_primitives[df_primitives['task_category'] == 'Reasoning Primitive']
         if not df_primitives.empty:
-            holistic_acc = df_primitives.groupby('ut_steps')['is_correct'].mean().reset_index()
-            holistic_acc.columns = ['ut_steps', 'holistic_accuracy']
+            primitives_acc = df_primitives.groupby('ut_steps')['is_correct'].mean().reset_index()
+            primitives_acc.columns = ['ut_steps', 'primitives_accuracy']
             
             # Merge
-            comparison = main_acc.merge(holistic_acc, on='ut_steps', how='outer')
+            comparison = main_acc.merge(primitives_acc, on='ut_steps', how='outer')
             comparison['main_accuracy_pct'] = comparison['main_accuracy'] * 100
-            comparison['holistic_accuracy_pct'] = comparison['holistic_accuracy'] * 100
-            comparison['gap'] = comparison['main_accuracy_pct'] - comparison['holistic_accuracy_pct']
+            comparison['primitives_accuracy_pct'] = comparison['primitives_accuracy'] * 100
+            comparison['gap'] = comparison['main_accuracy_pct'] - comparison['primitives_accuracy_pct']
             
             return comparison
         
@@ -328,24 +328,24 @@ class EnhancedOuroMetrics:
         return difficulty_acc
     
     # =========================================================================
-    # ENHANCED PLOTTING WITH HOLISTIC RESULTS
+    # ENHANCED PLOTTING WITH REASONING PRIMITIVES RESULTS
     # =========================================================================
     
     def generate_enhanced_plots(
         self,
         main_results: Optional[List[Dict]] = None,
-        holistic_results: Optional[List[Dict]] = None,
+        reasoning_primitives_results: Optional[List[Dict]] = None,
         save_dir: str = "./plots"
     ) -> None:
         """
-        Generate comprehensive plots including holistic evaluation.
+        Generate comprehensive plots including reasoning primitives evaluation.
         """
         os.makedirs(save_dir, exist_ok=True)
         
         if main_results is None:
             main_results = self.results_cache
-        if holistic_results is None:
-            holistic_results = self.holistic_cache
+        if reasoning_primitives_results is None:
+            reasoning_primitives_results = self.reasoning_primitives_cache
         
         # Plot 1: Main Tasks Accuracy
         if main_results:
@@ -366,8 +366,8 @@ class EnhancedOuroMetrics:
             plt.close()
         
         # Plot 2: Reasoning Primitives by Depth
-        if holistic_results:
-            primitive_acc = self.compute_reasoning_primitive_accuracy(holistic_results)
+        if reasoning_primitives_results:
+            primitive_acc = self.compute_reasoning_primitive_accuracy(reasoning_primitives_results)
             
             if not primitive_acc.empty:
                 plt.figure(figsize=(12, 6))
@@ -385,8 +385,8 @@ class EnhancedOuroMetrics:
                 plt.close()
         
         # Plot 3: Depth Generalization Gap
-        if holistic_results:
-            depth_gen = self.compute_depth_generalization(holistic_results)
+        if reasoning_primitives_results:
+            depth_gen = self.compute_depth_generalization(reasoning_primitives_results)
             
             if not depth_gen.empty and 'generalization_gap' in depth_gen.columns:
                 plt.figure(figsize=(10, 6))
@@ -405,15 +405,15 @@ class EnhancedOuroMetrics:
                 plt.savefig(f'{save_dir}/generalization_gap.png', dpi=300, bbox_inches='tight')
                 plt.close()
         
-        # Plot 4: Main vs Holistic Comparison
-        if main_results and holistic_results:
-            comparison = self.compute_holistic_vs_main_comparison(main_results, holistic_results)
+        # Plot 4: Main vs Reasoning Primitives Comparison
+        if main_results and reasoning_primitives_results:
+            comparison = self.compute_reasoning_primitives_vs_main_comparison(main_results, reasoning_primitives_results)
             
             if not comparison.empty:
                 plt.figure(figsize=(10, 6))
                 plt.plot(comparison['ut_steps'], comparison['main_accuracy_pct'], 
                         marker='o', label='Main Tasks', linewidth=2)
-                plt.plot(comparison['ut_steps'], comparison['holistic_accuracy_pct'], 
+                plt.plot(comparison['ut_steps'], comparison['primitives_accuracy_pct'], 
                         marker='s', label='Reasoning Primitives', linewidth=2)
                 
                 plt.xlabel('UT Steps', fontsize=12)
@@ -421,7 +421,7 @@ class EnhancedOuroMetrics:
                 plt.title('Main Tasks vs Reasoning Primitives', fontsize=14)
                 plt.legend()
                 plt.grid(True, alpha=0.3)
-                plt.savefig(f'{save_dir}/main_vs_holistic.png', dpi=300, bbox_inches='tight')
+                plt.savefig(f'{save_dir}/main_vs_reasoning_primitives.png', dpi=300, bbox_inches='tight')
                 plt.close()
         
         print(f"✅ Enhanced plots saved to {save_dir}/")
@@ -429,16 +429,16 @@ class EnhancedOuroMetrics:
     def generate_comprehensive_summary(
         self,
         main_results: Optional[List[Dict]] = None,
-        holistic_results: Optional[List[Dict]] = None,
+        reasoning_primitives_results: Optional[List[Dict]] = None,
         model_name: str = "Ouro"
     ) -> Dict[str, pd.DataFrame]:
         """
-        Generate comprehensive summary including holistic results.
+        Generate comprehensive summary including reasoning primitives results.
         """
         if main_results is None:
             main_results = self.results_cache
-        if holistic_results is None:
-            holistic_results = self.holistic_cache
+        if reasoning_primitives_results is None:
+            reasoning_primitives_results = self.reasoning_primitives_cache
         
         summary = {}
         
@@ -460,22 +460,22 @@ class EnhancedOuroMetrics:
             
             summary['main_tasks'] = main_summary
         
-        # Holistic summary
-        if holistic_results:
-            df_holistic = pd.DataFrame(holistic_results)
-            df_primitives = df_holistic[df_holistic['task_category'] == 'Reasoning Primitive']
+        # Reasoning Primitives summary
+        if reasoning_primitives_results:
+            df_primitives = pd.DataFrame(reasoning_primitives_results)
+            df_primitives = df_primitives[df_primitives['task_category'] == 'Reasoning Primitive']
             
             if not df_primitives.empty:
-                holistic_summary = df_primitives.groupby(['task_name', 'ut_steps']).agg({
+                primitives_summary = df_primitives.groupby(['task_name', 'ut_steps']).agg({
                     'is_correct': 'mean'
                 }).reset_index()
                 
-                holistic_summary.columns = ['Task', 'UT Steps', 'Accuracy']
-                holistic_summary['Accuracy'] = (holistic_summary['Accuracy'] * 100).round(2)
-                holistic_summary['Model'] = model_name
-                holistic_summary['Category'] = 'Reasoning Primitives'
+                primitives_summary.columns = ['Task', 'UT Steps', 'Accuracy']
+                primitives_summary['Accuracy'] = (primitives_summary['Accuracy'] * 100).round(2)
+                primitives_summary['Model'] = model_name
+                primitives_summary['Category'] = 'Reasoning Primitives'
                 
-                summary['reasoning_primitives'] = holistic_summary
+                summary['reasoning_primitives'] = primitives_summary
         
         # Combined summary
         if 'main_tasks' in summary and 'reasoning_primitives' in summary:
@@ -499,11 +499,11 @@ def analyze_experiment_results(
     save_dir: str = "./plots"
 ) -> Dict[str, pd.DataFrame]:
     """
-    Comprehensive analysis including holistic evaluation.
+    Comprehensive analysis including reasoning primitives evaluation.
     
     Args:
         results: Main experiment results (n_ary, p_hop, igsm)
-        holistic_results: Holistic evaluation results (reasoning primitives)
+        reasoning_primitives_results: Reasoning primitives evaluation results
         model_name: Model name for labeling
         model_size_b: Model size in billions
         save_plots: Whether to generate plots
@@ -517,21 +517,21 @@ def analyze_experiment_results(
     print(f"{'='*70}\n")
     
     metrics = EnhancedOuroMetrics()
-
+    save_dir = results_folder if save_plots else save_dir
         # --- Load results CSV ---
-    all_latest_path = os.path.join(results_folder, "all.csv")
-    if not os.path.exists(all_latest_path):
-        print(f"❌ all.csv not found in {results_folder}")
+    simple_reasoning_path = os.path.join(results_folder, "simple_reasoning.csv")
+    if not os.path.exists(simple_reasoning_path):
+        print(f"❌ simple_reasoning.csv not found in {results_folder}")
         return {}
-    holistic_path = os.path.join(results_folder, "holistic.csv")
-    if not os.path.exists(holistic_path):
-        print(f"⚠️ holistic.csv not found in {results_folder}, proceeding without holistic results")
+    reasoning_primitives_path = os.path.join(results_folder, "reasoning_primitives.csv")
+    if not os.path.exists(reasoning_primitives_path):
+        print(f"⚠️ reasoning_primitives.csv not found in {results_folder}, proceeding without reasoning primitives results")
         return {}
     
-    all_result_df = pd.read_csv(all_latest_path)
-    simple_reasoning_results = all_result_df.to_dict(orient="records")
-    holistic_result_df = pd.read_csv(holistic_path)
-    holistic_results = holistic_result_df.to_dict(orient="records")
+    simple_reasoning_df = pd.read_csv(simple_reasoning_path)
+    simple_reasoning_results = simple_reasoning_df.to_dict(orient="records")
+    reasoning_primitives_df = pd.read_csv(reasoning_primitives_path)
+    reasoning_primitives_results = reasoning_primitives_df.to_dict(orient="records")
 
     # --- Load config.json ---
     config_path = os.path.join(results_folder, "config.json")
@@ -561,8 +561,8 @@ def analyze_experiment_results(
 
     metrics.add_results(simple_reasoning_results)
     
-    if holistic_results:
-        metrics.add_holistic_results(holistic_results)
+    if reasoning_primitives_results:
+        metrics.add_reasoning_primitives_results(reasoning_primitives_results)
     
     analysis_results = {}
     
@@ -602,9 +602,9 @@ def analyze_experiment_results(
     print()
     
     # =========================================================================
-    # HOLISTIC EVALUATION METRICS
+    # REASONING PRIMITIVES EVALUATION METRICS
     # =========================================================================
-    if holistic_results:
+    if reasoning_primitives_results:
         print("="*70)
         print("REASONING PRIMITIVES ANALYSIS")
         print("="*70 + "\n")
@@ -633,11 +633,11 @@ def analyze_experiment_results(
             print(variant_comp.to_string(index=False))
             print()
         
-        # Metric 8: Main vs Holistic
+        # Metric 8: Main vs Reasoning Primitives
         print("📈 Main Tasks vs Reasoning Primitives:")
-        comparison = metrics.compute_holistic_vs_main_comparison()
+        comparison = metrics.compute_reasoning_primitives_vs_main_comparison()
         if not comparison.empty:
-            analysis_results['main_vs_holistic'] = comparison
+            analysis_results['main_vs_reasoning_primitives'] = comparison
             print(comparison.to_string(index=False))
             print()
     
@@ -650,7 +650,7 @@ def analyze_experiment_results(
     
     summary_tables = metrics.generate_comprehensive_summary(
         main_results=simple_reasoning_results,
-        holistic_results=holistic_results,
+        reasoning_primitives_results=reasoning_primitives_results,
         model_name=model_name
     )
     
@@ -667,7 +667,7 @@ def analyze_experiment_results(
         print("📊 Generating plots...")
         metrics.generate_enhanced_plots(
             main_results=simple_reasoning_results,
-            holistic_results=holistic_results,
+            reasoning_primitives_results=reasoning_primitives_results,
             save_dir=save_dir
         )
     
@@ -760,7 +760,7 @@ if __name__ == "__main__":
         "--results_folder",
         type=str,
         required=True,
-        help="Path to the folder containing all.csv and config.json"
+        help="Path to the folder containing simple_reasoning.csv and config.json"
     )
     args = parser.parse_args()
     

@@ -10,7 +10,7 @@ from typing import List, Dict
 def save_results(
     simple_reasoning_results: List[Dict],
     perplexity_results: List[Dict],
-    holistic_results: List[Dict],
+    reasoning_primitives_results: List[Dict],
     output_dir: str,
     overwrite: bool = True
 ) -> None:
@@ -25,7 +25,7 @@ def save_results(
         pd.DataFrame(data).to_csv(fname, index=False)
 
     if simple_reasoning_results:
-        stats_file = os.path.join(output_dir, "all.csv")
+        stats_file = os.path.join(output_dir, "simple_reasoning.csv")
         save_csv(simple_reasoning_results, stats_file)
         print(f"✅ Periodic save: all results to {stats_file}")
 
@@ -34,15 +34,15 @@ def save_results(
         save_csv(perplexity_results, ppl_file)
         print(f"✅ Periodic save: perplexity results to {ppl_file}")
 
-    if holistic_results:
-        holistic_file = os.path.join(output_dir, "holistic.csv")
-        save_csv(holistic_results, holistic_file)
-        print(f"✅ Periodic save: holistic results to {holistic_file}")
+    if reasoning_primitives_results:
+        reasoning_primitives_file = os.path.join(output_dir, "reasoning_primitives.csv")
+        save_csv(reasoning_primitives_results, reasoning_primitives_file)
+        print(f"✅ Periodic save: reasoning primitives results to {reasoning_primitives_file}")
 
 def save_simple_reasoning_results(
     simple_reasoning_results: List[Dict],
     output_dir: str,
-    file_name : str = "all.csv",
+    file_name : str = "simple_reasoning.csv",
     overwrite: bool = True
 ) -> None:
     """Save only simple_reasoning_results to CSV file."""
@@ -69,18 +69,18 @@ def save_perplexity_results(
     pd.DataFrame(perplexity_results).to_csv(ppl_file, index=False)
     print(f"✅ Saved perplexity results to {ppl_file}")
 
-def save_holistic_results(
-    holistic_results: List[Dict],
+def save_reasoning_primitives_results(
+    reasoning_primitives_results: List[Dict],
     output_dir: str,
     overwrite: bool = True
 ) -> None:
-    """Save only holistic_results to CSV file."""
+    """Save only reasoning_primitives_results to CSV file."""
     os.makedirs(output_dir, exist_ok=True)
-    holistic_file = os.path.join(output_dir, "holistic.csv")
-    if overwrite and os.path.exists(holistic_file):
-        os.remove(holistic_file)
-    pd.DataFrame(holistic_results).to_csv(holistic_file, index=False)
-    print(f"✅ Saved holistic results to {holistic_file}")
+    reasoning_primitives_file = os.path.join(output_dir, "reasoning_primitives.csv")
+    if overwrite and os.path.exists(reasoning_primitives_file):
+        os.remove(reasoning_primitives_file)
+    pd.DataFrame(reasoning_primitives_results).to_csv(reasoning_primitives_file, index=False)
+    print(f"✅ Saved reasoning primitives results to {reasoning_primitives_file}")
 
 import json
 
