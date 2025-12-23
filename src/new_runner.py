@@ -20,7 +20,7 @@ from .utils import (
     generate_test_id
 )
 from .evaluation_metrics import (
-    OuroMetrics,
+    EnhancedOuroMetrics,
     analyze_experiment_results,
     PaperComplianceChecker
 )
