@@ -1,0 +1,7 @@
+Task,UT Steps,Accuracy,Model,Category
+var_assign_depth_0_code,8,20.0,Ouro-1.4B-Thinking,Reasoning Primitives
+var_assign_depth_0_equation,8,31.0,Ouro-1.4B-Thinking,Reasoning Primitives
+var_assign_depth_0_math,8,28.0,Ouro-1.4B-Thinking,Reasoning Primitives
+var_assign_depth_1_code,8,19.0,Ouro-1.4B-Thinking,Reasoning Primitives
+var_assign_depth_1_equation,8,20.0,Ouro-1.4B-Thinking,Reasoning Primitives
+var_assign_depth_1_math,8,26.0,Ouro-1.4B-Thinking,Reasoning Primitives
