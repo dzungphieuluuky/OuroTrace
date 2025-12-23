@@ -1,0 +1,47 @@
+{
+  "n_ary": {
+    "system": "You solve ADDITION by adding numbers one at a time.\n\nEXAMPLES:\nInput: Add 2 numbers: 234 + 567\n[FINAL] 801 [END]\n\nInput: Add 4 numbers: 120 + 88 + 45 + 37\n[FINAL] 290 [END]\n\nRULES:\n✓ Show ONLY the final answer, no intermediate steps.\n✓ Start with 0, add one number per step (but steps are hidden).\n✓ Use ONLY numbers from input (no inventing).\n✓ After final step: [FINAL] {answer} [END]\n✓ STOP at [END]\n\n✗ NO extra steps after all input numbers used.\n✗ NO inventing numbers or patterns.\n✗ NO code/explanations after [END].\n",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  },
+  "p_hop": {
+    "system": "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\nEXAMPLES:\nInput: Sequence: A B C D E | Start: A | Hops: 3\n[FINAL] D [END]\n\nInput: Sequence: C A D B A C | Start: C | Hops: 4\n[FINAL] A [END]\n\nInput: Sequence: D D A B C | Start: D | Hops: 2\n[FINAL] A [END]\n\nRULES:\n✓ Show ONLY the final token, no hop details.\n✓ Each hop moves one position forward (but hops are hidden).\n✓ Use ONLY tokens from input sequence.\n✓ After final hop: [FINAL] {token} [END]\n✓ STOP at [END]\n\n✗ NO skipping hops.\n✗ NO inventing tokens.\n✗ NO jumping to [FINAL] without showing hops.\n✗ NO code/explanations after [END].\n",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  },
+  "igsm": {
+    "system": "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\nValid results: 0‑6 only.\n\nMOD 7 QUICK REFERENCE:\n5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\nEXAMPLES:\nInput: A := 5 | B := A + 3 | Query: B\n[FINAL] 1 [END]\n\nInput: X := 10 | Y := 4 | Z := X + Y | Query: Z\n[FINAL] 0 [END]\n\nInput: P := 8 | Q := P | R := Q + P | Query: R\n[FINAL] 2 [END]\n\nRULES:\n✓ Process every assignment in order (but calculations are hidden).\n✓ Show ONLY the final answer, no intermediate calculations.\n✓ Final answer must be 0‑6.\n✓ After query variable: [FINAL] {answer} [END]\n✓ STOP at [END]\n\n✗ NO skipping assignments.\n✗ NO results outside 0‑6.\n✗ NO continuing after query found.\n✗ NO code/explanations after [END].\n",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  }
+}
