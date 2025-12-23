@@ -561,7 +561,7 @@ class SafeOuroThinkingExperiment:
                     "Step 3: R = P + Q = 6 + 5 = 11 (mod 7) = 4\n"
                     "Step 4: S = R + 366 = 4 + 366 = 370 (mod 7) = 6\n"
                     "[FINAL] 6 [END]\n\n"
-                                        
+
                     "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
                     "Step 1: {var} = {value} (mod 7) = {result}\n"
                     "Step 2: {var} = {expression} = {computed} (mod 7) = {result}\n"
@@ -619,27 +619,27 @@ class SafeOuroThinkingExperiment:
         task_generation_configs = {
             "n_ary": GenerationConfig(
                 max_new_tokens=16,
-                min_new_tokens=10,
+                min_new_tokens=4,
                 do_sample=False,
                 num_beams=1,
                 repetition_penalty=1.0,
-                temperature=0.7,
+                temperature=0.1,
             ),
             "p_hop": GenerationConfig(
                 max_new_tokens=16,
-                min_new_tokens=10,
+                min_new_tokens=4,
                 do_sample=False,
                 num_beams=1,
                 repetition_penalty=1.0,
-                temperature=0.7,
+                temperature=0.1,
             ),
             "igsm": GenerationConfig(
                 max_new_tokens=16,
-                min_new_tokens=10,
+                min_new_tokens=4,
                 do_sample=False,
                 num_beams=1,
                 repetition_penalty=1.0,
-                temperature=0.7,
+                temperature=0.1,
             ),
         }
 
