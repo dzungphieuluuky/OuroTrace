@@ -642,7 +642,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                     )
                     for result in reasoning_primitives_results:
                         result["ut_steps"] = ut_steps
-                        reasoning_primitives_results.append(result)
                     print(f"✅ Reasoning primitives evaluation completed\n")
                 except Exception as e:
                     print(f"⚠️ Reasoning primitives evaluation failed: {e}\n")
@@ -746,7 +745,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print("🔗 Finalizing W&B...")
         wandb.finish()
         print("✅ W&B session closed")
+        print(f"{'=' * 70}")
+        print(f"🧹 Cleaning up GPU memory...")
+        del model, tokenizer
+        torch.cuda.empty_cache()
+        gc.collect()
+        print(f"✅ GPU memory freed")
         print(f"{'=' * 70}\n")
+
 
     except KeyboardInterrupt:
         print(f"\n{'=' * 70}")
@@ -755,8 +761,15 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print("🔗 Finalizing W&B...")
         wandb.finish()
         print("✅ W&B session closed")
+        print(f"{'=' * 70}")
+        print(f"🧹 Cleaning up GPU memory...")
+        del model, tokenizer
+        torch.cuda.empty_cache()
+        gc.collect()
+        print(f"✅ GPU memory freed")
         print(f"{'=' * 70}\n")
 
+    
     # Save results to csv files
     save_results(
         simple_reasoning_results,
