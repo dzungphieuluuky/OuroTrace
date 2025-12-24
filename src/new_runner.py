@@ -110,7 +110,7 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
                     {
                         "task_category": "Reasoning Primitive",
                         "task_name": task_name,
-                        "prompt": prompt,  # Log last 100 chars for debugging
+                        "prompt": prompt,
                         "prediction": generated,
                         "target": item["expected_answer"],
                         "is_correct": is_correct,
