@@ -364,14 +364,15 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 print(f"{'=' * 70}\n")
 
                 try:
-                    ppl, avg_loss = experiment.calculate_perplexity(
-                        model,
-                        tokenizer,
-                        perplexity_data,
-                        ut_steps,
-                        max_length=eval_settings.get("ppl_max_length", 2048),
-                        stride=eval_settings.get("ppl_stride", 512),
-                    )
+                    with torch.inference_mode():
+                        ppl, avg_loss = experiment.calculate_perplexity(
+                            model,
+                            tokenizer,
+                            perplexity_data,
+                            ut_steps,
+                            max_length=eval_settings.get("ppl_max_length", 2048),
+                            stride=eval_settings.get("ppl_stride", 512),
+                        )
 
                     perplexity_results.append(
                         {"ut_steps": ut_steps, "perplexity": ppl, "avg_loss": avg_loss}
@@ -459,13 +460,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
 
                         try:
                             # Use unified predict() with list of prompts
-                            batch_outputs = experiment.predict(
-                                user_inputs=prompts,
-                                task_type=task_type,
-                                model=model,
-                                tokenizer=tokenizer,
-                                ut_steps=ut_steps,
-                            )
+                            with torch.inference_mode():
+                                batch_outputs = experiment.predict(
+                                    user_inputs=prompts,
+                                    task_type=task_type,
+                                    model=model,
+                                    tokenizer=tokenizer,
+                                    ut_steps=ut_steps,
+                                )
 
                             # Process each output
                             for output, item in zip(batch_outputs, batch_items):
@@ -494,13 +496,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                             # Fallback to sequential for this batch
                             for item in batch_items:
                                 try:
-                                    output = experiment.predict(
-                                        user_inputs=item["prompt"],
-                                        task_type=task_type,
-                                        model=model,
-                                        tokenizer=tokenizer,
-                                        ut_steps=ut_steps,
-                                    )
+                                    with torch.inference_mode():
+                                        output = experiment.predict(
+                                            user_inputs=item["prompt"],
+                                            task_type=task_type,
+                                            model=model,
+                                            tokenizer=tokenizer,
+                                            ut_steps=ut_steps,
+                                        )
                                     result_entry = _create_result_entry(
                                         output, item, task_type, ut_steps
                                     )
@@ -566,13 +569,14 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                     for item in tqdm(items, desc=f"   {task_type}", leave=False):
                         try:
                             # Use unified predict() with single prompt
-                            output = experiment.predict(
-                                user_inputs=item["prompt"],
-                                task_type=task_type,
-                                model=model,
-                                tokenizer=tokenizer,
-                                ut_steps=ut_steps,
-                            )
+                            with torch.inference_mode():
+                                output = experiment.predict(
+                                    user_inputs=item["prompt"],
+                                    task_type=task_type,
+                                    model=model,
+                                    tokenizer=tokenizer,
+                                    ut_steps=ut_steps,
+                                )
                             result_entry = _create_result_entry(
                                 output, item, task_type, ut_steps
                             )
