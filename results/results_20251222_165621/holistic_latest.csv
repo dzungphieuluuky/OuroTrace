@@ -1,0 +1,4167 @@
+task_category,task_name,prompt,prediction,target,is_correct,ut_steps
+Reasoning Primitive,var_assign_depth_0_code," Response:
+99
+
+### Instruction:
+m = 77, d = 77, q = 94, c = 39, s = 68, f = 72, s = ?
+
+### Response:...",72,68,False,4
+Reasoning Primitive,var_assign_depth_0_code,"x = 3, x = ?
+
+### Response:
+3
+
+### Instruction:
+g = 89, r = 34, k = 94, c = 75, k = ?
+
+### Response:...",94,94,True,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+68
+
+### Instruction:
+r = 64, a = 67, l = 1, j = 49, p = 69, t = 34, l = ?
+
+### Response:...",34,1,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 58, k = ?
+
+### Response:
+99
+
+### Instruction:
+e = 43, a = 39, l = 73, m = 75, a = ?
+
+### Response:...",75,39,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 47, z = ?
+
+### Response:
+67
+
+### Instruction:
+i = 15, j = 56, e = 11, c = 56, e = ?
+
+### Response:...",11,11,True,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+4
+
+### Instruction:
+t = 87, z = 30, v = 56, q = 27, u = 31, k = 98, l = 95, q = ?
+
+### Response:...",95,27,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+99
+
+### Instruction:
+c = 36, q = 81, b = 97, r = 92, f = 46, q = ?
+
+### Response:...",46,81,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+31
+
+### Instruction:
+l = 80, a = 71, m = 53, k = 38, f = 30, a = ?
+
+### Response:...",30,71,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 42, x = ?
+
+### Response:
+47
+
+### Instruction:
+t = 25, o = 37, r = 42, g = 44, r = ?
+
+### Response:...",44,42,False,4
+Reasoning Primitive,var_assign_depth_0_code,"nse:
+71
+
+### Instruction:
+s = 83, z = 6, g = 6, o = 92, f = 93, b = 52, h = 26, f = ?
+
+### Response:...",66,93,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+58
+
+### Instruction:
+k = 99, q = 83, h = 55, c = 29, v = 92, f = 65, x = 58, k = ?
+
+### Response:...",99,99,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 11, p = ?
+
+### Response:
+90
+
+### Instruction:
+f = 40, y = 79, t = 14, n = 78, y = ?
+
+### Response:...",78,79,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+68
+
+### Instruction:
+m = 32, k = 14, u = 56, o = 73, z = 11, r = 2, a = 25, k = ?
+
+### Response:...",2,14,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+27
+
+### Instruction:
+l = 80, b = 44, w = 67, e = 36, m = 43, y = 68, n = 82, w = ?
+
+### Response:...",82,67,False,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+7
+
+### Instruction:
+u = 94, f = 41, h = 69, r = 80, a = 71, g = 96, r = ?
+
+### Response:...",80,80,True,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+67
+
+### Instruction:
+w = 96, j = 62, z = 50, p = 48, s = 54, r = 39, p = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_0_code," = 59, k = ?
+
+### Response:
+4
+
+### Instruction:
+i = 17, o = 96, z = 67, x = 47, z = ?
+
+### Response:...",77,67,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 77, s = ?
+
+### Response:
+67
+
+### Instruction:
+t = 68, n = 80, o = 62, w = 48, o = ?
+
+### Response:...",48,62,False,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+95
+
+### Instruction:
+o = 26, d = 93, j = 16, m = 57, g = 34, y = 82, d = ?
+
+### Response:...",92,93,False,4
+Reasoning Primitive,var_assign_depth_0_code,"## Response:
+80
+
+### Instruction:
+x = 54, y = 94, g = 6, n = 18, v = 1, z = 99, g = ?
+
+### Response:...",99,6,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+67
+
+### Instruction:
+i = 42, n = 75, z = 74, m = 55, x = 3, x = ?
+
+### Response:...",3,3,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 44, r = ?
+
+### Response:
+42
+
+### Instruction:
+k = 40, f = 55, a = 93, c = 66, c = ?
+
+### Response:...",66,66,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+14
+
+### Instruction:
+x = 26, w = 72, u = 21, l = 81, h = 77, h = ?
+
+### Response:...",77,77,True,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+28
+
+### Instruction:
+m = 31, y = 92, e = 92, c = 56, z = 96, g = 22, v = 87, m = ?
+
+### Response:...",77,31,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+91
+
+### Instruction:
+f = 5, w = 86, d = 14, t = 61, p = 68, f = ?
+
+### Response:...",6,5,False,4
+Reasoning Primitive,var_assign_depth_0_code," = 25, x = ?
+
+### Response:
+7
+
+### Instruction:
+t = 77, j = 53, i = 72, f = 77, i = ?
+
+### Response:...",72,72,True,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+80
+
+### Instruction:
+j = 2, a = 96, n = 87, w = 53, t = 17, t = ?
+
+### Response:...",17,17,True,4
+Reasoning Primitive,var_assign_depth_0_code,"x = ?
+
+### Response:
+7
+
+### Instruction:
+d = 6, i = 25, j = 22, p = 10, v = 41, i = ?
+
+### Response:...",1,25,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+64
+
+### Instruction:
+e = 46, o = 44, k = 92, n = 73, t = 47, t = ?
+
+### Response:...",47,47,True,4
+Reasoning Primitive,var_assign_depth_0_code,"nse:
+94
+
+### Instruction:
+b = 0, w = 59, q = 4, d = 49, r = 18, u = 61, a = 93, r = ?
+
+### Response:...",93,18,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 75, s = ?
+
+### Response:
+64
+
+### Instruction:
+t = 54, v = 16, q = 58, h = 63, t = ?
+
+### Response:...",63,54,False,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+51
+
+### Instruction:
+f = 1, i = 32, p = 88, w = 88, y = 77, e = 54, f = ?
+
+### Response:...",54,1,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+58
+
+### Instruction:
+h = 11, u = 14, f = 86, a = 14, l = 38, f = ?
+
+### Response:...",86,86,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 66, c = ?
+
+### Response:
+66
+
+### Instruction:
+a = 94, g = 31, b = 11, v = 42, b = ?
+
+### Response:...",11,11,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 95, b = ?
+
+### Response:
+95
+
+### Instruction:
+j = 40, u = 74, o = 79, b = 58, b = ?
+
+### Response:...",58,58,True,4
+Reasoning Primitive,var_assign_depth_0_code,"k = ?
+
+### Response:
+61
+
+### Instruction:
+m = 78, b = 97, q = 9, s = 51, r = 1, b = ?
+
+### Response:...",9,97,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+64
+
+### Instruction:
+k = 67, e = 66, a = 89, y = 62, c = 89, k = ?
+
+### Response:...",99,67,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+17
+
+### Instruction:
+e = 68, s = 67, x = 26, u = 3, j = 77, s = ?
+
+### Response:...",77,67,False,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+3
+
+### Instruction:
+u = 62, n = 23, i = 46, b = 72, t = 84, w = 68, t = ?
+
+### Response:...",84,84,True,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+62
+
+### Instruction:
+x = 51, o = 86, b = 96, h = 48, g = 39, p = 56, x = ?
+
+### Response:...",66,51,False,4
+Reasoning Primitive,var_assign_depth_0_code,"nse:
+92
+
+### Instruction:
+s = 15, l = 73, z = 62, b = 45, p = 7, j = 4, r = 10, j = ?
+
+### Response:...",10,4,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+62
+
+### Instruction:
+u = 12, c = 75, d = 10, z = 29, o = 94, d = ?
+
+### Response:...",4,10,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+3
+
+### Instruction:
+b = 83, m = 78, u = 99, y = 51, z = 22, z = ?
+
+### Response:...",22,22,True,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+14
+
+### Instruction:
+d = 60, v = 58, z = 96, c = 63, p = 90, e = 29, a = 77, v = ?
+
+### Response:...",29,58,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+86
+
+### Instruction:
+c = 88, k = 7, i = 41, j = 36, p = 14, q = 18, r = 15, k = ?
+
+### Response:...",15,7,False,4
+Reasoning Primitive,var_assign_depth_0_code,"## Response:
+11
+
+### Instruction:
+w = 45, g = 2, l = 94, p = 5, y = 93, h = 72, p = ?
+
+### Response:...",72,5,False,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+15
+
+### Instruction:
+m = 34, d = 0, s = 25, p = 66, h = 30, b = 11, p = ?
+
+### Response:...",66,66,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+54
+
+### Instruction:
+g = 66, a = 31, i = 15, z = 23, n = 77, a = ?
+
+### Response:...",77,31,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+68
+
+### Instruction:
+t = 16, c = 93, w = 87, d = 59, m = 77, q = 20, z = 1, z = ?
+
+### Response:...",1,1,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 46, q = ?
+
+### Response:
+81
+
+### Instruction:
+e = 73, i = 30, u = 17, m = 14, e = ?
+
+### Response:...",73,73,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 95, q = ?
+
+### Response:
+27
+
+### Instruction:
+k = 61, m = 65, o = 52, g = 31, k = ?
+
+### Response:...",31,61,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 55, o = ?
+
+### Response:
+32
+
+### Instruction:
+d = 27, z = 22, w = 30, g = 46, g = ?
+
+### Response:...",66,46,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+51
+
+### Instruction:
+m = 27, g = 81, s = 29, j = 76, e = 64, a = 69, w = 98, j = ?
+
+### Response:...",98,76,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+4
+
+### Instruction:
+p = 42, a = 34, v = 67, c = 13, f = 94, p = ?
+
+### Response:...",94,42,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+14
+
+### Instruction:
+p = 24, u = 1, l = 61, q = 75, z = 26, g = 89, v = 91, v = ?
+
+### Response:...",91,91,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 64, d = ?
+
+### Response:
+14
+
+### Instruction:
+e = 89, b = 34, o = 65, z = 84, e = ?
+
+### Response:...",84,89,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+11
+
+### Instruction:
+y = 33, a = 49, z = 83, m = 43, l = 66, k = 7, h = 29, l = ?
+
+### Response:...",29,66,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+89
+
+### Instruction:
+q = 34, e = 71, j = 72, b = 43, f = 67, g = 84, k = 92, k = ?
+
+### Response:...",92,92,True,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+17
+
+### Instruction:
+t = 8, u = 81, a = 38, i = 41, z = 26, b = 95, b = ?
+
+### Response:...",95,95,True,4
+Reasoning Primitive,var_assign_depth_0_code,"o = ?
+
+### Response:
+62
+
+### Instruction:
+v = 57, k = 27, b = 90, i = 2, f = 2, k = ?
+
+### Response:...",2,27,False,4
+Reasoning Primitive,var_assign_depth_0_code,"### Response:
+5
+
+### Instruction:
+z = 78, x = 47, l = 5, r = 68, u = 7, j = 42, x = ?
+
+### Response:...",7,47,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+46
+
+### Instruction:
+b = 83, o = 62, u = 40, j = 94, w = 22, o = ?
+
+### Response:...",22,62,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+1
+
+### Instruction:
+s = 48, w = 76, a = 90, i = 65, l = 99, p = 73, u = 88, s = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+86
+
+### Instruction:
+x = 13, m = 52, h = 52, k = 6, i = 13, e = 70, k = ?
+
+### Response:...",70,6,False,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+51
+
+### Instruction:
+g = 86, e = 28, z = 15, a = 63, j = 10, u = 86, a = ?
+
+### Response:...",66,63,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 77, a = ?
+
+### Response:
+31
+
+### Instruction:
+k = 93, j = 66, y = 83, f = 62, f = ?
+
+### Response:...",22,62,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 60, v = ?
+
+### Response:
+80
+
+### Instruction:
+m = 40, u = 93, d = 94, h = 67, h = ?
+
+### Response:...",77,67,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+72
+
+### Instruction:
+r = 45, p = 53, c = 65, t = 11, i = 7, s = 58, m = 91, p = ?
+
+### Response:...",91,53,False,4
+Reasoning Primitive,var_assign_depth_0_code,"onse:
+4
+
+### Instruction:
+a = 33, t = 90, x = 7, b = 53, o = 11, l = 64, p = 1, x = ?
+
+### Response:...",1,7,False,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+73
+
+### Instruction:
+a = 57, c = 1, s = 51, m = 18, v = 11, n = 48, n = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_0_code," = 92, k = ?
+
+### Response:
+92
+
+### Instruction:
+j = 58, a = 8, b = 65, i = 98, b = ?
+
+### Response:...",8,65,False,4
+Reasoning Primitive,var_assign_depth_0_code,"f = ?
+
+### Response:
+93
+
+### Instruction:
+f = 37, q = 4, x = 13, t = 67, p = 0, t = ?
+
+### Response:...",67,67,True,4
+Reasoning Primitive,var_assign_depth_0_code," = 47, z = ?
+
+### Response:
+67
+
+### Instruction:
+f = 19, k = 4, s = 13, m = 59, k = ?
+
+### Response:...",59,4,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+51
+
+### Instruction:
+g = 34, t = 56, c = 42, q = 73, b = 98, c = ?
+
+### Response:...",42,42,True,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+81
+
+### Instruction:
+u = 92, y = 21, t = 2, b = 32, i = 65, u = ?
+
+### Response:...",65,92,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+97
+
+### Instruction:
+o = 7, x = 81, r = 87, q = 27, y = 27, l = 11, d = 70, x = ?
+
+### Response:...",70,81,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 98, b = ?
+
+### Response:
+65
+
+### Instruction:
+w = 59, k = 35, f = 11, i = 60, w = ?
+
+### Response:...",61,59,False,4
+Reasoning Primitive,var_assign_depth_0_code," k = ?
+
+### Response:
+6
+
+### Instruction:
+p = 64, r = 8, e = 21, o = 32, m = 6, p = ?
+
+### Response:...",6,64,False,4
+Reasoning Primitive,var_assign_depth_0_code,"se:
+90
+
+### Instruction:
+s = 70, k = 11, b = 15, y = 40, q = 33, m = 9, n = 91, b = ?
+
+### Response:...",91,15,False,4
+Reasoning Primitive,var_assign_depth_0_code," = 39, p = ?
+
+### Response:
+48
+
+### Instruction:
+z = 40, l = 5, c = 28, n = 78, z = ?
+
+### Response:...",78,40,False,4
+Reasoning Primitive,var_assign_depth_0_code,"# Response:
+27
+
+### Instruction:
+z = 67, c = 39, w = 30, x = 7, p = 27, h = 25, x = ?
+
+### Response:...",27,7,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+18
+
+### Instruction:
+i = 48, e = 98, h = 71, k = 99, v = 80, g = 74, b = 60, v = ?
+
+### Response:...",80,80,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= 56, l = ?
+
+### Response:
+33
+
+### Instruction:
+k = 60, x = 99, a = 17, e = 31, x = ?
+
+### Response:...",17,99,False,4
+Reasoning Primitive,var_assign_depth_0_code,"f = 2, k = ?
+
+### Response:
+27
+
+### Instruction:
+l = 33, u = 52, s = 1, m = 56, l = ?
+
+### Response:...",68,33,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+58
+
+### Instruction:
+v = 70, u = 27, r = 14, a = 75, q = 13, y = 14, o = 28, u = ?
+
+### Response:...",28,27,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 38, f = ?
+
+### Response:
+86
+
+### Instruction:
+z = 64, u = 30, d = 50, e = 63, z = ?
+
+### Response:...",63,64,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 98, j = ?
+
+### Response:
+76
+
+### Instruction:
+l = 50, z = 87, r = 84, w = 94, r = ?
+
+### Response:...",94,84,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 26, f = ?
+
+### Response:
+93
+
+### Instruction:
+v = 42, y = 23, p = 92, x = 93, p = ?
+
+### Response:...",93,92,False,4
+Reasoning Primitive,var_assign_depth_0_code,"e:
+84
+
+### Instruction:
+o = 32, q = 69, h = 47, t = 32, i = 63, y = 19, g = 55, o = ?
+
+### Response:...",55,32,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+11
+
+### Instruction:
+n = 9, o = 71, g = 94, e = 60, v = 17, o = ?
+
+### Response:...",17,71,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+62
+
+### Instruction:
+s = 64, i = 24, x = 34, t = 40, m = 75, s = ?
+
+### Response:...",75,64,False,4
+Reasoning Primitive,var_assign_depth_0_code," = ?
+
+### Response:
+58
+
+### Instruction:
+p = 34, q = 3, o = 59, d = 64, e = 89, q = ?
+
+### Response:...",3,3,True,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+47
+
+### Instruction:
+m = 46, u = 81, h = 36, j = 69, x = 10, f = 65, x = ?
+
+### Response:...",10,10,True,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+10
+
+### Instruction:
+g = 61, c = 49, w = 90, p = 90, f = 58, d = 11, p = ?
+
+### Response:...",11,90,False,4
+Reasoning Primitive,var_assign_depth_0_code," Response:
+89
+
+### Instruction:
+m = 64, h = 77, i = 70, x = 46, v = 65, s = 65, h = ?
+
+### Response:...",65,77,False,4
+Reasoning Primitive,var_assign_depth_0_code,"= 56, e = ?
+
+### Response:
+11
+
+### Instruction:
+d = 14, b = 26, m = 60, s = 64, d = ?
+
+### Response:...",64,14,False,4
+Reasoning Primitive,var_assign_depth_0_code,"## Response:
+22
+
+### Instruction:
+j = 7, c = 4, e = 15, p = 44, r = 18, d = 77, p = ?
+
+### Response:...",44,44,True,4
+Reasoning Primitive,var_assign_depth_0_code," k = ?
+
+### Response:
+7
+
+### Instruction:
+y = 8, o = 8, m = 15, v = 68, z = 96, v = ?
+
+### Response:...",68,68,True,4
+Reasoning Primitive,var_assign_depth_0_code,"= ?
+
+### Response:
+66
+
+### Instruction:
+y = 39, m = 81, q = 28, c = 39, k = 14, q = ?
+
+### Response:...",14,28,False,4
+Reasoning Primitive,var_assign_depth_0_code,"nse:
+7
+
+### Instruction:
+a = 77, r = 20, x = 5, s = 21, k = 63, n = 11, u = 40, n = ?
+
+### Response:...",40,11,False,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+68
+
+### Instruction:
+Let p = 1, Let u = 82, Let v = 79, Let c = 90, u = ?
+
+### Response:...",82,82,True,4
+Reasoning Primitive,var_assign_depth_0_math,"a = 50, Let q = 78, Let r = 90, Let n = 62, Let h = 36, Let y = 28, Let k = 84, n = ?
+
+### Response:...",84,62,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+96
+
+### Instruction:
+Let k = 90, Let m = 55, Let f = 99, Let j = 24, m = ?
+
+### Response:...",96,55,False,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let e = 95, Let i = 94, Let q = 51, Let s = 21, Let x = 54, Let d = 52, x = ?
+
+### Response:...",52,54,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+78
+
+### Instruction:
+Let h = 90, Let g = 78, Let u = 46, Let t = 19, h = ?
+
+### Response:...",19,90,False,4
+Reasoning Primitive,var_assign_depth_0_math,"ruction:
+Let z = 3, Let j = 39, Let g = 48, Let s = 69, Let w = 94, Let d = 19, s = ?
+
+### Response:...",69,69,True,4
+Reasoning Primitive,var_assign_depth_0_math,"truction:
+Let c = 6, Let z = 12, Let b = 96, Let q = 8, Let a = 69, Let o = 61, o = ?
+
+### Response:...",61,61,True,4
+Reasoning Primitive,var_assign_depth_0_math,"3
+
+### Instruction:
+Let d = 68, Let i = 80, Let y = 44, Let c = 67, Let x = 20, d = ?
+
+### Response:...",83,68,False,4
+Reasoning Primitive,var_assign_depth_0_math,"ruction:
+Let b = 5, Let p = 95, Let f = 44, Let h = 13, Let q = 76, Let a = 67, a = ?
+
+### Response:...",77,67,False,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+46
+
+### Instruction:
+Let l = 69, Let o = 1, Let y = 20, Let r = 76, l = ?
+
+### Response:...",66,69,False,4
+Reasoning Primitive,var_assign_depth_0_math,"g = 96, Let e = 95, Let c = 77, Let z = 81, Let l = 54, Let t = 40, Let h = 29, g = ?
+
+### Response:...",29,96,False,4
+Reasoning Primitive,var_assign_depth_0_math," g = 17, Let h = 41, Let b = 98, Let z = 6, Let o = 35, Let u = 16, Let k = 85, h = ?
+
+### Response:...",85,41,False,4
+Reasoning Primitive,var_assign_depth_0_math,"t g = 7, Let z = 53, Let l = 74, Let x = 1, Let a = 80, Let y = 25, Let p = 73, g = ?
+
+### Response:...",73,7,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+78
+
+### Instruction:
+Let a = 68, Let e = 52, Let k = 86, Let t = 39, a = ?
+
+### Response:...",88,68,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+62
+
+### Instruction:
+Let r = 13, Let f = 49, Let a = 41, Let b = 58, r = ?
+
+### Response:...",13,13,True,4
+Reasoning Primitive,var_assign_depth_0_math,"82
+
+### Instruction:
+Let z = 92, Let f = 57, Let v = 1, Let y = 61, Let t = 87, f = ?
+
+### Response:...",77,57,False,4
+Reasoning Primitive,var_assign_depth_0_math,"22
+
+### Instruction:
+Let r = 2, Let x = 87, Let m = 36, Let k = 87, Let o = 79, r = ?
+
+### Response:...",17,2,False,4
+Reasoning Primitive,var_assign_depth_0_math,"1
+
+### Instruction:
+Let a = 48, Let v = 28, Let g = 47, Let j = 36, Let s = 63, a = ?
+
+### Response:...",63,48,False,4
+Reasoning Primitive,var_assign_depth_0_math,"32
+
+### Instruction:
+Let t = 0, Let c = 55, Let n = 55, Let i = 27, Let y = 76, i = ?
+
+### Response:...",64,27,False,4
+Reasoning Primitive,var_assign_depth_0_math,"24
+
+### Instruction:
+Let j = 0, Let z = 80, Let k = 78, Let o = 10, Let b = 69, j = ?
+
+### Response:...",69,0,False,4
+Reasoning Primitive,var_assign_depth_0_math,"7
+
+### Instruction:
+Let d = 53, Let i = 85, Let u = 33, Let w = 15, Let q = 69, u = ?
+
+### Response:...",99,33,False,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+0
+
+### Instruction:
+Let a = 87, Let i = 35, Let y = 65, Let m = 49, a = ?
+
+### Response:...",0,87,False,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let t = 49, Let b = 83, Let s = 33, Let w = 19, Let c = 47, Let y = 35, t = ?
+
+### Response:...",49,49,True,4
+Reasoning Primitive,var_assign_depth_0_math,"1
+
+### Instruction:
+Let w = 47, Let j = 20, Let k = 83, Let h = 54, Let p = 24, k = ?
+
+### Response:...",24,83,False,4
+Reasoning Primitive,var_assign_depth_0_math,"1
+
+### Instruction:
+Let h = 26, Let i = 47, Let o = 42, Let v = 63, Let z = 16, h = ?
+
+### Response:...",63,26,False,4
+Reasoning Primitive,var_assign_depth_0_math,"6
+
+### Instruction:
+Let n = 28, Let e = 54, Let y = 70, Let b = 20, Let v = 78, e = ?
+
+### Response:...",88,54,False,4
+Reasoning Primitive,var_assign_depth_0_math," v = 54, Let o = 96, Let m = 6, Let w = 23, Let i = 56, Let d = 15, Let k = 69, m = ?
+
+### Response:...",69,6,False,4
+Reasoning Primitive,var_assign_depth_0_math,"9
+
+### Instruction:
+Let n = 86, Let z = 99, Let g = 71, Let k = 34, Let c = 73, n = ?
+
+### Response:...",73,86,False,4
+Reasoning Primitive,var_assign_depth_0_math,"2
+
+### Instruction:
+Let i = 90, Let g = 38, Let y = 63, Let o = 13, Let x = 76, x = ?
+
+### Response:...",66,76,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+99
+
+### Instruction:
+Let d = 79, Let g = 22, Let f = 63, Let m = 43, f = ?
+
+### Response:...",63,63,True,4
+Reasoning Primitive,var_assign_depth_0_math,"t y = 7, Let s = 42, Let d = 90, Let j = 0, Let b = 19, Let m = 39, Let q = 67, d = ?
+
+### Response:...",77,90,False,4
+Reasoning Primitive,var_assign_depth_0_math,"63
+
+### Instruction:
+Let r = 26, Let d = 37, Let g = 8, Let e = 18, Let y = 31, y = ?
+
+### Response:...",31,31,True,4
+Reasoning Primitive,var_assign_depth_0_math,"k = 31, Let i = 78, Let t = 96, Let r = 38, Let o = 79, Let z = 10, Let j = 16, i = ?
+
+### Response:...",16,78,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+97
+
+### Instruction:
+Let s = 32, Let p = 45, Let e = 96, Let k = 36, k = ?
+
+### Response:...",36,36,True,4
+Reasoning Primitive,var_assign_depth_0_math,"c = 31, Let x = 34, Let t = 17, Let s = 28, Let d = 30, Let j = 30, Let y = 69, t = ?
+
+### Response:...",99,17,False,4
+Reasoning Primitive,var_assign_depth_0_math,"## Response:
+18
+
+### Instruction:
+Let h = 37, Let o = 5, Let g = 0, Let c = 73, h = ?
+
+### Response:...",73,37,False,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+4
+
+### Instruction:
+Let l = 51, Let q = 93, Let y = 97, Let f = 40, q = ?
+
+### Response:...",4,93,False,4
+Reasoning Primitive,var_assign_depth_0_math,"5
+
+### Instruction:
+Let t = 98, Let g = 89, Let d = 15, Let c = 88, Let a = 76, t = ?
+
+### Response:...",66,98,False,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+65
+
+### Instruction:
+Let j = 4, Let l = 79, Let e = 11, Let m = 74, l = ?
+
+### Response:...",74,79,False,4
+Reasoning Primitive,var_assign_depth_0_math,"i = 18, Let q = 22, Let w = 45, Let j = 33, Let e = 73, Let z = 58, Let b = 24, j = ?
+
+### Response:...",24,33,False,4
+Reasoning Primitive,var_assign_depth_0_math,"0
+
+### Instruction:
+Let y = 64, Let k = 25, Let h = 26, Let i = 82, Let s = 99, k = ?
+
+### Response:...",10,25,False,4
+Reasoning Primitive,var_assign_depth_0_math," g = 62, Let u = 6, Let z = 77, Let r = 87, Let d = 17, Let c = 82, Let l = 18, r = ?
+
+### Response:...",18,87,False,4
+Reasoning Primitive,var_assign_depth_0_math," v = 69, Let p = 71, Let l = 86, Let a = 87, Let o = 59, Let m = 9, Let q = 29, q = ?
+
+### Response:...",29,29,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+17
+
+### Instruction:
+Let r = 50, Let z = 34, Let j = 39, Let n = 44, z = ?
+
+### Response:...",44,34,False,4
+Reasoning Primitive,var_assign_depth_0_math,"p = 84, Let x = 69, Let r = 52, Let i = 85, Let q = 32, Let t = 24, Let g = 43, x = ?
+
+### Response:...",43,69,False,4
+Reasoning Primitive,var_assign_depth_0_math,"4
+
+### Instruction:
+Let x = 46, Let t = 55, Let n = 33, Let z = 36, Let q = 24, t = ?
+
+### Response:...",33,55,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+32
+
+### Instruction:
+Let z = 91, Let s = 17, Let w = 18, Let v = 77, v = ?
+
+### Response:...",77,77,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+86
+
+### Instruction:
+Let n = 70, Let x = 61, Let j = 72, Let w = 33, x = ?
+
+### Response:...",61,61,True,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let r = 58, Let h = 89, Let t = 86, Let n = 62, Let f = 72, Let v = 61, t = ?
+
+### Response:...",61,86,False,4
+Reasoning Primitive,var_assign_depth_0_math,"2
+
+### Instruction:
+Let q = 65, Let m = 50, Let d = 42, Let y = 64, Let l = 63, q = ?
+
+### Response:...",63,65,False,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let b = 76, Let i = 29, Let y = 69, Let x = 43, Let t = 45, Let w = 94, i = ?
+
+### Response:...",29,29,True,4
+Reasoning Primitive,var_assign_depth_0_math,"29
+
+### Instruction:
+Let h = 89, Let p = 30, Let b = 45, Let s = 9, Let d = 68, b = ?
+
+### Response:...",88,45,False,4
+Reasoning Primitive,var_assign_depth_0_math,"w = 79, Let z = 45, Let a = 61, Let u = 94, Let i = 40, Let t = 17, Let v = 61, t = ?
+
+### Response:...",17,17,True,4
+Reasoning Primitive,var_assign_depth_0_math," h = 72, Let m = 99, Let r = 24, Let w = 9, Let x = 37, Let c = 46, Let b = 83, w = ?
+
+### Response:...",83,9,False,4
+Reasoning Primitive,var_assign_depth_0_math,"75
+
+### Instruction:
+Let t = 11, Let j = 13, Let i = 98, Let o = 7, Let x = 48, x = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+17
+
+### Instruction:
+Let a = 86, Let j = 42, Let z = 48, Let p = 46, j = ?
+
+### Response:...",46,42,False,4
+Reasoning Primitive,var_assign_depth_0_math,"
+98
+
+### Instruction:
+Let k = 9, Let f = 97, Let t = 94, Let u = 92, Let l = 9, l = ?
+
+### Response:...",9,9,True,4
+Reasoning Primitive,var_assign_depth_0_math,"c = 83, Let j = 66, Let p = 32, Let v = 27, Let d = 14, Let o = 78, Let a = 56, p = ?
+
+### Response:...",68,32,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+64
+
+### Instruction:
+Let u = 81, Let b = 49, Let r = 52, Let k = 26, r = ?
+
+### Response:...",52,52,True,4
+Reasoning Primitive,var_assign_depth_0_math,"truction:
+Let t = 31, Let p = 38, Let b = 16, Let r = 8, Let n = 19, Let w = 4, n = ?
+
+### Response:...",4,19,False,4
+Reasoning Primitive,var_assign_depth_0_math,"i = 80, Let r = 51, Let a = 35, Let s = 57, Let d = 48, Let g = 48, Let t = 66, r = ?
+
+### Response:...",66,51,False,4
+Reasoning Primitive,var_assign_depth_0_math,"79
+
+### Instruction:
+Let p = 8, Let g = 71, Let d = 92, Let b = 86, Let f = 43, g = ?
+
+### Response:...",79,71,False,4
+Reasoning Primitive,var_assign_depth_0_math,"5
+
+### Instruction:
+Let f = 61, Let h = 58, Let l = 40, Let v = 53, Let k = 78, l = ?
+
+### Response:...",88,40,False,4
+Reasoning Primitive,var_assign_depth_0_math,"6
+
+### Instruction:
+Let z = 73, Let k = 83, Let m = 59, Let w = 95, Let f = 75, z = ?
+
+### Response:...",55,73,False,4
+Reasoning Primitive,var_assign_depth_0_math,"t = 45, Let r = 53, Let h = 61, Let v = 23, Let c = 97, Let k = 42, Let m = 63, k = ?
+
+### Response:...",63,42,False,4
+Reasoning Primitive,var_assign_depth_0_math,"d = 18, Let h = 92, Let b = 31, Let t = 24, Let m = 41, Let s = 26, Let o = 90, d = ?
+
+### Response:...",10,18,False,4
+Reasoning Primitive,var_assign_depth_0_math,"86
+
+### Instruction:
+Let p = 46, Let o = 51, Let k = 58, Let s = 1, Let a = 20, s = ?
+
+### Response:...",20,1,False,4
+Reasoning Primitive,var_assign_depth_0_math,"j = 99, Let b = 69, Let x = 66, Let n = 89, Let i = 12, Let h = 74, Let f = 22, n = ?
+
+### Response:...",22,89,False,4
+Reasoning Primitive,var_assign_depth_0_math,"ruction:
+Let x = 9, Let k = 44, Let t = 34, Let g = 54, Let p = 90, Let d = 84, p = ?
+
+### Response:...",4,90,False,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+63
+
+### Instruction:
+Let b = 8, Let f = 91, Let c = 73, Let j = 28, c = ?
+
+### Response:...",73,73,True,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let r = 32, Let i = 61, Let g = 38, Let m = 65, Let p = 40, Let o = 73, o = ?
+
+### Response:...",73,73,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+26
+
+### Instruction:
+Let p = 10, Let n = 78, Let u = 85, Let l = 86, n = ?
+
+### Response:...",86,78,False,4
+Reasoning Primitive,var_assign_depth_0_math,"68
+
+### Instruction:
+Let z = 6, Let v = 68, Let e = 78, Let r = 79, Let x = 76, v = ?
+
+### Response:...",66,68,False,4
+Reasoning Primitive,var_assign_depth_0_math,"54
+
+### Instruction:
+Let a = 90, Let j = 30, Let o = 0, Let c = 17, Let e = 36, o = ?
+
+### Response:...",0,0,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+63
+
+### Instruction:
+Let p = 37, Let f = 24, Let g = 89, Let h = 73, f = ?
+
+### Response:...",73,24,False,4
+Reasoning Primitive,var_assign_depth_0_math,"ruction:
+Let t = 72, Let b = 1, Let j = 30, Let e = 12, Let q = 68, Let h = 69, q = ?
+
+### Response:...",69,68,False,4
+Reasoning Primitive,var_assign_depth_0_math,"o = 44, Let r = 46, Let d = 99, Let q = 61, Let e = 22, Let w = 50, Let m = 97, d = ?
+
+### Response:...",97,99,False,4
+Reasoning Primitive,var_assign_depth_0_math,"32
+
+### Instruction:
+Let g = 63, Let l = 80, Let o = 14, Let y = 71, Let s = 2, s = ?
+
+### Response:...",2,2,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+61
+
+### Instruction:
+Let d = 31, Let p = 73, Let f = 22, Let a = 86, f = ?
+
+### Response:...",6,22,False,4
+Reasoning Primitive,var_assign_depth_0_math,"## Response:
+9
+
+### Instruction:
+Let s = 17, Let z = 75, Let m = 52, Let t = 7, s = ?
+
+### Response:...",7,17,False,4
+Reasoning Primitive,var_assign_depth_0_math,"t e = 87, Let w = 80, Let v = 86, Let b = 6, Let x = 64, Let g = 20, Let a = 4, x = ?
+
+### Response:...",6,64,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+73
+
+### Instruction:
+Let n = 58, Let p = 26, Let b = 66, Let s = 73, n = ?
+
+### Response:...",58,58,True,4
+Reasoning Primitive,var_assign_depth_0_math,"truction:
+Let z = 73, Let x = 45, Let r = 7, Let g = 64, Let q = 52, Let j = 8, g = ?
+
+### Response:...",8,64,False,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let c = 88, Let k = 49, Let s = 95, Let m = 18, Let g = 19, Let q = 91, m = ?
+
+### Response:...",19,18,False,4
+Reasoning Primitive,var_assign_depth_0_math,"ruction:
+Let v = 52, Let n = 68, Let f = 79, Let c = 77, Let t = 74, Let s = 4, s = ?
+
+### Response:...",4,4,True,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+90
+
+### Instruction:
+Let r = 22, Let h = 32, Let a = 50, Let v = 89, a = ?
+
+### Response:...",90,50,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+33
+
+### Instruction:
+Let b = 20, Let t = 66, Let q = 27, Let p = 46, p = ?
+
+### Response:...",46,46,True,4
+Reasoning Primitive,var_assign_depth_0_math,"v = 38, Let n = 44, Let w = 13, Let f = 10, Let p = 32, Let h = 93, Let m = 19, f = ?
+
+### Response:...",19,10,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+46
+
+### Instruction:
+Let f = 22, Let l = 96, Let b = 90, Let d = 61, b = ?
+
+### Response:...",61,90,False,4
+Reasoning Primitive,var_assign_depth_0_math,"6
+
+### Instruction:
+Let t = 14, Let q = 38, Let n = 85, Let r = 88, Let a = 58, a = ?
+
+### Response:...",88,58,False,4
+Reasoning Primitive,var_assign_depth_0_math,"struction:
+Let z = 86, Let w = 40, Let x = 0, Let s = 1, Let o = 35, Let y = 4, y = ?
+
+### Response:...",4,4,True,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let d = 96, Let q = 57, Let j = 97, Let f = 86, Let v = 20, Let k = 37, j = ?
+
+### Response:...",37,97,False,4
+Reasoning Primitive,var_assign_depth_0_math," k = 98, Let v = 64, Let z = 18, Let h = 74, Let o = 12, Let w = 2, Let y = 39, k = ?
+
+### Response:...",39,98,False,4
+Reasoning Primitive,var_assign_depth_0_math," Response:
+57
+
+### Instruction:
+Let q = 11, Let l = 90, Let s = 16, Let o = 53, s = ?
+
+### Response:...",53,16,False,4
+Reasoning Primitive,var_assign_depth_0_math,"1
+
+### Instruction:
+Let c = 89, Let a = 80, Let u = 97, Let d = 56, Let s = 97, u = ?
+
+### Response:...",97,97,True,4
+Reasoning Primitive,var_assign_depth_0_math,"# Response:
+31
+
+### Instruction:
+Let p = 44, Let f = 5, Let x = 55, Let l = 74, f = ?
+
+### Response:...",55,5,False,4
+Reasoning Primitive,var_assign_depth_0_math,"i = 91, Let x = 99, Let y = 18, Let u = 64, Let p = 75, Let t = 59, Let o = 93, p = ?
+
+### Response:...",93,75,False,4
+Reasoning Primitive,var_assign_depth_0_math,"uction:
+Let n = 33, Let x = 91, Let e = 52, Let g = 93, Let z = 57, Let b = 67, b = ?
+
+### Response:...",67,67,True,4
+Reasoning Primitive,var_assign_depth_0_math,"3
+
+### Instruction:
+Let z = 94, Let h = 46, Let m = 78, Let e = 15, Let v = 12, m = ?
+
+### Response:...",12,78,False,4
+Reasoning Primitive,var_assign_depth_0_math,"7
+
+### Instruction:
+Let i = 46, Let m = 27, Let k = 37, Let a = 52, Let x = 81, i = ?
+
+### Response:...",1,46,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+u := 63, y := 60, a := 36, o := 21, w := 40, p := 91, i := 51, w = ?
+
+### Response:...",51,40,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+7
+
+### Instruction:
+p := 96, t := 90, j := 7, l := 53, s := 40, v := 90, l = ?
+
+### Response:...",90,53,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+6
+
+### Instruction:
+v := 2, e := 86, o := 11, f := 15, g := 13, b := 18, e = ?
+
+### Response:...",18,86,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+
+### Instruction:
+w := 4, e := 56, g := 60, l := 63, y := 69, c := 7, h := 96, c = ?
+
+### Response:...",7,7,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+93
+
+### Instruction:
+j := 42, u := 75, c := 41, h := 91, q := 14, c = ?
+
+### Response:...",14,41,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", h = ?
+
+### Response:
+93
+
+### Instruction:
+n := 93, z := 68, q := 94, x := 43, q = ?
+
+### Response:...",43,94,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+l := 40, m := 68, k := 91, y := 60, d := 23, b := 46, o := 99, m = ?
+
+### Response:...",99,68,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+92
+
+### Instruction:
+i := 55, f := 62, y := 60, q := 42, p := 48, p = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+
+### Instruction:
+t := 29, c := 60, j := 84, s := 25, l := 68, y := 2, b := 3, b = ?
+
+### Response:...",3,3,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+
+### Response:
+92
+
+### Instruction:
+s := 1, c := 34, y := 52, b := 34, i := 6, s = ?
+
+### Response:...",6,1,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+41
+
+### Instruction:
+v := 32, t := 29, c := 70, g := 23, o := 70, v = ?
+
+### Response:...",70,32,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+32
+
+### Instruction:
+e := 36, t := 24, c := 0, l := 19, u := 32, a := 3, l = ?
+
+### Response:...",3,19,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"6, c = ?
+
+### Response:
+7
+
+### Instruction:
+x := 58, m := 81, e := 31, k := 66, x = ?
+
+### Response:...",6,58,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+v := 84, k := 30, e := 74, r := 79, u := 85, i := 24, a := 29, k = ?
+
+### Response:...",30,30,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+u := 19, l := 13, v := 26, b := 75, i := 62, c := 60, p := 70, b = ?
+
+### Response:...",70,75,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+7
+
+### Instruction:
+f := 71, b := 12, e := 15, n := 24, u := 2, g := 98, u = ?
+
+### Response:...",2,2,True,4
+Reasoning Primitive,var_assign_depth_0_equation,", u = ?
+
+### Response:
+92
+
+### Instruction:
+f := 33, b := 35, w := 41, u := 71, w = ?
+
+### Response:...",71,41,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+17
+
+### Instruction:
+x := 30, l := 13, j := 99, u := 38, y := 76, x = ?
+
+### Response:...",30,30,True,4
+Reasoning Primitive,var_assign_depth_0_equation,", l = ?
+
+### Response:
+19
+
+### Instruction:
+d := 44, j := 93, l := 85, a := 11, l = ?
+
+### Response:...",11,85,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+73
+
+### Instruction:
+i := 59, y := 65, g := 87, v := 36, n := 67, m := 75, g = ?
+
+### Response:...",75,87,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+2
+
+### Instruction:
+t := 27, n := 22, s := 80, o := 30, u := 86, t = ?
+
+### Response:...",27,27,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+u := 22, e := 20, g := 23, z := 44, v := 83, j := 62, p := 66, e = ?
+
+### Response:...",66,20,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", v = ?
+
+### Response:
+63
+
+### Instruction:
+n := 35, b := 94, q := 11, a := 61, a = ?
+
+### Response:...",61,61,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+41
+
+### Instruction:
+d := 62, z := 57, l := 26, j := 82, c := 94, e := 49, c = ?
+
+### Response:...",49,94,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+92
+
+### Instruction:
+q := 79, r := 11, m := 28, z := 63, v := 2, v = ?
+
+### Response:...",2,2,True,4
+Reasoning Primitive,var_assign_depth_0_equation,", x = ?
+
+### Response:
+58
+
+### Instruction:
+d := 15, j := 33, v := 10, l := 91, d = ?
+
+### Response:...",91,15,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", b = ?
+
+### Response:
+60
+
+### Instruction:
+w := 67, a := 32, r := 44, d := 73, w = ?
+
+### Response:...",73,67,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+y := 67, z := 27, x := 97, a := 99, s := 92, v := 61, j := 16, y = ?
+
+### Response:...",16,67,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"sponse:
+38
+
+### Instruction:
+v := 97, c := 70, r := 6, z := 8, n := 10, e := 6, z = ?
+
+### Response:...",6,8,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+41
+
+### Instruction:
+o := 32, k := 70, w := 93, d := 32, i := 47, d = ?
+
+### Response:...",47,32,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+74
+
+### Instruction:
+m := 49, g := 82, x := 37, z := 44, o := 64, g = ?
+
+### Response:...",64,82,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"3, l = ?
+
+### Response:
+19
+
+### Instruction:
+w := 55, v := 48, x := 45, l := 4, w = ?
+
+### Response:...",4,55,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", i = ?
+
+### Response:
+93
+
+### Instruction:
+h := 34, r := 11, a := 14, i := 28, a = ?
+
+### Response:...",28,14,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"3, w = ?
+
+### Response:
+67
+
+### Instruction:
+s := 85, h := 8, r := 44, z := 51, z = ?
+
+### Response:...",51,51,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"onse:
+9
+
+### Instruction:
+x := 61, p := 88, o := 67, k := 79, t := 21, f := 62, x = ?
+
+### Response:...",21,61,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+v := 49, b := 41, j := 38, g := 96, c := 38, i := 26, r := 39, b = ?
+
+### Response:...",39,41,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+83
+
+### Instruction:
+g := 26, v := 44, o := 92, j := 13, y := 9, y = ?
+
+### Response:...",9,9,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+20
+
+### Instruction:
+t := 29, y := 1, x := 42, s := 16, b := 43, s = ?
+
+### Response:...",43,16,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+30
+
+### Instruction:
+w := 27, r := 99, j := 79, f := 23, n := 74, t := 15, n = ?
+
+### Response:...",15,74,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"?
+
+### Response:
+91
+
+### Instruction:
+w := 6, f := 95, z := 69, o := 7, n := 2, n = ?
+
+### Response:...",2,2,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"onse:
+51
+
+### Instruction:
+j := 91, k := 48, b := 54, v := 9, i := 93, c := 69, i = ?
+
+### Response:...",93,93,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+8
+
+### Instruction:
+r := 86, z := 68, e := 62, x := 73, h := 93, h = ?
+
+### Response:...",93,93,True,4
+Reasoning Primitive,var_assign_depth_0_equation,", u = ?
+
+### Response:
+64
+
+### Instruction:
+z := 48, s := 95, t := 46, m := 88, s = ?
+
+### Response:...",88,95,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+67
+
+### Instruction:
+r := 59, n := 19, y := 20, e := 65, h := 30, n = ?
+
+### Response:...",30,19,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", g = ?
+
+### Response:
+17
+
+### Instruction:
+d := 85, r := 87, s := 64, h := 71, h = ?
+
+### Response:...",71,71,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"1, a = ?
+
+### Response:
+61
+
+### Instruction:
+u := 90, f := 8, k := 70, p := 60, u = ?
+
+### Response:...",60,90,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+25
+
+### Instruction:
+p := 62, s := 84, w := 69, k := 32, d := 98, d = ?
+
+### Response:...",88,98,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+99
+
+### Instruction:
+m := 96, j := 11, i := 2, t := 67, x := 58, x = ?
+
+### Response:...",58,58,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+d := 89, z := 61, k := 80, c := 31, y := 85, h := 93, n := 82, c = ?
+
+### Response:...",22,31,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+
+### Response:
+73
+
+### Instruction:
+x := 32, f := 57, u := 13, t := 0, j := 4, f = ?
+
+### Response:...",4,57,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+g := 77, x := 92, c := 32, n := 67, i := 29, d := 51, y := 32, y = ?
+
+### Response:...",32,32,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+14
+
+### Instruction:
+h := 41, a := 22, y := 11, j := 19, e := 55, s := 25, h = ?
+
+### Response:...",25,41,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+b := 59, f := 40, g := 66, h := 48, z := 98, a := 57, l := 68, z = ?
+
+### Response:...",68,98,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"onse:
+19
+
+### Instruction:
+e := 2, t := 73, k := 66, z := 69, q := 27, r := 21, t = ?
+
+### Response:...",21,73,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+19
+
+### Instruction:
+e := 83, z := 67, t := 63, j := 99, c := 64, t = ?
+
+### Response:...",64,63,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+s := 30, c := 6, t := 93, k := 15, x := 11, a := 44, h := 77, c = ?
+
+### Response:...",44,6,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+d := 98, z := 49, e := 11, o := 17, p := 50, h := 59, v := 27, d = ?
+
+### Response:...",59,98,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+98
+
+### Instruction:
+o := 96, v := 28, k := 7, i := 97, y := 9, b := 58, v = ?
+
+### Response:...",97,28,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+
+### Response:
+40
+
+### Instruction:
+j := 20, v := 46, u := 96, f := 3, q := 1, j = ?
+
+### Response:...",40,20,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+6
+
+### Instruction:
+i := 87, r := 30, k := 35, f := 14, d := 28, z := 2, f = ?
+
+### Response:...",2,14,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", z = ?
+
+### Response:
+51
+
+### Instruction:
+g := 73, f := 80, k := 18, p := 37, p = ?
+
+### Response:...",37,37,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+r := 25, o := 17, a := 86, c := 16, u := 57, l := 4, p := 71, r = ?
+
+### Response:...",71,25,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", l = ?
+
+### Response:
+53
+
+### Instruction:
+r := 33, x := 51, f := 24, c := 95, x = ?
+
+### Response:...",51,51,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+y := 74, n := 5, c := 90, q := 87, o := 32, j := 99, h := 71, h = ?
+
+### Response:...",71,71,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+q := 61, n := 53, u := 5, y := 46, j := 85, o := 13, l := 69, n = ?
+
+### Response:...",69,53,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", m = ?
+
+### Response:
+68
+
+### Instruction:
+f := 21, e := 32, v := 37, g := 99, g = ?
+
+### Response:...",99,99,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+z := 60, s := 60, r := 26, m := 73, b := 83, j := 11, o := 29, m = ?
+
+### Response:...",73,73,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"6, s = ?
+
+### Response:
+1
+
+### Instruction:
+b := 50, o := 83, z := 89, r := 78, r = ?
+
+### Response:...",78,78,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"onse:
+53
+
+### Instruction:
+m := 69, o := 52, c := 0, d := 86, q := 83, f := 33, f = ?
+
+### Response:...",33,33,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"18, e = ?
+
+### Response:
+86
+
+### Instruction:
+o := 9, i := 41, q := 50, p := 8, i = ?
+
+### Response:...",8,41,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Response:
+41
+
+### Instruction:
+q := 32, d := 37, f := 21, u := 92, k := 13, u = ?
+
+### Response:...",13,92,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", u = ?
+
+### Response:
+90
+
+### Instruction:
+f := 83, a := 39, h := 43, v := 63, v = ?
+
+### Response:...",63,63,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+r := 79, p := 96, c := 8, m := 98, q := 68, g := 53, d := 88, c = ?
+
+### Response:...",88,8,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+p := 18, u := 68, m := 57, d := 74, r := 33, y := 61, z := 51, u = ?
+
+### Response:...",51,68,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+61
+
+### Instruction:
+f := 90, l := 83, k := 45, j := 62, y := 25, u := 35, l = ?
+
+### Response:...",35,83,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+w := 64, y := 79, t := 97, k := 92, q := 56, o := 93, i := 13, q = ?
+
+### Response:...",56,56,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+y := 42, p := 34, f := 79, n := 26, r := 11, e := 3, w := 39, r = ?
+
+### Response:...",39,11,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+98
+
+### Instruction:
+f := 99, u := 16, c := 70, m := 32, e := 36, l := 33, f = ?
+
+### Response:...",99,99,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Instruction:
+t := 39, s := 99, l := 9, i := 56, u := 64, d := 46, m := 18, u = ?
+
+### Response:...",18,64,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+11
+
+### Instruction:
+j := 80, s := 54, f := 46, g := 14, v := 98, x := 55, v = ?
+
+### Response:...",88,98,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+20
+
+### Instruction:
+e := 36, q := 67, j := 61, u := 82, x := 37, f := 57, f = ?
+
+### Response:...",7,57,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+h := 46, e := 55, r := 82, l := 70, y := 17, k := 68, n := 61, h = ?
+
+### Response:...",61,46,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+25
+
+### Instruction:
+y := 6, h := 21, m := 93, q := 51, v := 16, y = ?
+
+### Response:...",16,6,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+6
+
+### Instruction:
+g := 92, q := 63, x := 83, o := 81, t := 29, x = ?
+
+### Response:...",29,83,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+l := 45, u := 89, m := 28, i := 58, a := 27, z := 44, b := 60, b = ?
+
+### Response:...",60,60,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+
+### Response:
+73
+
+### Instruction:
+y := 2, j := 2, w := 37, v := 93, o := 29, o = ?
+
+### Response:...",29,29,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+67
+
+### Instruction:
+a := 24, u := 40, o := 87, h := 52, x := 38, r := 93, u = ?
+
+### Response:...",93,40,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+h := 43, d := 80, e := 52, n := 97, p := 11, j := 82, z := 46, p = ?
+
+### Response:...",46,11,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"### Instruction:
+y := 32, k := 70, z := 13, m := 52, i := 39, h := 93, t := 41, t = ?
+
+### Response:...",41,41,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+73
+
+### Instruction:
+m := 6, f := 67, j := 31, n := 27, x := 32, m = ?
+
+### Response:...",32,6,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"7, c = ?
+
+### Response:
+6
+
+### Instruction:
+h := 86, y := 94, n := 73, t := 51, n = ?
+
+### Response:...",51,73,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+68
+
+### Instruction:
+g := 10, i := 10, m := 86, f := 94, j := 77, t := 55, f = ?
+
+### Response:...",55,94,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", t = ?
+
+### Response:
+27
+
+### Instruction:
+z := 95, a := 25, v := 83, j := 83, a = ?
+
+### Response:...",25,25,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+94
+
+### Instruction:
+q := 73, f := 13, n := 19, k := 83, c := 60, p := 19, k = ?
+
+### Response:...",83,83,True,4
+Reasoning Primitive,var_assign_depth_0_equation,", m = ?
+
+### Response:
+68
+
+### Instruction:
+u := 53, r := 71, y := 88, v := 37, r = ?
+
+### Response:...",71,71,True,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+75
+
+### Instruction:
+n := 23, w := 38, x := 18, g := 6, m := 31, w = ?
+
+### Response:...",31,38,False,4
+Reasoning Primitive,var_assign_depth_0_equation,", v = ?
+
+### Response:
+28
+
+### Instruction:
+e := 96, i := 13, k := 93, a := 23, i = ?
+
+### Response:...",23,13,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"
+### Response:
+6
+
+### Instruction:
+x := 46, d := 70, e := 23, g := 17, w := 65, g = ?
+
+### Response:...",65,17,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"nse:
+99
+
+### Instruction:
+p := 24, m := 76, l := 41, b := 18, z := 82, w := 40, l = ?
+
+### Response:...",40,41,False,4
+Reasoning Primitive,var_assign_depth_0_equation,"ponse:
+94
+
+### Instruction:
+f := 0, d := 93, c := 15, u := 7, q := 91, m := 65, q = ?
+
+### Response:...",6,91,False,4
+Reasoning Primitive,var_assign_depth_1_code,"
+### Response:
+82
+
+### Instruction:
+u = 88, z = 40, r = u, l = u, n = z, h = 4, n = ?
+
+### Response:...",4,40,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+25
+
+### Instruction:
+g = 28, p = 13, u = 51, c = g, z = p, e = p, z = ?
+
+### Response:...",13,13,True,4
+Reasoning Primitive,var_assign_depth_1_code,", y = ?
+
+### Response:
+56
+
+### Instruction:
+c = 6, u = c, x = c, m = 77, a = m, a = ?
+
+### Response:...",77,77,True,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+35
+
+### Instruction:
+l = 1, b = v, m = v, v = 61, a = l, w = 70, z = w, z = ?
+
+### Response:...",70,70,True,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+37
+
+### Instruction:
+g = i, e = 61, d = e, w = 8, x = i, m = w, i = 78, d = ?
+
+### Response:...",78,61,False,4
+Reasoning Primitive,var_assign_depth_1_code,"
+### Response:
+12
+
+### Instruction:
+a = l, l = 8, v = 93, r = m, m = 65, f = m, a = ?
+
+### Response:...",65,8,False,4
+Reasoning Primitive,var_assign_depth_1_code,", l = i, l = ?
+
+### Response:
+1
+
+### Instruction:
+l = 12, d = l, k = b, b = 52, k = ?
+
+### Response:...",52,52,True,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+51
+
+### Instruction:
+j = x, q = 41, y = q, i = 4, z = q, h = x, x = 45, j = ?
+
+### Response:...",45,45,True,4
+Reasoning Primitive,var_assign_depth_1_code,"i = 58, r = ?
+
+### Response:
+58
+
+### Instruction:
+q = n, j = n, t = 91, n = 35, q = ?
+
+### Response:...",35,35,True,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+86
+
+### Instruction:
+z = p, b = p, s = 82, p = 39, j = p, v = 53, j = ?
+
+### Response:...",39,39,True,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+22
+
+### Instruction:
+x = s, s = 38, a = 47, r = d, k = s, f = s, d = 76, x = ?
+
+### Response:...",76,38,False,4
+Reasoning Primitive,var_assign_depth_1_code,"5, s = ?
+
+### Response:
+96
+
+### Instruction:
+u = 4, e = t, v = t, p = t, t = 5, p = ?
+
+### Response:...",6,5,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+21
+
+### Instruction:
+h = r, b = 54, d = z, r = 73, z = 29, f = b, d = ?
+
+### Response:...",29,29,True,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+29
+
+### Instruction:
+w = 37, x = g, v = 71, g = 43, b = v, k = w, z = v, x = ?
+
+### Response:...",x,43,False,4
+Reasoning Primitive,var_assign_depth_1_code," h = ?
+
+### Response:
+47
+
+### Instruction:
+e = 45, c = 56, p = c, k = e, z = c, p = ?
+
+### Response:...",66,56,False,4
+Reasoning Primitive,var_assign_depth_1_code,"g = 21, a = ?
+
+### Response:
+21
+
+### Instruction:
+s = 44, m = s, p = 32, n = p, m = ?
+
+### Response:...",32,44,False,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+69
+
+### Instruction:
+e = 46, w = 47, h = e, d = w, a = 2, f = w, y = e, d = ?
+
+### Response:...",2,47,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+72
+
+### Instruction:
+h = e, q = i, e = 51, x = i, i = 76, t = 48, x = ?
+
+### Response:...",64,76,False,4
+Reasoning Primitive,var_assign_depth_1_code," j = ?
+
+### Response:
+45
+
+### Instruction:
+y = i, i = 24, x = u, s = u, u = 22, s = ?
+
+### Response:...",22,22,True,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+47
+
+### Instruction:
+x = m, q = g, t = s, m = 21, s = 43, p = g, g = 40, t = ?
+
+### Response:...",40,43,False,4
+Reasoning Primitive,var_assign_depth_1_code," j = ?
+
+### Response:
+45
+
+### Instruction:
+r = 73, c = f, i = f, f = 44, h = r, c = ?
+
+### Response:...",44,44,True,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+28
+
+### Instruction:
+y = c, o = 77, b = 14, p = o, c = 51, w = o, y = ?
+
+### Response:...",51,51,True,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+91
+
+### Instruction:
+c = e, q = e, o = 16, w = 23, e = 50, y = o, q = ?
+
+### Response:...",16,50,False,4
+Reasoning Primitive,var_assign_depth_1_code,", e = ?
+
+### Response:
+1
+
+### Instruction:
+o = q, e = 47, k = e, v = q, q = 47, v = ?
+
+### Response:...",47,47,True,4
+Reasoning Primitive,var_assign_depth_1_code,"x = 45, j = ?
+
+### Response:
+45
+
+### Instruction:
+p = 84, m = q, q = 31, r = q, m = ?
+
+### Response:...",31,31,True,4
+Reasoning Primitive,var_assign_depth_1_code," x = k, u = ?
+
+### Response:
+45
+
+### Instruction:
+h = 24, a = 66, u = a, l = h, u = ?
+
+### Response:...",###,66,False,4
+Reasoning Primitive,var_assign_depth_1_code," g = 48, h = ?
+
+### Response:
+48
+
+### Instruction:
+f = s, s = 39, i = 1, l = i, l = ?
+
+### Response:...",1,1,True,4
+Reasoning Primitive,var_assign_depth_1_code,"esponse:
+53
+
+### Instruction:
+k = w, i = t, e = t, t = 43, u = t, h = 8, w = 2, u = ?
+
+### Response:...",2,43,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+43
+
+### Instruction:
+x = 82, g = 60, v = x, u = g, p = g, i = m, m = 17, i = ?
+
+### Response:...",17,17,True,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+17
+
+### Instruction:
+a = 25, d = 77, z = d, b = d, s = a, m = 35, b = ?
+
+### Response:...",35,77,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+94
+
+### Instruction:
+y = 96, u = w, s = y, w = 32, m = e, b = y, e = 55, s = ?
+
+### Response:...",55,96,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+71
+
+### Instruction:
+q = 17, i = q, l = 52, u = q, a = w, w = 20, i = ?
+
+### Response:...",20,17,False,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+86
+
+### Instruction:
+r = 71, w = r, q = 0, c = 86, v = r, h = r, f = c, v = ?
+
+### Response:...",###,71,False,4
+Reasoning Primitive,var_assign_depth_1_code," q = n, q = ?
+
+### Response:
+29
+
+### Instruction:
+l = f, a = g, g = 26, f = 86, l = ?
+
+### Response:...",6,86,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+40
+
+### Instruction:
+g = w, k = 66, t = 62, q = w, w = 86, l = k, r = t, g = ?
+
+### Response:...",66,86,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+86
+
+### Instruction:
+c = 89, m = c, z = k, a = c, j = p, p = 31, k = 51, m = ?
+
+### Response:...",51,89,False,4
+Reasoning Primitive,var_assign_depth_1_code," h = ?
+
+### Response:
+47
+
+### Instruction:
+u = i, r = h, h = 25, i = 36, s = h, r = ?
+
+### Response:...",36,25,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+20
+
+### Instruction:
+k = i, i = 29, b = z, q = 27, t = q, z = 48, h = q, k = ?
+
+### Response:...",48,29,False,4
+Reasoning Primitive,var_assign_depth_1_code," f = c, v = ?
+
+### Response:
+71
+
+### Instruction:
+d = 13, a = o, l = o, o = 16, l = ?
+
+### Response:...",16,16,True,4
+Reasoning Primitive,var_assign_depth_1_code,"
+### Response:
+6
+
+### Instruction:
+h = 63, r = m, i = n, n = 99, y = n, m = 17, r = ?
+
+### Response:...",17,17,True,4
+Reasoning Primitive,var_assign_depth_1_code,"q = 47, v = ?
+
+### Response:
+47
+
+### Instruction:
+l = w, w = 29, e = 34, g = w, g = ?
+
+### Response:...",34,29,False,4
+Reasoning Primitive,var_assign_depth_1_code," w = 2, u = ?
+
+### Response:
+43
+
+### Instruction:
+a = g, h = 61, i = h, g = 21, a = ?
+
+### Response:...",21,21,True,4
+Reasoning Primitive,var_assign_depth_1_code,"g = 58, v = ?
+
+### Response:
+82
+
+### Instruction:
+a = k, t = k, n = 35, k = 39, t = ?
+
+### Response:...",42,39,False,4
+Reasoning Primitive,var_assign_depth_1_code,"g, h = 1, m = ?
+
+### Response:
+1
+
+### Instruction:
+r = 50, s = o, a = r, o = 5, a = ?
+
+### Response:...",1,50,False,4
+Reasoning Primitive,var_assign_depth_1_code,", v = ?
+
+### Response:
+71
+
+### Instruction:
+f = 0, b = f, e = f, t = f, k = 13, b = ?
+
+### Response:...",13,0,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+71
+
+### Instruction:
+t = 32, p = 77, v = 14, z = t, b = p, q = v, h = v, z = ?
+
+### Response:...",77,32,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+11
+
+### Instruction:
+u = x, w = h, h = 83, x = 91, k = s, s = 18, r = s, u = ?
+
+### Response:...",18,91,False,4
+Reasoning Primitive,var_assign_depth_1_code," l = s, p = ?
+
+### Response:
+72
+
+### Instruction:
+a = n, r = 12, e = n, n = 73, a = ?
+
+### Response:...",73,73,True,4
+Reasoning Primitive,var_assign_depth_1_code," z = ?
+
+### Response:
+86
+
+### Instruction:
+k = g, e = g, h = g, x = 94, g = 48, h = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_1_code," r = ?
+
+### Response:
+58
+
+### Instruction:
+i = 48, t = i, q = h, h = 92, n = h, n = ?
+
+### Response:...",92,92,True,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+17
+
+### Instruction:
+r = i, h = 48, e = 83, p = i, t = e, c = e, i = 58, r = ?
+
+### Response:...",58,58,True,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+42
+
+### Instruction:
+m = y, n = 43, h = 53, v = n, y = 67, f = y, v = ?
+
+### Response:...",67,43,False,4
+Reasoning Primitive,var_assign_depth_1_code,", m = ?
+
+### Response:
+73
+
+### Instruction:
+u = s, n = 6, p = n, s = 67, o = n, o = ?
+
+### Response:...",###,6,False,4
+Reasoning Primitive,var_assign_depth_1_code," f = c, v = ?
+
+### Response:
+71
+
+### Instruction:
+t = w, w = 96, n = w, v = 74, t = ?
+
+### Response:...",74,96,False,4
+Reasoning Primitive,var_assign_depth_1_code," u = ?
+
+### Response:
+47
+
+### Instruction:
+j = e, q = e, z = o, e = 12, o = 26, j = ?
+
+### Response:...",26,12,False,4
+Reasoning Primitive,var_assign_depth_1_code,"
+### Response:
+40
+
+### Instruction:
+g = y, w = 3, s = b, b = 17, y = 88, n = b, n = ?
+
+### Response:...",17,17,True,4
+Reasoning Primitive,var_assign_depth_1_code,", s = ?
+
+### Response:
+96
+
+### Instruction:
+o = 94, p = m, m = 6, q = o, z = o, q = ?
+
+### Response:...",6,94,False,4
+Reasoning Primitive,var_assign_depth_1_code," j = o, j = ?
+
+### Response:
+93
+
+### Instruction:
+t = n, y = 51, n = 80, j = y, j = ?
+
+### Response:...",80,51,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+78
+
+### Instruction:
+o = w, h = u, w = 11, e = 52, i = e, u = 30, o = ?
+
+### Response:...",30,11,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+47
+
+### Instruction:
+z = y, i = 84, v = 72, p = v, y = 91, c = y, p = ?
+
+### Response:...",91,72,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+67
+
+### Instruction:
+y = a, v = 36, r = j, a = 53, j = 53, w = j, r = ?
+
+### Response:...",67,53,False,4
+Reasoning Primitive,var_assign_depth_1_code,"o = 26, j = ?
+
+### Response:
+12
+
+### Instruction:
+n = s, i = 98, s = 86, z = s, z = ?
+
+### Response:...",6,86,False,4
+Reasoning Primitive,var_assign_depth_1_code,"8, w = 2, u = ?
+
+### Response:
+43
+
+### Instruction:
+g = 4, m = h, s = g, h = 1, m = ?
+
+### Response:...",1,1,True,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+67
+
+### Instruction:
+z = 56, e = 91, d = 18, k = e, y = z, q = d, y = ?
+
+### Response:...",18,56,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+57
+
+### Instruction:
+b = 88, s = o, w = v, y = o, m = v, v = 84, o = 78, y = ?
+
+### Response:...",89,78,False,4
+Reasoning Primitive,var_assign_depth_1_code,"g = 58, v = ?
+
+### Response:
+82
+
+### Instruction:
+q = 53, l = q, f = q, y = 97, l = ?
+
+### Response:...",97,53,False,4
+Reasoning Primitive,var_assign_depth_1_code,"i = 58, r = ?
+
+### Response:
+58
+
+### Instruction:
+u = p, w = n, p = 47, n = 19, u = ?
+
+### Response:...",19,47,False,4
+Reasoning Primitive,var_assign_depth_1_code,"n = 19, u = ?
+
+### Response:
+47
+
+### Instruction:
+q = e, e = 71, y = 77, z = e, z = ?
+
+### Response:...",77,71,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+13
+
+### Instruction:
+v = y, z = 74, y = 82, r = g, f = g, g = 58, v = ?
+
+### Response:...",58,82,False,4
+Reasoning Primitive,var_assign_depth_1_code,", y = ?
+
+### Response:
+56
+
+### Instruction:
+i = r, q = x, x = 7, z = x, r = 78, i = ?
+
+### Response:...",78,78,True,4
+Reasoning Primitive,var_assign_depth_1_code," g = ?
+
+### Response:
+67
+
+### Instruction:
+j = n, g = n, n = 29, t = 79, q = n, q = ?
+
+### Response:...",79,29,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+50
+
+### Instruction:
+g = 56, d = 80, r = 18, n = r, p = r, m = r, p = ?
+
+### Response:...",18,18,True,4
+Reasoning Primitive,var_assign_depth_1_code," u = ?
+
+### Response:
+45
+
+### Instruction:
+s = 36, w = 72, a = w, p = w, l = s, p = ?
+
+### Response:...",72,72,True,4
+Reasoning Primitive,var_assign_depth_1_code,"esponse:
+13
+
+### Instruction:
+a = k, w = x, e = s, s = 63, d = k, k = 2, x = 0, d = ?
+
+### Response:...",0,2,False,4
+Reasoning Primitive,var_assign_depth_1_code,"
+### Response:
+98
+
+### Instruction:
+x = t, n = 37, k = i, i = 49, a = n, t = 9, x = ?
+
+### Response:...",9,9,True,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+30
+
+### Instruction:
+n = 5, r = n, m = x, d = u, y = n, x = 24, u = 84, r = ?
+
+### Response:...",44,5,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+78
+
+### Instruction:
+y = p, l = c, c = 64, o = p, m = i, p = 44, i = 73, m = ?
+
+### Response:...",73,73,True,4
+Reasoning Primitive,var_assign_depth_1_code," z = ?
+
+### Response:
+32
+
+### Instruction:
+z = 73, t = z, y = 20, r = y, v = y, r = ?
+
+### Response:...",32,20,False,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+30
+
+### Instruction:
+n = 2, y = 45, i = n, q = k, u = y, k = 69, x = k, u = ?
+
+### Response:...",1,45,False,4
+Reasoning Primitive,var_assign_depth_1_code,"m = 17, r = ?
+
+### Response:
+17
+
+### Instruction:
+x = 68, o = 93, d = x, j = o, j = ?
+
+### Response:...",1,93,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+45
+
+### Instruction:
+f = 92, e = t, t = 98, r = t, s = 58, j = s, r = ?
+
+### Response:...",###,98,False,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+5
+
+### Instruction:
+e = r, p = z, d = r, k = 26, r = 28, z = 53, b = z, p = ?
+
+### Response:...",53,53,True,4
+Reasoning Primitive,var_assign_depth_1_code,"x = 82, c = ?
+
+### Response:
+51
+
+### Instruction:
+q = 57, y = b, n = q, b = 71, y = ?
+
+### Response:...",71,71,True,4
+Reasoning Primitive,var_assign_depth_1_code,"u = 22, s = ?
+
+### Response:
+22
+
+### Instruction:
+n = 56, p = n, q = m, m = 27, q = ?
+
+### Response:...",27,27,True,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+5
+
+### Instruction:
+m = x, f = s, s = 81, r = 51, c = r, t = s, x = 82, c = ?
+
+### Response:...",82,51,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+53
+
+### Instruction:
+w = o, n = m, c = 61, m = 40, r = m, o = 37, w = ?
+
+### Response:...",37,37,True,4
+Reasoning Primitive,var_assign_depth_1_code," h = q, k = ?
+
+### Response:
+29
+
+### Instruction:
+u = 68, g = 93, o = g, d = g, d = ?
+
+### Response:...",g,93,False,4
+Reasoning Primitive,var_assign_depth_1_code," r = ?
+
+### Response:
+58
+
+### Instruction:
+p = x, b = 21, a = b, n = x, x = 30, n = ?
+
+### Response:...",30,30,True,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+18
+
+### Instruction:
+z = o, j = t, o = 60, t = 4, h = e, e = 47, c = t, h = ?
+
+### Response:...",47,47,True,4
+Reasoning Primitive,var_assign_depth_1_code,"g = 21, a = ?
+
+### Response:
+21
+
+### Instruction:
+c = 42, e = 97, j = c, b = c, b = ?
+
+### Response:...",c,42,False,4
+Reasoning Primitive,var_assign_depth_1_code," r = ?
+
+### Response:
+98
+
+### Instruction:
+n = x, g = x, y = x, d = 58, x = 67, g = ?
+
+### Response:...",77,67,False,4
+Reasoning Primitive,var_assign_depth_1_code,"u = 22, s = ?
+
+### Response:
+22
+
+### Instruction:
+v = m, b = s, s = 87, m = 28, v = ?
+
+### Response:...",28,28,True,4
+Reasoning Primitive,var_assign_depth_1_code," l = ?
+
+### Response:
+53
+
+### Instruction:
+g = 69, c = x, j = g, x = 54, r = g, j = ?
+
+### Response:...",54,69,False,4
+Reasoning Primitive,var_assign_depth_1_code,"
+### Response:
+45
+
+### Instruction:
+n = s, y = s, m = 40, p = 2, a = m, s = 73, a = ?
+
+### Response:...",73,40,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+40
+
+### Instruction:
+z = 45, y = b, d = 57, g = d, t = z, b = 26, k = d, k = ?
+
+### Response:...",###,57,False,4
+Reasoning Primitive,var_assign_depth_1_code,"sponse:
+73
+
+### Instruction:
+a = r, r = 1, s = l, l = 82, o = 78, z = l, e = r, e = ?
+
+### Response:...",r,1,False,4
+Reasoning Primitive,var_assign_depth_1_code," v = ?
+
+### Response:
+47
+
+### Instruction:
+g = 43, o = r, q = g, r = 98, x = r, o = ?
+
+### Response:...",98,98,True,4
+Reasoning Primitive,var_assign_depth_1_code,"m = 35, b = ?
+
+### Response:
+77
+
+### Instruction:
+h = d, s = d, d = 63, z = 12, h = ?
+
+### Response:...",12,63,False,4
+Reasoning Primitive,var_assign_depth_1_code,"### Response:
+35
+
+### Instruction:
+n = 61, u = m, o = m, y = 19, r = y, m = 73, r = ?
+
+### Response:...",73,19,False,4
+Reasoning Primitive,var_assign_depth_1_code,"ponse:
+93
+
+### Instruction:
+o = b, w = 44, q = w, l = w, b = 65, j = b, m = 15, o = ?
+
+### Response:...",15,65,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+81
+
+### Instruction:
+Let h = 44, Let u = h, Let v = h, Let m = 37, Let y = h, u = ?
+
+### Response:...",37,44,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+21
+
+### Instruction:
+Let m = b, Let g = 88, Let b = 26, Let e = b, e = ?
+
+### Response:...",15,26,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+89
+
+### Instruction:
+Let x = 65, Let m = x, Let o = x, Let z = 75, o = ?
+
+### Response:...",75,65,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+82
+
+### Instruction:
+Let n = 85, Let y = a, Let a = 56, Let m = a, Let l = n, l = ?
+
+### Response:...",20,85,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let v = k, Let k = 66, Let r = k, Let p = m, Let m = 35, Let c = 58, p = ?
+
+### Response:...",58,35,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+37
+
+### Instruction:
+Let w = 84, Let e = w, Let t = 90, Let l = t, e = ?
+
+### Response:...",90,84,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+72
+
+### Instruction:
+Let r = 27, Let q = u, Let s = r, Let u = 12, Let y = u, s = ?
+
+### Response:...",12,27,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let h = p, Let z = v, Let u = j, Let v = 41, Let p = 81, Let j = 15, u = ?
+
+### Response:...",15,15,True,4
+Reasoning Primitive,var_assign_depth_1_math,":
+43
+
+### Instruction:
+Let s = k, Let a = 56, Let k = 55, Let x = k, Let p = k, p = ?
+
+### Response:...",1,55,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let k = 88, Let a = c, Let e = k, Let c = 69, Let h = 37, Let r = h, e = ?
+
+### Response:...",37,88,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let z = 25, Let r = p, Let k = 98, Let p = 28, Let g = p, Let s = z, r = ?
+
+### Response:...",1,28,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+39
+
+### Instruction:
+Let o = j, Let k = j, Let z = j, Let d = 61, Let j = 15, k = ?
+
+### Response:...",15,15,True,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+15
+
+### Instruction:
+Let x = s, Let s = 15, Let n = 58, Let l = s, l = ?
+
+### Response:...",58,15,False,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+32
+
+### Instruction:
+Let b = 4, Let r = l, Let l = 29, Let m = b, r = ?
+
+### Response:...",29,29,True,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+28
+
+### Instruction:
+Let p = 68, Let l = p, Let z = q, Let q = 70, z = ?
+
+### Response:...",70,70,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let a = t, Let e = t, Let b = l, Let g = 99, Let l = 39, Let t = 43, a = ?
+
+### Response:...",43,43,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let f = a, Let j = i, Let i = 51, Let a = 82, Let c = i, Let b = 31, f = ?
+
+### Response:...",31,82,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let o = q, Let g = u, Let q = 49, Let y = u, Let l = u, Let u = 97, Let x = 82, y = ?
+
+### Response:...",82,97,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+19
+
+### Instruction:
+Let w = y, Let y = 61, Let n = 85, Let j = y, Let l = n, j = ?
+
+### Response:...",19,61,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+98
+
+### Instruction:
+Let f = d, Let g = 32, Let k = g, Let d = 61, k = ?
+
+### Response:...",61,32,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let w = 32, Let b = c, Let r = w, Let c = 69, Let o = s, Let m = c, Let s = 47, o = ?
+
+### Response:...",47,47,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let a = m, Let z = 62, Let f = m, Let m = 82, Let h = m, Let g = 54, h = ?
+
+### Response:...",54,82,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let f = y, Let u = k, Let l = 51, Let y = 20, Let m = k, Let k = 91, Let q = k, f = ?
+
+### Response:...",91,20,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+43
+
+### Instruction:
+Let x = a, Let a = 45, Let y = a, Let o = 33, Let v = a, x = ?
+
+### Response:...",33,45,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+88
+
+### Instruction:
+Let j = 54, Let t = i, Let i = 61, Let b = i, Let m = i, m = ?
+
+### Response:...",1,61,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+72
+
+### Instruction:
+Let z = h, Let c = w, Let w = 59, Let h = 70, z = ?
+
+### Response:...",70,70,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let q = d, Let l = 65, Let m = l, Let d = 42, Let g = j, Let j = 90, q = ?
+
+### Response:...",90,42,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+72
+
+### Instruction:
+Let g = 12, Let i = g, Let r = 50, Let y = g, y = ?
+
+### Response:...",###,12,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+61
+
+### Instruction:
+Let a = v, Let v = 61, Let s = m, Let m = 47, a = ?
+
+### Response:...",47,61,False,4
+Reasoning Primitive,var_assign_depth_1_math,"e:
+36
+
+### Instruction:
+Let w = x, Let x = 21, Let h = z, Let z = 3, Let f = z, w = ?
+
+### Response:...",3,21,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let r = e, Let v = p, Let a = o, Let f = o, Let p = 81, Let e = 27, Let o = 73, v = ?
+
+### Response:...",73,81,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+79
+
+### Instruction:
+Let w = 46, Let x = 21, Let y = w, Let v = w, Let n = x, n = ?
+
+### Response:...",1,21,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let l = k, Let k = 80, Let i = m, Let j = 20, Let m = 97, Let b = j, Let h = j, h = ?
+
+### Response:...",97,20,False,4
+Reasoning Primitive,var_assign_depth_1_math,"nstruction:
+Let r = q, Let i = 94, Let c = q, Let q = 0, Let o = q, Let f = 68, r = ?
+
+### Response:...",68,0,False,4
+Reasoning Primitive,var_assign_depth_1_math,"e:
+1
+
+### Instruction:
+Let e = 39, Let u = e, Let m = e, Let s = p, Let p = 99, m = ?
+
+### Response:...",1,39,False,4
+Reasoning Primitive,var_assign_depth_1_math,"nstruction:
+Let a = 50, Let l = a, Let t = d, Let f = 9, Let o = d, Let d = 42, l = ?
+
+### Response:...",42,50,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+27
+
+### Instruction:
+Let y = f, Let o = 25, Let d = f, Let f = 71, y = ?
+
+### Response:...",71,71,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let f = 77, Let j = y, Let c = k, Let y = 15, Let k = 61, Let t = k, c = ?
+
+### Response:...",61,61,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let r = m, Let m = 21, Let e = v, Let v = 38, Let z = 59, Let f = z, e = ?
+
+### Response:...",59,38,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let e = 59, Let u = p, Let h = k, Let s = e, Let k = 90, Let p = 95, u = ?
+
+### Response:...",95,95,True,4
+Reasoning Primitive,var_assign_depth_1_math,"Let d = v, Let n = v, Let k = x, Let m = v, Let y = 31, Let x = 56, Let v = 69, d = ?
+
+### Response:...",69,69,True,4
+Reasoning Primitive,var_assign_depth_1_math,"
+Let z = l, Let y = l, Let m = 40, Let l = 5, Let a = 38, Let w = m, Let j = m, j = ?
+
+### Response:...",38,40,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let b = 37, Let s = b, Let w = 41, Let l = 26, Let x = l, Let t = b, s = ?
+
+### Response:...",26,37,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let i = 24, Let n = 43, Let j = n, Let r = f, Let f = 65, Let v = n, v = ?
+
+### Response:...",1,43,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+61
+
+### Instruction:
+Let x = 40, Let r = x, Let b = x, Let e = 41, r = ?
+
+### Response:...",41,40,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let y = h, Let h = 40, Let m = 65, Let f = 39, Let n = h, Let v = m, v = ?
+
+### Response:...",19,65,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let k = 57, Let z = 96, Let f = 54, Let c = f, Let q = k, Let t = z, q = ?
+
+### Response:...",54,57,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+13
+
+### Instruction:
+Let p = 51, Let a = 17, Let e = p, Let s = p, Let j = p, j = ?
+
+### Response:...",17,51,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let z = 14, Let i = z, Let h = 79, Let t = 45, Let p = t, Let l = t, p = ?
+
+### Response:...",55,45,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let i = f, Let f = 83, Let v = f, Let u = 15, Let r = 70, Let x = f, v = ?
+
+### Response:...",15,83,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+42
+
+### Instruction:
+Let s = o, Let o = 11, Let x = b, Let b = 82, Let g = o, x = ?
+
+### Response:...",12,82,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let c = 90, Let l = 83, Let e = n, Let h = c, Let b = n, Let z = l, Let n = 16, h = ?
+
+### Response:...",16,90,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+39
+
+### Instruction:
+Let x = j, Let j = 85, Let b = f, Let f = 32, Let o = f, o = ?
+
+### Response:...",32,32,True,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+53
+
+### Instruction:
+Let o = 28, Let g = 0, Let i = o, Let x = o, i = ?
+
+### Response:...",0,28,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+47
+
+### Instruction:
+Let l = m, Let g = 68, Let p = g, Let m = 63, Let u = m, u = ?
+
+### Response:...",63,63,True,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+1
+
+### Instruction:
+Let u = t, Let t = 53, Let y = 82, Let m = t, m = ?
+
+### Response:...",39,53,False,4
+Reasoning Primitive,var_assign_depth_1_math,"
+Let n = d, Let o = 49, Let u = 70, Let z = u, Let d = 7, Let m = o, Let l = o, z = ?
+
+### Response:...",0,70,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let k = 98, Let c = 44, Let r = c, Let f = c, Let q = k, Let j = 34, q = ?
+
+### Response:...",34,98,False,4
+Reasoning Primitive,var_assign_depth_1_math,"Let q = d, Let c = 42, Let b = s, Let w = s, Let d = 77, Let j = c, Let s = 61, b = ?
+
+### Response:...",61,61,True,4
+Reasoning Primitive,var_assign_depth_1_math,"nstruction:
+Let z = i, Let i = 15, Let l = 26, Let y = i, Let t = o, Let o = 9, y = ?
+
+### Response:...",9,15,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+13
+
+### Instruction:
+Let b = 89, Let y = z, Let n = z, Let z = 47, n = ?
+
+### Response:...",47,47,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let m = d, Let k = d, Let z = 93, Let a = i, Let d = 14, Let i = 94, k = ?
+
+### Response:...",94,14,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let u = b, Let w = 50, Let f = w, Let b = 82, Let g = 15, Let n = b, f = ?
+
+### Response:...",15,50,False,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+47
+
+### Instruction:
+Let q = 49, Let a = q, Let s = 8, Let c = s, c = ?
+
+### Response:...",8,8,True,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+21
+
+### Instruction:
+Let l = f, Let f = 33, Let k = 73, Let u = f, l = ?
+
+### Response:...",33,33,True,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+57
+
+### Instruction:
+Let o = w, Let m = 10, Let w = 6, Let p = w, p = ?
+
+### Response:...",6,6,True,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+84
+
+### Instruction:
+Let b = l, Let l = 79, Let f = 39, Let z = f, b = ?
+
+### Response:...",39,79,False,4
+Reasoning Primitive,var_assign_depth_1_math,"se:
+3
+
+### Instruction:
+Let x = t, Let t = 1, Let f = 58, Let q = f, Let u = f, u = ?
+
+### Response:...",58,58,True,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+40
+
+### Instruction:
+Let w = o, Let o = 44, Let s = 80, Let l = s, l = ?
+
+### Response:...",80,80,True,4
+Reasoning Primitive,var_assign_depth_1_math,":
+61
+
+### Instruction:
+Let w = b, Let n = 90, Let q = n, Let b = 88, Let v = n, q = ?
+
+### Response:...",88,90,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let z = m, Let k = 44, Let w = g, Let m = 39, Let t = k, Let g = 53, z = ?
+
+### Response:...",53,39,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let o = y, Let r = w, Let p = w, Let h = 74, Let w = 23, Let y = 44, r = ?
+
+### Response:...",44,23,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let a = v, Let t = v, Let o = l, Let w = 51, Let l = 11, Let v = 69, t = ?
+
+### Response:...",69,69,True,4
+Reasoning Primitive,var_assign_depth_1_math,":
+70
+
+### Instruction:
+Let s = z, Let j = 16, Let x = j, Let z = 42, Let p = z, x = ?
+
+### Response:...",22,16,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+Let w = z, Let j = q, Let x = z, Let p = z, Let z = 1, Let o = 74, Let q = 5, w = ?
+
+### Response:...",61,1,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let d = 37, Let i = 85, Let p = v, Let r = i, Let f = i, Let v = 58, f = ?
+
+### Response:...",58,85,False,4
+Reasoning Primitive,var_assign_depth_1_math,"nstruction:
+Let p = r, Let r = 72, Let b = 89, Let t = n, Let g = r, Let n = 6, g = ?
+
+### Response:...",6,72,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+40
+
+### Instruction:
+Let j = u, Let n = 72, Let x = n, Let u = 16, Let y = u, x = ?
+
+### Response:...",16,72,False,4
+Reasoning Primitive,var_assign_depth_1_math,"e:
+32
+
+### Instruction:
+Let s = f, Let r = y, Let b = f, Let f = 1, Let y = 72, s = ?
+
+### Response:...",72,1,False,4
+Reasoning Primitive,var_assign_depth_1_math,"
+Let z = 1, Let b = x, Let i = x, Let m = 23, Let a = x, Let k = z, Let x = 27, b = ?
+
+### Response:...",27,27,True,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+33
+
+### Instruction:
+Let i = h, Let h = 19, Let n = b, Let b = 9, i = ?
+
+### Response:...",19,19,True,4
+Reasoning Primitive,var_assign_depth_1_math,":
+49
+
+### Instruction:
+Let k = j, Let j = 55, Let a = 80, Let r = j, Let w = a, k = ?
+
+### Response:...",49,55,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let k = 56, Let q = 13, Let b = q, Let d = q, Let i = m, Let m = 54, d = ?
+
+### Response:...",54,13,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+89
+
+### Instruction:
+Let h = u, Let j = u, Let c = 57, Let u = 32, h = ?
+
+### Response:...",32,32,True,4
+Reasoning Primitive,var_assign_depth_1_math,":
+51
+
+### Instruction:
+Let a = h, Let p = g, Let f = g, Let h = 37, Let g = 12, a = ?
+
+### Response:...",22,37,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let w = 49, Let p = w, Let s = 66, Let z = f, Let f = 47, Let c = s, p = ?
+
+### Response:...",1,49,False,4
+Reasoning Primitive,var_assign_depth_1_math,"
+Let l = 7, Let d = u, Let y = l, Let n = l, Let r = l, Let k = 58, Let u = 95, d = ?
+
+### Response:...",58,95,False,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let z = 89, Let d = 16, Let v = d, Let q = 89, Let w = q, Let j = q, w = ?
+
+### Response:...",89,89,True,4
+Reasoning Primitive,var_assign_depth_1_math,"struction:
+Let f = 82, Let w = f, Let b = e, Let o = t, Let e = 74, Let t = 91, w = ?
+
+### Response:...",1,82,False,4
+Reasoning Primitive,var_assign_depth_1_math,"e:
+70
+
+### Instruction:
+Let s = t, Let w = z, Let z = 81, Let g = t, Let t = 2, w = ?
+
+### Response:...",2,81,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+65
+
+### Instruction:
+Let l = 55, Let r = y, Let c = y, Let y = 36, r = ?
+
+### Response:...",36,36,True,4
+Reasoning Primitive,var_assign_depth_1_math,"nstruction:
+Let i = g, Let x = b, Let k = 7, Let g = 52, Let p = g, Let b = 64, x = ?
+
+### Response:...",64,64,True,4
+Reasoning Primitive,var_assign_depth_1_math,"e:
+0
+
+### Instruction:
+Let e = s, Let i = x, Let y = x, Let x = 98, Let s = 42, y = ?
+
+### Response:...",42,98,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+15
+
+### Instruction:
+Let d = x, Let j = l, Let x = 37, Let l = 84, d = ?
+
+### Response:...",37,37,True,4
+Reasoning Primitive,var_assign_depth_1_math,"Let b = o, Let m = 59, Let o = 87, Let l = z, Let e = m, Let k = m, Let z = 17, e = ?
+
+### Response:...",17,59,False,4
+Reasoning Primitive,var_assign_depth_1_math,":
+61
+
+### Instruction:
+Let q = 84, Let w = q, Let l = 39, Let b = l, Let n = q, b = ?
+
+### Response:...",39,39,True,4
+Reasoning Primitive,var_assign_depth_1_math,"### Response:
+43
+
+### Instruction:
+Let b = 3, Let e = b, Let r = g, Let g = 81, e = ?
+
+### Response:...",81,3,False,4
+Reasoning Primitive,var_assign_depth_1_math,"## Response:
+82
+
+### Instruction:
+Let w = 54, Let c = a, Let k = a, Let a = 50, c = ?
+
+### Response:...",50,50,True,4
+Reasoning Primitive,var_assign_depth_1_math,"Let l = p, Let u = f, Let a = d, Let p = 94, Let d = 51, Let f = 72, Let o = f, u = ?
+
+### Response:...",72,72,True,4
+Reasoning Primitive,var_assign_depth_1_math,"Let t = 28, Let u = 80, Let b = 40, Let h = u, Let a = t, Let c = b, Let r = b, r = ?
+
+### Response:...",1,40,False,4
+Reasoning Primitive,var_assign_depth_1_equation," m, n = ?
+
+### Response:
+69
+
+### Instruction:
+g := i, f := i, i := 39, t := 90, g = ?
+
+### Response:...",90,39,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"= s, v = ?
+
+### Response:
+6
+
+### Instruction:
+g := e, e := 58, r := j, j := 54, r = ?
+
+### Response:...",54,54,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"16, j = ?
+
+### Response:
+16
+
+### Instruction:
+c := 48, m := 69, n := m, y := m, n = ?
+
+### Response:...",69,69,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"53, b = ?
+
+### Response:
+53
+
+### Instruction:
+l := g, n := 16, k := n, g := 56, k = ?
+
+### Response:...",66,16,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+90
+
+### Instruction:
+t := n, x := n, f := 90, s := n, n := 75, x = ?
+
+### Response:...",75,75,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"12, t = ?
+
+### Response:
+79
+
+### Instruction:
+c := h, f := 16, h := 91, w := f, c = ?
+
+### Response:...",91,91,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"45
+
+### Instruction:
+u := 79, r := 67, k := r, t := u, y := u, z := r, m := 12, t = ?
+
+### Response:...",12,79,False,4
+Reasoning Primitive,var_assign_depth_1_equation," e, o = ?
+
+### Response:
+93
+
+### Instruction:
+j := 76, i := j, q := 73, v := j, v = ?
+
+### Response:...",33,76,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+26
+
+### Instruction:
+v := f, i := f, a := 14, y := f, f := 74, v = ?
+
+### Response:...",48,74,False,4
+Reasoning Primitive,var_assign_depth_1_equation," 93, f = ?
+
+### Response:
+0
+
+### Instruction:
+i := q, g := 81, j := q, q := 58, i = ?
+
+### Response:...",0,58,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+93
+
+### Instruction:
+h := n, n := 33, a := n, g := 31, o := g, h = ?
+
+### Response:...",31,33,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+36
+
+### Instruction:
+x := f, g := 80, f := 18, y := g, l := o, o := 11, y = ?
+
+### Response:...",11,80,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"52
+
+### Instruction:
+k := w, a := i, c := 33, i := 50, f := w, w := 39, x := w, f = ?
+
+### Response:...",39,39,True,4
+Reasoning Primitive,var_assign_depth_1_equation,":= 0, r = ?
+
+### Response:
+0
+
+### Instruction:
+n := x, o := 7, l := o, x := 63, l = ?
+
+### Response:...",63,7,False,4
+Reasoning Primitive,var_assign_depth_1_equation," i, w = ?
+
+### Response:
+88
+
+### Instruction:
+c := 18, u := c, p := c, a := 45, p = ?
+
+### Response:...",45,18,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"75, x = ?
+
+### Response:
+75
+
+### Instruction:
+y := z, s := 85, z := 95, l := z, y = ?
+
+### Response:...",55,95,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+55
+
+### Instruction:
+x := 1, m := 29, b := m, d := h, c := x, z := x, h := 35, d = ?
+
+### Response:...",35,35,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+55
+
+### Instruction:
+v := 62, w := 5, z := y, e := w, y := 31, g := v, a := w, z = ?
+
+### Response:...",31,31,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+58
+
+### Instruction:
+k := s, a := s, r := s, s := 21, y := 32, a = ?
+
+### Response:...",21,21,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+3
+
+### Instruction:
+c := v, v := 47, k := 84, z := i, a := i, i := 38, a = ?
+
+### Response:...",38,38,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"= l, d = ?
+
+### Response:
+72
+
+### Instruction:
+r := 7, j := 45, p := r, h := j, h = ?
+
+### Response:...",72,45,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+24
+
+### Instruction:
+l := m, y := d, f := d, d := 0, e := 57, r := m, m := 93, f = ?
+
+### Response:...",93,0,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"44
+
+### Instruction:
+c := 80, p := 93, o := p, d := p, q := p, e := 53, z := e, o = ?
+
+### Response:...",53,93,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"21, x = ?
+
+### Response:
+58
+
+### Instruction:
+h := a, a := 87, i := 23, g := a, g = ?
+
+### Response:...",23,87,False,4
+Reasoning Primitive,var_assign_depth_1_equation,":= w, a = ?
+
+### Response:
+3
+
+### Instruction:
+f := a, p := 5, a := 87, v := a, v = ?
+
+### Response:...",7,87,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+55
+
+### Instruction:
+q := v, r := 91, v := 91, j := v, e := v, j = ?
+
+### Response:...",1,91,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+79
+
+### Instruction:
+s := b, b := 51, o := 1, l := 49, f := o, t := b, f = ?
+
+### Response:...",49,1,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"= e, h = ?
+
+### Response:
+0
+
+### Instruction:
+l := y, k := 12, m := k, y := 38, l = ?
+
+### Response:...",38,38,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"35, d = ?
+
+### Response:
+35
+
+### Instruction:
+i := 44, z := i, f := i, j := 79, f = ?
+
+### Response:...",79,44,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+76
+
+### Instruction:
+m := 38, k := p, x := c, c := 69, p := 87, u := m, u = ?
+
+### Response:...",77,38,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+26
+
+### Instruction:
+z := f, x := r, f := 49, o := r, r := 77, o = ?
+
+### Response:...",77,77,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+11
+
+### Instruction:
+j := r, e := 3, w := r, a := e, p := 41, r := 16, j = ?
+
+### Response:...",16,16,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+39
+
+### Instruction:
+e := d, d := 79, o := j, a := d, u := 0, t := d, j := 12, t = ?
+
+### Response:...",12,79,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"33, a = ?
+
+### Response:
+33
+
+### Instruction:
+c := 54, s := 83, t := c, f := c, f = ?
+
+### Response:...",33,54,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+33
+
+### Instruction:
+f := j, q := j, w := 63, a := j, z := 89, j := 3, e := w, a = ?
+
+### Response:...",3,3,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"= p, d = ?
+
+### Response:
+29
+
+### Instruction:
+i := 1, x := i, t := 53, z := i, z = ?
+
+### Response:...",3,1,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+67
+
+### Instruction:
+o := v, r := 47, g := r, v := 11, z := v, d := 48, o = ?
+
+### Response:...",48,11,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+55
+
+### Instruction:
+m := 54, k := z, a := z, z := 3, f := n, n := 91, g := m, g = ?
+
+### Response:...",91,54,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+67
+
+### Instruction:
+f := g, j := m, b := 65, t := b, g := 11, m := 58, t = ?
+
+### Response:...",58,65,False,4
+Reasoning Primitive,var_assign_depth_1_equation," ?
+
+### Response:
+29
+
+### Instruction:
+n := 1, m := n, g := k, k := 43, h := k, g = ?
+
+### Response:...",43,43,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"= w, r = ?
+
+### Response:
+62
+
+### Instruction:
+r := e, e := 46, b := 7, u := e, u = ?
+
+### Response:...",7,46,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"52
+
+### Instruction:
+m := 87, f := 46, k := p, z := p, q := f, o := f, p := 79, q = ?
+
+### Response:...",79,46,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+75
+
+### Instruction:
+n := 82, m := t, t := 46, l := n, x := t, x = ?
+
+### Response:...",6,46,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+7
+
+### Instruction:
+y := 47, s := z, h := z, z := 52, k := 47, u := k, s = ?
+
+### Response:...",7,52,False,4
+Reasoning Primitive,var_assign_depth_1_equation," 75, x = ?
+
+### Response:
+75
+
+### Instruction:
+n := 89, m := n, c := 3, x := c, x = ?
+
+### Response:...",3,3,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+26
+
+### Instruction:
+s := p, p := 14, d := w, w := 29, i := 20, x := p, d = ?
+
+### Response:...",20,29,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+0
+
+### Instruction:
+g := t, t := 13, s := 67, x := 48, z := x, k := t, z = ?
+
+### Response:...",48,48,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+43
+
+### Instruction:
+m := e, w := 53, c := e, e := 26, z := 4, a := e, c = ?
+
+### Response:...",4,26,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+44
+
+### Instruction:
+s := 16, q := 22, a := 6, v := a, o := q, p := s, v = ?
+
+### Response:...",16,6,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"84
+
+### Instruction:
+g := x, b := s, q := 83, s := 38, y := s, x := 74, r := x, r = ?
+
+### Response:...",74,74,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+50
+
+### Instruction:
+o := c, a := c, c := 34, e := s, s := 98, a = ?
+
+### Response:...",88,34,False,4
+Reasoning Primitive,var_assign_depth_1_equation," a, g = ?
+
+### Response:
+87
+
+### Instruction:
+f := 28, s := 76, d := s, l := s, d = ?
+
+### Response:...",28,76,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+39
+
+### Instruction:
+n := 98, g := e, l := e, s := 76, e := 94, u := e, u = ?
+
+### Response:...",94,94,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+84
+
+### Instruction:
+i := 18, o := 95, w := i, q := o, g := 81, f := i, w = ?
+
+### Response:...",81,18,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+98
+
+### Instruction:
+l := a, a := 84, j := w, c := a, w := 84, l = ?
+
+### Response:...",84,84,True,4
+Reasoning Primitive,var_assign_depth_1_equation," ?
+
+### Response:
+4
+
+### Instruction:
+w := t, x := 97, t := 75, a := x, p := x, w = ?
+
+### Response:...",###,75,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"16, j = ?
+
+### Response:
+16
+
+### Instruction:
+e := l, w := m, l := 16, m := 24, w = ?
+
+### Response:...",24,24,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+58
+
+### Instruction:
+d := 98, g := d, k := 99, h := k, y := d, y = ?
+
+### Response:...",99,98,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+24
+
+### Instruction:
+p := 26, y := p, k := p, q := p, s := 20, q = ?
+
+### Response:...",20,26,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"= w, z = ?
+
+### Response:
+31
+
+### Instruction:
+z := s, r := 8, s := 36, e := r, z = ?
+
+### Response:...",36,36,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"64
+
+### Instruction:
+f := n, q := n, b := i, n := 47, i := 17, u := 89, a := n, a = ?
+
+### Response:...",99,47,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+94
+
+### Instruction:
+h := e, m := e, e := 90, f := n, n := 18, h = ?
+
+### Response:...",18,90,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+79
+
+### Instruction:
+x := 81, r := x, s := 53, o := s, f := 69, m := f, r = ?
+
+### Response:...",79,81,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"53
+
+### Instruction:
+m := y, r := y, o := x, s := n, n := 86, x := 20, y := 82, s = ?
+
+### Response:...",20,86,False,4
+Reasoning Primitive,var_assign_depth_1_equation," m, l = ?
+
+### Response:
+50
+
+### Instruction:
+e := w, z := 96, d := w, w := 67, e = ?
+
+### Response:...",67,67,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"58, t = ?
+
+### Response:
+65
+
+### Instruction:
+p := 26, b := 15, i := p, y := p, i = ?
+
+### Response:...",15,26,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+0
+
+### Instruction:
+h := j, k := g, s := i, g := 92, j := 55, i := 27, x := g, h = ?
+
+### Response:...",27,55,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+87
+
+### Instruction:
+b := t, l := 72, t := 60, d := l, o := l, d = ?
+
+### Response:...",60,72,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+44
+
+### Instruction:
+m := 44, n := k, j := 89, u := j, y := m, k := 99, y = ?
+
+### Response:...",99,44,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+69
+
+### Instruction:
+n := 5, g := n, p := i, o := 20, i := 94, x := o, x = ?
+
+### Response:...",94,20,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+31
+
+### Instruction:
+l := 9, x := 46, j := 26, q := l, n := x, v := j, n = ?
+
+### Response:...",26,46,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+53
+
+### Instruction:
+o := 60, h := 36, w := h, v := o, k := 77, u := o, w = ?
+
+### Response:...",77,36,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+39
+
+### Instruction:
+f := o, x := o, j := o, r := 42, o := 47, x = ?
+
+### Response:...",42,47,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+0
+
+### Instruction:
+z := 28, i := w, b := 93, w := 62, j := w, r := w, r = ?
+
+### Response:...",62,62,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+53
+
+### Instruction:
+z := 51, u := z, p := a, m := a, j := 23, a := 94, p = ?
+
+### Response:...",94,94,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+31
+
+### Instruction:
+g := 88, x := i, p := 83, i := 73, w := g, m := i, w = ?
+
+### Response:...",73,88,False,4
+Reasoning Primitive,var_assign_depth_1_equation," 96, b = ?
+
+### Response:
+38
+
+### Instruction:
+h := 7, f := d, d := 84, t := d, f = ?
+
+### Response:...",84,84,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"26
+
+### Instruction:
+b := 59, p := 75, n := b, t := 42, c := t, w := b, o := b, c = ?
+
+### Response:...",26,42,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+46
+
+### Instruction:
+j := h, i := 58, b := i, h := 1, x := i, u := 21, x = ?
+
+### Response:...",21,58,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"31
+
+### Instruction:
+y := 47, z := x, w := 60, x := 71, j := w, q := x, p := y, j = ?
+
+### Response:...",71,60,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+67
+
+### Instruction:
+s := 27, v := 3, y := v, n := v, m := 86, x := s, x = ?
+
+### Response:...",67,27,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+58
+
+### Instruction:
+e := l, l := 20, f := 31, j := f, k := f, j = ?
+
+### Response:...",11,31,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"60
+
+### Instruction:
+y := 80, b := l, i := c, h := l, c := 78, t := y, l := 10, t = ?
+
+### Response:...",10,80,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"24, w = ?
+
+### Response:
+24
+
+### Instruction:
+s := 76, c := s, w := s, u := 56, c = ?
+
+### Response:...",66,76,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"10, t = ?
+
+### Response:
+80
+
+### Instruction:
+z := 70, b := d, j := d, d := 53, b = ?
+
+### Response:...",33,53,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+38
+
+### Instruction:
+g := 93, z := g, o := s, s := 68, q := s, z = ?
+
+### Response:...",68,93,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"32, a = ?
+
+### Response:
+21
+
+### Instruction:
+l := 14, e := l, g := 18, f := l, e = ?
+
+### Response:...",18,14,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"= p, i = ?
+
+### Response:
+26
+
+### Instruction:
+a := o, m := 7, u := o, o := 33, a = ?
+
+### Response:...",33,33,True,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+64
+
+### Instruction:
+r := j, w := e, a := e, e := 83, f := 97, l := e, j := 0, r = ?
+
+### Response:...",0,0,True,4
+Reasoning Primitive,var_assign_depth_1_equation," m, l = ?
+
+### Response:
+50
+
+### Instruction:
+w := 96, r := m, m := 92, t := w, r = ?
+
+### Response:...",22,92,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"Response:
+93
+
+### Instruction:
+h := x, r := x, y := 2, x := 4, q := c, c := 51, h = ?
+
+### Response:...",51,4,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"
+44
+
+### Instruction:
+h := 1, m := r, r := 33, k := 39, c := r, j := k, d := r, j = ?
+
+### Response:...",33,39,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+44
+
+### Instruction:
+q := 60, r := z, b := m, m := 69, x := q, z := 12, b = ?
+
+### Response:...",12,69,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+64
+
+### Instruction:
+g := x, f := x, b := y, x := 6, y := 38, h := 96, b = ?
+
+### Response:...",64,38,False,4
+Reasoning Primitive,var_assign_depth_1_equation," ?
+
+### Response:
+33
+
+### Instruction:
+p := 20, e := 0, j := e, x := e, h := e, h = ?
+
+### Response:...",20,0,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+50
+
+### Instruction:
+z := i, w := i, p := t, i := 25, k := 91, t := 50, z = ?
+
+### Response:...",50,25,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"esponse:
+0
+
+### Instruction:
+b := 62, m := z, v := 46, z := 28, n := v, q := b, q = ?
+
+### Response:...",28,62,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"20, q = ?
+
+### Response:
+26
+
+### Instruction:
+p := 50, l := p, m := 35, r := m, l = ?
+
+### Response:...",35,50,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"sponse:
+26
+
+### Instruction:
+s := n, r := 48, m := r, n := 64, u := 45, k := n, k = ?
+
+### Response:...",45,64,False,4
+Reasoning Primitive,var_assign_depth_1_equation,"?
+
+### Response:
+26
+
+### Instruction:
+p := 25, b := g, f := g, i := p, g := 55, i = ?
+
+### Response:...",6,25,False,4

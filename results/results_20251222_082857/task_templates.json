@@ -1,0 +1,47 @@
+{
+  "n_ary": {
+    "system": "You solve ADDITION by adding numbers one at a time.\n\nCONCRETE EXAMPLES:\nEXAMPLE 1: (DO NOT COPY)\nInput: Add 2 numbers: 807 + 696\nStep 1: 0 + 807 = 807\nStep 2: 807 + 696 = 1503\n[FINAL] 1503 [END]\n\nEXAMPLE 2: (DO NOT COPY)\nInput: Add 4 numbers: 50 + 25 + 10 + 5\nStep 1: 0 + 50 = 50\nStep 2: 50 + 25 = 75\nStep 3: 75 + 10 = 85\nStep 4: 85 + 5 = 90\n[FINAL] 90 [END]\n\nRULES:\n✓ Count input numbers → Show EXACTLY that many steps\n✓ Start with 0, add one number per step\n✓ Use ONLY numbers from input (no inventing)\n✓ After final step: [FINAL] {answer} [END]\n✓ STOP at [END]\n\n✗ NO extra steps after all input numbers used\n✗ NO inventing numbers or patterns\n✗ NO code/explanations after [END]\n",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  },
+  "p_hop": {
+    "system": "You solve SEQUENCE HOPPING: follow a sequence forward N steps.\n\nCONCRETE EXAMPLES:\nEXAMPLE 1: (DO NOT COPY)\nInput: Sequence: A B C D E | Start: A | Hops: 3\nHop 1: At A → Next is B\nHop 2: At B → Next is C\nHop 3: At C → Next is D\n[FINAL] D [END]\n\nEXAMPLE 2: (DO NOT COPY)\nInput: Sequence: C A D B A C | Start: C | Hops: 4\nHop 1: At C → Next is A\nHop 2: At A → Next is D\nHop 3: At D → Next is B\nHop 4: At B → Next is A\n[FINAL] A [END]\n\nInput: Sequence: D D A B C | Start: D | Hops: 2\nHop 1: At D → Next is D\nHop 2: At D → Next is A\n[FINAL] A [END]\n\nRULES:\n✓ Show EVERY hop (N hops = N lines)\n✓ Each hop moves one position forward\n✓ Use ONLY tokens from input sequence\n✓ After final hop: [FINAL] {token} [END]\n✓ STOP at [END]\n\n✗ NO skipping hops\n✗ NO inventing tokens\n✗ NO jumping to [FINAL] without showing hops\n✗ NO code/explanations after [END]\n",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  },
+  "igsm": {
+    "system": "You solve MODULAR ARITHMETIC (mod 7): evaluate assignments, apply mod 7.\nValid results: 0-6 only.\n\nMOD 7 QUICK REFERENCE:\n5 mod 7 = 5 | 8 mod 7 = 1 | 14 mod 7 = 0 | 20 mod 7 = 6\n\nCONCRETE EXAMPLES:\nEXAMPLE 1: (DO NOT COPY)\nInput: A := 5 | B := A + 3 | Query: B\nStep 1: A = 5 (mod 7) = 5\nStep 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1\n[FINAL] 1 [END]\n\nEXAMPLE 2: (DO NOT COPY)\nInput: X := 10 | Y := 4 | Z := X + Y | Query: Z\nStep 1: X = 10 (mod 7) = 3\nStep 2: Y = 4 (mod 7) = 4\nStep 3: Z = X + Y = 3 + 4 = 7 (mod 7) = 0\n[FINAL] 0 [END]\n\nEXAMPLE 3: (DO NOT COPY)\nInput: P := 8 | Q := P | R := Q + P | Query: R\nStep 1: P = 8 (mod 7) = 1\nStep 2: Q = P = 1 (mod 7) = 1\nStep 3: R = Q + P = 1 + 1 = 2 (mod 7) = 2\n[FINAL] 2 [END]\n\nRULES:\n✓ Process every assignment in order\n✓ Substitute variable values immediately\n✓ Show calculation before applying mod 7\n✓ Final answer must be 0-6\n✓ After query variable: [FINAL] {answer} [END]\n✓ STOP at [END]\n\n✗ NO skipping assignments\n✗ NO results outside 0-6\n✗ NO continuing after query found\n✗ NO code/explanations after [END]\n",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  }
+}

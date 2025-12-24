@@ -1,0 +1,62 @@
+{
+  "MODEL": {
+    "path": "ByteDance/Ouro-1.4B-Thinking",
+    "dtype": "torch.bfloat16",
+    "use_4bit_quant": false,
+    "use_torch_compile": true
+  },
+  "INFERENCE_STEPS": [
+    4
+  ],
+  "EVAL_SETTINGS": {
+    "calculate_perplexity": true,
+    "early_exit_threshold": 1.0,
+    "ppl_num_samples": 50,
+    "ppl_max_length": 2048,
+    "ppl_stride": 512
+  },
+  "WANDB": {
+    "enabled": true,
+    "project": "ouro-1.4b-thinking",
+    "run_name": "",
+    "entity": null,
+    "mode": "online"
+  },
+  "DATA": {
+    "load_existing": false,
+    "data_file_path": "",
+    "n_ary": {
+      "ops_levels": [
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "num_samples_per_level": 0
+    },
+    "p_hop": {
+      "hop_levels": [
+        16,
+        24,
+        32
+      ],
+      "num_samples_per_level": 0
+    },
+    "igsm": {
+      "num_samples_total": 0
+    }
+  },
+  "OPTIMIZATION": {
+    "enable_batch": true,
+    "max_batch_size": 12,
+    "max_new_tokens": 512
+  },
+  "reasoning_primitives": {
+    "num_samples": 100,
+    "template_format": "chat"
+  },
+  "ENABLE_HEAVY_BENCHMARKS": false,
+  "PERIODIC_SAVE_INTERVAL": 300,
+  "eval_batch_size": 4
+}

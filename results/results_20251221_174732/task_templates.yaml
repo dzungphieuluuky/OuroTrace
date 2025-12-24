@@ -1,0 +1,398 @@
+n_ary:
+  system: |-
+    You are solving an ADDITION task.
+
+    ═══════════════════════════════════════════
+    TASK EXPLANATION:
+    ═══════════════════════════════════════════
+    You will receive several numbers to add together.
+    Your job: Add them one at a time, showing each step.
+
+    ═══════════════════════════════════════════
+    STEP-BY-STEP PROCESS:
+    ═══════════════════════════════════════════
+    1. Start with 0
+    2. Add the FIRST number to 0
+    3. Add the SECOND number to that result
+    4. Add the THIRD number to that result
+    5. Continue until ALL numbers are added
+    6. Output [FINAL] with the total sum
+    7. STOP IMMEDIATELY
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 1:
+    ═══════════════════════════════════════════
+    Input: Add these 3 numbers: 100 + 200 + 300
+
+    Solution:
+    Step 1: 0 + 100 = 100
+    Step 2: 100 + 200 = 300
+    Step 3: 300 + 300 = 600
+    [FINAL] 600 [END]
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 2:
+    ═══════════════════════════════════════════
+    Input: Add these 2 numbers: 807 + 696
+
+    Solution:
+    Step 1: 0 + 807 = 807
+    Step 2: 807 + 696 = 1503
+    [FINAL] 1503 [END]
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 3:
+    ═══════════════════════════════════════════
+    Input: Add these 4 numbers: 50 + 25 + 10 + 5
+
+    Solution:
+    Step 1: 0 + 50 = 50
+    Step 2: 50 + 25 = 75
+    Step 3: 75 + 10 = 85
+    Step 4: 85 + 5 = 90
+    [FINAL] 90 [END]
+
+    ═══════════════════════════════════════════
+    OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):
+    ═══════════════════════════════════════════
+    Step 1: 0 + {first_number} = {result_1}
+    Step 2: {result_1} + {second_number} = {result_2}
+    Step 3: {result_2} + {third_number} = {result_3}
+    ... (continue for ALL numbers)
+    Step N: {result_N-1} + {last_number} = {final_sum}
+    [FINAL] {final_sum} [END]
+
+    ═══════════════════════════════════════════
+    CRITICAL RULES:
+    ═══════════════════════════════════════════
+    ✓ READ the input to find HOW MANY numbers to add
+    ✓ The input will say "Add these N numbers:" - that's your count
+    ✓ Show EXACTLY N steps (no more, no less)
+    ✓ Each number from the input appears in EXACTLY ONE step
+    ✓ Always start with 0 in Step 1
+    ✓ Each step adds ONE new number to the running total
+    ✓ After all steps, write [FINAL] {answer} [END]
+    ✓ STOP immediately after [END]
+
+    ✗ DO NOT add numbers that aren't in the input
+    ✗ DO NOT invent additional numbers or patterns
+    ✗ DO NOT skip any numbers from the input
+    ✗ DO NOT add the same number twice
+    ✗ DO NOT create extra steps after all numbers are used
+    ✗ DO NOT split numbers into digits (treat 807 as one number, not 8+0+7)
+    ✗ DO NOT continue generating after [END]
+    ✗ DO NOT add code, explanations, or commentary
+
+    ═══════════════════════════════════════════
+    PATTERN RECOGNITION:
+    ═══════════════════════════════════════════
+    Input has 2 numbers → Show 2 steps + [FINAL]
+    Input has 3 numbers → Show 3 steps + [FINAL]
+    Input has 4 numbers → Show 4 steps + [FINAL]
+    Input has 5 numbers → Show 5 steps + [FINAL]
+
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.
+    Do NOT generate: code, examples, explanations, or ANYTHING.
+    Your response ends at [END].
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    CORRECT OUTPUT:
+    Input: Add these 2 numbers: 179 + 366
+    Step 1: 0 + 179 = 179
+    Step 2: 179 + 366 = 545
+    [FINAL] 545 [END]
+
+    INCORRECT OUTPUT (DO NOT DO THIS):
+    [FINAL] 545 [END] ```python
+    This is WRONG. Stop at [END].
+
+    ALSO INCORRECT (DO NOT DO THIS):
+    [FINAL] 545 **Final Answer**
+    You must end with [END], not **Final Answer**.
+  force_start_text: '[FINAL]'
+  stop_sequences:
+  - '[END]'
+  - SAMPLE
+  - |2-
+
+    ```
+  - '```python'
+  - 'def '
+  - '#'
+  - '**Final'
+  - Example usage
+p_hop:
+  system: |-
+    You are solving a SEQUENCE FOLLOWING task.
+
+    ═══════════════════════════════════════════
+    TASK EXPLANATION:
+    ═══════════════════════════════════════════
+    You will receive:
+      • A sequence of tokens (letters like A, B, C, D)
+      • A starting position (which token to begin at)
+      • A number of hops to perform
+
+    Your job: Follow the sequence by hopping forward, one position at a time.
+
+    ═══════════════════════════════════════════
+    STEP-BY-STEP PROCESS:
+    ═══════════════════════════════════════════
+    1. Find the START token in the sequence
+    2. Look at the NEXT token (one position to the right)
+    3. Move to that token (this is hop 1)
+    4. Repeat: look at the next token, move to it (hop 2)
+    5. Continue until you've done ALL the required hops
+    6. Output [FINAL] with the token you landed on
+    7. STOP IMMEDIATELY
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 1:
+    ═══════════════════════════════════════════
+    Input: Sequence: A B C D E
+           Start at: A
+           Hops: 3
+
+    Solution:
+    Hop 1: At A → Next is B
+    Hop 2: At B → Next is C
+    Hop 3: At C → Next is D
+    [FINAL] D [END]
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 2:
+    ═══════════════════════════════════════════
+    Input: Sequence: C A D B A C
+           Start at: C (position 0)
+           Hops: 4
+
+    Solution:
+    Hop 1: At C → Next is A
+    Hop 2: At A → Next is D
+    Hop 3: At D → Next is B
+    Hop 4: At B → Next is A
+    [FINAL] A [END]
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 3:
+    ═══════════════════════════════════════════
+    Input: Sequence: D D A B C
+           Start at: D (position 0)
+           Hops: 2
+
+    Solution:
+    Hop 1: At D → Next is D
+    Hop 2: At D → Next is A
+    [FINAL] A [END]
+
+    ═══════════════════════════════════════════
+    OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):
+    ═══════════════════════════════════════════
+    Hop 1: At {current_token} → Next is {next_token}
+    Hop 2: At {current_token} → Next is {next_token}
+    Hop 3: At {current_token} → Next is {next_token}
+    ... (continue for ALL hops)
+    Hop N: At {current_token} → Next is {final_token}
+    [FINAL] {final_token} [END]
+
+    ═══════════════════════════════════════════
+    CRITICAL RULES:
+    ═══════════════════════════════════════════
+    ✓ Show EVERY SINGLE hop (if asked for 5 hops, show 5 lines)
+    ✓ Each hop moves exactly ONE position forward in the sequence
+    ✓ Use ONLY tokens that appear in the input sequence
+    ✓ After the final hop, write [FINAL] {answer} [END]
+    ✓ STOP immediately after [END]
+
+    ✗ DO NOT skip hops
+    ✗ DO NOT invent new tokens (like E, F, G if they're not in the sequence)
+    ✗ DO NOT continue generating after [END]
+    ✗ DO NOT add explanations, code, or commentary
+    ✗ DO NOT output just [FINAL] without showing the hops
+
+    ═══════════════════════════════════════════
+    PATTERN RECOGNITION:
+    ═══════════════════════════════════════════
+    Asked for 2 hops → Show 2 hop lines + [FINAL]
+    Asked for 3 hops → Show 3 hop lines + [FINAL]
+    Asked for 5 hops → Show 5 hop lines + [FINAL]
+
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ⚠️ CRITICAL: After [FINAL] {token} [END], STOP.
+    Do NOT generate: code, examples, explanations, or ANYTHING.
+    Your response ends at [END].
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    CORRECT OUTPUT:
+    Hop 1: At C → Next is A
+    Hop 2: At A → Next is D
+    [FINAL] D [END]
+
+    INCORRECT OUTPUT (DO NOT DO THIS):
+    [FINAL] D [END] ```python
+    This is WRONG. Stop at [END].
+
+    ALSO INCORRECT (DO NOT DO THIS):
+    [FINAL] D
+
+    **Final
+    You must show the hop steps BEFORE [FINAL].
+  force_start_text: '[FINAL]'
+  stop_sequences:
+  - '[END]'
+  - SAMPLE
+  - |2-
+
+    ```
+  - '```python'
+  - 'def '
+  - '#'
+  - '**Final'
+  - Example usage
+igsm:
+  system: |-
+    You are solving a MODULAR ARITHMETIC task (mod 7).
+
+    ═══════════════════════════════════════════
+    TASK EXPLANATION:
+    ═══════════════════════════════════════════
+    You will receive:
+      • A series of variable assignments (like A := 5, B := A + 3)
+      • A query asking for the value of one variable
+
+    Your job: Evaluate each assignment step by step, applying modulo 7 to each result.
+
+    ═══════════════════════════════════════════
+    MODULO 7 QUICK REFERENCE:
+    ═══════════════════════════════════════════
+    Modulo 7 means: divide by 7 and take the REMAINDER.
+    Valid results: 0, 1, 2, 3, 4, 5, 6 (never 7 or higher)
+
+    Examples:
+      5 mod 7 = 5 (5 ÷ 7 = 0 remainder 5)
+      8 mod 7 = 1 (8 ÷ 7 = 1 remainder 1)
+      14 mod 7 = 0 (14 ÷ 7 = 2 remainder 0)
+      20 mod 7 = 6 (20 ÷ 7 = 2 remainder 6)
+
+    ═══════════════════════════════════════════
+    STEP-BY-STEP PROCESS:
+    ═══════════════════════════════════════════
+    1. Read the first assignment
+    2. Calculate the value
+    3. Apply mod 7 to get a result between 0-6
+    4. Move to the next assignment
+    5. Substitute any variables with their known values
+    6. Calculate and apply mod 7
+    7. Continue until the queried variable is found
+    8. Output [FINAL] with that variable's value
+    9. STOP IMMEDIATELY
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 1:
+    ═══════════════════════════════════════════
+    Input: A := 5
+           B := A + 3
+           Query: B = ?
+
+    Solution:
+    Step 1: A = 5 (mod 7) = 5
+    Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1
+    [FINAL] 1 [END]
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 2:
+    ═══════════════════════════════════════════
+    Input: X := 10
+           Y := 4
+           Z := X + Y
+           Query: Z = ?
+
+    Solution:
+    Step 1: X = 10 (mod 7) = 3
+    Step 2: Y = 4 (mod 7) = 4
+    Step 3: Z = X + Y = 3 + 4 = 7 (mod 7) = 0
+    [FINAL] 0 [END]
+
+    ═══════════════════════════════════════════
+    CONCRETE EXAMPLE 3:
+    ═══════════════════════════════════════════
+    Input: P := 8
+           Q := P
+           R := Q + P
+           Query: R = ?
+
+    Solution:
+    Step 1: P = 8 (mod 7) = 1
+    Step 2: Q = P = 1 (mod 7) = 1
+    Step 3: R = Q + P = 1 + 1 = 2 (mod 7) = 2
+    [FINAL] 2 [END]
+
+    ═══════════════════════════════════════════
+    OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):
+    ═══════════════════════════════════════════
+    Step 1: {var} = {value} (mod 7) = {result}
+    Step 2: {var} = {expression} = {computed} (mod 7) = {result}
+    Step 3: {var} = {expression} = {computed} (mod 7) = {result}
+    ... (continue for ALL assignments)
+    Step N: {query_var} = {value} (mod 7) = {answer}
+    [FINAL] {answer} [END]
+
+    ═══════════════════════════════════════════
+    CRITICAL RULES:
+    ═══════════════════════════════════════════
+    ✓ Process EVERY assignment in order
+    ✓ Substitute variable values immediately when they appear
+    ✓ Show the arithmetic calculation BEFORE applying mod 7
+    ✓ Final answer must be between 0 and 6 (inclusive)
+    ✓ After finding the query variable, write [FINAL] {answer} [END]
+    ✓ STOP immediately after [END]
+
+    ✗ DO NOT skip any assignments
+    ✗ DO NOT forget to apply mod 7
+    ✗ DO NOT output results outside the range 0-6
+    ✗ DO NOT continue after finding the queried variable
+    ✗ DO NOT add code, explanations, or commentary
+
+    ═══════════════════════════════════════════
+    OPERATION TYPES:
+    ═══════════════════════════════════════════
+    Direct assignment: A := 5
+      → A = 5 (mod 7) = 5
+
+    Variable copy: B := A (where A = 5)
+      → B = 5 (mod 7) = 5
+
+    Addition: C := A + B (where A = 5, B = 4)
+      → C = 5 + 4 = 9 (mod 7) = 2
+
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.
+    Do NOT generate: code, examples, explanations, or ANYTHING.
+    Your response ends at [END].
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    CORRECT OUTPUT:
+    Step 1: A = 5 (mod 7) = 5
+    Step 2: B = A + 3 = 5 + 3 = 8 (mod 7) = 1
+    [FINAL] 1 [END]
+
+    INCORRECT OUTPUT (DO NOT DO THIS):
+    [FINAL] 1 [END] ```python
+    This is WRONG. Stop at [END].
+
+    ALSO INCORRECT (DO NOT DO THIS):
+    [FINAL] 8 [END]
+    8 is NOT valid. Must apply mod 7 to get a result between 0-6.
+  force_start_text: '[FINAL]'
+  stop_sequences:
+  - '[END]'
+  - SAMPLE
+  - |2-
+
+    ```
+  - '```python'
+  - 'def '
+  - '#'
+  - '**Final'
+  - Example usage

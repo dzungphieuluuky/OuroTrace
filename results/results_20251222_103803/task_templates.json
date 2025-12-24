@@ -1,0 +1,50 @@
+{
+  "n_ary": {
+    "system": "You are solving an ADDITION task.\n\nTASK EXPLANATION:\nYou will receive several numbers to add together.\nYour job: Add them one at a time, but you must NOT reveal any intermediate steps.\n\nSTEP-BY-STEP PROCESS:\n1. Look at the input and COUNT the numbers (separated by +).\n2. Write that count down (this is N).\n3. Start with 0.\n4. Add the FIRST number to 0.\n5. Add the SECOND number to that result.\n6. Add the THIRD number to that result.\n7. Continue ONLY until you've used all N numbers.\n8. As soon as all numbers are used, output [FINAL] with the sum.\n9. STOP IMMEDIATELY – do not add any more numbers.\n\n⚠️ CRITICAL: The input contains ONLY the numbers shown.\nDo NOT invent additional numbers.\nDo NOT continue patterns.\nDo NOT add numbers that aren't explicitly in the input.\n\nCONCRETE EXAMPLE 1:\nInput: Add these 3 numbers: 100 + 200 + 300\n\nSolution:\n[FINAL] 600 [END]\n\nCONCRETE EXAMPLE 2:\nInput: Add these 2 numbers: 807 + 696\n\nSolution:\n[FINAL] 1503 [END]\n\nCONCRETE EXAMPLE 3:\nInput: Add these 4 numbers: 50 + 25 + 10 + 5\n\nSolution:\n[FINAL] 90 [END]\n\nOUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n[FINAL] {final_sum} [END]\n\nCRITICAL RULES:\n✓ Read the input to find HOW MANY numbers to add.\n✓ Show ONLY the final answer – no intermediate steps.\n✓ Each number from the input appears exactly once in the calculation.\n✓ Start with 0 in Step 1.\n✓ Each step adds ONE new number to the running total (but steps are hidden).\n✓ After all steps, write [FINAL] {answer} [END].\n✓ STOP immediately after [END].\n\n✗ DO NOT add numbers that aren't in the input.\n✗ DO NOT invent additional numbers or patterns.\n✗ DO NOT skip any numbers from the input.\n✗ DO NOT add the same number twice.\n✗ DO NOT create extra steps after all numbers are used.\n✗ DO NOT split numbers into digits (treat 807 as one number, not 8+0+7).\n✗ DO NOT continue generating after [END].\n✗ DO NOT add code, explanations, or commentary.\n\nPATTERN RECOGNITION:\nInput has 2 numbers → Show 2 steps + [FINAL] (but steps are hidden).\nInput has 3 numbers → Show 3 steps + [FINAL] (but steps are hidden).\nInput has 4 numbers → Show 4 steps + [FINAL] (but steps are hidden).\nInput has 5 numbers → Show 5 steps + [FINAL] (but steps are hidden).\n\n⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\nDo NOT generate: code, examples, explanations, or ANYTHING.\nYour response ends at [END].\n\nCORRECT OUTPUT:\nInput: Add these 2 numbers: 179 + 366\n[FINAL] 545 [END]\n\nINCORRECT OUTPUT (DO NOT DO THIS):\n[FINAL] 545 [END] ```python\nThis is WRONG. Stop at [END].\n\nALSO INCORRECT (DO NOT DO THIS):\n[FINAL] 545 **Final Answer**\nYou must end with [END], not **Final Answer**.",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "\n\n",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  },
+  "p_hop": {
+    "system": "You are solving a SEQUENCE FOLLOWING task.\n\nTASK EXPLANATION:\nYou will receive a sequence of tokens, a starting token, and a number of hops.\nYour job: Follow the sequence by hopping forward, but you must NOT reveal any hop steps.\n\nSTEP-BY-STEP PROCESS:\n1. Find the START token in the sequence.\n2. Look at the NEXT token (one position to the right).\n3. Move to that token (this is hop 1).\n4. Repeat until you've done ALL the required hops.\n5. Output [FINAL] with the token you landed on.\n6. STOP IMMEDIATELY – do not provide hop details.\n\nCONCRETE EXAMPLE 1:\nInput: Sequence: A B C D E\n       Start at: A\n       Hops: 3\n\nSolution:\n[FINAL] D [END]\n\nCONCRETE EXAMPLE 2:\nInput: Sequence: C A D B A C\n       Start at: C (position 0)\n       Hops: 4\n\nSolution:\n[FINAL] A [END]\n\nCONCRETE EXAMPLE 3:\nInput: Sequence: D D A B C\n       Start at: D (position 0)\n       Hops: 2\n\nSolution:\n[FINAL] A [END]\n\nOUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n[FINAL] {final_token} [END]\n\nCRITICAL RULES:\n✓ Read the input to find the starting token and hop count.\n✓ Show ONLY the final token – no hop steps.\n✓ Each hop moves exactly ONE position forward in the sequence.\n✓ Use ONLY tokens that appear in the input sequence.\n✓ After the final hop, write [FINAL] {answer} [END].\n✓ STOP immediately after [END].\n\n✗ DO NOT skip hops.\n✗ DO NOT invent new tokens.\n✗ DO NOT continue generating after [END].\n✗ DO NOT add code, explanations, or commentary.\n✗ DO NOT output just [FINAL] without showing hops.\n\nPATTERN RECOGNITION:\nAsked for 2 hops → Show 2 hop lines + [FINAL] (but hops are hidden).\nAsked for 3 hops → Show 3 hop lines + [FINAL] (but hops are hidden).\nAsked for 5 hops → Show 5 hop lines + [FINAL] (but hops are hidden).\n\n⚠️ CRITICAL: After [FINAL] {token} [END], STOP.\nDo NOT generate: code, examples, explanations, or ANYTHING.\nYour response ends at [END].\n\nCORRECT OUTPUT:\nHop 1: At C → Next is A\nHop 2: At A → Next is D\n[FINAL] D [END]\n\nINCORRECT OUTPUT (DO NOT DO THIS):\n[FINAL] D [END] ```python\nThis is WRONG. Stop at [END].\n\nALSO INCORRECT (DO NOT DO THIS):\n[FINAL] D\n\n**Final\nYou must show the hop steps BEFORE [FINAL].",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "\n\n",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  },
+  "igsm": {
+    "system": "You are solving a MODULAR ARITHMETIC task (mod 7).\n\nTASK EXPLANATION:\nYou will receive a series of variable assignments and a query for one variable.\nYour job: Evaluate each assignment step by step, but you must NOT reveal any intermediate calculations.\n\nMODULO 7 QUICK REFERENCE:\nModulo 7 means: divide by 7 and take the REMAINDER.\nValid results: 0, 1, 2, 3, 4, 5, 6 (never 7 or higher).\n\nCONCRETE EXAMPLE 1:\nInput: A := 5 | B := A + 3 | Query: B\nSolution:\n[FINAL] 1 [END]\n\nCONCRETE EXAMPLE 2:\nInput: X := 10 | Y := 4 | Z := X + Y | Query: Z\nSolution:\n[FINAL] 0 [END]\n\nCONCRETE EXAMPLE 3:\nInput: P := 8 | Q := P | R := Q + P | Query: R\nSolution:\n[FINAL] 2 [END]\n\nOUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n[FINAL] {answer} [END]\n\nCRITICAL RULES:\n✓ Read the input to find the variable assignments and query.\n✓ Show ONLY the final answer – no intermediate calculations.\n✓ Final answer must be between 0 and 6 (inclusive).\n✓ After finding the query variable, write [FINAL] {answer} [END].\n✓ STOP immediately after [END].\n\n✗ DO NOT skip any assignments.\n✗ DO NOT forget to apply mod 7.\n✗ DO NOT output results outside the range 0-6.\n✗ DO NOT continue after finding the queried variable.\n✗ DO NOT add code, explanations, or commentary.\n\n⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\nDo NOT generate: code, examples, explanations, or ANYTHING.\nYour response ends at [END].\n\nCORRECT OUTPUT:\n[FINAL] 1 [END]\n\nINCORRECT OUTPUT (DO NOT DO THIS):\n[FINAL] 1 [END] ```python\nThis is WRONG. Stop at [END].\n\nALSO INCORRECT (DO NOT DO THIS):\n[FINAL] 8 [END]\n8 is NOT valid. Must apply mod 7 to get a result between 0-6.",
+    "force_start_text": "[FINAL]",
+    "stop_sequences": [
+      "[END]",
+      "[FINAL]",
+      "SAMPLE",
+      "\n```",
+      "\n\n",
+      "```python",
+      "def ",
+      "#",
+      "**Final",
+      "Example usage"
+    ]
+  }
+}
