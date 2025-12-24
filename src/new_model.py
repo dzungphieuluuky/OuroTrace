@@ -372,7 +372,6 @@ class SafeOuroThinkingExperiment:
                 ),
                 "force_start": "[FINAL]",
             },
-
             "p_hop": {
                 "system": (
                     "You are solving a SEQUENCE FOLLOWING task.\n\n"
@@ -435,7 +434,6 @@ class SafeOuroThinkingExperiment:
                 ),
                 "force_start": "[FINAL]",
             },
-
             "igsm": {
                 "system": (
                     "You are solving a MODULAR ARITHMETIC task (mod 7).\n\n"
