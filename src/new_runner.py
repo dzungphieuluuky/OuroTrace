@@ -49,14 +49,14 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
 
     # --- PART 1: CUSTOM REASONING PRIMITIVES ---
     print("\n" + "=" * 60)
-    print("🧠 Running Reasoning Primitives (5-shot)")
+    print("Running Reasoning Primitives (5-shot)")
     print("=" * 60)
 
     # Generate data
     primitives = create_reasoning_primitives_data(config = config)
 
     if not primitives:
-        print("⚠️ No reasoning primitives configured. Skipping.")
+        print("Warning: No reasoning primitives configured. Skipping.")
     else:
         # Determine template format from config
         template_format = config.get("reasoning_primitives", {}).get(
@@ -64,7 +64,7 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
         )
 
         for task_name, samples in primitives.items():
-            print(f"\n📋 Task: {task_name} ({len(samples)} samples)")
+            print(f"\nTask: {task_name} ({len(samples)} samples)")
             correct = 0
 
             for item in tqdm(samples, desc=f"  {task_name}", leave=False):
@@ -120,17 +120,23 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
                 )
 
             accuracy = correct / len(samples) if samples else 0.0
-            print(f"    ✅ Accuracy: {accuracy:.2%} ({correct}/{len(samples)})")
+            print(f"    Accuracy: {accuracy:.2%} ({correct}/{len(samples)})")
 
     return reasoning_primitives_results
 
 
 def run_standard_benchmarks(model, tokenizer, config: dict):
     """
-    # --- PART 2: STANDARD BENCHMARKS (lm-eval) ---
+    Runs standard benchmarks using lm-evaluation-harness.
+    
+    This function evaluates the model on standard NLP benchmarks including
+    closed-book QA, open-book QA, and math word problems.
+    
+    Returns:
+        List[Dict]: Results for each benchmark task
     """
     print("\n" + "=" * 60)
-    print("📚 Running Standard Benchmarks (lm-evaluation-harness)")
+    print("Running Standard Benchmarks (lm-evaluation-harness)")
     print("=" * 60)
 
     try:
@@ -153,12 +159,12 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
             "asdiv",
         ]
 
-        print(f"📝 Configured tasks: {', '.join(standard_tasks)}")
-        print("⚠️ Note: This may take significant time and download large datasets.")
+        print(f"Configured tasks: {', '.join(standard_tasks)}")
+        print("Note: This may take significant time and download large datasets.")
         benchmark_results = []
         # Only run if explicitly enabled (to avoid long eval times)
         if config.get("ENABLE_HEAVY_BENCHMARKS", False):
-            print("\n🚀 Starting benchmark evaluation...")
+            print("\nStarting benchmark evaluation...")
 
             results = evaluator.simple_evaluate(
                 model="hf",
@@ -174,7 +180,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
             )
 
             # Log results
-            print("\n📊 Benchmark Results:")
+            print("\nBenchmark Results:")
             for task, res in results["results"].items():
                 # Extract accuracy (different tasks use different metric keys)
                 res_keys = list(res.keys())
@@ -201,12 +207,12 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
                     )
         else:
             print(
-                "⏩ Skipping heavy benchmarks (set ENABLE_HEAVY_BENCHMARKS = True to run)"
+                "Skipping heavy benchmarks (set ENABLE_HEAVY_BENCHMARKS = True to run)"
             )
 
     except ImportError:
-        print("⚠️ 'lm-evaluation-harness' not installed. Skipping Standard Benchmarks.")
-        print("ℹ️  Install with: pip install lm-eval")
+        print("Warning: 'lm-evaluation-harness' not installed. Skipping Standard Benchmarks.")
+        print("Info: Install with: pip install lm-eval")
 
     return benchmark_results
 
@@ -226,7 +232,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
 
     if use_wandb:
         wb_conf = config["WANDB"]
-        print(f"🔗 Initializing W&B (timeout: {wb_conf.get('timeout', 30)}s)...")
+        print(f"Initializing W&B (timeout: {wb_conf.get('timeout', 30)}s)...")
 
         try:
             run = wandb.init(
@@ -237,9 +243,9 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                 mode=wb_conf.get("mode", "online"),
                 settings=wandb.Settings(_disable_stats=True),
             )
-            print("✅ W&B initialized")
+            print("W&B initialized successfully")
         except Exception as e:
-            print(f"⚠️ W&B initialization failed: {e}. Continuing offline.")
+            print(f"Warning: W&B initialization failed: {e}. Continuing offline.")
             use_wandb = False
             run = None
 
@@ -252,7 +258,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     optimization_config = config.get("OPTIMIZATION", {})
 
     print(f"\n{'=' * 70}")
-    print(f"🔧 EXPERIMENT CONFIGURATION")
+    print(f"EXPERIMENT CONFIGURATION")
     print(f"{'=' * 70}")
     print(f"Model Path: {model_path}")
     print(f"UT Steps to Test: {ut_steps_list}")
@@ -277,21 +283,21 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     )
 
     torch.manual_seed(42)
-    print(f"🎲 Random seed set to 42")
+    print(f"Random seed set to 42")
 
     # 4. Prepare Test Datasets
     print(f"\n{'=' * 70}")
-    print(f"📦 LOADING TEST DATASETS")
+    print(f"LOADING TEST DATASETS")
     print(f"{'=' * 70}")
 
     if data_config.get("load_existing", False):
         print(f"Loading from: {data_config['data_file_path']}")
         test_datasets = load_and_preprocess_data(data_config["data_file_path"])
-        print(f"✅ Loaded existing data")
+        print(f"Loaded existing data successfully")
     else:
-        print("⚙️ Generating new test datasets...")
+        print("Generating new test datasets...")
         test_datasets = create_test_datasets(data_config)
-        print(f"✅ Generated test datasets")
+        print(f"Generated test datasets successfully")
 
     # Print dataset summary
     print(f"\nDataset Summary:")
@@ -306,7 +312,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     ut_coverage = checker.check_ut_steps_coverage(ut_steps_list)
 
     print(f"\n{'=' * 70}")
-    print(f"📋 PAPER COMPLIANCE CHECK")
+    print(f"PAPER COMPLIANCE CHECK")
     print(f"{'=' * 70}")
     print(f"Task Alignment: {task_alignment}")
     print(f"UT Steps Coverage: {ut_coverage}")
@@ -320,10 +326,10 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     benchmark_results = []
 
     if eval_settings.get("calculate_perplexity", False):
-        print(f"📚 Preparing perplexity evaluation data...")
+        print(f"Preparing perplexity evaluation data...")
         raw_ppl_data = create_perplexity_data(eval_settings["ppl_num_samples"])
         perplexity_data = ["\n\n".join(raw_ppl_data)]
-        print(f"✅ Prepared {eval_settings['ppl_num_samples']} samples for PPL\n")
+        print(f"Prepared {eval_settings['ppl_num_samples']} samples for PPL\n")
 
 
     # 6. Setup output directory and periodic saving
@@ -349,7 +355,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
         for ut_step_idx, ut_steps in enumerate(ut_steps_list):
             print(f"\n{'=' * 70}")
             print(
-                f"🧪 EXPERIMENT {ut_step_idx + 1}/{len(ut_steps_list)}: UT Steps = {ut_steps}"
+                f"EXPERIMENT {ut_step_idx + 1}/{len(ut_steps_list)}: UT Steps = {ut_steps}"
             )
             print(f"{'=' * 70}\n")
 
@@ -362,23 +368,23 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                     experiment.load_model_with_ut_steps(ut_steps)
                 )
             except Exception as e:
-                print(f"❌ Failed to load model with UT steps={ut_steps}: {e}")
+                print(f"Failed to load model with UT steps={ut_steps}: {e}")
                 continue
 
             # Build task templates (only once)
             if not hasattr(experiment, "_templates_precomputed"):
-                print("🔧 Building task templates...")
+                print("Building task templates...")
                 experiment._build_task_templates(tokenizer)
                 experiment._templates_precomputed = True
-                print("✅ Task templates built\n")
+                print("Task templates built successfully\n")
                 save_config(config, output_dir=output_dir, experiment=experiment)
-                print("✅ Experiment configuration saved with task templates\n")
+                print("Experiment configuration saved with task templates\n")
                 print()
 
             # A. PERPLEXITY EVALUATION
             if perplexity_data:
                 print(f"{'=' * 70}")
-                print(f"📉 PERPLEXITY EVALUATION")
+                print(f"PERPLEXITY EVALUATION")
                 print(f"{'=' * 70}\n")
 
                 try:
@@ -396,7 +402,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                         {"ut_steps": ut_steps, "perplexity": ppl, "avg_loss": avg_loss}
                     )
 
-                    print(f"\n✅ Perplexity Results:")
+                    print(f"\nPerplexity Results:")
                     print(f"   Perplexity: {ppl:.4f}")
                     print(f"   Avg Loss:   {avg_loss:.4f}\n")
 
@@ -410,7 +416,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                         )
 
                 except Exception as e:
-                    print(f"⚠️ Perplexity calculation failed: {e}\n")
+                    print(f"Warning: Perplexity calculation failed: {e}\n")
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
@@ -425,16 +431,16 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
 
             # B. ACCURACY & PERFORMANCE EVALUATION
             print(f"{'=' * 70}")
-            print(f"🎯 ACCURACY EVALUATION")
+            print(f"ACCURACY EVALUATION")
             print(f"{'=' * 70}\n")
 
             for task_type, items in test_datasets.items():
                 if not items:
-                    print(f"⚠️ Skipping {task_type} - no test items\n")
+                    print(f"Warning: Skipping {task_type} - no test items\n")
                     continue
 
                 print(f"\n{'─' * 70}")
-                print(f"📝 Task: {task_type.upper()}")
+                print(f"Task: {task_type.upper()}")
                 print(f"{'─' * 70}")
                 print(f"Total Samples: {len(items)}")
 
@@ -510,7 +516,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
 
                         except Exception as e:
                             print(
-                                f"\n⚠️ Batch {batch_idx // batch_size + 1} failed: {e}"
+                                f"\nWarning: Batch {batch_idx // batch_size + 1} failed: {e}"
                             )
                             # Fallback to sequential for this batch
                             for item in batch_items:
@@ -541,7 +547,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                                         result_entry, task_type
                                     )
                                 except Exception as e2:
-                                    print(f"⚠️ Item failed: {e2}")
+                                    print(f"Warning: Item failed: {e2}")
                                     error_result = {
                                         "prediction": "ERROR",
                                         "full_response": str(e2),
@@ -609,7 +615,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                             )
                             experiment.monitor_and_maybe_abort(result_entry, task_type)
                         except Exception as e:
-                            print(f"⚠️ Item failed: {e}")
+                            print(f"Warning: Item failed: {e}")
                             error_result = {
                                 "prediction": "ERROR",
                                 "full_response": str(e),
@@ -652,7 +658,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
             # C. REASONING PRIMITIVES EVALUATION (if enabled)
             if config["DATA"].get("reasoning_primitives"):
                 print(f"\n{'=' * 70}")
-                print(f"🎯 REASONING PRIMITIVES EVALUATION")
+                print(f"REASONING PRIMITIVES EVALUATION")
                 print(f"{'=' * 70}\n")
 
                 try:
@@ -661,9 +667,9 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                     )
                     for result in reasoning_primitives_results:
                         result["ut_steps"] = ut_steps
-                    print(f"✅ Reasoning primitives evaluation completed\n")
+                    print(f"Reasoning primitives evaluation completed successfully\n")
                 except Exception as e:
-                    print(f"⚠️ Reasoning primitives evaluation failed: {e}\n")
+                    print(f"Warning: Reasoning primitives evaluation failed: {e}\n")
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
@@ -678,7 +684,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
             
             if config.get("ENABLE_HEAVY_BENCHMARKS"):
                 print(f"\n{'=' * 70}")
-                print(f"🎯 STANDARD BENCHMARKS EVALUATION")
+                print(f"STANDARD BENCHMARKS EVALUATION")
                 print(f"{'=' * 70}\n")
 
                 try:
@@ -689,9 +695,9 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                     if benchmark_results:
                         for result in benchmark_results:
                             result["ut_steps"] = ut_steps
-                        print(f"✅ Standard benchmarks evaluation completed\n")
+                        print(f"Standard benchmarks evaluation completed successfully\n")
                 except Exception as e:
-                    print(f"⚠️ Standard benchmarks evaluation failed: {e}\n")
+                    print(f"Warning: Standard benchmarks evaluation failed: {e}\n")
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
@@ -707,16 +713,16 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
 
             # Cleanup GPU memory
             print(f"{'=' * 70}")
-            print(f"🧹 Cleaning up GPU memory...")
+            print(f"Cleaning up GPU memory...")
             del model, tokenizer
             torch.cuda.empty_cache()
             gc.collect()
-            print(f"✅ GPU memory freed")
+            print(f"GPU memory freed successfully")
             print(f"{'=' * 70}\n")
 
         # 7. Final Summary
         print(f"\n{'=' * 70}")
-        print(f"📊 FINAL EXPERIMENT SUMMARY")
+        print(f"FINAL EXPERIMENT SUMMARY")
         print(f"{'=' * 70}\n")
 
         if simple_reasoning_results:
@@ -727,10 +733,10 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                 num_garbage = df_all["is_degenerate"].sum()
                 if num_garbage > 0:
                     print(
-                        f"⚠️ WARNING: {num_garbage} garbage/degenerate outputs detected\n"
+                        f"WARNING: {num_garbage} garbage/degenerate outputs detected\n"
                     )
 
-            print("📈 Overall Accuracy by Task Type:")
+            print("Overall Accuracy by Task Type:")
             print(f"{'─' * 70}")
             accuracy_by_task = df_all.groupby("task_type")["is_correct"].agg(
                 ["mean", "count"]
@@ -743,7 +749,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
             print(accuracy_by_task)
             print()
 
-            print("📈 Accuracy by UT Steps:")
+            print("Accuracy by UT Steps:")
             print(f"{'─' * 70}")
             accuracy_by_steps = df_all.groupby("ut_steps")["is_correct"].agg(
                 ["mean", "count"]
@@ -758,7 +764,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
             print(accuracy_by_steps)
             print()
 
-            print("📈 Accuracy by Task Type and UT Steps:")
+            print("Accuracy by Task Type and UT Steps:")
             print(f"{'─' * 70}")
             accuracy_pivot = (
                 df_all.pivot_table(
@@ -773,7 +779,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
             print()
 
         if perplexity_results:
-            print("📉 Perplexity by UT Steps:")
+            print("Perplexity by UT Steps:")
             print(f"{'─' * 70}")
             df_ppl = pd.DataFrame(perplexity_results)
             print(df_ppl.to_string(index=False))
@@ -782,40 +788,40 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
         # 9. Close W&B
         if use_wandb and run:
             print(f"{'=' * 70}")
-            print("🔗 Finalizing W&B...")
+            print("Finalizing W&B...")
             wandb.finish()
-            print("✅ W&B session closed")
+            print("W&B session closed")
             print(f"{'=' * 70}\n")
 
     except ExperimentFailureException as efe:
         print(f"\n{'=' * 70}")
-        print(f"❌ EXPERIMENT ABORTED GRACEFULLY: {efe}")
+        print(f"EXPERIMENT ABORTED GRACEFULLY: {efe}")
         print(f"{'=' * 70}")
-        print("🔗 Finalizing W&B...")
+        print("Finalizing W&B...")
         wandb.finish()
-        print("✅ W&B session closed")
+        print("W&B session closed")
         print(f"{'=' * 70}")
-        print(f"🧹 Cleaning up GPU memory...")
+        print(f"Cleaning up GPU memory...")
         del model, tokenizer
         torch.cuda.empty_cache()
         gc.collect()
-        print(f"✅ GPU memory freed")
+        print(f"GPU memory freed")
         print(f"{'=' * 70}\n")
 
 
     except KeyboardInterrupt:
         print(f"\n{'=' * 70}")
-        print("❌ EXPERIMENT INTERRUPTED BY USER")
+        print("EXPERIMENT INTERRUPTED BY USER")
         print(f"{'=' * 70}\n")
-        print("🔗 Finalizing W&B...")
+        print("Finalizing W&B...")
         wandb.finish()
-        print("✅ W&B session closed")
+        print("W&B session closed")
         print(f"{'=' * 70}")
-        print(f"🧹 Cleaning up GPU memory...")
+        print(f"Cleaning up GPU memory...")
         del model, tokenizer
         torch.cuda.empty_cache()
         gc.collect()
-        print(f"✅ GPU memory freed")
+        print(f"GPU memory freed")
         print(f"{'=' * 70}\n")
 
 
@@ -838,7 +844,17 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
 def _create_result_entry(
     result: Dict[str, Any], item: Dict[str, Any], task_type: str, ut_steps: int
 ) -> Dict[str, Any]:
-    """Create a standardized result entry with correctness evaluation."""
+    """Create a standardized result entry with correctness evaluation.
+    
+    Args:
+        result: Dictionary containing model prediction results
+        item: Original test item dictionary
+        task_type: Type of task (n_ary, p_hop, igsm)
+        ut_steps: Number of UT steps used for inference
+        
+    Returns:
+        Dict: Standardized result entry with all evaluation metrics
+    """
     pred = str(result.get("prediction", "ERROR")).strip().lower()
     target = str(item["expected_answer"]).strip().lower()
 
@@ -883,9 +899,17 @@ def _log_task_summary(
     start_time: float,
     use_wandb: bool,
 ) -> None:
-    """Log summary statistics for a task."""
+    """Log summary statistics for a task.
+    
+    Args:
+        results: List of result dictionaries for the task
+        task_type: Type of task being evaluated
+        ut_steps: Number of UT steps used
+        start_time: Start time of the task evaluation
+        use_wandb: Whether to log to Weights & Biases
+    """
     if not results:
-        print(f"\n   ⚠️ No results to summarize for {task_type}\n")
+        print(f"\n   Warning: No results to summarize for {task_type}\n")
         return
 
     # Calculate metrics
@@ -905,7 +929,7 @@ def _log_task_summary(
 
     # Print summary
     print(f"\n{'─' * 70}")
-    print(f"📊 Summary for {task_type.upper()}")
+    print(f"Summary for {task_type.upper()}")
     print(f"{'─' * 70}")
     print(f"Accuracy:            {accuracy * 100:6.2f}% ({num_correct}/{num_samples})")
     if num_degenerate > 0:
@@ -933,17 +957,23 @@ def _log_task_summary(
                 }
             )
         except Exception as e:
-            print(f"   ⚠️ Failed to log to W&B: {e}")
+            print(f"   Warning: Failed to log to W&B: {e}")
 
 
 def _display_sample_results(
     results: List[Dict[str, Any]], task_type: str, num_samples: int = 10
 ) -> None:
-    """Display sample results for inspection."""
+    """Display sample results for inspection.
+    
+    Args:
+        results: List of result dictionaries
+        task_type: Type of task being displayed
+        num_samples: Number of sample results to display (default: 10)
+    """
     if not results:
         return
 
-    print(f"📋 Sample Results for {task_type.upper()} (first {num_samples}):")
+    print(f"Sample Results for {task_type.upper()} (first {num_samples}):")
     print(f"{'─' * 70}")
 
     df_sample = pd.DataFrame(results).head(num_samples)
