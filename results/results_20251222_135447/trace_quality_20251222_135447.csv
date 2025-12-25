@@ -1,0 +1,4 @@
+task_type,ut_steps,is_correct,step_count,has_final,response_length,accuracy_pct
+igsm,8,0.22,0.0,1.0,19.01,22.0
+n_ary,8,0.048,0.0,1.0,21.326,4.8
+p_hop,8,0.2866666666666667,0.0,1.0,24.29,28.666666666666668

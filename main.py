@@ -16,18 +16,22 @@ auto_unzip_colab_content(DATA_PATH)
 # 2. Load Configuration
 if __name__ == "__main__":
     # 1. Load Base Config (BatchConfig)
-    BatchConfig = load_config_from_json('configs/batch_config.json')
+    BatchConfig = load_config_from_json("configs/batch_config.json")
 
     # 2. Load Holistic Extension
-    HolisticExtension = load_config_from_json('configs/holistic_extension.json')
-    
+    HolisticExtension = load_config_from_json("configs/holistic_extension.json")
+
     if BatchConfig and HolisticExtension:
         # 3. Merge configs to create HolisticExperimentConfig
         HolisticExperimentConfig = BatchConfig.copy()
-        
+
         # Deep merge for WANDB and append other keys
         for key, value in HolisticExtension.items():
-            if key in HolisticExperimentConfig and isinstance(value, dict) and isinstance(HolisticExperimentConfig[key], dict):
+            if (
+                key in HolisticExperimentConfig
+                and isinstance(value, dict)
+                and isinstance(HolisticExperimentConfig[key], dict)
+            ):
                 HolisticExperimentConfig[key].update(value)
             else:
                 HolisticExperimentConfig[key] = value
@@ -49,7 +53,9 @@ if __name__ == "__main__":
     print("\n" + "=" * 50 + "\n🚀 STARTING EXPERIMENT\n" + "=" * 50)
 
     # 4. Run
-    acc_results, ppl_results, holistic_results = run_batch_experiment(HolisticExperimentConfig)
+    acc_results, ppl_results, holistic_results = run_batch_experiment(
+        HolisticExperimentConfig
+    )
 
     # 5. Save Results
     df_acc = pd.DataFrame(acc_results)
@@ -60,8 +66,12 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME), exist_ok=True)
     acc_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_acc_{timestamp}.csv")
     ppl_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_ppl_{timestamp}.csv")
-    hol_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_holistic_{timestamp}.csv")
-    cfg_path = os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_config_{timestamp}.yaml")
+    hol_path = os.path.join(
+        OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_holistic_{timestamp}.csv"
+    )
+    cfg_path = os.path.join(
+        OUTPUT_PATH, RUN_RESULTS_NAME, f"ouro_config_{timestamp}.yaml"
+    )
 
     df_acc.to_csv(acc_path, index=False)
     if not df_ppl.empty:
@@ -100,12 +110,18 @@ if __name__ == "__main__":
             fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
             # Plot 1: Accuracy
-            if 'ut_steps' in df_acc.columns and 'task_type' in df_acc.columns:
+            if "ut_steps" in df_acc.columns and "task_type" in df_acc.columns:
                 acc_summary = (
-                    df_acc.groupby(["task_type", "ut_steps"])["is_correct"].mean().reset_index()
+                    df_acc.groupby(["task_type", "ut_steps"])["is_correct"]
+                    .mean()
+                    .reset_index()
                 )
                 sns.barplot(
-                    data=acc_summary, x="ut_steps", y="is_correct", hue="task_type", ax=axes[0]
+                    data=acc_summary,
+                    x="ut_steps",
+                    y="is_correct",
+                    hue="task_type",
+                    ax=axes[0],
                 )
                 axes[0].set_title("Accuracy by UT Steps")
                 axes[0].set_ylabel("Accuracy")
@@ -129,16 +145,24 @@ if __name__ == "__main__":
                 axes[1].set_title("Inference Time (s) by UT Steps")
 
                 # Plot 3: Token Count
-                if 'generated_tokens' in df_acc.columns:
+                if "generated_tokens" in df_acc.columns:
                     sns.boxplot(
-                        data=df_acc, x="ut_steps", y="generated_tokens", hue="task_type", ax=axes[2]
+                        data=df_acc,
+                        x="ut_steps",
+                        y="generated_tokens",
+                        hue="task_type",
+                        ax=axes[2],
                     )
                     axes[2].set_title("Generated Tokens Distribution")
 
                 plt.tight_layout()
                 plt.show()
                 # Save plot
-                plt.savefig(os.path.join(OUTPUT_PATH, RUN_RESULTS_NAME, f"results_plot_{timestamp}.png"))
+                plt.savefig(
+                    os.path.join(
+                        OUTPUT_PATH, RUN_RESULTS_NAME, f"results_plot_{timestamp}.png"
+                    )
+                )
                 print(f"📊 Plot saved to results_plot_{timestamp}.png")
 
         except Exception as e:
