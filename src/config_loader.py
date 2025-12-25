@@ -34,7 +34,7 @@ def post_process_config(config: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: processed config dictionary.
     """
-    # Xử lý kiểu dữ liệu Torch
+    # Post processing for Torch data type
     if config.get("MODEL", {}).get("dtype") == "torch.float16":
         config["MODEL"]["dtype"] = torch.float16
     elif config.get("MODEL", {}).get("dtype") == "torch.float32":
