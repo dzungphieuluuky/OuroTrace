@@ -53,7 +53,7 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
     print("=" * 60)
 
     # Generate data
-    primitives = create_reasoning_primitives_data(config)
+    primitives = create_reasoning_primitives_data(config = config)
 
     if not primitives:
         print("⚠️ No reasoning primitives configured. Skipping.")
@@ -70,7 +70,9 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
             for item in tqdm(samples, desc=f"  {task_name}", leave=False):
                 # Apply 5-shot formatting
                 prompt = format_5_shot_prompt(
-                    samples, item, template_format=template_format
+                    task_samples = samples,
+                    current_sample = item, 
+                    template_format = template_format
                 )
 
                 # Generate response (greedy decoding for consistency)
@@ -186,9 +188,17 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
                     )
                 else:
                     print(f"  • {task}: No accuracy metric found")
+                    print(f" Saving all results for {task}")
+                    benchmark_results.append(
+                        {
+                            "task_category": "Standard Benchmark",
+                            "task_name": task,
+                            "results": res,
+                        }
+                    )
         else:
             print(
-                "⏩ Skipping heavy benchmarks (set ENABLE_HEAVY_BENCHMARKS=True to run)"
+                "⏩ Skipping heavy benchmarks (set ENABLE_HEAVY_BENCHMARKS = True to run)"
             )
 
     except ImportError:
