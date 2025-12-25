@@ -147,7 +147,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
             "coqa",
             # Math Word Problems
             "gsm8k",
-            "svamp",
+            # "svamp",
             "asdiv",
         ]
 
