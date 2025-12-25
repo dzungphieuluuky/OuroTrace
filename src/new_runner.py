@@ -146,7 +146,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
             # Open Book QA
             "squadv2",
             "drop",
-            "coqa",
+            # "coqa",
             # Math Word Problems
             "gsm8k",
             # "svamp",
