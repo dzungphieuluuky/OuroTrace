@@ -176,8 +176,10 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
             print("\n📊 Benchmark Results:")
             for task, res in results["results"].items():
                 # Extract accuracy (different tasks use different metric keys)
+                res_keys = list(res.keys())
+                print(f"DEBUG: {task} result keys: {res_keys}")
                 acc = res.get("acc,none") or res.get("acc") or res.get("exact_match")
-                if acc is not None:
+                try:
                     print(f"  • {task}: {acc:.2%}")
                     benchmark_results.append(
                         {
@@ -186,8 +188,8 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
                             "is_correct": acc,  # Store accuracy directly
                         }
                     )
-                else:
-                    print(f"  • {task}: No accuracy metric found")
+                except Exception as e:
+                    print(f"Exception: {e}")
                     print(f" Saving all results for {task}")
                     benchmark_results.append(
                         {
