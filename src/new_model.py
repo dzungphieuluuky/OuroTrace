@@ -24,7 +24,7 @@ class SafeOptimizations:
         if hasattr(model, "generation_config"):
             model.generation_config.cache_implementation = "static"
             model.generation_config.max_cache_length = max_seq_length
-            print("   ✓ Static KV cache enabled")
+            print("   Static KV cache enabled")
 
     @staticmethod
     def optimize_attention_backend(model):
@@ -34,7 +34,7 @@ class SafeOptimizations:
         ):
             torch.backends.cuda.enable_flash_sdp(True)
             torch.backends.cuda.enable_mem_efficient_sdp(True)
-            print("   ✓ Flash Attention / SDPA enabled")
+            print("   Flash Attention / SDPA enabled")
         return model
 
     @staticmethod
@@ -51,11 +51,11 @@ class SafeOptimizations:
             # TF32 for faster matmul on Ampere+ GPUs
             torch.backends.cuda.matmul.allow_tf32 = True
             torch.backends.cudnn.allow_tf32 = True
-            print("   ✓ TF32 enabled for matmul")
+            print("   TF32 enabled for matmul")
 
             # cuDNN auto-tuning
             torch.backends.cudnn.benchmark = True
-            print("   ✓ cuDNN auto-tuning enabled")
+            print("   cuDNN auto-tuning enabled")
 
         return model
 
@@ -64,7 +64,7 @@ class SafeOptimizations:
         """Optimize CUDA memory allocation"""
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-            print("   ✓ Memory pool optimized")
+            print("   Memory pool optimized")
 
     @staticmethod
     def warmup_model(model, tokenizer, num_passes: int = 3):
@@ -73,7 +73,7 @@ class SafeOptimizations:
         dummy_input = tokenizer("warmup test", return_tensors="pt")
         input_ids = dummy_input.input_ids.to(device)
 
-        print(f"   → Running {num_passes} warmup passes...")
+        print(f"   Running {num_passes} warmup passes...")
         with torch.inference_mode():
             for i in range(num_passes):
                 _ = model.generate(
@@ -85,7 +85,7 @@ class SafeOptimizations:
                 )
 
         torch.cuda.empty_cache()
-        print("   ✓ Warmup complete")
+        print("   Warmup complete")
 
 
 class SafeOuroThinkingExperiment:
@@ -128,7 +128,7 @@ class SafeOuroThinkingExperiment:
         if len(self.last_k_outputs) == self.k_repeat_abort and all(
             o == self.last_k_outputs[0] for o in self.last_k_outputs
         ):
-            print(f"❌ Aborting due to repeated outputs...")
+            print(f"Aborting due to repeated outputs...")
             raise ExperimentFailureException(
                 f"Experiment failed: {self.k_repeat_abort} repeated outputs"
             )
@@ -147,25 +147,25 @@ class SafeOuroThinkingExperiment:
             min_samples_before_check=min_samples,
             window_size=window_size,
         )
-        print(f"[+] Quality monitor initialized:")
-        print(f"    → Garbage threshold: {garbage_threshold * 100:.0f}%")
+        print(f"Quality monitor initialized:")
+        print(f"    Garbage threshold: {garbage_threshold * 100:.0f}%")
         print(
-            f"    → Example similarity threshold: {example_similarity_threshold * 100:.0f}%"
+            f"    Example similarity threshold: {example_similarity_threshold * 100:.0f}%"
         )
-        print(f"    → Min samples before check: {min_samples}")
+        print(f"    Min samples before check: {min_samples}")
 
     def load_model_with_ut_steps(self, total_ut_steps: int):
         """Load model with specific UT steps configuration and apply safe optimizations"""
         quantization_config = None
         if self.use_4bit_quant:
-            print("→ Applying 4-bit quantization")
+            print("Applying 4-bit quantization")
             quantization_config = BitsAndBytesConfig(load_in_4bit=True)
 
         # Auto-enable torch.compile only for ut_steps=1
         auto_compile = self.use_torch_compile
 
         print(f"\n{'=' * 60}")
-        print(f"⚙️  LOADING MODEL CONFIGURATION")
+        print(f"LOADING MODEL CONFIGURATION")
         print(f"{'=' * 60}")
         print(f"Model Path: {self.model_path}")
         print(f"Requested UT Steps: {total_ut_steps}")
@@ -177,7 +177,7 @@ class SafeOuroThinkingExperiment:
         base_config = AutoConfig.from_pretrained(
             self.model_path, trust_remote_code=True
         )
-        print(f"\n→ Base config loaded")
+        print(f"\nBase config loaded")
         print(f"   Original UT steps: {getattr(base_config, 'total_ut_steps', 'N/A')}")
         print(
             f"   Original early exit: {getattr(base_config, 'early_exit_threshold', 'N/A')}"
@@ -185,7 +185,7 @@ class SafeOuroThinkingExperiment:
 
         # Apply UT step configuration
         base_config.total_ut_steps = total_ut_steps
-        print(f"\n→ Modified config:")
+        print(f"\nModified config:")
         print(f"   New UT steps: {base_config.total_ut_steps}")
         print(
             f"   Early exit threshold: {base_config.early_exit_threshold} (from default)"
@@ -198,13 +198,13 @@ class SafeOuroThinkingExperiment:
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
 
-        print(f"\n→ Tokenizer loaded")
+        print(f"\nTokenizer loaded")
         print(f"   Vocab size: {tokenizer.vocab_size}")
         print(f"   PAD token: {tokenizer.pad_token}")
         print(f"   EOS token: {tokenizer.eos_token}")
 
         # Load model
-        print(f"\n→ Loading model weights...")
+        print(f"\nLoading model weights...")
         model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
             config=base_config,
@@ -218,46 +218,46 @@ class SafeOuroThinkingExperiment:
         # try:
         #     from optimum.bettertransformer import BetterTransformer
         #     model = BetterTransformer.transform(model, keep_original_model=True)
-        #     print("✓ BetterTransformer enabled")
+        #     print("BetterTransformer enabled")
         # except Exception as e:
-        #     print(f"✗ BetterTransformer not available: {e}")
+        #     print(f"BetterTransformer not available: {e}")
 
         # Apply torch.compile only for UT=1
         if auto_compile:
-            print("→ Applying torch.compile()")
+            print("Applying torch.compile()")
             model = torch.compile(model)
 
         model.eval()
 
         print(f"\n{'─' * 60}")
-        print(f"🚀 APPLYING SAFE OPTIMIZATIONS")
+        print(f"APPLYING SAFE OPTIMIZATIONS")
         print(f"{'─' * 60}")
 
         try:
             model = SafeOptimizations.optimize_attention_backend(model)
         except Exception as e:
-            print(f"   ⚠️ Attention optimization failed: {e}")
+            print(f"   Warning: Attention optimization failed: {e}")
 
         try:
             model = SafeOptimizations.apply_inference_optimizations(model)
         except Exception as e:
-            print(f"   ⚠️ Inference optimization failed: {e}")
+            print(f"   Warning: Inference optimization failed: {e}")
 
         try:
             SafeOptimizations.optimize_memory()
         except Exception as e:
-            print(f"   ⚠️ Memory optimization failed: {e}")
+            print(f"   Warning: Memory optimization failed: {e}")
 
         try:
             SafeOptimizations.warmup_model(model, tokenizer, num_passes=3)
         except Exception as e:
-            print(f"   ⚠️ Warmup failed: {e}")
+            print(f"   Warning: Warmup failed: {e}")
 
         print(f"{'─' * 60}")
 
         # Final verification
         print(f"\n{'=' * 60}")
-        print(f"✅ MODEL LOADED SUCCESSFULLY")
+        print(f"MODEL LOADED SUCCESSFULLY")
         print(f"{'=' * 60}")
         print(f"Device: {model.device}")
         print(f"Model dtype: {model.dtype}")
@@ -265,7 +265,7 @@ class SafeOuroThinkingExperiment:
         print(f"VERIFIED early exit: {model.config.early_exit_threshold}")
 
         if model.config.total_ut_steps != total_ut_steps:
-            print(f"\n⚠️  WARNING: UT STEPS MISMATCH!")
+            print(f"\nWARNING: UT STEPS MISMATCH!")
             print(f"   Requested: {total_ut_steps}")
             print(f"   Actual: {model.config.total_ut_steps}")
 
@@ -322,17 +322,17 @@ class SafeOuroThinkingExperiment:
                     "7. Continue ONLY until you've used all N numbers.\n"
                     "8. As soon as all numbers are used, output [FINAL] with the sum.\n"
                     "9. STOP IMMEDIATELY – do not add any more numbers.\n\n"
-                    "⚠️ CRITICAL: The input contains ONLY the numbers shown.\n"
+                    "CRITICAL: The input contains ONLY the numbers shown.\n"
                     "Do NOT invent additional numbers.\n"
                     "Do NOT continue patterns.\n"
                     "Do NOT add numbers that aren't explicitly in the input.\n\n"
-                    "CONCRETE EXAMPLE 1 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 1:\n"
                     "User: 141 + 592 + 653 =\n\n"
                     "Assistant: [FINAL] 1386 [END]\n\n"
-                    "CONCRETE EXAMPLE 2 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 2:\n"
                     "User: 589 + 793 =\n\n"
                     "Assistant: [FINAL] 1382 [END]\n\n"
-                    "CONCRETE EXAMPLE 3 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 3:\n"
                     "User: 238 + 462 + 643 + 383 =\n\n"
                     "Assistant: [FINAL] 1726 [END]\n\n"
                     "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
@@ -357,7 +357,7 @@ class SafeOuroThinkingExperiment:
                     "Input has 3 numbers → only final answer shown.\n"
                     "Input has 4 numbers → only final answer shown.\n"
                     "Input has 5 numbers → only final answer shown.\n\n"
-                    "⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\n"
+                    "CRITICAL: After [FINAL] {answer} [END], STOP.\n"
                     "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
                     "Your response ends at [END].\n\n"
                     "CORRECT OUTPUT:\n"
@@ -385,17 +385,17 @@ class SafeOuroThinkingExperiment:
                     "4. Repeat until you've done ALL the required hops.\n"
                     "5. Output [FINAL] with the token you landed on.\n"
                     "6. STOP IMMEDIATELY.\n\n"
-                    "CONCRETE EXAMPLE 1 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 1:\n"
                     "User: Sequence: A B C D E\n"
                     "       Start at: A\n"
                     "       Hops: 3\n\n"
                     "Assistant: [FINAL] D [END]\n\n"
-                    "CONCRETE EXAMPLE 2 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 2:\n"
                     "User: Sequence: B C D A\n"
                     "       Start at: B\n"
                     "       Hops: 2\n\n"
                     "Assistant: [FINAL] D [END]\n\n"
-                    "CONCRETE EXAMPLE 3 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 3:\n"
                     "User: Sequence: D C B A\n"
                     "       Start at: D\n"
                     "       Hops: 1\n\n"
@@ -418,7 +418,7 @@ class SafeOuroThinkingExperiment:
                     "Asked for 2 hops → only final answer shown.\n"
                     "Asked for 3 hops → only final answer shown.\n"
                     "Asked for 5 hops → only final answer shown.\n\n"
-                    "⚠️ CRITICAL: After [FINAL] {token} [END], STOP.\n"
+                    "CRITICAL: After [FINAL] {token} [END], STOP.\n"
                     "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
                     "Your response ends at [END].\n\n"
                     "CORRECT OUTPUT:\n"
@@ -450,13 +450,13 @@ class SafeOuroThinkingExperiment:
                     "7. Continue until the queried variable is found.\n"
                     "8. Output [FINAL] with that variable's value.\n"
                     "9. STOP IMMEDIATELY.\n\n"
-                    "CONCRETE EXAMPLE 1 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 1:\n"
                     "User: E#E := 4. O#L := K#C. C#M := E#O. K#L := J#M * G#M. I#J := C#E + C#E. E#O := 3. P#L := G#M. N#F := G#M. N#E := E#O * K#C. N#M := N#E - C#E. K#C := 1. G#M := I#J. F#J := N#E. J#M := I#J. C#E := E#E + K#C. L#M := 4. G#K := J#M. K#L? \n\n"
                     "Assistant: [FINAL] 2 [END]\n\n"
-                    "CONCRETE EXAMPLE 2 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 2:\n"
                     "User: M#J := F#J. A#K := J#P - J#P. B#P := I#O. J#P := F#B. F#J := 5. C#P := 6. A#P := 0. F#B := M#J. E#M := A#P. I#O := M#J. M#E := M#J. K#I := I#O. M#A := M#J + M#J. L#I := I#O. A#I := 0. O#G := K#I * K#I. A#O := L#I * K#I. J#A := B#P. A#K? \n\n"
                     "Assistant: [FINAL] 0 [END]\n\n"
-                    "CONCRETE EXAMPLE 3 (DO NOT COPY):\n"
+                    "CONCRETE EXAMPLE 3:\n"
                     "User: M#M := K#A. L#D := C#O. K#P := 4. P#D := B#K. D#H := G#B. J#A := 0. B#K := K#A. G#B := 1. P#E := 2. E#P := P#D. C#O := M#M + L#B. L#G := D#H. L#B := D#H - D#H. G#A := P#D. L#A := C#O. K#A := P#E. L#A? \n\n"
                     "Assistant: [FINAL] 2 [END]\n\n"
                     "OUTPUT FORMAT (YOU MUST FOLLOW THIS EXACTLY):\n"
@@ -480,7 +480,7 @@ class SafeOuroThinkingExperiment:
                     "  → B = 5 (mod 7) = 5\n\n"
                     "Addition: C := A + B (where A = 5, B = 4)\n"
                     "  → C = 5 + 4 = 9 (mod 7) = 2\n\n"
-                    "⚠️ CRITICAL: After [FINAL] {answer} [END], STOP.\n"
+                    "CRITICAL: After [FINAL] {answer} [END], STOP.\n"
                     "Do NOT generate: code, examples, explanations, or ANYTHING.\n"
                     "Your response ends at [END].\n\n"
                     "CORRECT OUTPUT:\n"
@@ -590,7 +590,7 @@ class SafeOuroThinkingExperiment:
                 ],
             }
 
-        print("[+] Task templates with pre-tokenized components computed.")
+        print("Task templates with pre-tokenized components computed.")
         print(
             f"    System prompt N_ary tokens: {len(self.task_templates['n_ary']['system_tokens'])} tokens"
         )
@@ -631,7 +631,7 @@ class SafeOuroThinkingExperiment:
             user_inputs = [user_inputs]
 
         if not hasattr(model.config, "total_ut_steps"):
-            print("❌ ERROR: Model missing total_ut_steps config!")
+            print("ERROR: Model missing total_ut_steps config!")
             error_results = [
                 self._create_error_result(inp, ut_steps) for inp in user_inputs
             ]
@@ -730,7 +730,7 @@ class SafeOuroThinkingExperiment:
                 generation_config=gen_config,
             )
         except Exception as e:
-            print(f"❌ Generation failed: {e}")
+            print(f"Generation failed: {e}")
             error_results = [
                 self._create_error_result(inp, ut_steps, str(e)) for inp in user_inputs
             ]
@@ -833,7 +833,7 @@ class SafeOuroThinkingExperiment:
                         pred = "ERROR"
 
         except Exception as e:
-            print(f"[!] Parsing error: {e}")
+            print(f"Parsing error: {e}")
             pred = "ParseError"
 
         return pred
@@ -969,7 +969,7 @@ class SafeOuroThinkingExperiment:
         failure = self.quality_monitor.check_failure_conditions()
         if failure:
             print("\n" + "=" * 60)
-            print("❌ EXPERIMENT TERMINATED DUE TO OUTPUT QUALITY FAILURE")
+            print("EXPERIMENT TERMINATED DUE TO OUTPUT QUALITY FAILURE")
             print(f"Reason: {failure.reason}")
             print("Details:")
             for k, v in failure.failure_stats.items():
