@@ -160,7 +160,11 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
 
             results = evaluator.simple_evaluate(
                 model="hf",
-                model_args=f"pretrained=ByteDance/Ouro-1.4B-Thinking,dtype=bfloat16",
+                model_args=(
+                    f"pretrained={model.name_or_path},"
+                    "dtype=bfloat16,"
+                    "trust_remote_code=True,"
+                ),
                 tasks=standard_tasks,
                 num_fewshot=5,  # 5-shot evaluation
                 batch_size=config.get("eval_batch_size", 4),
