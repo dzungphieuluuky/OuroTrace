@@ -60,7 +60,7 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
     else:
         # Determine template format from config
         template_format = config.get("reasoning_primitives", {}).get(
-            "template_format", "plain"
+            "template_format", "chat"
         )
 
         for task_name, samples in primitives.items():
@@ -153,7 +153,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
 
         print(f"📝 Configured tasks: {', '.join(standard_tasks)}")
         print("⚠️ Note: This may take significant time and download large datasets.")
-        standard_benchmark_results = []
+        benchmark_results = []
         # Only run if explicitly enabled (to avoid long eval times)
         if config.get("ENABLE_HEAVY_BENCHMARKS", False):
             print("\n🚀 Starting benchmark evaluation...")
@@ -173,7 +173,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
                 acc = res.get("acc,none") or res.get("acc") or res.get("exact_match")
                 if acc is not None:
                     print(f"  • {task}: {acc:.2%}")
-                    standard_benchmark_results.append(
+                    benchmark_results.append(
                         {
                             "task_category": "Standard Benchmark",
                             "task_name": task,
@@ -191,17 +191,17 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
         print("⚠️ 'lm-evaluation-harness' not installed. Skipping Standard Benchmarks.")
         print("ℹ️  Install with: pip install lm-eval")
 
-    return standard_benchmark_results
+    return benchmark_results
 
 
-def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
+def run_batch_experiment(config: dict) -> list[List[Dict]]:
     """Run batch experiment based on the provided configuration.
 
     Args:
         config (dict): Experiment configuration dictionary.
 
     Returns:
-        Tuple[List[Dict], List[Dict], List[Dict]]: Simple reasoning results, perplexity results, reasoning primitives results.
+        list[List[Dict]]: Simple reasoning results, perplexity results, reasoning primitives results, benchmark results.
     """
     # 1. Initialize W&B
     use_wandb = config.get("WANDB", {}).get("enabled", False)
@@ -296,8 +296,11 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"{'=' * 70}\n")
 
     # 5. Prepare Perplexity Data (if needed)
-    perplexity_results = []
     perplexity_data = []
+    perplexity_results = []
+    simple_reasoning_results = []
+    reasoning_primitives_results = []
+    benchmark_results = []
 
     if eval_settings.get("calculate_perplexity", False):
         print(f"📚 Preparing perplexity evaluation data...")
@@ -305,8 +308,6 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         perplexity_data = ["\n\n".join(raw_ppl_data)]
         print(f"✅ Prepared {eval_settings['ppl_num_samples']} samples for PPL\n")
 
-    simple_reasoning_results = []
-    reasoning_primitives_results = []
 
     # 6. Setup output directory and periodic saving
     from datetime import datetime
@@ -396,11 +397,11 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
-                        simple_reasoning_results,
-                        perplexity_results,
-                        reasoning_primitives_results,
-                        output_dir=output_dir,
-                        overwrite=True,
+                        simple_reasoning_results = simple_reasoning_results,
+                        perplexity_results = perplexity_results,
+                        reasoning_primitives_results = reasoning_primitives_results,
+                        output_dir = output_dir,
+                        overwrite = True,
                     )
                     last_save_time = now
 
@@ -551,11 +552,11 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
                             save_results(
-                                simple_reasoning_results,
-                                perplexity_results,
-                                reasoning_primitives_results,
-                                output_dir=output_dir,
-                                overwrite=True,
+                                simple_reasoning_results = simple_reasoning_results,
+                                perplexity_results = perplexity_results,
+                                reasoning_primitives_results = reasoning_primitives_results,
+                                output_dir = output_dir,
+                                overwrite = True,
                             )
                             last_save_time = now
 
@@ -612,11 +613,11 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                         now = time.time()
                         if now - last_save_time >= periodic_save_interval:
                             save_results(
-                                simple_reasoning_results,
-                                perplexity_results,
-                                reasoning_primitives_results,
-                                output_dir=output_dir,
-                                overwrite=True,
+                                simple_reasoning_results = simple_reasoning_results,
+                                perplexity_results = perplexity_results,
+                                reasoning_primitives_results = reasoning_primitives_results,
+                                output_dir = output_dir,
+                                overwrite = True,
                             )
                             last_save_time = now
 
@@ -629,9 +630,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 _display_sample_results(task_results, task_type)
 
             # C. REASONING PRIMITIVES EVALUATION (if enabled)
-            if config["DATA"].get("reasoning_primitives") or config.get(
-                "ENABLE_HEAVY_BENCHMARKS"
-            ):
+            if config["DATA"].get("reasoning_primitives"):
                 print(f"\n{'=' * 70}")
                 print(f"🎯 REASONING PRIMITIVES EVALUATION")
                 print(f"{'=' * 70}\n")
@@ -648,13 +647,41 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
                 now = time.time()
                 if now - last_save_time >= periodic_save_interval:
                     save_results(
-                        simple_reasoning_results,
-                        perplexity_results,
-                        reasoning_primitives_results,
-                        output_dir=output_dir,
-                        overwrite=True,
+                        simple_reasoning_results = simple_reasoning_results,
+                        perplexity_results = perplexity_results,
+                        reasoning_primitives_results = reasoning_primitives_results,
+                        output_dir = output_dir,
+                        overwrite = True,
                     )
                     last_save_time = now
+            
+            if config.get("ENABLE_HEAVY_BENCHMARKS"):
+                print(f"\n{'=' * 70}")
+                print(f"🎯 STANDARD BENCHMARKS EVALUATION")
+                print(f"{'=' * 70}\n")
+
+                try:
+                    benchmark_results = run_standard_benchmarks(
+                        model, tokenizer, config
+                    )
+                    # Optionally, add UT steps info to each result
+                    for result in benchmark_results:
+                        result["ut_steps"] = ut_steps
+                    print(f"✅ Standard benchmarks evaluation completed\n")
+                except Exception as e:
+                    print(f"⚠️ Standard benchmarks evaluation failed: {e}\n")
+                now = time.time()
+                if now - last_save_time >= periodic_save_interval:
+                    save_results(
+                        simple_reasoning_results = simple_reasoning_results,
+                        perplexity_results = perplexity_results,
+                        reasoning_primitives_results = reasoning_primitives_results,
+                        benchmark_results = benchmark_results,
+                        output_dir = output_dir,
+                        overwrite = True,
+                    )
+                    last_save_time = now
+
 
             # Cleanup GPU memory
             print(f"{'=' * 70}")
@@ -769,20 +796,21 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
         print(f"✅ GPU memory freed")
         print(f"{'=' * 70}\n")
 
-    
+
     # Save results to csv files
     save_results(
-        simple_reasoning_results,
-        perplexity_results,
-        reasoning_primitives_results,
-        output_dir=output_dir,
-        overwrite=True,
+        simple_reasoning_results = simple_reasoning_results,
+        perplexity_results = perplexity_results,
+        reasoning_primitives_results = reasoning_primitives_results,
+        benchmark_results = benchmark_results,
+        output_dir = output_dir,
+        overwrite = True,
     )
 
     # Save config file into yaml file
     save_config(config, output_dir=output_dir, experiment=experiment)
 
-    return simple_reasoning_results, perplexity_results, reasoning_primitives_results
+    return [simple_reasoning_results, perplexity_results, reasoning_primitives_results, benchmark_results]
 
 
 def _create_result_entry(

@@ -12,6 +12,7 @@ def save_results(
     simple_reasoning_results: List[Dict],
     perplexity_results: List[Dict],
     reasoning_primitives_results: List[Dict],
+    benchmark_results: List[Dict],
     output_dir: str,
     overwrite: bool = True,
 ) -> None:
@@ -41,7 +42,11 @@ def save_results(
         print(
             f"✅ Periodic save: reasoning primitives results to {reasoning_primitives_file}"
         )
-
+    
+    if benchmark_results:
+        benchmark_file = os.path.join(output_dir, "heavy_benchmarks.csv")
+        save_csv(benchmark_results, benchmark_file)
+        print(f"✅ Periodic save: heavy benchmark results to {benchmark_file}")
 
 def save_simple_reasoning_results(
     simple_reasoning_results: List[Dict],
