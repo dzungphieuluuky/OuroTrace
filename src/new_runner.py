@@ -169,7 +169,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
                 ),
                 tasks=standard_tasks,
                 num_fewshot=5,  # 5-shot evaluation
-                batch_size=config.get("eval_batch_size", 4),
+                # batch_size=config.get("eval_batch_size", 4),
             )
 
             # Log results
