@@ -169,7 +169,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
                 ),
                 tasks=standard_tasks,
                 num_fewshot=5,  # 5-shot evaluation
-                # batch_size=config.get("eval_batch_size", 4),
+                batch_size=config.get("eval_batch_size", 4),
             )
 
             # Log results
@@ -311,7 +311,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     print(f"UT Steps Coverage: {ut_coverage}")
     print(f"{'=' * 70}\n")
 
-    # 5. Prepare Perplexity Data (if needed)
+    # 5. Initialization of result storage
     perplexity_data = []
     perplexity_results = []
     simple_reasoning_results = []
@@ -416,6 +416,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                         simple_reasoning_results = simple_reasoning_results,
                         perplexity_results = perplexity_results,
                         reasoning_primitives_results = reasoning_primitives_results,
+                        benchmark_results = benchmark_results,
                         output_dir = output_dir,
                         overwrite = True,
                     )
@@ -571,6 +572,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                                 simple_reasoning_results = simple_reasoning_results,
                                 perplexity_results = perplexity_results,
                                 reasoning_primitives_results = reasoning_primitives_results,
+                                benchmark_results = benchmark_results,
                                 output_dir = output_dir,
                                 overwrite = True,
                             )
@@ -632,6 +634,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                                 simple_reasoning_results = simple_reasoning_results,
                                 perplexity_results = perplexity_results,
                                 reasoning_primitives_results = reasoning_primitives_results,
+                                benchmark_results = benchmark_results,
                                 output_dir = output_dir,
                                 overwrite = True,
                             )
@@ -666,6 +669,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                         simple_reasoning_results = simple_reasoning_results,
                         perplexity_results = perplexity_results,
                         reasoning_primitives_results = reasoning_primitives_results,
+                        benchmark_results = benchmark_results,
                         output_dir = output_dir,
                         overwrite = True,
                     )
@@ -681,9 +685,10 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                         model, tokenizer, config
                     )
                     # Optionally, add UT steps info to each result
-                    for result in benchmark_results:
-                        result["ut_steps"] = ut_steps
-                    print(f"✅ Standard benchmarks evaluation completed\n")
+                    if benchmark_results:
+                        for result in benchmark_results:
+                            result["ut_steps"] = ut_steps
+                        print(f"✅ Standard benchmarks evaluation completed\n")
                 except Exception as e:
                     print(f"⚠️ Standard benchmarks evaluation failed: {e}\n")
                 now = time.time()

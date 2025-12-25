@@ -9,11 +9,11 @@ from typing import List, Dict
 
 
 def save_results(
-    simple_reasoning_results: List[Dict],
-    perplexity_results: List[Dict],
-    reasoning_primitives_results: List[Dict],
-    benchmark_results: List[Dict],
-    output_dir: str,
+    simple_reasoning_results: List[Dict] = None,
+    perplexity_results: List[Dict] = None,
+    reasoning_primitives_results: List[Dict] = None,
+    benchmark_results: List[Dict] = None,
+    output_dir: str = "./results",
     overwrite: bool = True,
 ) -> None:
     """Save experiment results to CSV files. Overwrites if overwrite=True."""
