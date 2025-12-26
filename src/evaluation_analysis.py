@@ -617,75 +617,80 @@ class EnhancedOuroMetrics:
 
 
 def analyze_experiment_results(
-    results_folder: str, save_plots: bool = True, save_dir: str = "./plots"
+    results_folder: str, save_plots: bool = True
 ) -> Dict[str, pd.DataFrame]:
     """
-    Comprehensive analysis including reasoning primitives evaluation.
+    Comprehensive analysis including ALL metrics and reasoning primitives evaluation.
 
     Args:
-        results: Main experiment results (n_ary, p_hop, igsm)
-        reasoning_primitives_results: Reasoning primitives evaluation results
-        model_name: Model name for labeling
-        model_size_b: Model size in billions
+        results_folder: Path to folder containing CSV files and config.json
         save_plots: Whether to generate plots
-        save_dir: Directory to save plots
 
     Returns:
         Dict of all computed metrics
     """
     print(f"\n{'=' * 70}")
     print(f"📊 COMPREHENSIVE METRICS ANALYSIS")
+    print(f"📂 Folder: {results_folder}")
     print(f"{'=' * 70}\n")
 
     metrics = EnhancedOuroMetrics()
     save_dir = os.path.join(results_folder, "plots")
+    os.makedirs(save_dir, exist_ok=True)
 
-    # --- Load results CSV ---
+    # =========================================================================
+    # LOAD DATA FILES
+    # =========================================================================
+    print("📥 Loading data files...")
+    
+    # Load main task results
     simple_reasoning_path = os.path.join(results_folder, "simple_reasoning.csv")
     if not os.path.exists(simple_reasoning_path):
         print(f"❌ simple_reasoning.csv not found in {results_folder}")
         return {}
-    reasoning_primitives_path = os.path.join(results_folder, "reasoning_primitives.csv")
-    if not os.path.exists(reasoning_primitives_path):
-        print(
-            f"⚠️ reasoning_primitives.csv not found in {results_folder}, proceeding without reasoning primitives results"
-        )
-        return {}
-
+    
     simple_reasoning_df = pd.read_csv(simple_reasoning_path)
     simple_reasoning_results = simple_reasoning_df.to_dict(orient="records")
-    reasoning_primitives_df = pd.read_csv(reasoning_primitives_path)
-    reasoning_primitives_results = reasoning_primitives_df.to_dict(orient="records")
+    print(f"   ✓ Loaded {len(simple_reasoning_results)} main task results")
+    
+    # Load reasoning primitives results (optional)
+    reasoning_primitives_results = []
+    reasoning_primitives_path = os.path.join(results_folder, "reasoning_primitives.csv")
+    if os.path.exists(reasoning_primitives_path):
+        reasoning_primitives_df = pd.read_csv(reasoning_primitives_path)
+        reasoning_primitives_results = reasoning_primitives_df.to_dict(orient="records")
+        print(f"   ✓ Loaded {len(reasoning_primitives_results)} reasoning primitive results")
+    else:
+        print(f"   ⚠️ reasoning_primitives.csv not found (optional)")
 
-    # --- Load config.json ---
+    # Load config
     config_path = os.path.join(results_folder, "config.json")
     if not os.path.exists(config_path):
-        print(f"❌ config.json not found in {results_folder}")
+        print(f"   ⚠️ config.json not found, using defaults")
         model_name = "Ouro"
         model_size_b = 1.4
     else:
         import json
-
         with open(config_path, "r") as f:
             config = json.load(f)
-        # Try to extract model name and size
+        
         model_config = config.get("MODEL", {})
-        model_hf_path = model_config.get("path", None)
-        model_name = model_hf_path.split("/")[-1] if model_hf_path else None
-
-        if not model_name:
-            model_name = model_config.get("path", "Ouro")
-
-        if "1.4" in model_name:
+        model_path = model_config.get("path", "")
+        model_name = model_path.split("/")[-1] if model_path else "Ouro"
+        
+        if "1.4" in model_name.lower():
             model_size_b = 1.4
-        elif "2.6" in model_name:
+        elif "2.6" in model_name.lower():
             model_size_b = 2.6
         else:
-            print("⚠️ Unable to determine model size from config, defaulting to 1.4B")
-            model_size_b = model_config.get("size_b", 1.4)
+            model_size_b = 1.4
+        
+        print(f"   ✓ Model: {model_name} ({model_size_b}B)")
 
+    print()
+
+    # Add results to metrics object
     metrics.add_results(simple_reasoning_results)
-
     if reasoning_primitives_results:
         metrics.add_reasoning_primitives_results(reasoning_primitives_results)
 
@@ -695,82 +700,190 @@ def analyze_experiment_results(
     # MAIN TASK METRICS
     # =========================================================================
     print("=" * 70)
-    print("MAIN TASK ANALYSIS")
+    print("📊 MAIN TASK ANALYSIS")
     print("=" * 70 + "\n")
 
     # Metric 1: Accuracy vs UT Steps
-    print("📈 Accuracy vs UT Steps:")
+    print("📈 Metric 1: Accuracy vs UT Steps")
+    print("-" * 70)
     acc_by_ut = metrics.compute_accuracy_by_ut_steps()
-    analysis_results["accuracy_by_ut"] = acc_by_ut
-    print(acc_by_ut.to_string(index=False))
-    print()
+    if not acc_by_ut.empty:
+        analysis_results["accuracy_by_ut"] = acc_by_ut
+        print(acc_by_ut.to_string(index=False))
+        
+        # Summary stats
+        best_acc = acc_by_ut.loc[acc_by_ut['accuracy_pct'].idxmax()]
+        print(f"\n   🏆 Best: {best_acc['task_type']} at UT={best_acc['ut_steps']} ({best_acc['accuracy_pct']:.2f}%)")
+    print("\n")
 
     # Metric 2: Depth Efficiency
-    print("📈 Depth Efficiency:")
+    print("📈 Metric 2: Depth Efficiency")
+    print("-" * 70)
     depth_eff = metrics.compute_depth_efficiency()
-    analysis_results["depth_efficiency"] = depth_eff
-    print(depth_eff.to_string(index=False))
-    print()
+    if not depth_eff.empty:
+        analysis_results["depth_efficiency"] = depth_eff
+        print(depth_eff.to_string(index=False))
+        
+        # Check if efficiency improves with depth
+        if len(depth_eff) > 1:
+            trend = "📈 Increasing" if depth_eff['depth_efficiency'].is_monotonic_increasing else "📉 Decreasing"
+            print(f"\n   {trend} efficiency with more UT steps")
+    print("\n")
 
     # Metric 3: Parameter Efficiency
-    print("📈 Parameter Efficiency:")
+    print("📈 Metric 3: Parameter Efficiency")
+    print("-" * 70)
     param_eff = metrics.compute_parameter_efficiency(model_size_b=model_size_b)
-    analysis_results["param_efficiency"] = param_eff
-    print(param_eff.to_string(index=False))
-    print()
+    if not param_eff.empty:
+        analysis_results["param_efficiency"] = param_eff
+        print(param_eff.to_string(index=False))
+        
+        # Highlight best param efficiency
+        best_param_eff = param_eff.loc[param_eff['param_efficiency'].idxmax()]
+        print(f"\n   🏆 Best param efficiency: UT={best_param_eff['ut_steps']} ({best_param_eff['param_efficiency']:.4f})")
+    print("\n")
 
-    # Metric 4: Throughput
-    print("📈 Throughput Efficiency:")
+    # Metric 4: Throughput Efficiency
+    print("📈 Metric 4: Throughput Efficiency")
+    print("-" * 70)
     throughput = metrics.compute_throughput_efficiency()
-    analysis_results["throughput"] = throughput
-    print(throughput.to_string(index=False))
-    print()
+    if not throughput.empty:
+        analysis_results["throughput"] = throughput
+        print(throughput.to_string(index=False))
+        
+        # Highlight speed-accuracy tradeoff
+        best_throughput = throughput.loc[throughput['tokens_per_sec'].idxmax()]
+        best_accuracy = throughput.loc[throughput['accuracy_pct'].idxmax()]
+        print(f"\n   ⚡ Fastest: UT={best_throughput['ut_steps']} ({best_throughput['tokens_per_sec']:.1f} tok/s)")
+        print(f"   🎯 Most accurate: UT={best_accuracy['ut_steps']} ({best_accuracy['accuracy_pct']:.2f}%)")
+    print("\n")
+
+    # Metric 5: Difficulty Scaling (if available)
+    if 'difficulty' in simple_reasoning_df.columns:
+        print("📈 Metric 5: Difficulty Scaling")
+        print("-" * 70)
+        difficulty_scaling = metrics.compute_difficulty_scaling()
+        if not difficulty_scaling.empty:
+            analysis_results["difficulty_scaling"] = difficulty_scaling
+            print(difficulty_scaling.to_string(index=False))
+            
+            # Analyze improvement on hard problems
+            for task in difficulty_scaling['task_type'].unique():
+                task_data = difficulty_scaling[difficulty_scaling['task_type'] == task]
+                if len(task_data) > 1:
+                    print(f"\n   {task}: Accuracy improves with UT steps on harder problems")
+        print("\n")
 
     # =========================================================================
-    # REASONING PRIMITIVES EVALUATION METRICS
+    # REASONING PRIMITIVES METRICS
     # =========================================================================
     if reasoning_primitives_results:
         print("=" * 70)
-        print("REASONING PRIMITIVES ANALYSIS")
+        print("🧠 REASONING PRIMITIVES ANALYSIS")
         print("=" * 70 + "\n")
 
-        # Metric 5: Reasoning Primitive Accuracy
-        print("📈 Reasoning Primitives by Depth & Variant:")
+        # Metric 6: Reasoning Primitive Accuracy
+        print("📈 Metric 6: Reasoning Primitives by Depth & Variant")
+        print("-" * 70)
         primitive_acc = metrics.compute_reasoning_primitive_accuracy()
         if not primitive_acc.empty:
             analysis_results["primitive_accuracy"] = primitive_acc
             print(primitive_acc.to_string(index=False))
-            print()
+            
+            # Summary by depth
+            print("\n   Summary by depth:")
+            for depth in primitive_acc['depth'].unique():
+                depth_data = primitive_acc[primitive_acc['depth'] == depth]
+                avg_acc = depth_data['accuracy_pct'].mean()
+                print(f"   • Depth-{depth}: {avg_acc:.2f}% average")
+        print("\n")
 
-        # Metric 6: Depth Generalization
-        print("📈 Depth Generalization (Depth-0 vs Depth-1):")
+        # Metric 7: Depth Generalization
+        print("📈 Metric 7: Depth Generalization Gap")
+        print("-" * 70)
         depth_gen = metrics.compute_depth_generalization()
         if not depth_gen.empty:
             analysis_results["depth_generalization"] = depth_gen
             print(depth_gen.to_string(index=False))
-            print()
+            
+            if 'generalization_gap' in depth_gen.columns:
+                avg_gap = depth_gen['generalization_gap'].mean()
+                print(f"\n   📊 Average gap: {avg_gap:.2f}%")
+                
+                if avg_gap > 15:
+                    print("   ⚠️  Large gap! Model struggles with indirection")
+                elif avg_gap > 5:
+                    print("   ✓ Moderate gap - reasonable performance on depth-1")
+                else:
+                    print("   ✅ Excellent! Strong generalization to deeper reasoning")
+                
+                # Check if gap improves with UT steps
+                if len(depth_gen) > 1:
+                    gap_trend = depth_gen.groupby('ut_steps')['generalization_gap'].mean()
+                    if gap_trend.is_monotonic_decreasing:
+                        print("   📈 Gap decreases with more UT steps - thinking helps!")
+        print("\n")
 
-        # Metric 7: Variant Comparison
-        print("📈 Accuracy by Variant:")
+        # Metric 8: Variant Comparison (Format Robustness)
+        print("📈 Metric 8: Format Robustness (Variant Comparison)")
+        print("-" * 70)
         variant_comp = metrics.compute_variant_comparison()
         if not variant_comp.empty:
             analysis_results["variant_comparison"] = variant_comp
             print(variant_comp.to_string(index=False))
-            print()
+            
+            # Check consistency across formats
+            print("\n   Format consistency by UT step:")
+            for ut in variant_comp['ut_steps'].unique():
+                ut_data = variant_comp[variant_comp['ut_steps'] == ut]
+                acc_std = ut_data['accuracy_pct'].std()
+                acc_range = ut_data['accuracy_pct'].max() - ut_data['accuracy_pct'].min()
+                
+                if acc_std > 10:
+                    status = "⚠️  High variance"
+                elif acc_std > 5:
+                    status = "○ Moderate variance"
+                else:
+                    status = "✓ Consistent"
+                
+                print(f"   • UT={ut}: {status} (σ={acc_std:.1f}%, range={acc_range:.1f}%)")
+        print("\n")
 
-        # Metric 8: Main vs Reasoning Primitives
-        print("📈 Main Tasks vs Reasoning Primitives:")
+        # Metric 9: Main vs Reasoning Primitives Comparison
+        print("📈 Metric 9: Main Tasks vs Reasoning Primitives")
+        print("-" * 70)
         comparison = metrics.compute_reasoning_primitives_vs_main_comparison()
         if not comparison.empty:
             analysis_results["main_vs_reasoning_primitives"] = comparison
             print(comparison.to_string(index=False))
-            print()
+            
+            # Analyze relative performance
+            print("\n   Relative performance:")
+            for _, row in comparison.iterrows():
+                ut = row['ut_steps']
+                gap = row.get('gap', 0)
+                
+                if abs(gap) < 3:
+                    status = "≈ Similar performance"
+                elif gap > 0:
+                    status = f"↑ Main tasks {gap:.1f}% better"
+                else:
+                    status = f"↑ Primitives {abs(gap):.1f}% better"
+                
+                print(f"   • UT={ut}: {status}")
+            
+            # Check convergence
+            if len(comparison) > 1:
+                gap_trend = comparison['gap'].abs()
+                if gap_trend.is_monotonic_decreasing:
+                    print("\n   📈 Performance gap narrows with more UT steps!")
+        print("\n")
 
     # =========================================================================
-    # SUMMARY TABLE
+    # COMPREHENSIVE SUMMARY TABLES
     # =========================================================================
     print("=" * 70)
-    print("COMPREHENSIVE SUMMARY")
+    print("📋 COMPREHENSIVE SUMMARY TABLES")
     print("=" * 70 + "\n")
 
     summary_tables = metrics.generate_comprehensive_summary(
@@ -780,26 +893,98 @@ def analyze_experiment_results(
     )
 
     for table_name, table_df in summary_tables.items():
-        print(f"📋 {table_name.replace('_', ' ').title()}:")
+        print(f"📊 {table_name.replace('_', ' ').title()}")
+        print("-" * 70)
         print(table_df.to_string(index=False))
         print()
         analysis_results[f"summary_{table_name}"] = table_df
 
     # =========================================================================
+    # KEY INSIGHTS SECTION
+    # =========================================================================
+    print("=" * 70)
+    print("💡 KEY INSIGHTS")
+    print("=" * 70 + "\n")
+    
+    insights = []
+    
+    # Insight 1: Overall best configuration
+    if not acc_by_ut.empty:
+        overall_best = acc_by_ut.groupby('ut_steps')['accuracy_pct'].mean().idxmax()
+        overall_best_acc = acc_by_ut.groupby('ut_steps')['accuracy_pct'].mean().max()
+        insights.append(f"• Best overall performance: UT={overall_best} ({overall_best_acc:.2f}%)")
+    
+    # Insight 2: Scaling behavior
+    if not acc_by_ut.empty and len(acc_by_ut['ut_steps'].unique()) > 1:
+        ut_sorted = acc_by_ut.groupby('ut_steps')['accuracy_pct'].mean().sort_index()
+        if ut_sorted.is_monotonic_increasing:
+            insights.append("• Accuracy scales positively with UT steps ✓")
+        else:
+            insights.append("• Accuracy does not scale monotonically with UT steps ⚠️")
+    
+    # Insight 3: Reasoning primitives performance
+    if reasoning_primitives_results and not primitive_acc.empty:
+        depth0_acc = primitive_acc[primitive_acc['depth'] == 0]['accuracy_pct'].mean()
+        depth1_acc = primitive_acc[primitive_acc['depth'] == 1]['accuracy_pct'].mean()
+        insights.append(f"• Reasoning: Depth-0 {depth0_acc:.1f}% vs Depth-1 {depth1_acc:.1f}%")
+        
+        if depth0_acc - depth1_acc > 10:
+            insights.append("  ⚠️ Significant drop at depth-1 - generalization challenge")
+        else:
+            insights.append("  ✓ Good generalization to depth-1 problems")
+    
+    # Insight 4: Speed-accuracy tradeoff
+    if not throughput.empty:
+        best_speed_ut = throughput.loc[throughput['tokens_per_sec'].idxmax(), 'ut_steps']
+        best_acc_ut = throughput.loc[throughput['accuracy_pct'].idxmax(), 'ut_steps']
+        
+        if best_speed_ut != best_acc_ut:
+            insights.append(f"• Speed-accuracy tradeoff: Fastest at UT={best_speed_ut}, Most accurate at UT={best_acc_ut}")
+    
+    # Print all insights
+    for insight in insights:
+        print(insight)
+    
+    print()
+
+    # =========================================================================
     # GENERATE PLOTS
     # =========================================================================
     if save_plots:
-        print("📊 Generating plots...")
+        print("=" * 70)
+        print("📊 GENERATING VISUALIZATION PLOTS")
+        print("=" * 70 + "\n")
+        
         metrics.generate_enhanced_plots(
             main_results=simple_reasoning_results,
             reasoning_primitives_results=reasoning_primitives_results,
             save_dir=save_dir,
         )
+        print()
 
+    # =========================================================================
+    # SAVE ALL METRICS TO CSV
+    # =========================================================================
+    print("=" * 70)
+    print("💾 SAVING METRICS TO CSV")
+    print("=" * 70 + "\n")
+    
+    saved_count = 0
+    for metric_name, df in analysis_results.items():
+        if not df.empty:
+            filename = os.path.join(results_folder, f"{metric_name}.csv")
+            df.to_csv(filename, index=False)
+            print(f"   ✓ {metric_name}.csv")
+            saved_count += 1
+    
+    print(f"\n   📁 Saved {saved_count} metric files to {results_folder}")
+    print()
+
+    print(f"{'=' * 70}")
+    print(f"✅ ANALYSIS COMPLETE")
     print(f"{'=' * 70}\n")
 
     return analysis_results
-
 
 class PaperComplianceChecker:
     """
