@@ -7,7 +7,7 @@ from datetime import datetime
 from src.config_loader import load_config_from_json, post_process_config
 from src.utils import configure_environment_paths, auto_unzip_colab_content
 from src.runner import run_experiment
-from src.evaluation_metrics import analyze_experiment_results
+from evaluation_analysis import analyze_experiment_results
 
 # 1. Setup Environment
 DATA_PATH, OUTPUT_PATH, ENV = configure_environment_paths()

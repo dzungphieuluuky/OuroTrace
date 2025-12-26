@@ -4,10 +4,8 @@ Includes reasoning primitives (depth-k variable assignment) analysis
 """
 
 import os
-import numpy as np
 import pandas as pd
-from typing import Dict, List, Any, Tuple, Optional
-from collections import defaultdict
+from typing import Dict, List, Any, Optional
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 

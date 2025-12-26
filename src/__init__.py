@@ -14,7 +14,7 @@ from .data_generator import (
 from .new_model import OuroExperiment
 from .safe_model import SafeOuroBatchExperiment
 from .new_runner import run_experiment, run_reasoning_primitives_evaluation
-from .evaluation_metrics import analyze_experiment_results
+from .evaluation_analysis import analyze_experiment_results
 
 __all__ = [
     "load_config_from_json",
