@@ -17,7 +17,7 @@ from .utils import (
     save_config,
     generate_test_id,
 )
-from .evaluation_metrics import (
+from .evaluation_analysis import (
     EnhancedOuroMetrics,
     analyze_experiment_results,
     PaperComplianceChecker,

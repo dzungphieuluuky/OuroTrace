@@ -26,7 +26,7 @@ from src import (
 - `config_loader.py`: Loads and parses experiment configuration files (JSON).
 - `data_generator.py`: Generates and preprocesses datasets for supported reasoning tasks.
 - `model.py`: Defines experiment classes and manages CoT evaluation logic.
-- `evaluation_metrics.py`: Provides functions for analyzing and visualizing experiment results.
+- `evaluation_analysis.py`: Provides functions for analyzing and visualizing experiment results.
 - `utils.py`: Contains helper functions for environment setup and path management.
 - `runner.py`: Orchestrates batch experiment execution and result collection.
 
