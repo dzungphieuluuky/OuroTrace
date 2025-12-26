@@ -85,7 +85,7 @@ class SafeOptimizations:
         print("   ✓ Warmup complete")
 
 
-class SafeOuroThinkingExperiment:
+class OuroExperiment:
     """Core experiment class for Ouro model testing"""
 
     def __init__(
@@ -656,7 +656,7 @@ class SafeOuroThinkingExperiment:
             raise SystemExit(f"Experiment failed: {failure.reason}")
 
 
-class SafeOuroBatchExperiment(SafeOuroThinkingExperiment):
+class SafeOuroBatchExperiment(OuroExperiment):
     """Extended experiment class with batch processing"""
 
     def __init__(

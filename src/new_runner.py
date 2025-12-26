@@ -31,7 +31,7 @@ from .data_generator import (
     load_and_preprocess_data,
 )
 from .new_model import (
-    SafeOuroThinkingExperiment,
+    OuroExperiment,
     SafeOptimizations,
 )
 
@@ -125,7 +125,7 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
     return reasoning_primitives_results
 
 
-def run_standard_benchmarks(model, tokenizer, config: dict):
+def run_benchmark_evaluation(model, tokenizer, config: dict):
     """
     Runs standard benchmarks using lm-evaluation-harness.
     
@@ -217,7 +217,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
     return benchmark_results
 
 
-def run_batch_experiment(config: dict) -> list[List[Dict]]:
+def run_experiment(config: dict) -> list[List[Dict]]:
     """Run batch experiment based on the provided configuration.
 
     Args:
@@ -273,7 +273,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     print(f"{'=' * 70}\n")
 
     # 3. Setup Experiment Handler
-    experiment = SafeOuroThinkingExperiment(
+    experiment = OuroExperiment(
         model_path,
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
@@ -688,7 +688,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                 print(f"{'=' * 70}\n")
 
                 try:
-                    benchmark_results = run_standard_benchmarks(
+                    benchmark_results = run_benchmark_evaluation(
                         model, tokenizer, config
                     )
                     # Optionally, add UT steps info to each result

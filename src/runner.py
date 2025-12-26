@@ -30,7 +30,7 @@ from .data_generator import (
     load_and_preprocess_data,
 )
 from .new_model import (
-    SafeOuroThinkingExperiment,
+    OuroExperiment,
     SafeOptimizations,
 )
 
@@ -187,7 +187,7 @@ def run_holistic_evaluation(model, tokenizer, config: dict):
     return holistic_results
 
 
-def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
+def run_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dict]]:
     """Run batch experiment based on the provided configuration.
 
     Args:
@@ -243,7 +243,7 @@ def run_batch_experiment(config: dict) -> Tuple[List[Dict], List[Dict], List[Dic
     print(f"{'=' * 70}\n")
 
     # 3. Setup Experiment Handler
-    experiment = SafeOuroThinkingExperiment(
+    experiment = OuroExperiment(
         model_path,
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
