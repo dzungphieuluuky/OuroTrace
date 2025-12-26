@@ -305,19 +305,6 @@ def run_experiment(config: dict) -> list[List[Dict]]:
         print(f"   {task_type:12s}: {len(items):4d} samples")
     print(f"{'=' * 70}\n")
 
-    # Check experiment compliance with paper
-    checker = PaperComplianceChecker()
-
-    task_alignment = checker.check_task_alignment(list(test_datasets.keys()))
-    ut_coverage = checker.check_ut_steps_coverage(ut_steps_list)
-
-    print(f"\n{'=' * 70}")
-    print(f"PAPER COMPLIANCE CHECK")
-    print(f"{'=' * 70}")
-    print(f"Task Alignment: {task_alignment}")
-    print(f"UT Steps Coverage: {ut_coverage}")
-    print(f"{'=' * 70}\n")
-
     # 5. Initialization of result storage
     perplexity_data = []
     perplexity_results = []
