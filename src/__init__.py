@@ -12,7 +12,6 @@ from .data_generator import (
     format_5_shot_prompt,
 )
 from .new_model import OuroExperiment
-from .safe_model import SafeOuroBatchExperiment
 from .new_runner import run_experiment, run_reasoning_primitives_evaluation
 from .evaluation_analysis import analyze_experiment_results
 
