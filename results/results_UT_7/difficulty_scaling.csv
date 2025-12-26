@@ -1,0 +1,10 @@
+task_type,difficulty,ut_steps,accuracy,n_samples,accuracy_pct
+igsm,depth_4_hierarchical_mod_7,7,0.17,100,17.0
+n_ary,16_ops,7,0.01,100,1.0
+n_ary,2_ops,7,0.97,100,97.0
+n_ary,32_ops,7,0.0,100,0.0
+n_ary,4_ops,7,0.41,100,41.0
+n_ary,8_ops,7,0.01,100,1.0
+p_hop,16_hops,7,0.17,100,17.0
+p_hop,24_hops,7,0.21,100,21.0
+p_hop,32_hops,7,0.16,100,16.0

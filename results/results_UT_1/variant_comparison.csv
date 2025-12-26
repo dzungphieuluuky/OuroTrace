@@ -1,0 +1,4 @@
+variant,ut_steps,accuracy,std,n_samples,accuracy_pct
+code,1,0.52,0.5008535428214359,200,52.0
+equation,1,0.655,0.4765611742093758,200,65.5
+math,1,0.585,0.49395847484821204,200,58.5
