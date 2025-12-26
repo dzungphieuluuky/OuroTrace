@@ -1,4 +1,5 @@
 import os
+import random
 import time
 import wandb
 import gc
@@ -281,10 +282,7 @@ def run_experiment(config: dict) -> list[List[Dict]]:
         max_batch_size=optimization_config.get("max_batch_size", 8),
         max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
-
-    torch.manual_seed(42)
-    print(f"Random seed set to 42")
-
+    
     # 4. Prepare Test Datasets
     print(f"\n{'=' * 70}")
     print(f"LOADING TEST DATASETS")
