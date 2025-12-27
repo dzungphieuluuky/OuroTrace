@@ -44,17 +44,22 @@
       "num_samples_per_level": 100
     },
     "igsm": {
-      "num_samples_total": 100
+      "num_samples": 100
+    },
+    "reasoning_primitives": {
+      "num_samples": 100,
+      "template_format": "chat"
     }
   },
   "OPTIMIZATION": {
-    "enable_batch": true,
-    "max_batch_size": 12,
-    "max_new_tokens": 512
-  },
-  "reasoning_primitives": {
-    "num_samples": 100,
-    "template_format": "instruction"
+    "enable_batch": false,
+    "max_batch_size": 8,
+    "max_new_tokens": 16,
+    "task_batch_size": {
+      "n_ary": 8,
+      "p_hop": 4,
+      "igsm": 1
+    }
   },
   "ENABLE_HEAVY_BENCHMARKS": false,
   "PERIODIC_SAVE_INTERVAL": 300,

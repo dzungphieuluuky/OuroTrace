@@ -1,4 +1,0 @@
-variant,ut_steps,depth_0_acc,depth_1_acc,generalization_gap
-code,8,20.0,19.0,1.0
-equation,8,31.0,20.0,11.0
-math,8,28.000000000000004,26.0,2.0000000000000036
