@@ -1,4 +1,0 @@
-Task,UT Steps,Accuracy,Time (s),Tokens,Model,Category
-igsm,4,19.0,7.764,5.7,Ouro-1.4B-Thinking,Main Tasks
-n_ary,4,2.6,26.563,10.6,Ouro-1.4B-Thinking,Main Tasks
-p_hop,4,19.67,16.824,14.8,Ouro-1.4B-Thinking,Main Tasks
