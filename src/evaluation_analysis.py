@@ -37,6 +37,11 @@ class EnhancedOuroMetrics:
     def __init__(self):
         self.results_cache = []
         self.reasoning_primitives_cache = []
+        self.perplexity_cache = []
+
+    def add_perplexity_results(self, results: List[Dict[str, Any]]) -> None:
+        """Add perplexity evaluation results"""
+        self.perplexity_cache.extend(results)
 
     def add_results(self, results: List[Dict[str, Any]]) -> None:
         """Add main experiment results"""
@@ -385,15 +390,16 @@ class EnhancedOuroMetrics:
     # =========================================================================
     # ENHANCED PLOTTING WITH REASONING PRIMITIVES RESULTS
     # =========================================================================
-
     def generate_enhanced_plots(
         self,
         main_results: Optional[List[Dict]] = None,
         reasoning_primitives_results: Optional[List[Dict]] = None,
+        perplexity_results: Optional[List[Dict]] = None,
         save_dir: str = "./plots",
     ) -> None:
         """
-        Generate comprehensive plots including reasoning primitives evaluation.
+        Generate comprehensive plots for ALL computed metrics.
+        Every analysis function gets its own visualization(s).
         """
         os.makedirs(save_dir, exist_ok=True)
 
@@ -401,129 +407,390 @@ class EnhancedOuroMetrics:
             main_results = self.results_cache
         if reasoning_primitives_results is None:
             reasoning_primitives_results = self.reasoning_primitives_cache
+        if perplexity_results is None:
+            perplexity_results = self.perplexity_cache
+        print(f"📊 Generating comprehensive visualizations...")
+        plot_count = 0
 
-        # Plot 1: Main Tasks Accuracy
+        # =========================================================================
+        # MAIN TASK PLOTS
+        # =========================================================================
+        
         if main_results:
+            # PLOT 1: Accuracy vs UT Steps (Line chart per task)
             acc_by_ut = self.compute_accuracy_by_ut_steps(main_results)
-
-            plt.figure(figsize=(10, 6))
-            for task in acc_by_ut["task_type"].unique():
-                task_data = acc_by_ut[acc_by_ut["task_type"] == task]
-                plt.plot(
-                    task_data["ut_steps"],
-                    task_data["accuracy_pct"],
-                    marker="o",
-                    label=task,
-                    linewidth=2,
-                )
-
-            plt.xlabel("UT Steps", fontsize=12)
-            plt.ylabel("Accuracy (%)", fontsize=12)
-            plt.title("Main Tasks: Accuracy vs UT Steps", fontsize=14)
-            plt.legend()
-            plt.grid(True, alpha=0.3)
-            plt.savefig(
-                f"{save_dir}/main_accuracy_vs_ut.png", dpi=300, bbox_inches="tight"
-            )
-            plt.close()
-
-        # Plot 2: Reasoning Primitives by Depth
-        if reasoning_primitives_results:
-            primitive_acc = self.compute_reasoning_primitive_accuracy(
-                reasoning_primitives_results
-            )
-
-            if not primitive_acc.empty:
-                plt.figure(figsize=(12, 6))
-
-                for (depth, variant), group in primitive_acc.groupby(
-                    ["depth", "variant"]
-                ):
-                    plt.plot(
-                        group["ut_steps"],
-                        group["accuracy_pct"],
-                        marker="o",
-                        label=f"Depth-{depth} ({variant})",
-                        linewidth=2,
-                    )
-
-                plt.xlabel("UT Steps", fontsize=12)
-                plt.ylabel("Accuracy (%)", fontsize=12)
-                plt.title(
-                    "Reasoning Primitives: Accuracy by Depth & Variant", fontsize=14
-                )
-                plt.legend()
-                plt.grid(True, alpha=0.3)
-                plt.savefig(
-                    f"{save_dir}/primitives_by_depth.png", dpi=300, bbox_inches="tight"
-                )
-                plt.close()
-
-        # Plot 3: Depth Generalization Gap
-        if reasoning_primitives_results:
-            depth_gen = self.compute_depth_generalization(reasoning_primitives_results)
-
-            if not depth_gen.empty and "generalization_gap" in depth_gen.columns:
+            if not acc_by_ut.empty:
                 plt.figure(figsize=(10, 6))
+                for task in acc_by_ut["task_type"].unique():
+                    task_data = acc_by_ut[acc_by_ut["task_type"] == task]
+                    plt.errorbar(
+                        task_data["ut_steps"],
+                        task_data["accuracy_pct"],
+                        yerr=task_data["std"] * 100,
+                        marker="o",
+                        label=task,
+                        linewidth=2,
+                        capsize=5,
+                    )
+                plt.xlabel("UT Steps", fontsize=12, fontweight="bold")
+                plt.ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                plt.title("Main Tasks: Accuracy vs UT Steps", fontsize=14, fontweight="bold")
+                plt.legend(fontsize=10)
+                plt.grid(True, alpha=0.3)
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/1_main_accuracy_vs_ut.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
 
+            # PLOT 2: Accuracy Heatmap (Task x UT Steps)
+            if not acc_by_ut.empty:
+                pivot = acc_by_ut.pivot(index="task_type", columns="ut_steps", values="accuracy_pct")
+                plt.figure(figsize=(10, 6))
+                plt.imshow(pivot.values, cmap="RdYlGn", aspect="auto", vmin=0, vmax=100)
+                plt.colorbar(label="Accuracy (%)")
+                plt.xticks(range(len(pivot.columns)), pivot.columns)
+                plt.yticks(range(len(pivot.index)), pivot.index)
+                plt.xlabel("UT Steps", fontsize=12, fontweight="bold")
+                plt.ylabel("Task Type", fontsize=12, fontweight="bold")
+                plt.title("Accuracy Heatmap: Task Type vs UT Steps", fontsize=14, fontweight="bold")
+                
+                # Add text annotations
+                for i in range(len(pivot.index)):
+                    for j in range(len(pivot.columns)):
+                        plt.text(j, i, f"{pivot.values[i, j]:.1f}", 
+                                ha="center", va="center", fontsize=9)
+                
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/2_accuracy_heatmap.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+            # PLOT 3: Depth Efficiency
+            depth_eff = self.compute_depth_efficiency(main_results)
+            if not depth_eff.empty:
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+                
+                # Left: Accuracy vs Effective Depth
+                ax1.plot(depth_eff["effective_depth"], depth_eff["accuracy_pct"], 
+                        marker="s", linewidth=2, color="purple", markersize=8)
+                ax1.set_xlabel("Effective Depth (k × L)", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax1.set_title("Accuracy vs Effective Depth", fontsize=13, fontweight="bold")
+                ax1.grid(True, alpha=0.3)
+                
+                # Right: Depth Efficiency (Accuracy / Depth)
+                ax2.plot(depth_eff["ut_steps"], depth_eff["depth_efficiency"], 
+                        marker="o", linewidth=2, color="green", markersize=8)
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Depth Efficiency (Acc / Depth)", fontsize=12, fontweight="bold")
+                ax2.set_title("Efficiency: Accuracy per Unit Depth", fontsize=13, fontweight="bold")
+                ax2.grid(True, alpha=0.3)
+                
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/3_depth_efficiency.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+            # PLOT 4: Parameter Efficiency
+            param_eff = self.compute_parameter_efficiency(main_results)
+            if not param_eff.empty:
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+                
+                # Left: Accuracy vs UT Steps
+                ax1.bar(param_eff["ut_steps"], param_eff["accuracy_pct"], 
+                    color="steelblue", alpha=0.7)
+                ax1.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax1.set_title("Accuracy by UT Steps", fontsize=13, fontweight="bold")
+                ax1.grid(True, alpha=0.3, axis='y')
+                
+                # Right: Parameter Efficiency
+                ax2.plot(param_eff["ut_steps"], param_eff["param_efficiency"], 
+                        marker="D", linewidth=2, color="orange", markersize=8)
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Param Efficiency (Acc / B)", fontsize=12, fontweight="bold")
+                ax2.set_title("Parameter Efficiency", fontsize=13, fontweight="bold")
+                ax2.grid(True, alpha=0.3)
+                
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/4_parameter_efficiency.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+            # PLOT 5: Throughput Analysis (Multi-panel)
+            throughput = self.compute_throughput_efficiency(main_results)
+            if not throughput.empty:
+                fig = plt.figure(figsize=(16, 10))
+                gs = fig.add_gridspec(2, 2, hspace=0.3, wspace=0.3)
+                
+                # Top-left: Tokens per second
+                ax1 = fig.add_subplot(gs[0, 0])
+                ax1.plot(throughput["ut_steps"], throughput["tokens_per_sec"], 
+                        marker="o", linewidth=2, color="green", markersize=8)
+                ax1.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Tokens/Second", fontsize=12, fontweight="bold")
+                ax1.set_title("Throughput: Tokens per Second", fontsize=13, fontweight="bold")
+                ax1.grid(True, alpha=0.3)
+                
+                # Top-right: Generation time
+                ax2 = fig.add_subplot(gs[0, 1])
+                ax2.plot(throughput["ut_steps"], throughput["generation_time"], 
+                        marker="s", linewidth=2, color="red", markersize=8)
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Generation Time (s)", fontsize=12, fontweight="bold")
+                ax2.set_title("Average Generation Time", fontsize=13, fontweight="bold")
+                ax2.grid(True, alpha=0.3)
+                
+                # Bottom-left: Accuracy per second
+                ax3 = fig.add_subplot(gs[1, 0])
+                ax3.plot(throughput["ut_steps"], throughput["accuracy_per_sec"], 
+                        marker="^", linewidth=2, color="purple", markersize=8)
+                ax3.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax3.set_ylabel("Accuracy per Second", fontsize=12, fontweight="bold")
+                ax3.set_title("Efficiency: Accuracy / Time", fontsize=13, fontweight="bold")
+                ax3.grid(True, alpha=0.3)
+                
+                # Bottom-right: Speed-Accuracy Tradeoff
+                ax4 = fig.add_subplot(gs[1, 1])
+                scatter = ax4.scatter(throughput["tokens_per_sec"], throughput["accuracy_pct"], 
+                                    s=100, c=throughput["ut_steps"], cmap="viridis", 
+                                    edgecolors="black", linewidth=1.5)
+                for i, ut in enumerate(throughput["ut_steps"]):
+                    ax4.annotate(f"UT={ut}", 
+                            (throughput["tokens_per_sec"].iloc[i], 
+                                throughput["accuracy_pct"].iloc[i]),
+                            fontsize=9, ha='right')
+                ax4.set_xlabel("Tokens per Second", fontsize=12, fontweight="bold")
+                ax4.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax4.set_title("Speed-Accuracy Tradeoff", fontsize=13, fontweight="bold")
+                ax4.grid(True, alpha=0.3)
+                plt.colorbar(scatter, ax=ax4, label="UT Steps")
+                
+                plt.savefig(f"{save_dir}/5_throughput_analysis.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+            # PLOT 6: Difficulty Scaling (if available)
+            difficulty_scaling = self.compute_difficulty_scaling(main_results)
+            if not difficulty_scaling.empty:
+                fig, axes = plt.subplots(1, len(difficulty_scaling["task_type"].unique()), 
+                                        figsize=(6*len(difficulty_scaling["task_type"].unique()), 6))
+                if len(difficulty_scaling["task_type"].unique()) == 1:
+                    axes = [axes]
+                
+                for idx, task in enumerate(difficulty_scaling["task_type"].unique()):
+                    task_data = difficulty_scaling[difficulty_scaling["task_type"] == task]
+                    
+                    pivot = task_data.pivot(index="difficulty", columns="ut_steps", 
+                                        values="accuracy_pct")
+                    
+                    for col in pivot.columns:
+                        axes[idx].plot(pivot.index, pivot[col], marker="o", 
+                                    label=f"UT={col}", linewidth=2)
+                    
+                    axes[idx].set_xlabel("Difficulty Level", fontsize=12, fontweight="bold")
+                    axes[idx].set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                    axes[idx].set_title(f"{task}: Difficulty Scaling", fontsize=13, fontweight="bold")
+                    axes[idx].legend()
+                    axes[idx].grid(True, alpha=0.3)
+                
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/6_difficulty_scaling.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+        # =========================================================================
+        # REASONING PRIMITIVES PLOTS
+        # =========================================================================
+        
+        if reasoning_primitives_results:
+            # PLOT 7: Reasoning Primitives by Depth & Variant
+            primitive_acc = self.compute_reasoning_primitive_accuracy(reasoning_primitives_results)
+            if not primitive_acc.empty:
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+                
+                # Left: All combinations
+                for (depth, variant), group in primitive_acc.groupby(["depth", "variant"]):
+                    ax1.plot(group["ut_steps"], group["accuracy_pct"], 
+                            marker="o", label=f"Depth-{depth} ({variant})", linewidth=2)
+                
+                ax1.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax1.set_title("Reasoning Primitives: All Variants", fontsize=13, fontweight="bold")
+                ax1.legend(fontsize=9)
+                ax1.grid(True, alpha=0.3)
+                
+                # Right: Average by depth
+                depth_avg = primitive_acc.groupby(["depth", "ut_steps"])["accuracy_pct"].mean().reset_index()
+                for depth in depth_avg["depth"].unique():
+                    depth_data = depth_avg[depth_avg["depth"] == depth]
+                    ax2.plot(depth_data["ut_steps"], depth_data["accuracy_pct"], 
+                            marker="s", label=f"Depth-{depth}", linewidth=3, markersize=10)
+                
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax2.set_title("Average Accuracy by Depth", fontsize=13, fontweight="bold")
+                ax2.legend(fontsize=11)
+                ax2.grid(True, alpha=0.3)
+                
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/7_primitives_by_depth.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+            # PLOT 8: Depth Generalization Gap (Multiple views)
+            depth_gen = self.compute_depth_generalization(reasoning_primitives_results)
+            if not depth_gen.empty and "generalization_gap" in depth_gen.columns:
+                fig = plt.figure(figsize=(16, 6))
+                gs = fig.add_gridspec(1, 3, hspace=0.3, wspace=0.3)
+                
+                # Left: Generalization gap by variant
+                ax1 = fig.add_subplot(gs[0, 0])
                 for variant in depth_gen["variant"].unique():
                     var_data = depth_gen[depth_gen["variant"] == variant]
-                    plt.plot(
-                        var_data["ut_steps"],
-                        var_data["generalization_gap"],
-                        marker="s",
-                        label=variant,
-                        linewidth=2,
-                    )
-
-                plt.axhline(y=0, color="red", linestyle="--", alpha=0.5)
-                plt.xlabel("UT Steps", fontsize=12)
-                plt.ylabel("Depth-0 Acc - Depth-1 Acc (%)", fontsize=12)
-                plt.title("Generalization Gap (Depth-0 vs Depth-1)", fontsize=14)
-                plt.legend()
-                plt.grid(True, alpha=0.3)
-                plt.savefig(
-                    f"{save_dir}/generalization_gap.png", dpi=300, bbox_inches="tight"
-                )
+                    ax1.plot(var_data["ut_steps"], var_data["generalization_gap"], 
+                            marker="s", label=variant, linewidth=2, markersize=8)
+                ax1.axhline(y=0, color="red", linestyle="--", alpha=0.5, linewidth=2)
+                ax1.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Depth-0 Acc - Depth-1 Acc (%)", fontsize=12, fontweight="bold")
+                ax1.set_title("Generalization Gap by Variant", fontsize=13, fontweight="bold")
+                ax1.legend()
+                ax1.grid(True, alpha=0.3)
+                
+                # Middle: Depth-0 vs Depth-1 comparison
+                ax2 = fig.add_subplot(gs[0, 1])
+                avg_by_ut = depth_gen.groupby("ut_steps")[["depth_0_acc", "depth_1_acc"]].mean()
+                x = range(len(avg_by_ut))
+                width = 0.35
+                ax2.bar([i - width/2 for i in x], avg_by_ut["depth_0_acc"], 
+                    width, label="Depth-0", color="steelblue", alpha=0.8)
+                ax2.bar([i + width/2 for i in x], avg_by_ut["depth_1_acc"], 
+                    width, label="Depth-1", color="orange", alpha=0.8)
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax2.set_title("Depth-0 vs Depth-1 Accuracy", fontsize=13, fontweight="bold")
+                ax2.set_xticks(x)
+                ax2.set_xticklabels(avg_by_ut.index)
+                ax2.legend()
+                ax2.grid(True, alpha=0.3, axis='y')
+                
+                # Right: Gap improvement over UT steps
+                ax3 = fig.add_subplot(gs[0, 2])
+                avg_gap = depth_gen.groupby("ut_steps")["generalization_gap"].mean()
+                colors = ["red" if g > 10 else "orange" if g > 5 else "green" for g in avg_gap.values]
+                ax3.bar(range(len(avg_gap)), avg_gap.values, color=colors, alpha=0.7)
+                ax3.axhline(y=10, color="red", linestyle="--", alpha=0.5, label="High gap (>10%)")
+                ax3.axhline(y=5, color="orange", linestyle="--", alpha=0.5, label="Moderate gap (>5%)")
+                ax3.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax3.set_ylabel("Average Gap (%)", fontsize=12, fontweight="bold")
+                ax3.set_title("Gap Severity by UT Steps", fontsize=13, fontweight="bold")
+                ax3.set_xticks(range(len(avg_gap)))
+                ax3.set_xticklabels(avg_gap.index)
+                ax3.legend(fontsize=9)
+                ax3.grid(True, alpha=0.3, axis='y')
+                
+                plt.savefig(f"{save_dir}/8_depth_generalization.png", dpi=300, bbox_inches="tight")
                 plt.close()
+                plot_count += 1
 
-        # Plot 4: Main vs Reasoning Primitives Comparison
-        if main_results and reasoning_primitives_results:
+            # PLOT 9: Variant Comparison (Format Robustness)
+            variant_comp = self.compute_variant_comparison(reasoning_primitives_results)
+            if not variant_comp.empty:
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+                
+                # Left: Accuracy by variant
+                for variant in variant_comp["variant"].unique():
+                    var_data = variant_comp[variant_comp["variant"] == variant]
+                    ax1.plot(var_data["ut_steps"], var_data["accuracy_pct"], 
+                            marker="o", label=variant, linewidth=2, markersize=8)
+                ax1.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax1.set_title("Format Robustness: Accuracy by Variant", fontsize=13, fontweight="bold")
+                ax1.legend()
+                ax1.grid(True, alpha=0.3)
+                
+                # Right: Variance across formats
+                variance_by_ut = variant_comp.groupby("ut_steps")["accuracy_pct"].std()
+                colors = ["red" if v > 10 else "orange" if v > 5 else "green" for v in variance_by_ut.values]
+                ax2.bar(range(len(variance_by_ut)), variance_by_ut.values, 
+                    color=colors, alpha=0.7)
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Std Dev of Accuracy (%)", fontsize=12, fontweight="bold")
+                ax2.set_title("Format Consistency (Lower = Better)", fontsize=13, fontweight="bold")
+                ax2.set_xticks(range(len(variance_by_ut)))
+                ax2.set_xticklabels(variance_by_ut.index)
+                ax2.grid(True, alpha=0.3, axis='y')
+                
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/9_format_robustness.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+
+            # PLOT 10: Main vs Reasoning Primitives
             comparison = self.compute_reasoning_primitives_vs_main_comparison(
                 main_results, reasoning_primitives_results
             )
-
             if not comparison.empty:
-                plt.figure(figsize=(10, 6))
-                plt.plot(
-                    comparison["ut_steps"],
-                    comparison["main_accuracy_pct"],
-                    marker="o",
-                    label="Main Tasks",
-                    linewidth=2,
-                )
-                plt.plot(
-                    comparison["ut_steps"],
-                    comparison["primitives_accuracy_pct"],
-                    marker="s",
-                    label="Reasoning Primitives",
-                    linewidth=2,
-                )
-
-                plt.xlabel("UT Steps", fontsize=12)
-                plt.ylabel("Accuracy (%)", fontsize=12)
-                plt.title("Main Tasks vs Reasoning Primitives", fontsize=14)
-                plt.legend()
-                plt.grid(True, alpha=0.3)
-                plt.savefig(
-                    f"{save_dir}/main_vs_reasoning_primitives.png",
-                    dpi=300,
-                    bbox_inches="tight",
-                )
+                fig = plt.figure(figsize=(16, 6))
+                gs = fig.add_gridspec(1, 3, hspace=0.3, wspace=0.3)
+                
+                # Left: Line comparison
+                ax1 = fig.add_subplot(gs[0, 0])
+                ax1.plot(comparison["ut_steps"], comparison["main_accuracy_pct"], 
+                        marker="o", label="Main Tasks", linewidth=2, markersize=8, color="blue")
+                ax1.plot(comparison["ut_steps"], comparison["primitives_accuracy_pct"], 
+                        marker="s", label="Reasoning Primitives", linewidth=2, markersize=8, color="green")
+                ax1.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax1.set_ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
+                ax1.set_title("Main Tasks vs Reasoning Primitives", fontsize=13, fontweight="bold")
+                ax1.legend()
+                ax1.grid(True, alpha=0.3)
+                
+                # Middle: Performance gap
+                ax2 = fig.add_subplot(gs[0, 1])
+                colors = ["blue" if g > 0 else "green" for g in comparison["gap"].values]
+                ax2.bar(range(len(comparison)), comparison["gap"], color=colors, alpha=0.7)
+                ax2.axhline(y=0, color="black", linestyle="-", linewidth=1)
+                ax2.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax2.set_ylabel("Gap: Main - Primitives (%)", fontsize=12, fontweight="bold")
+                ax2.set_title("Performance Gap", fontsize=13, fontweight="bold")
+                ax2.set_xticks(range(len(comparison)))
+                ax2.set_xticklabels(comparison["ut_steps"])
+                ax2.grid(True, alpha=0.3, axis='y')
+                
+                # Right: Convergence analysis
+                ax3 = fig.add_subplot(gs[0, 2])
+                ax3.plot(comparison["ut_steps"], comparison["gap"].abs(), 
+                        marker="D", linewidth=2, markersize=8, color="purple")
+                ax3.set_xlabel("UT Steps", fontsize=12, fontweight="bold")
+                ax3.set_ylabel("Absolute Gap (%)", fontsize=12, fontweight="bold")
+                ax3.set_title("Gap Convergence (Lower = Better)", fontsize=13, fontweight="bold")
+                ax3.grid(True, alpha=0.3)
+                
+                plt.savefig(f"{save_dir}/10_main_vs_primitives.png", dpi=300, bbox_inches="tight")
                 plt.close()
+                plot_count += 1
 
-        print(f"✅ Enhanced plots saved to {save_dir}/")
-
+        if perplexity_results:
+            perplexity_results_df = pd.DataFrame(perplexity_results)
+            if not perplexity_results_df.empty:
+                plt.figure(figsize=(8, 5))
+                plt.plot(perplexity_results_df["ut_steps"], perplexity_results_df["perplexity"], marker="o", linewidth=2, color="crimson")
+                plt.xlabel("UT Steps", fontsize=12, fontweight="bold")
+                plt.ylabel("Perplexity", fontsize=12, fontweight="bold")
+                plt.title("Perplexity vs UT Steps", fontsize=14, fontweight="bold")
+                plt.grid(True, alpha=0.3)
+                plt.tight_layout()
+                plt.savefig(f"{save_dir}/11_perplexity_vs_ut.png", dpi=300, bbox_inches="tight")
+                plt.close()
+                plot_count += 1
+        # =========================================================================
+        # SUMMARY
+        # =========================================================================
+        
+        print(f"   ✅ Generated {plot_count} comprehensive plots")
+        print(f"   📁 Saved to: {save_dir}/")
+        print()
     def generate_comprehensive_summary(
         self,
         main_results: Optional[List[Dict]] = None,
@@ -662,6 +929,16 @@ def analyze_experiment_results(
         print(f"   ✓ Loaded {len(reasoning_primitives_results)} reasoning primitive results")
     else:
         print(f"   ⚠️ reasoning_primitives.csv not found (optional)")
+
+    # Load perplexity results 
+    perplexity_path = os.path.join(results_folder, "perplexity.csv")
+    if os.path.exists(perplexity_path):
+        perplexity_df = pd.read_csv(perplexity_path)
+        perplexity_results = perplexity_df.to_dict(orient="records")
+        metrics.add_perplexity_results(perplexity_results)
+        print(f"   ✓ Loaded {len(perplexity_results)} perplexity results")
+    else:
+        print(f"   ⚠️ perplexity.csv not found (optional)")
 
     # Load config
     config_path = os.path.join(results_folder, "config.json")
@@ -957,6 +1234,7 @@ def analyze_experiment_results(
         
         metrics.generate_enhanced_plots(
             main_results=simple_reasoning_results,
+            perplexity_results=perplexity_results,
             reasoning_primitives_results=reasoning_primitives_results,
             save_dir=save_dir,
         )
