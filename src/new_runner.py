@@ -6,15 +6,11 @@ import gc
 import torch
 import pandas as pd
 from tqdm.auto import tqdm
-from typing import Dict, List, Any, Optional, Tuple, Union
+from typing import Dict, List, Any
 
 from .data_generator import create_reasoning_primitives_data, format_5_shot_prompt
 from .utils import (
     save_results,
-    save_simple_reasoning_results,
-    save_perplexity_results,
-    save_reasoning_primitives_results,
-    save_heavy_benchmark_results,
     save_config,
     generate_test_id,
 )
