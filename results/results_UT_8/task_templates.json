@@ -2940,7 +2940,7 @@
       15451,
       77
     ],
-    "generation_config": "GenerationConfig {\n  \"max_new_tokens\": 16,\n  \"min_new_tokens\": 4,\n  \"temperature\": 0.1\n}\n",
+    "generation_config": "GenerationConfig {\n  \"max_new_tokens\": 16,\n  \"min_new_tokens\": 4,\n  \"stop_strings\": [\n    \"[END]\",\n    \"[FINAL]\",\n    \"SAMPLE\",\n    \"\\n```\",\n    \"\\n\\n\",\n    \"```python\",\n    \"def \",\n    \"#\",\n    \"**Final\",\n    \"Example usage\"\n  ],\n  \"temperature\": 0.1\n}\n",
     "stop_sequences": [
       "[END]",
       "[FINAL]",
