@@ -1,4 +1,5 @@
 import os
+import random
 import time
 import wandb
 import gc
@@ -17,7 +18,7 @@ from .utils import (
     save_config,
     generate_test_id,
 )
-from .evaluation_metrics import (
+from .evaluation_analysis import (
     EnhancedOuroMetrics,
     analyze_experiment_results,
     PaperComplianceChecker,
@@ -31,7 +32,7 @@ from .data_generator import (
     load_and_preprocess_data,
 )
 from .new_model import (
-    SafeOuroThinkingExperiment,
+    OuroExperiment,
     SafeOptimizations,
 )
 
@@ -125,7 +126,7 @@ def run_reasoning_primitives_evaluation(model, tokenizer, config: dict):
     return reasoning_primitives_results
 
 
-def run_standard_benchmarks(model, tokenizer, config: dict):
+def run_benchmark_evaluation(model, tokenizer, config: dict):
     """
     Runs standard benchmarks using lm-evaluation-harness.
     
@@ -217,7 +218,7 @@ def run_standard_benchmarks(model, tokenizer, config: dict):
     return benchmark_results
 
 
-def run_batch_experiment(config: dict) -> list[List[Dict]]:
+def run_experiment(config: dict) -> list[List[Dict]]:
     """Run batch experiment based on the provided configuration.
 
     Args:
@@ -273,7 +274,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     print(f"{'=' * 70}\n")
 
     # 3. Setup Experiment Handler
-    experiment = SafeOuroThinkingExperiment(
+    experiment = OuroExperiment(
         model_path,
         dtype=config["MODEL"].get("dtype", torch.bfloat16),
         use_4bit_quant=config["MODEL"].get("use_4bit_quant", True),
@@ -281,10 +282,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
         max_batch_size=optimization_config.get("max_batch_size", 8),
         max_new_tokens=optimization_config.get("max_new_tokens", 256),
     )
-
-    torch.manual_seed(42)
-    print(f"Random seed set to 42")
-
+    
     # 4. Prepare Test Datasets
     print(f"\n{'=' * 70}")
     print(f"LOADING TEST DATASETS")
@@ -303,19 +301,6 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
     print(f"\nDataset Summary:")
     for task_type, items in test_datasets.items():
         print(f"   {task_type:12s}: {len(items):4d} samples")
-    print(f"{'=' * 70}\n")
-
-    # Check experiment compliance with paper
-    checker = PaperComplianceChecker()
-
-    task_alignment = checker.check_task_alignment(list(test_datasets.keys()))
-    ut_coverage = checker.check_ut_steps_coverage(ut_steps_list)
-
-    print(f"\n{'=' * 70}")
-    print(f"PAPER COMPLIANCE CHECK")
-    print(f"{'=' * 70}")
-    print(f"Task Alignment: {task_alignment}")
-    print(f"UT Steps Coverage: {ut_coverage}")
     print(f"{'=' * 70}\n")
 
     # 5. Initialization of result storage
@@ -688,7 +673,7 @@ def run_batch_experiment(config: dict) -> list[List[Dict]]:
                 print(f"{'=' * 70}\n")
 
                 try:
-                    benchmark_results = run_standard_benchmarks(
+                    benchmark_results = run_benchmark_evaluation(
                         model, tokenizer, config
                     )
                     # Optionally, add UT steps info to each result

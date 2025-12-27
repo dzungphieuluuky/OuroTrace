@@ -1,0 +1,4 @@
+variant,ut_steps,depth_0_acc,depth_1_acc,generalization_gap
+code,7,99.0,96.0,3.0
+equation,7,100.0,92.0,8.0
+math,7,100.0,95.0,5.0

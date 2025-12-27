@@ -8,6 +8,32 @@ import pandas as pd
 from typing import List, Dict
 
 
+import os
+import pandas as pd
+
+def concat_csv_files(filename, folder1='results_UT_4', folder2='results_UT_8', output_folder='results_concat'):
+    """
+    Concatenates rows from two CSV files with the same name in two folders.
+    Saves the result in output_folder with the same filename.
+    """
+    # Ensure output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+    
+    file1 = os.path.join(folder1, filename)
+    file2 = os.path.join(folder2, filename)
+    output_file = os.path.join(output_folder, filename)
+    
+    # Read CSV files
+    df1 = pd.read_csv(file1)
+    df2 = pd.read_csv(file2)
+    
+    # Concatenate
+    df_concat = pd.concat([df1, df2], ignore_index=True)
+    
+    # Save result
+    df_concat.to_csv(output_file, index=False)
+    print(f"Concatenated file saved to {output_file}")
+
 def save_results(
     simple_reasoning_results: List[Dict] = None,
     perplexity_results: List[Dict] = None,
@@ -224,3 +250,23 @@ def generate_test_id(task_type: str, difficulty: str, prompt: str) -> str:
     """Generate unique test ID"""
     unique_str = f"{task_type}_{difficulty}_{prompt}"
     return hashlib.md5(unique_str.encode()).hexdigest()[:8]
+
+if __name__ == "__main__":
+    # Example usage
+    import argparse
+    # Input output folder, filename, folder 1 and folder 2
+    parser = argparse.ArgumentParser(description="Concatenate CSV files from two folders.")
+    parser.add_argument(
+        "--filename", type=str, required=True, help="Name of the CSV file to concatenate"
+    )
+    parser.add_argument(
+        "--folder1", type=str, default="results_UT_4", help="First folder containing the CSV file"
+    )
+    parser.add_argument(
+        "--folder2", type=str, default="results_UT_8", help="Second folder containing the CSV file"
+    )
+    parser.add_argument(
+        "--output_folder", type=str, default="results_concat", help="Output folder for the concatenated CSV file"
+    )
+    args = parser.parse_args()
+    concat_csv_files(args.filename, args.folder1, args.folder2, args.output_folder)

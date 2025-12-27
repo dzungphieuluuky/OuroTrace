@@ -1,4 +1,4 @@
-# OuroTrace
+# 🧠 OuroTrace
 
 OuroTrace is a framework for evaluating Chain-of-Thought (CoT) reasoning in Ouroboros (UT) models. It provides tools for structured prompting, dataset creation, experiment management, and result analysis.
 
@@ -21,20 +21,26 @@ from src import (
 )
 ```
 
-## Modules Overview
+## 🗂️ Modules Overview
 
-- `config_loader`: Load/process experiment configs.
-- `data`: Dataset creation and preprocessing.
-- `model`: Experiment classes for CoT evaluation.
-- `evaluation`: Result analysis and visualization.
-- `utils`: Environment and helper functions.
-- `runner`: Batch experiment execution.
+- `config_loader.py`: Loads and parses experiment configuration files (JSON).
+- `data_generator.py`: Generates and preprocesses datasets for supported reasoning tasks.
+- `model.py`: Defines experiment classes and manages CoT evaluation logic.
+- `evaluation_analysis.py`: Provides functions for analyzing and visualizing experiment results.
+- `utils.py`: Contains helper functions for environment setup and path management.
+- `runner.py`: Orchestrates batch experiment execution and result collection.
 
 ## License
 
 Apache-2.0
 
-## Notebooks
+## Tasks Evaluation
 
+You can run end-to-end using one of the notebooks below to perform evaluation for this model on several tasks including:
+- Simple reasoning tasks: n-ary addition, p-hop induction and i-GSM problems.
+- Perplexity calculation: calculate the perplexity which measure the uncertainty of the model of predicting the next token, which has a strong connection to cross entropy loss.
+- Reasoning primitives: variable assignment in code, math and equation of level 0 and 1 using 5-shot prompting to instruct the model.
+
+## Notebooks
 - [Kaggle Notebook](https://www.kaggle.com/code/dzung271828/ouro-trace)
 - [Google Colab](https://colab.research.google.com/github/dzungphieuluuky/OuroTrace/blob/claude/ouro_trace.ipynb)

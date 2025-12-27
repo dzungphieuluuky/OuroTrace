@@ -11,10 +11,9 @@ from .data_generator import (
     create_reasoning_primitives_data,
     format_5_shot_prompt,
 )
-from .new_model import SafeOuroThinkingExperiment
-from .safe_model import SafeOuroBatchExperiment
-from .new_runner import run_batch_experiment, run_reasoning_primitives_evaluation
-from .evaluation_metrics import analyze_experiment_results
+from .new_model import OuroExperiment
+from .new_refactored_runner import run_experiment, run_reasoning_primitives_evaluation
+from .evaluation_analysis import analyze_experiment_results
 
 __all__ = [
     "load_config_from_json",
@@ -27,9 +26,8 @@ __all__ = [
     "load_and_preprocess_data",
     "create_reasoning_primitives_data",
     "format_5_shot_prompt",
-    "SafeOuroThinkingExperiment",
-    "SafeOuroBatchExperiment",
+    "OuroExperiment",
     "analyze_experiment_results",
-    "run_batch_experiment",
+    "run_experiment",
     "run_reasoning_primitives_evaluation",
 ]
