@@ -189,6 +189,7 @@ def save_config(
 def configure_environment_paths():
     """Detect environment and configure paths"""
     try:
+        from IPython import get_ipython
         if "google.colab" in str(get_ipython()):
             print("✅ Environment: Google Colab")
             base_data_path = "/content/"
@@ -220,6 +221,7 @@ def configure_environment_paths():
 def auto_unzip_colab_content(target_dir="/content/", zip_extension="*.zip"):
     """Auto-extract zip files in Colab environment"""
     try:
+        from IPython import get_ipython
         if "google.colab" not in str(get_ipython()):
             return
     except NameError:
