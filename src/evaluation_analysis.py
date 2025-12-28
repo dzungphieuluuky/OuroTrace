@@ -423,14 +423,13 @@ class EnhancedOuroMetrics:
                 plt.figure(figsize=(10, 6))
                 for task in acc_by_ut["task_type"].unique():
                     task_data = acc_by_ut[acc_by_ut["task_type"] == task]
-                    plt.errorbar(
+                    plt.plot(
                         task_data["ut_steps"],
                         task_data["accuracy_pct"],
-                        yerr=task_data["std"] * 100,
                         marker="o",
                         label=task,
                         linewidth=2,
-                        capsize=5,
+                        markersize=8,
                     )
                 plt.xlabel("UT Steps", fontsize=12, fontweight="bold")
                 plt.ylabel("Accuracy (%)", fontsize=12, fontweight="bold")
