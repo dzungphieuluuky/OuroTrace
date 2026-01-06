@@ -27,7 +27,7 @@ from .data_generator import (
     create_perplexity_data,
     load_and_preprocess_data,
 )
-from .new_model import (
+from .model import (
     OuroExperiment,
     SafeOptimizations,
 )

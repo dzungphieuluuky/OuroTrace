@@ -37,7 +37,7 @@ from .evaluation_analysis import (
     PaperComplianceChecker,
 )
 from .output_monitor import OutputQualityMonitor, ExperimentFailureException
-from .new_model import OuroExperiment, SafeOptimizations
+from .model import OuroExperiment, SafeOptimizations
 
 
 # =============================================================================
